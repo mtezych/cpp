@@ -29,6 +29,17 @@ namespace ieee754
 
 		const auto bits         = *reinterpret_cast<const uint32_t* const>(&number);
 
+		/*                                     *\
+		|         IEEE 754 float 32-bit         |
+		|                                       |
+		| 31 30    24 23                     0  |
+		| +-+--------+------------------------+ |
+		| | |exponent|        fraction        | |
+		| +-+--------+------------------------+ |
+		|  ^                                    |
+		| sign                                  |
+		\*                                     */
+
 		const auto sign         = uint32_t { bits & 0x80000000 } >> 31;
 		const auto exponentBias = uint32_t { bits & 0x7F800000 } >> 23;
 		const auto fraction     = uint32_t { bits & 0x007FFFFF } >>  0;
