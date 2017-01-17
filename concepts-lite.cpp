@@ -2,7 +2,6 @@
 #include <utility>
 #include <type_traits>
 #include <cstdint>
-#include <iostream>
 #include <array>
 
 namespace foo
