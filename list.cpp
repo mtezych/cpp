@@ -36,7 +36,7 @@ namespace adt
 			node* n;
 
 			using element_type = typename
-			std::conditional<constant, value_type, const value_type>::type;
+			std::conditional<constant, const value_type, value_type>::type;
 
 		public:
 			iterator (node* const n = nullptr)
@@ -81,8 +81,8 @@ namespace adt
 				return this->n != it.n;
 			}
 		};
-		using mutable_iterator = iterator<true >;
-		using   const_iterator = iterator<false>;
+		using mutable_iterator = iterator<false>;
+		using   const_iterator = iterator<true >;
 
 	public:
 		list ()
