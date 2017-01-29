@@ -34,6 +34,8 @@
 
 cmake_minimum_required (VERSION 3.1)
 
+project(libsync)
+
 if(CMAKE_SYSTEM_NAME MATCHES Android)
 
  add_library               (sync SHARED sync.c)
@@ -54,6 +56,6 @@ if(CMAKE_SYSTEM_NAME MATCHES Android)
 
 else()
 
- message("Only building for Android is supported.")
+ message("[libsync] Only building for Android is supported.")
 
 endif()

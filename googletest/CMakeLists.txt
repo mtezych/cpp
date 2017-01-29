@@ -36,7 +36,7 @@ cmake_minimum_required (VERSION 3.1)
 
 project(googletest)
 
-add_library               (gtest SHARED     include/gtest/gtest.h
+add_library               (gtest STATIC     include/gtest/gtest.h
                                             src/gtest-all.cc
                                             src/gtest_main.cc)
 

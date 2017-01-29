@@ -34,20 +34,35 @@
 
 cmake_minimum_required (VERSION 3.1)
 
-project(cpp)
+project(android-demos)
 
-add_subdirectory(googletest)
+if(CMAKE_SYSTEM_NAME MATCHES Android)
 
-add_subdirectory(libsync)
+ if(ANDROID_SOURCE AND ANDROID_SYSROOT)
 
-add_subdirectory(android-demos)
+  add_executable            (android-window android-window.cpp)
 
-add_executable       (list list.cpp)
-set_target_properties(list PROPERTIES CXX_STANDARD          14
-                                      CXX_STANDARD_REQUIRED ON)
+  target_include_directories(android-window PUBLIC
+                                ${ANDROID_SOURCE}/frameworks/native/include
+                                ${ANDROID_SOURCE}/system/core/include
+                                ${ANDROID_SOURCE}/system/core/libsync/include
+                                ${ANDROID_SOURCE}/hardware/libhardware/include)
 
-add_executable       (ieee754-float ieee754-float.cpp)
-set_target_properties(ieee754-float PROPERTIES CXX_STANDARD          14
-                                               CXX_STANDARD_REQUIRED ON)
+  target_link_libraries     (android-window
+                                ${ANDROID_SYSROOT}/system/lib/libgui.so
+                                ${ANDROID_SYSROOT}/system/lib/libutils.so)
 
-add_subdirectory(concepts-lite)
+  set_target_properties     (android-window PROPERTIES CXX_STANDARD          14
+                                                       CXX_STANDARD_REQUIRED ON)
+
+ else()
+
+  message("[android-window] Android source code and sysroot are required.")
+
+ endif()
+
+else()
+
+ message("[android-demos] Only building for Android is supported.")
+
+endif()
