@@ -34,11 +34,8 @@
 
 cmake_minimum_required (VERSION 3.1)
 
-project(cpp)
+project(ieee754)
 
-add_subdirectory(googletest)
-add_subdirectory(libsync)
-add_subdirectory(android-demos)
-add_subdirectory(adt)
-add_subdirectory(ieee754)
-add_subdirectory(concepts-lite)
+add_executable       (ieee754-float ieee754-float.cpp)
+set_target_properties(ieee754-float PROPERTIES CXX_STANDARD          14
+                                               CXX_STANDARD_REQUIRED ON)
