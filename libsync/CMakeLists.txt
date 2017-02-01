@@ -38,7 +38,9 @@ project(libsync)
 
 if(CMAKE_SYSTEM_NAME MATCHES Android)
 
- add_library               (sync SHARED sync.c)
+ add_library               (sync SHARED include/sync/sync.h
+                                        sw_sync.h
+                                        sync.c)
  target_include_directories(sync PUBLIC include)
 
  add_executable            (sync_test sync_test.c)

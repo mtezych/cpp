@@ -553,7 +553,6 @@ TEST_P(MergeStressTest, RandomMerge) {
 
     unordered_map<int, int> fenceMap;
     fenceMap.insert(make_pair(0, 0));
- // fenceMap.insert(make_tuple(0, 0));
 
     // Randomly create syncpoints out of a fixed set of timelines, and merge them together.
     for (int i = 0; i < mergeCount; i++) {
