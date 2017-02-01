@@ -45,7 +45,6 @@ if(CMAKE_SYSTEM_NAME MATCHES Android)
   target_include_directories(android-window PUBLIC
                                 ${ANDROID_SOURCE}/frameworks/native/include
                                 ${ANDROID_SOURCE}/system/core/include
-                                ${ANDROID_SOURCE}/system/core/libsync/include
                                 ${ANDROID_SOURCE}/hardware/libhardware/include)
 
   target_link_libraries     (android-window

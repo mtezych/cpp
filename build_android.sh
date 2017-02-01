@@ -43,13 +43,18 @@
 # Android source code
 # https://source.android.com/source/downloading.html
 # https://source.android.com/source/using-repo.html
+curl https://storage.googleapis.com/git-repo-downloads/repo > repo
+chmod +x repo
 mkdir android-source
 cd android-source
-repo init -u https://android.googlesource.com/platform/manifest # upstream
-repo sync system/core          \
-          hardware/libhardware \
-          frameworks/native
+../repo init                                                  \
+        -u https://android.googlesource.com/platform/manifest \
+        -b android-6.0.1_r59
+../repo sync system/core          \
+             hardware/libhardware \
+             frameworks/native
 cd ..
+rm repo
 
 # Android sysroot
 # https://developer.android.com/studio/command-line/adb.html

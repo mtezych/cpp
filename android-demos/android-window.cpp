@@ -35,8 +35,10 @@
 #ifdef __ANDROID__
 
 #include <cassert>
+#include <thread>
+#include <chrono>
 
-#include <EGL/egl.h>
+#include <android/native_window.h>
 
 #include <gui/Surface.h>
 #include <gui/SurfaceComposerClient.h>
@@ -48,14 +50,14 @@ class Window
 {
 	android::sp<android::SurfaceComposerClient> surfaceComposerClient;
 	android::sp<android::SurfaceControl>        surfaceControl;
-	android::sp<ANativeWindow>                  androidNativeWindow;
+	android::sp<android::Surface>               surface;
 
 public:
-	Window()
+	Window(uint32_t width, uint32_t height)
 	:
 		surfaceComposerClient { nullptr },
 		surfaceControl        { nullptr },
-		androidNativeWindow   { nullptr }
+		surface               { nullptr }
 	{
 		auto status = android::status_t { android::UNKNOWN_ERROR };
 
@@ -68,8 +70,8 @@ public:
 		surfaceControl = surfaceComposerClient->createSurface
 		(
 			android::String8 { "Android Surface Title" },
-			512, 512,
-			android::PIXEL_FORMAT_RGB_888
+			width, height,
+			android::PIXEL_FORMAT_RGBA_8888
 		);
 		assert(surfaceControl != nullptr);
 
@@ -88,21 +90,50 @@ public:
 		}
 		android::SurfaceComposerClient::closeGlobalTransaction();
 
-		androidNativeWindow = surfaceControl->getSurface();
+		surface = surfaceControl->getSurface();
 	}
 
-	EGLNativeWindowType get()
+	ANativeWindow* NativeHandle()
 	{
-		return androidNativeWindow.get();
+		return surface.get();
+	}
+
+	void Clear(const uint8_t R, const uint8_t G, const uint8_t B, const uint8_t A)
+	{
+		auto buffer = ANativeWindow_Buffer { };
+		auto result = surface->lock(&buffer, nullptr);
+		assert(result == android::NO_ERROR);
+		{
+			assert(buffer.format == android::PIXEL_FORMAT_RGBA_8888);
+
+			const auto data = static_cast<uint8_t*>(buffer.bits);
+
+			for (auto y = int32_t { 0 }; y < buffer.height; ++y)
+			{
+				for (auto x = int32_t { 0 }; x < buffer.width; ++x)
+				{
+					data[y * buffer.stride * 4 + x * 4 + 0] = R;
+					data[y * buffer.stride * 4 + x * 4 + 1] = G;
+					data[y * buffer.stride * 4 + x * 4 + 2] = B;
+					data[y * buffer.stride * 4 + x * 4 + 3] = A;
+				}
+			}
+		}
+		result = surface->unlockAndPost();
+		assert(result == android::NO_ERROR);
 	}
 };
 
 int main()
 {
-	auto window = Window { };
+	auto window = Window { 512, 512 };
 
-	const auto eglNativeWindow = window.get();
-	assert(eglNativeWindow != nullptr);
+	const auto nativeHandle = window.NativeHandle();
+	assert(nativeHandle != nullptr);
+
+	window.Clear(0x00, 0xFF, 0x00, 0x77);
+
+	std::this_thread::sleep_for(std::chrono::seconds { 4 });
 
 	return 0;
 }
