@@ -43,6 +43,7 @@
 # Android source code
 # https://source.android.com/source/downloading.html
 # https://source.android.com/source/using-repo.html
+# https://source.android.com/source/build-numbers.html
 curl https://storage.googleapis.com/git-repo-downloads/repo > repo
 chmod +x repo
 mkdir android-source
