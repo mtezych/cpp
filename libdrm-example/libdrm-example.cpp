@@ -47,8 +47,8 @@
 
 int main()
 {
-	auto card0FD = open("/dev/dri/card0", O_RDWR);
-	assert(card0FD != -1);
+	auto card0FD = open("/dev/dri/renderD128", O_RDWR); // "/dev/dri/card0"
+	assert(card0FD > 0);
 	{
 		const auto batchSize = 2048 * 1024;
 		auto drmIntelBufferManager = drm_intel_bufmgr_gem_init
@@ -69,8 +69,8 @@ int main()
 			);
 			assert(drmIntelBufferObject != nullptr);
 			{
-				auto tilingMode = uint32_t{ I915_TILING_NONE };
-				const auto bufferStride = uint32_t{ 1024 };
+				auto tilingMode = uint32_t { I915_TILING_NONE };
+				const auto bufferStride = uint32_t { 1024 };
 				auto result = drm_intel_bo_set_tiling
 				(
 					drmIntelBufferObject,
@@ -95,10 +95,14 @@ int main()
 					drmIntelBufferObject,
 					&bufferFD
 				);
-				assert(bufferFD == -1);
+				assert(bufferFD > 0);
+				assert(result == 0);
+				{
+				}
+				result = close(bufferFD);
 				assert(result == 0);
 
-				auto bufferName = uint32_t{};
+				auto bufferName = uint32_t { };
 				result = drm_intel_bo_flink(drmIntelBufferObject, &bufferName);
 				assert(result == 0);
 			}
