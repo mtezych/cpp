@@ -98,9 +98,11 @@ public:
 		return surface.get();
 	}
 
-	void Clear(const uint8_t R, const uint8_t G, const uint8_t B, const uint8_t A)
+	void
+	Clear(const uint8_t R, const uint8_t G, const uint8_t B, const uint8_t A)
 	{
 		auto buffer = ANativeWindow_Buffer { };
+
 		auto result = surface->lock(&buffer, nullptr);
 		assert(result == android::NO_ERROR);
 		{
