@@ -34,14 +34,12 @@
 
 #ifdef __ANDROID__
 
-#include <cassert>
-#include <thread>
-#include <chrono>
-
 #include <android/native_window.h>
 
 #include <gui/Surface.h>
 #include <gui/SurfaceComposerClient.h>
+
+#include <cassert>
 
 // https://github.com/waynewolf/waynewolf.github.io
 // https://source.android.com/devices/graphics/arch-sf-hwc.html
@@ -125,6 +123,9 @@ public:
 		assert(result == android::NO_ERROR);
 	}
 };
+
+#include <thread>
+#include <chrono>
 
 int main()
 {

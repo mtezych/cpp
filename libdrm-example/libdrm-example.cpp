@@ -47,13 +47,13 @@
 
 int main()
 {
-	auto card0FD = open("/dev/dri/renderD128", O_RDWR); // "/dev/dri/card0"
-	assert(card0FD > 0);
+	auto gpuFD = open("/dev/dri/renderD128", O_RDWR); // "/dev/dri/card0"
+	assert(gpuFD > 0);
 	{
 		const auto batchSize = 2048 * 1024;
 		auto drmIntelBufferManager = drm_intel_bufmgr_gem_init
 		(
-			card0FD,
+			gpuFD,
 			batchSize
 		);
 		assert(drmIntelBufferManager != nullptr);
@@ -69,13 +69,24 @@ int main()
 			);
 			assert(drmIntelBufferObject != nullptr);
 			{
+				auto result = int { -1 };
+
 				auto tilingMode = uint32_t { I915_TILING_NONE };
 				const auto bufferStride = uint32_t { 1024 };
-				auto result = drm_intel_bo_set_tiling
+				result = drm_intel_bo_set_tiling
 				(
 					drmIntelBufferObject,
 					&tilingMode,
 					bufferStride
+				);
+				assert(result == 0);
+
+				auto swizzleMode = uint32_t { 0 };
+				result = drm_intel_bo_get_tiling
+				(
+					drmIntelBufferObject,
+					&tilingMode,
+					&swizzleMode
 				);
 				assert(result == 0);
 
@@ -110,7 +121,7 @@ int main()
 		}
 		drm_intel_bufmgr_destroy(drmIntelBufferManager);
 	}
-	auto result = close(card0FD);
+	auto result = close(gpuFD);
 	assert(result == 0);
 
 	return 0;
