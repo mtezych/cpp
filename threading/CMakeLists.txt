@@ -32,26 +32,13 @@
 # EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #
 
-cmake_minimum_required(VERSION 3.1)
+cmake_minimum_required (VERSION 3.1)
 
-add_library               (drm_intel SHARED intel_aub.h
-                                            intel_bufmgr.h
-                                            intel_bufmgr.c
-                                            intel_bufmgr_fake.c
-                                            intel_bufmgr_gem.c
-                                            intel_bufmgr_priv.h
-                                            intel_decode.c
-                                            intel_chipset.h
-                                            intel_debug.h
-                                            mm.h
-                                            mm.c
-                                            uthash.h)
+project(threading)
 
-target_include_directories(drm_intel PUBLIC .
-                                            ..
-                                            ../include/drm
-                                            /usr/include/valgrind)
+find_package(Threads REQUIRED)
 
-target_compile_definitions(drm_intel PUBLIC PIC HAVE_CONFIG_H)
-
-target_link_libraries     (drm_intel drm pciaccess)
+add_executable       (producer-consumer producer-consumer.cpp)
+set_target_properties(producer-consumer PROPERTIES CXX_STANDARD          14
+                                                   CXX_STANDARD_REQUIRED ON)
+target_link_libraries(producer-consumer ${CMAKE_THREAD_LIBS_INIT})
