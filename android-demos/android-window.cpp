@@ -91,7 +91,7 @@ public:
 		surface = surfaceControl->getSurface();
 	}
 
-	ANativeWindow* NativeHandle()
+	ANativeWindow* NativeHandle() const
 	{
 		return surface.get();
 	}

@@ -34,15 +34,17 @@
 
 cmake_minimum_required (VERSION 3.1)
 
-project(cpp)
+project(xlib)
 
-add_subdirectory(googletest)
-add_subdirectory(libsync)
-add_subdirectory(android-demos)
-add_subdirectory(adt)
-add_subdirectory(threading)
-add_subdirectory(libdrm-example)
-add_subdirectory(egl)
-add_subdirectory(xlib)
-add_subdirectory(ieee754)
-add_subdirectory(concepts-lite)
+if(CMAKE_SYSTEM_NAME MATCHES Linux)
+
+ add_executable       (xlib xlib.cpp)
+ target_link_libraries(xlib X11)
+ set_target_properties(xlib PROPERTIES CXX_STANDARD          14
+                                       CXX_STANDARD_REQUIRED ON)
+
+else()
+
+ message("[xlib] Only building for GNU/Linux is supported.")
+
+endif()
