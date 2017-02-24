@@ -330,12 +330,14 @@ namespace platform
 		::Window   xWindow;
 		::Display* xDisplay;
 		::Screen*  xScreen;
+		::Colormap xColormap;
 
 		Window (const Display& display, uint32_t width, uint32_t height)
 		:
-			xWindow  { None },
-			xDisplay { display.xDisplay },
-			xScreen  { XDefaultScreenOfDisplay(xDisplay) }
+			xWindow   { None },
+			xDisplay  { display.xDisplay },
+			xScreen   { XDefaultScreenOfDisplay(xDisplay) },
+			xColormap { None }
 		{
 			assert(xDisplay != None);
 			assert(xScreen  != None);
@@ -343,9 +345,17 @@ namespace platform
 			::Visual* xVisual = XDefaultVisualOfScreen(xScreen);
 			assert(xVisual != None);
 
+			xColormap = XCreateColormap
+			(
+				xDisplay, XRootWindowOfScreen(xScreen),
+				xVisual, AllocNone
+			);
+			assert(xColormap != None);
+
 			auto attribs = XSetWindowAttributes { };
 			attribs.border_pixel     = XWhitePixelOfScreen(xScreen);
 			attribs.background_pixel = XBlackPixelOfScreen(xScreen);
+			attribs.colormap         = xColormap;
 			attribs.event_mask       = NoEventMask;
 
 			xWindow = XCreateWindow
@@ -356,7 +366,7 @@ namespace platform
 				XDefaultDepthOfScreen(xScreen),
 				InputOutput,
 				xVisual,
-				CWBorderPixel | CWBackPixel | CWEventMask, &attribs
+				CWBorderPixel | CWBackPixel | CWColormap | CWEventMask, &attribs
 			);
 			assert(xWindow != None);
 
@@ -374,12 +384,15 @@ namespace platform
 
 			XStoreName(xDisplay, xWindow, "Xlib Window Title");
 
-			::Atom deleteAtom = XInternAtom(xDisplay, "WM_DELETE_WINDOW", True);
-			assert(deleteAtom != None);
+			auto deleteWindowAtom = ::Atom
+			{
+				XInternAtom(xDisplay, "WM_DELETE_WINDOW", True)
+			};
+			assert(deleteWindowAtom != None);
 
 			const auto status = Status
 			{
-				XSetWMProtocols(xDisplay, xWindow, &deleteAtom, 1)
+				XSetWMProtocols(xDisplay, xWindow, &deleteWindowAtom, 1)
 			};
 			assert(status != False);
 
@@ -391,18 +404,21 @@ namespace platform
 			if (xWindow != None)
 			{
 				XDestroyWindow(xDisplay, xWindow);
+				XFreeColormap(xDisplay, xColormap);
 			}
 		}
 
 		Window (Window&& window)
 		:
-			xWindow  { window.xWindow  },
-			xDisplay { window.xDisplay },
-			xScreen  { window.xScreen  }
+			xWindow   { window.xWindow   },
+			xDisplay  { window.xDisplay  },
+			xScreen   { window.xScreen   },
+			xColormap { window.xColormap }
 		{
-			window.xWindow  = None;
-			window.xDisplay = None;
-			window.xScreen  = None;
+			window.xWindow   = None;
+			window.xDisplay  = None;
+			window.xScreen   = None;
+			window.xColormap = None;
 		}
 
 		Window& operator = (Window&& window)
@@ -410,14 +426,17 @@ namespace platform
 			if (xWindow != None)
 			{
 				XDestroyWindow(xDisplay, xWindow);
+				XFreeColormap(xDisplay, xColormap);
 			}
 
-			xWindow  = window.xWindow;
-			xDisplay = window.xDisplay;
-			xScreen  = window.xScreen;
-			window.xWindow  = None;
-			window.xDisplay = None;
-			window.xScreen  = None;
+			xWindow   = window.xWindow;
+			xDisplay  = window.xDisplay;
+			xScreen   = window.xScreen;
+			xColormap = window.xColormap;
+			window.xWindow   = None;
+			window.xDisplay  = None;
+			window.xScreen   = None;
+			window.xColormap = None;
 
 			return *this;
 		}
@@ -499,6 +518,11 @@ namespace platform
 				case KeyPress :
 				case KeyRelease :
 				{
+					auto keyEvent = event.xkey;
+					if (XLookupKeysym(&keyEvent, 0) == XK_Escape)
+					{
+						return false;
+					}
 					break;
 				}
 				case Expose :
@@ -521,12 +545,22 @@ namespace platform
 				}
 				case ClientMessage :
 				{
-					const auto atomName = XGetAtomName
-					(
-						xDisplay, event.xclient.message_type
-					);
-					static_cast<void>(atomName);
-					return false;
+					const auto protocolsAtom = ::Atom
+					{
+						XInternAtom(xDisplay, "WM_PROTOCOLS", True)
+					};
+					const auto deleteWindowAtom = ::Atom
+					{
+						XInternAtom(xDisplay, "WM_DELETE_WINDOW", True)
+					};
+					if (event.xclient.message_type == protocolsAtom)
+					{
+						if (::Atom(event.xclient.data.l[0]) == deleteWindowAtom)
+						{
+							return false;
+						}
+					}
+					break;
 				}
 				case MapNotify :
 				default :
