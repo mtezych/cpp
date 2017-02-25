@@ -34,17 +34,15 @@
 
 cmake_minimum_required (VERSION 3.1)
 
-project(cpp)
+project(vulkan)
 
-add_subdirectory(googletest)
-add_subdirectory(libsync)
-add_subdirectory(android-demos)
-add_subdirectory(adt)
-add_subdirectory(threading)
-add_subdirectory(libdrm-example)
-add_subdirectory(egl)
-add_subdirectory(xlib)
-add_subdirectory(vulkan)
-add_subdirectory(library)
-add_subdirectory(ieee754)
-add_subdirectory(concepts-lite)
+add_executable       (vulkan VulkanSymbols.h
+                             Vulkan.h
+                             Vulkan.cpp
+                             vulkan-demo.cpp)
+
+target_link_libraries(vulkan library
+                             ${CMAKE_DL_LIBS})
+
+set_target_properties(vulkan PROPERTIES CXX_STANDARD          14
+                                        CXX_STANDARD_REQUIRED ON)
