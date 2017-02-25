@@ -9,8 +9,6 @@ TEST(LibraryTest, libc_sprintf)
 	const auto path = "libc.so";
 #elif defined(__unix__)
 	const auto path = "libc.so.6";
-#elif defined(_WIN32)
-	const auto path = "Kernel32.dll";
 #else
 	#error "Unsupported Platform"
 #endif
