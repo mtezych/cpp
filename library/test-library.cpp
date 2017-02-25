@@ -5,7 +5,17 @@
 
 TEST(LibraryTest, libc_sprintf)
 {
-	const auto library = Library { "libc.so.6" };
+#if defined(__ANDROID__)
+	const auto path = "libc.so";
+#elif defined(__unix__)
+	const auto path = "libc.so.6";
+#elif defined(_WIN32)
+	const auto path = "Kernel32.dll";
+#else
+	#error "Unsupported Platform"
+#endif
+
+	const auto library = platform::Library { path };
 
 	using sprintfType = int (*)(char* buffer, const char* format, ...);
 
