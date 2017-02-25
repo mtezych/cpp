@@ -89,7 +89,8 @@ namespace vk
 		return instanceExtensionProperties;
 	}
 
-	std::vector<VkLayerProperties> Vulkan::EnumerateInstanceLayerProperties() const
+	std::vector<VkLayerProperties>
+	Vulkan::EnumerateInstanceLayerProperties() const
 	{
 		auto instanceLayerPropertiesCount = uint32_t { 0 };
 		auto result = vkEnumerateInstanceLayerProperties

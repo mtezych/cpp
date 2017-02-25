@@ -39,7 +39,15 @@ project(vulkan)
 add_executable       (vulkan VulkanSymbols.h
                              Vulkan.h
                              Vulkan.cpp
+                             VulkanInstance.h
+                             VulkanInstance.cpp
+                             VulkanSurface.h
+                             VulkanSurface.cpp
+                             VulkanPhysicalDevice.h
+                             VulkanPhysicalDevice.cpp
                              vulkan-demo.cpp)
+
+target_include_directories(vulkan PUBLIC /opt/VulkanSDK/1.0.39.1/x86_64/include)
 
 target_link_libraries(vulkan library
                              ${CMAKE_DL_LIBS})
