@@ -7,7 +7,7 @@ TEST(LibraryTest, libc_sprintf)
 {
 #if defined(__ANDROID__)
 	const auto path = "libc.so";
-#elif defined(__unix__)
+#elif defined(__gnu_linux__)
 	const auto path = "libc.so.6";
 #else
 	#error "Unsupported Platform"

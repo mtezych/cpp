@@ -38,13 +38,20 @@ project(library)
 
 find_package(Threads REQUIRED)
 
-add_executable       (library library.h
-                              library.cpp
-                              test-library.cpp)
+add_library          (library STATIC library.h
+                                     library.cpp)
 
-target_link_libraries(library ${CMAKE_DL_LIBS}
-                              gtest
-                              ${CMAKE_THREAD_LIBS_INIT})
+target_include_directories(library PUBLIC .)
 
 set_target_properties(library PROPERTIES CXX_STANDARD          14
                                          CXX_STANDARD_REQUIRED ON)
+
+add_executable       (test-library test-library.cpp)
+
+target_link_libraries(test-library library
+                                   ${CMAKE_DL_LIBS}
+                                   gtest
+                                   ${CMAKE_THREAD_LIBS_INIT})
+
+set_target_properties(test-library PROPERTIES CXX_STANDARD          14
+                                              CXX_STANDARD_REQUIRED ON)
