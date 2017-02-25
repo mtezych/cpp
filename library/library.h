@@ -42,7 +42,7 @@
 
 	#include <dlfcn.h>
 
-	namespace PlatformLibrary
+	namespace NativeLibrary
 	{
 		using Handle = void*;
 
@@ -57,7 +57,7 @@
 
 	#include <Windows.h>
 
-	namespace PlatformLibrary
+	namespace NativeLibrary
 	{
 		using Handle = HMODULE;
 
@@ -74,41 +74,44 @@
 
 #endif
 
-class Library
+namespace platform
 {
-private:
-
-	PlatformLibrary::Handle handle;
-
-public:
-
-	Library();
-
-	explicit Library(const std::string& path);
-
-	~Library();
-
-	Library(const Library& library) = delete;
-
-	Library& operator =(const Library& library) = delete;
-
-	Library(Library&& library);
-
-	Library& operator =(Library&& library);
-
-	template <typename SymbolType>
-	SymbolType LoadSymbol(const std::string& symbolName) const
+	class Library
 	{
-		assert(handle != nullptr);
+	private:
 
-		const auto symbolAddress = PlatformLibrary::LoadSymbol
-		(
-			handle, symbolName.c_str()
-		);
-		assert(symbolAddress != nullptr);
+		NativeLibrary::Handle handle;
 
-		return reinterpret_cast<SymbolType>(symbolAddress);
-	}
-};
+	public:
+
+		Library();
+
+		explicit Library(const std::string& path);
+
+		~Library();
+
+		Library(const Library& library) = delete;
+
+		Library& operator =(const Library& library) = delete;
+
+		Library(Library&& library);
+
+		Library& operator =(Library&& library);
+
+		template <typename SymbolType>
+		SymbolType LoadSymbol(const std::string& symbolName) const
+		{
+			assert(handle != nullptr);
+
+			const auto symbolAddress = NativeLibrary::LoadSymbol
+			(
+				handle, symbolName.c_str()
+			);
+			assert(symbolAddress != nullptr);
+
+			return reinterpret_cast<SymbolType>(symbolAddress);
+		}
+	};
+}
 
 #endif

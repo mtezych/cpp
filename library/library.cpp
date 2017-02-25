@@ -36,7 +36,7 @@
 
 #if defined(__unix__)
 
-	namespace PlatformLibrary
+	namespace NativeLibrary
 	{
 		Handle Init(const std::string& path)
 		{
@@ -52,7 +52,7 @@
 
 #elif defined(_WIN32)
 
-	namespace PlatformLibrary
+	namespace NativeLibrary
 	{
 		namespace
 		{
@@ -98,44 +98,47 @@
 
 #endif
 
-Library::Library()
-:
-	handle { nullptr }
+namespace platform
 {
-}
-
-Library::Library(const std::string& path)
-:
-	handle { PlatformLibrary::Init(path) }
-{
-	assert(handle != nullptr);
-}
-
-Library::~Library()
-{
-	if (handle != nullptr)
+	Library::Library()
+	:
+		handle { nullptr }
 	{
-		PlatformLibrary::Deinit(handle);
-	}
-}
-
-Library::Library(Library&& library)
-:
-	handle { library.handle }
-{
-	library.handle = nullptr;
-}
-
-Library& Library::operator =(Library&& library)
-{
-	if (handle != nullptr)
-	{
-		PlatformLibrary::Deinit(handle);
 	}
 
-	handle = library.handle;
+	Library::Library(const std::string& path)
+	:
+		handle { NativeLibrary::Init(path) }
+	{
+		assert(handle != nullptr);
+	}
 
-	library.handle = nullptr;
+	Library::~Library()
+	{
+		if (handle != nullptr)
+		{
+			NativeLibrary::Deinit(handle);
+		}
+	}
 
-	return *this;
+	Library::Library(Library&& library)
+	:
+		handle { library.handle }
+	{
+		library.handle = nullptr;
+	}
+
+	Library& Library::operator =(Library&& library)
+	{
+		if (handle != nullptr)
+		{
+			NativeLibrary::Deinit(handle);
+		}
+
+		handle = library.handle;
+
+		library.handle = nullptr;
+
+		return *this;
+	}
 }
