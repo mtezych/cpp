@@ -36,21 +36,21 @@ cmake_minimum_required (VERSION 3.1)
 
 project(vulkan)
 
-add_executable       (vulkan VulkanSymbols.h
-                             Vulkan.h
-                             Vulkan.cpp
-                             VulkanInstance.h
-                             VulkanInstance.cpp
-                             VulkanSurface.h
-                             VulkanSurface.cpp
-                             VulkanPhysicalDevice.h
-                             VulkanPhysicalDevice.cpp
-                             vulkan-demo.cpp)
+add_executable            (vulkan VulkanSymbols.h
+                                  Vulkan.h
+                                  Vulkan.cpp
+                                  VulkanInstance.h
+                                  VulkanInstance.cpp
+                                  VulkanSurface.h
+                                  VulkanSurface.cpp
+                                  VulkanPhysicalDevice.h
+                                  VulkanPhysicalDevice.cpp
+                                  vulkan-demo.cpp)
 
 target_include_directories(vulkan PUBLIC $ENV{VULKAN_SDK}/include)
 
-target_link_libraries(vulkan library
-                             ${CMAKE_DL_LIBS})
+target_link_libraries     (vulkan library
+                                  ${CMAKE_DL_LIBS})
 
-set_target_properties(vulkan PROPERTIES CXX_STANDARD          14
-                                        CXX_STANDARD_REQUIRED ON)
+set_target_properties     (vulkan PROPERTIES CXX_STANDARD          14
+                                             CXX_STANDARD_REQUIRED ON)
