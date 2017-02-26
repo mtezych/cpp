@@ -38,13 +38,13 @@ project(library)
 
 find_package(Threads REQUIRED)
 
-add_library          (library STATIC library.h
-                                     library.cpp)
+add_library               (library STATIC library.h
+                                          library.cpp)
 
 target_include_directories(library PUBLIC .)
 
-set_target_properties(library PROPERTIES CXX_STANDARD          14
-                                         CXX_STANDARD_REQUIRED ON)
+set_target_properties     (library PROPERTIES CXX_STANDARD          14
+                                              CXX_STANDARD_REQUIRED ON)
 
 add_executable       (test-library test-library.cpp)
 

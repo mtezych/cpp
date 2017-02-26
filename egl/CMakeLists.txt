@@ -36,7 +36,24 @@ cmake_minimum_required (VERSION 3.1)
 
 project(egl)
 
-add_executable       (egl egl.cpp)
-target_link_libraries(egl EGL)
-set_target_properties(egl PROPERTIES CXX_STANDARD          14
-                                     CXX_STANDARD_REQUIRED ON)
+add_library               (egl STATIC Display.h
+                                      Display.cpp
+                                      Config.h
+                                      Config.cpp
+                                      Surface.h
+                                      Surface.cpp
+                                      Context.h
+                                      Context.cpp)
+
+target_include_directories(egl PUBLIC .)
+
+set_target_properties     (egl PROPERTIES CXX_STANDARD          14
+                                          CXX_STANDARD_REQUIRED ON)
+
+add_executable            (egl-demo egl-demo.cpp)
+
+target_link_libraries     (egl-demo egl
+                                    EGL)
+
+set_target_properties     (egl-demo PROPERTIES CXX_STANDARD          14
+                                               CXX_STANDARD_REQUIRED ON)
