@@ -47,7 +47,7 @@ add_executable       (vulkan VulkanSymbols.h
                              VulkanPhysicalDevice.cpp
                              vulkan-demo.cpp)
 
-target_include_directories(vulkan PUBLIC /opt/VulkanSDK/1.0.39.1/x86_64/include)
+target_include_directories(vulkan PUBLIC $ENV{VULKAN_SDK}/include)
 
 target_link_libraries(vulkan library
                              ${CMAKE_DL_LIBS})
