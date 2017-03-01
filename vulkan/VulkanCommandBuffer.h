@@ -11,7 +11,7 @@ namespace vk
 	struct VulkanCommandPool;
 //	struct VulkanRenderPass;
 //	struct VulkanFramebuffer;
-//	struct VulkanPipeline;
+	struct VulkanPipeline;
 
 	struct VulkanCommandBuffer
 	{
@@ -80,7 +80,7 @@ namespace vk
 
 		void RecordCommandEndRenderPass();
 
-//		void RecordCommandBindPipeline(const VulkanPipeline& pipeline);
+		void RecordCommandBindPipeline(const VulkanPipeline& pipeline);
 
 		void RecordCommandDraw
 		(

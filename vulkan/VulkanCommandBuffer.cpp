@@ -6,7 +6,7 @@
 #include "VulkanCommandPool.h"
 // #include "VulkanRenderPass.h"
 // #include "VulkanFramebuffer.h"
-// #include "VulkanPipeline.h"
+#include "VulkanPipeline.h"
 
 #include <cassert>
 
@@ -264,15 +264,15 @@ namespace vk
 		vkCmdEndRenderPass(commandBuffer);
 	}
 
-//	void VulkanCommandBuffer::RecordCommandBindPipeline(const VulkanPipeline& pipeline)
-//	{
-//		vkCmdBindPipeline
-//		(
-//			commandBuffer,
-//			pipeline.bindPoint,
-//			pipeline.pipeline
-//		);
-//	}
+	void VulkanCommandBuffer::RecordCommandBindPipeline(const VulkanPipeline& pipeline)
+	{
+		vkCmdBindPipeline
+		(
+			commandBuffer,
+			pipeline.bindPoint,
+			pipeline.pipeline
+		);
+	}
 
 	void VulkanCommandBuffer::RecordCommandDraw
 	(

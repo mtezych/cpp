@@ -57,6 +57,12 @@ add_executable            (vulkan VulkanSymbols.h
                                   VulkanCommandBuffer.cpp
                                   VulkanSwapchain.h
                                   VulkanSwapchain.cpp
+                                  VulkanPipeline.h
+                                  VulkanPipeline.cpp
+                                  VulkanPipelineCache.h
+                                  VulkanPipelineCache.cpp
+                                  VulkanPipelineLayout.h
+                                  VulkanPipelineLayout.cpp
                                   vulkan-demo.cpp)
 
 target_include_directories(vulkan PUBLIC $ENV{VULKAN_SDK}/include)
