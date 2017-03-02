@@ -69,6 +69,8 @@ add_executable            (vulkan VulkanSymbols.h
                                   VulkanRenderPass.cpp
                                   VulkanImageView.h
                                   VulkanImageView.cpp
+                                  VulkanShaderModule.h
+                                  VulkanShaderModule.cpp
                                   vulkan-demo.cpp)
 
 target_include_directories(vulkan PUBLIC $ENV{VULKAN_SDK}/include)
