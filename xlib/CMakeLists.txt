@@ -38,7 +38,18 @@ project(xlib)
 
 if(CMAKE_SYSTEM_NAME MATCHES Linux)
 
- add_executable       (xlib xlib.cpp)
+ add_executable       (xlib Display.h
+                            Display.cpp
+                            Visual.h
+                            Visual.cpp
+                            Window.h
+                            Window.cpp
+                            Pixmap.h
+                            Pixmap.cpp
+                            Image.h
+                            Image.cpp
+                            Utils.h
+                            xlib.cpp)
  target_link_libraries(xlib X11)
  set_target_properties(xlib PROPERTIES CXX_STANDARD          14
                                        CXX_STANDARD_REQUIRED ON)
