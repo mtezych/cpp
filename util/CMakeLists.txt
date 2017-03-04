@@ -34,19 +34,12 @@
 
 cmake_minimum_required (VERSION 3.1)
 
-project(cpp)
+project(util)
 
-add_subdirectory(googletest)
-add_subdirectory(libsync)
-add_subdirectory(android-demos)
-add_subdirectory(adt)
-add_subdirectory(allocator)
-add_subdirectory(threading)
-add_subdirectory(libdrm-example)
-add_subdirectory(egl)
-add_subdirectory(xlib)
-add_subdirectory(vulkan)
-add_subdirectory(util)
-add_subdirectory(library)
-add_subdirectory(ieee754)
-add_subdirectory(concepts-lite)
+add_library               (util STATIC vec.h
+                                       vec.cpp)
+
+target_include_directories(util PUBLIC .)
+
+set_target_properties     (util PROPERTIES CXX_STANDARD          14
+                                           CXX_STANDARD_REQUIRED ON)

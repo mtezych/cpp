@@ -3,6 +3,7 @@
 
 #include "Display.h"
 #include "Image.h"
+#include "Pixmap.h"
 
 #include <X11/Xutil.h>
 
@@ -11,7 +12,7 @@
 
 namespace xlib
 {
-	Window::Window (const Display& display, const utility::Size<unsigned int>& size)
+	Window::Window (const Display& display, const util::uvec2& size)
 	:
 		xWindow   { None },
 		xDisplay  { display.xDisplay },
@@ -120,7 +121,7 @@ namespace xlib
 		return *this;
 	}
 
-	utility::Size<unsigned int> Window::Size() const
+	util::uvec2 Window::Size() const
 	{
 		auto attribs = XWindowAttributes { };
 
@@ -130,7 +131,7 @@ namespace xlib
 		};
 		assert(status != False);
 
-		return utility::Size<unsigned int>
+		return util::uvec2
 		{
 			static_cast<unsigned int>(attribs.width ),
 			static_cast<unsigned int>(attribs.height),
@@ -205,7 +206,7 @@ namespace xlib
 			}
 			case ConfigureNotify :
 			{
-				const auto windowSize = utility::Size<int>
+				const auto windowSize = util::ivec2
 				{
 					event.xconfigure.width,
 					event.xconfigure.height
@@ -241,25 +242,19 @@ namespace xlib
 		return true;
 	}
 
-	void Window::Clear
-	(
-		const uint8_t R, const uint8_t G, const uint8_t B, const uint8_t A
-	)
+	void Window::Clear (const util::vec4& color)
 	{
-		static_cast<void>(A);
-
-		constexpr auto scale =	std::numeric_limits<unsigned short>::max() /
-								std::numeric_limits<uint8_t>::max();
+		constexpr auto scale = std::numeric_limits<unsigned short>::max();
 
 		auto xColor = XColor { };
-		xColor.red   = scale * R;
-		xColor.green = scale * G;
-		xColor.blue  = scale * B;
+		xColor.red   = static_cast<unsigned short>(scale * color.red);
+		xColor.green = static_cast<unsigned short>(scale * color.green);
+		xColor.blue  = static_cast<unsigned short>(scale * color.blue);
 		xColor.flags = DoRed | DoGreen | DoBlue;
 
 		auto status = Status
 		{
-			XAllocColor(xDisplay,XDefaultColormapOfScreen(xScreen), &xColor)
+			XAllocColor(xDisplay, XDefaultColormapOfScreen(xScreen), &xColor)
 		};
 		assert(status != False);
 
@@ -297,6 +292,26 @@ namespace xlib
 			xDisplay, XDefaultColormapOfScreen(xScreen),
 			&xColor.pixel, 1,
 			0
+		);
+	}
+
+	void Window::Draw(const Pixmap& pixmap)
+	{
+		assert(pixmap.xDisplay == xDisplay);
+		assert(pixmap.xScreen  == xScreen);
+
+		const auto pixmapSize = pixmap.Size();
+		const auto windowSize = this->Size();
+
+		XCopyArea
+		(
+			xDisplay,
+			pixmap.xPixmap, xWindow,
+			XDefaultGCOfScreen(xScreen),
+			0, 0, // source      (x, y)
+			std::min(pixmapSize.width , windowSize.width ),
+			std::min(pixmapSize.height, windowSize.height),
+			0, 0  // destination (x, y)
 		);
 	}
 

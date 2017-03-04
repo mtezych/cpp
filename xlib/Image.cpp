@@ -15,7 +15,7 @@ namespace xlib
 	Image::Image
 	(
 		const Display& display,
-		const utility::Size<unsigned int>& size,
+		const util::uvec2& size,
 		const std::vector<uint8_t>& bytes
 	):
 		xImage { None }
@@ -65,9 +65,9 @@ namespace xlib
 		return *this;
 	}
 
-	utility::Size<unsigned int> Image::Size() const
+	util::uvec2 Image::Size() const
 	{
-		return utility::Size<unsigned int>
+		return util::uvec2
 		{
 			static_cast<unsigned int>(xImage->width),
 			static_cast<unsigned int>(xImage->height)

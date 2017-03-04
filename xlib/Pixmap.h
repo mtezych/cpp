@@ -4,7 +4,9 @@
 
 #include <X11/Xlib.h>
 
-#include "Utils.h"
+#include <vec.h>
+
+#include <cstdint>
 
 namespace xlib
 {
@@ -18,7 +20,7 @@ namespace xlib
 		::Display* xDisplay;
 		::Screen*  xScreen;
 
-		Pixmap(const xlib::Display& display, utility::Size<unsigned int> size);
+		Pixmap(const xlib::Display& display, const util::uvec2& size);
 		~Pixmap();
 
 		Pixmap (Pixmap&& pixmap);
@@ -27,10 +29,12 @@ namespace xlib
 		Pixmap& operator = (Pixmap&& pixmap);
 		Pixmap& operator = (const Pixmap& pixmap) = delete;
 
-		utility::Size<unsigned int> Size() const;
+		util::uvec2 Size() const;
 
-		void Draw(const xlib::Window& window);
-		void Draw(const xlib::Image& image);
+		void Clear (const util::vec4& color);
+
+		void Draw (const xlib::Window& window);
+		void Draw (const xlib::Image& image);
 	};
 }
 

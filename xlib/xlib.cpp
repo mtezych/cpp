@@ -65,7 +65,7 @@ int main()
 	auto window = xlib::Window { display, { 512, 512 } };
 	const auto render = [&window, &image]()
 	{
-		window.Clear(0x00, 0x77, 0x00, 0x00);
+		window.Clear(util::vec4 { 0.0f, 0.5f, 0.0f, 0.0f });
 		window.Draw(image);
 
 		const auto savedWindowImage = xlib::Image { window };

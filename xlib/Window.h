@@ -4,13 +4,14 @@
 
 #include <X11/Xlib.h>
 
-#include "Utils.h"
+#include <vec.h>
 
 #include <cstdint>
 
 namespace xlib
 {
 	struct Display;
+	struct Pixmap;
 	struct Image;
 
 	struct Window
@@ -20,7 +21,7 @@ namespace xlib
 		::Screen*  xScreen;
 		::Colormap xColormap;
 
-		Window (const xlib::Display& display, const utility::Size<unsigned int>& size);
+		Window (const xlib::Display& display, const util::uvec2& size);
 		~Window ();
 
 		Window (Window&& window);
@@ -29,7 +30,7 @@ namespace xlib
 		Window& operator = (Window&& window);
 		Window& operator = (const Window& window) = delete;
 
-		utility::Size<unsigned int> Size() const;
+		util::uvec2 Size() const;
 
 		bool HandleEvent(const XEvent& event) const;
 
@@ -55,12 +56,10 @@ namespace xlib
 			}
 		}
 
-		void Clear
-		(
-			const uint8_t R, const uint8_t G, const uint8_t B, const uint8_t A
-		);
+		void Clear (const util::vec4& color);
 
-		void Draw(const Image& image);
+		void Draw (const Pixmap& pixmap);
+		void Draw (const Image& image);
 	};
 }
 

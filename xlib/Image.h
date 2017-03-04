@@ -4,7 +4,7 @@
 
 #include <X11/Xlib.h>
 
-#include "Utils.h"
+#include <vec.h>
 
 #include <cstdint>
 #include <vector>
@@ -23,7 +23,7 @@ namespace xlib
 		Image
 		(
 			const xlib::Display& display,
-			const utility::Size<unsigned int>& size,
+			const util::uvec2& size,
 			const std::vector<uint8_t>& bytes
 		);
 		~Image();
@@ -34,7 +34,7 @@ namespace xlib
 		Image& operator = (Image&& image);
 		Image& operator = (const Image& image) = delete;
 
-		utility::Size<unsigned int> Size() const;
+		util::uvec2 Size() const;
 
 		explicit Image (const xlib::Window& window);
 		explicit Image (const xlib::Pixmap& pixmap);

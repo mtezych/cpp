@@ -10,7 +10,7 @@
 
 namespace xlib
 {
-	Pixmap::Pixmap (const Display& display, utility::Size<unsigned int> size)
+	Pixmap::Pixmap (const Display& display, const util::uvec2& size)
 	:
 		xPixmap  { None },
 		xDisplay { display.xDisplay },
@@ -63,7 +63,7 @@ namespace xlib
 		return *this;
 	}
 
-	utility::Size<unsigned int> Pixmap::Size() const
+	util::uvec2 Pixmap::Size() const
 	{
 		auto ignoredXID  = ::XID { None };
 		auto ignoredSInt = 0;
@@ -84,7 +84,62 @@ namespace xlib
 		};
 		assert(status != False);
 
-		return utility::Size<unsigned int> { width, height };
+		return util::uvec2 { width, height };
+	}
+
+	void Pixmap::Clear (const util::vec4& color)
+	{
+		static_cast<void>(color.alpha);
+
+		constexpr auto scale = std::numeric_limits<unsigned short>::max();
+
+		auto xColor = XColor { };
+		xColor.red   = static_cast<unsigned short>(scale * color.red);
+		xColor.green = static_cast<unsigned short>(scale * color.green);
+		xColor.blue  = static_cast<unsigned short>(scale * color.blue);
+		xColor.flags = DoRed | DoGreen | DoBlue;
+
+		auto status = Status
+		{
+			XAllocColor(xDisplay, XDefaultColormapOfScreen(xScreen), &xColor)
+		};
+		assert(status != False);
+
+		auto values = XGCValues { };
+		status = XGetGCValues
+		(
+			xDisplay,
+			XDefaultGCOfScreen(xScreen),
+			GCForeground, &values
+		);
+		assert(status != False);
+
+		XSetForeground
+		(
+			xDisplay, XDefaultGCOfScreen(xScreen), xColor.pixel
+		);
+
+		const auto pixmapSize = Size();
+
+		XFillRectangle
+		(
+			xDisplay, xPixmap, XDefaultGCOfScreen(xScreen),
+			0, 0, // (x, y)
+			pixmapSize.width,
+			pixmapSize.height
+		);
+
+		XSetForeground
+		(
+			xDisplay, XDefaultGCOfScreen(xScreen), values.foreground
+		);
+
+		XFreeColors
+		(
+			xDisplay, XDefaultColormapOfScreen(xScreen),
+			&xColor.pixel, 1,
+			0
+		);
 	}
 
 	void Pixmap::Draw(const Window& window)

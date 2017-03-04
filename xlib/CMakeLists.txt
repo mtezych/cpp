@@ -48,9 +48,8 @@ if(CMAKE_SYSTEM_NAME MATCHES Linux)
                             Pixmap.cpp
                             Image.h
                             Image.cpp
-                            Utils.h
                             xlib.cpp)
- target_link_libraries(xlib X11)
+ target_link_libraries(xlib X11 util)
  set_target_properties(xlib PROPERTIES CXX_STANDARD          14
                                        CXX_STANDARD_REQUIRED ON)
 
