@@ -14,14 +14,10 @@ namespace xlib
 {
 	Window::Window (const Display& display, const util::uvec2& size)
 	:
+		Drawable  { display },
 		xWindow   { None },
-		xDisplay  { display.xDisplay },
-		xScreen   { XDefaultScreenOfDisplay(xDisplay) },
 		xColormap { None }
 	{
-		assert(xDisplay != None);
-		assert(xScreen  != None);
-
 		::Visual* xVisual = XDefaultVisualOfScreen(xScreen);
 		assert(xVisual != None);
 
@@ -49,6 +45,8 @@ namespace xlib
 			CWBorderPixel | CWBackPixel | CWColormap | CWEventMask, &attribs
 		);
 		assert(xWindow != None);
+
+		xDrawable = xWindow;
 
 		XSelectInput
 		(
@@ -90,14 +88,11 @@ namespace xlib
 
 	Window::Window (Window&& window)
 	:
-		xWindow   { window.xWindow   },
-		xDisplay  { window.xDisplay  },
-		xScreen   { window.xScreen   },
-		xColormap { window.xColormap }
+		Drawable  { std::move(window) },
+		xWindow   { window.xWindow    },
+		xColormap { window.xColormap  }
 	{
 		window.xWindow   = None;
-		window.xDisplay  = None;
-		window.xScreen   = None;
 		window.xColormap = None;
 	}
 
@@ -109,33 +104,14 @@ namespace xlib
 			XFreeColormap(xDisplay, xColormap);
 		}
 
+		Drawable::operator = (std::move(window));
+
 		xWindow   = window.xWindow;
-		xDisplay  = window.xDisplay;
-		xScreen   = window.xScreen;
 		xColormap = window.xColormap;
 		window.xWindow   = None;
-		window.xDisplay  = None;
-		window.xScreen   = None;
 		window.xColormap = None;
 
 		return *this;
-	}
-
-	util::uvec2 Window::Size() const
-	{
-		auto attribs = XWindowAttributes { };
-
-		auto status = Status
-		{
-			XGetWindowAttributes(xDisplay, xWindow, &attribs)
-		};
-		assert(status != False);
-
-		return util::uvec2
-		{
-			static_cast<unsigned int>(attribs.width ),
-			static_cast<unsigned int>(attribs.height),
-		};
 	}
 
 	bool Window::HandleEvent(const XEvent& event) const
@@ -240,96 +216,5 @@ namespace xlib
 			}
 		}
 		return true;
-	}
-
-	void Window::Clear (const util::vec4& color)
-	{
-		constexpr auto scale = std::numeric_limits<unsigned short>::max();
-
-		auto xColor = XColor { };
-		xColor.red   = static_cast<unsigned short>(scale * color.red);
-		xColor.green = static_cast<unsigned short>(scale * color.green);
-		xColor.blue  = static_cast<unsigned short>(scale * color.blue);
-		xColor.flags = DoRed | DoGreen | DoBlue;
-
-		auto status = Status
-		{
-			XAllocColor(xDisplay, XDefaultColormapOfScreen(xScreen), &xColor)
-		};
-		assert(status != False);
-
-		auto values = XGCValues { };
-		status = XGetGCValues
-		(
-			xDisplay,
-			XDefaultGCOfScreen(xScreen),
-			GCForeground, &values
-		);
-		assert(status != False);
-
-		XSetForeground
-		(
-			xDisplay, XDefaultGCOfScreen(xScreen), xColor.pixel
-		);
-
-		const auto windowSize = Size();
-
-		XFillRectangle
-		(
-			xDisplay, xWindow, XDefaultGCOfScreen(xScreen),
-			0, 0, // (x, y)
-			windowSize.width,
-			windowSize.height
-		);
-
-		XSetForeground
-		(
-			xDisplay, XDefaultGCOfScreen(xScreen), values.foreground
-		);
-
-		XFreeColors
-		(
-			xDisplay, XDefaultColormapOfScreen(xScreen),
-			&xColor.pixel, 1,
-			0
-		);
-	}
-
-	void Window::Draw(const Pixmap& pixmap)
-	{
-		assert(pixmap.xDisplay == xDisplay);
-		assert(pixmap.xScreen  == xScreen);
-
-		const auto pixmapSize = pixmap.Size();
-		const auto windowSize = this->Size();
-
-		XCopyArea
-		(
-			xDisplay,
-			pixmap.xPixmap, xWindow,
-			XDefaultGCOfScreen(xScreen),
-			0, 0, // source      (x, y)
-			std::min(pixmapSize.width , windowSize.width ),
-			std::min(pixmapSize.height, windowSize.height),
-			0, 0  // destination (x, y)
-		);
-	}
-
-	void Window::Draw(const Image& image)
-	{
-		const auto  imageSize = image.Size();
-		const auto windowSize = this->Size();
-
-		XPutImage
-		(
-			xDisplay,
-			xWindow,
-			XDefaultGCOfScreen(xScreen),
-			image.xImage,
-			0, 0, // source      (x, y)
-			0, 0, // destination (x, y)
-			std::min(imageSize.width , windowSize.width ),
-			std::min(imageSize.height, windowSize.height)
-		);
 	}
 }

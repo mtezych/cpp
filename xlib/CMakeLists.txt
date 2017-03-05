@@ -42,6 +42,8 @@ if(CMAKE_SYSTEM_NAME MATCHES Linux)
                             Display.cpp
                             Visual.h
                             Visual.cpp
+                            Drawable.h
+                            Drawable.cpp
                             Window.h
                             Window.cpp
                             Pixmap.h
