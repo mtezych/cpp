@@ -43,15 +43,15 @@ add_library               (library STATIC library.h
 
 target_include_directories(library PUBLIC .)
 
+target_link_libraries     (library ${CMAKE_DL_LIBS})
+
 set_target_properties     (library PROPERTIES CXX_STANDARD          14
                                               CXX_STANDARD_REQUIRED ON)
 
 add_executable       (test-library test-library.cpp)
 
 target_link_libraries(test-library library
-                                   ${CMAKE_DL_LIBS}
-                                   gtest
-                                   ${CMAKE_THREAD_LIBS_INIT})
+                                   gtest)
 
 set_target_properties(test-library PROPERTIES CXX_STANDARD          14
                                               CXX_STANDARD_REQUIRED ON)

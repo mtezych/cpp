@@ -47,13 +47,14 @@ add_library               (egl STATIC Display.h
 
 target_include_directories(egl PUBLIC .)
 
+target_link_libraries     (egl EGL)
+
 set_target_properties     (egl PROPERTIES CXX_STANDARD          14
                                           CXX_STANDARD_REQUIRED ON)
 
 add_executable            (egl-demo egl-demo.cpp)
 
-target_link_libraries     (egl-demo egl
-                                    EGL)
+target_link_libraries     (egl-demo egl)
 
 set_target_properties     (egl-demo PROPERTIES CXX_STANDARD          14
                                                CXX_STANDARD_REQUIRED ON)

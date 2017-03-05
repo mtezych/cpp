@@ -75,8 +75,7 @@ add_executable            (vulkan VulkanSymbols.h
 
 target_include_directories(vulkan PUBLIC $ENV{VULKAN_SDK}/include)
 
-target_link_libraries     (vulkan library
-                                  ${CMAKE_DL_LIBS})
+target_link_libraries     (vulkan library)
 
 set_target_properties     (vulkan PROPERTIES CXX_STANDARD          14
                                              CXX_STANDARD_REQUIRED ON)

@@ -36,11 +36,15 @@ cmake_minimum_required (VERSION 3.1)
 
 project(googletest)
 
+find_package(Threads REQUIRED)
+
 add_library               (gtest STATIC     include/gtest/gtest.h
                                             src/gtest-all.cc
                                             src/gtest_main.cc)
 
 target_include_directories(gtest PUBLIC     include)
+
+target_link_libraries     (gtest ${CMAKE_THREAD_LIBS_INIT})
 
 set_target_properties     (gtest PROPERTIES CXX_STANDARD          11
                                             CXX_STANDARD_REQUIRED ON)
