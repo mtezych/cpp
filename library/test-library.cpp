@@ -9,6 +9,10 @@ TEST(LibraryTest, libc_sprintf)
 	const auto path = "libc.so";
 #elif defined(__gnu_linux__)
 	const auto path = "libc.so.6";
+#elif defined(_WIN32) && false
+	// https://blogs.msdn.microsoft.com/oldnewthing/20140411-00/?p=1273
+	// The MSVCRT.dll is reserved for Windows applications only.
+	const auto path = "MSVCRT.dll";
 #else
 	#error "Unsupported Platform"
 #endif
