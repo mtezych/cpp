@@ -46,6 +46,6 @@ if((CMAKE_CXX_COMPILER_ID STREQUAL "GNU") AND (NOT CMAKE_CXX_COMPILER_VERSION VE
 
 else()
 
- message("C++ concepts lite require GCC 6.1 or later.")
+ message("[concepts-lite] GCC 6.1 or later is required.")
 
 endif()

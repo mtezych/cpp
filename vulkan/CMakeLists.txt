@@ -36,46 +36,44 @@ cmake_minimum_required (VERSION 3.1)
 
 project(vulkan)
 
-add_executable            (vulkan VulkanSymbols.h
-                                  Vulkan.h
-                                  Vulkan.cpp
-                                  VulkanInstance.h
-                                  VulkanInstance.cpp
-                                  VulkanSurface.h
-                                  VulkanSurface.cpp
-                                  VulkanPhysicalDevice.h
-                                  VulkanPhysicalDevice.cpp
-                                  VulkanDevice.h
-                                  VulkanDevice.cpp
-                                  VulkanQueue.h
-                                  VulkanQueue.cpp
-                                  VulkanSemaphore.h
-                                  VulkanSemaphore.cpp
-                                  VulkanCommandPool.h
-                                  VulkanCommandPool.cpp
-                                  VulkanCommandBuffer.h
-                                  VulkanCommandBuffer.cpp
-                                  VulkanSwapchain.h
-                                  VulkanSwapchain.cpp
-                                  VulkanPipeline.h
-                                  VulkanPipeline.cpp
-                                  VulkanPipelineCache.h
-                                  VulkanPipelineCache.cpp
-                                  VulkanPipelineLayout.h
-                                  VulkanPipelineLayout.cpp
-                                  VulkanFramebuffer.h
-                                  VulkanFramebuffer.cpp
-                                  VulkanRenderPass.h
-                                  VulkanRenderPass.cpp
-                                  VulkanImageView.h
-                                  VulkanImageView.cpp
-                                  VulkanShaderModule.h
-                                  VulkanShaderModule.cpp
-                                  vulkan-demo.cpp)
+add_executable       (vulkan VulkanSymbols.h
+                             Vulkan.h
+                             Vulkan.cpp
+                             VulkanInstance.h
+                             VulkanInstance.cpp
+                             VulkanSurface.h
+                             VulkanSurface.cpp
+                             VulkanPhysicalDevice.h
+                             VulkanPhysicalDevice.cpp
+                             VulkanDevice.h
+                             VulkanDevice.cpp
+                             VulkanQueue.h
+                             VulkanQueue.cpp
+                             VulkanSemaphore.h
+                             VulkanSemaphore.cpp
+                             VulkanCommandPool.h
+                             VulkanCommandPool.cpp
+                             VulkanCommandBuffer.h
+                             VulkanCommandBuffer.cpp
+                             VulkanSwapchain.h
+                             VulkanSwapchain.cpp
+                             VulkanPipeline.h
+                             VulkanPipeline.cpp
+                             VulkanPipelineCache.h
+                             VulkanPipelineCache.cpp
+                             VulkanPipelineLayout.h
+                             VulkanPipelineLayout.cpp
+                             VulkanFramebuffer.h
+                             VulkanFramebuffer.cpp
+                             VulkanRenderPass.h
+                             VulkanRenderPass.cpp
+                             VulkanImageView.h
+                             VulkanImageView.cpp
+                             VulkanShaderModule.h
+                             VulkanShaderModule.cpp
+                             vulkan-demo.cpp)
 
-target_include_directories(vulkan PUBLIC $ENV{VULKAN_SDK}/include)
+target_link_libraries(vulkan khronos library)
 
-target_link_libraries     (vulkan khronos library)
-
-set_target_properties     (vulkan PROPERTIES CXX_STANDARD          14
-                                             CXX_STANDARD_REQUIRED ON)
+set_target_properties(vulkan PROPERTIES CXX_STANDARD          14
+                                        CXX_STANDARD_REQUIRED ON)
