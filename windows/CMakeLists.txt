@@ -36,9 +36,28 @@ cmake_minimum_required (VERSION 3.1)
 
 project(windows)
 
-add_executable            (windows-demo Window.h
-                                        Window.cpp
-                                        windows-demo.cpp)
+if(CMAKE_SYSTEM_NAME MATCHES Windows)
 
-set_target_properties     (windows-demo PROPERTIES CXX_STANDARD          14
-                                                   CXX_STANDARD_REQUIRED ON)
+ add_library               (windows STATIC Window.h
+                                           Window.cpp)
+
+ target_include_directories(windows PUBLIC .)
+
+ target_link_libraries     (windows util)
+
+ set_target_properties     (windows PROPERTIES CXX_STANDARD          14
+                                               CXX_STANDARD_REQUIRED ON)
+
+
+ add_executable            (windows-demo windows-demo.cpp)
+
+ target_link_libraries     (windows-demo windows)
+
+ set_target_properties     (windows-demo PROPERTIES CXX_STANDARD          14
+                                                    CXX_STANDARD_REQUIRED ON)
+
+else()
+
+ message("[windows] Only building for Windows is supported.")
+
+endif()

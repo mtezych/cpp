@@ -2,6 +2,8 @@
 #define UNICODE
 #include <Windows.h>
 
+#include <vec.h>
+
 #include <cassert>
 #include <cstdint>
 
@@ -18,7 +20,7 @@ namespace windows
 		WindowProcedure(HWND hWindow, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
 	public:
-		Window(const uint32_t width, const uint32_t height);
+		Window(const util::uvec2& size);
 		~Window();
 
 		Window(Window&& window);

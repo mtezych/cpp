@@ -58,10 +58,10 @@ if(CMAKE_SYSTEM_NAME MATCHES Linux)
  set_target_properties     (xlib PROPERTIES CXX_STANDARD          14
                                             CXX_STANDARD_REQUIRED ON)
 
+
  add_executable            (xlib-demo xlib-demo.cpp)
 
  target_link_libraries     (xlib-demo xlib)
-
 
  set_target_properties     (xlib-demo PROPERTIES CXX_STANDARD          14
                                                  CXX_STANDARD_REQUIRED ON)

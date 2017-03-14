@@ -3,7 +3,7 @@
 
 namespace windows
 {
-	Window::Window(const uint32_t width, const uint32_t height)
+	Window::Window(const util::uvec2& size)
 	:
 		windowHandle        { nullptr },
 		classAtom           { 0       },
@@ -37,17 +37,17 @@ namespace windows
 		// https://blogs.msdn.microsoft.com/oldnewthing/20080501-00/?p=22503
 		windowHandle = CreateWindowEx
 		(
-			0,                              // extended style
-			MAKEINTATOM(classAtom),        // class atom or name
-			TEXT("WinAPI Window Title"),  // title
-			WS_OVERLAPPEDWINDOW,         // style
-			0, 0,                       // x, y
-			static_cast<int>(width),   // width
-			static_cast<int>(height), // height
-			nullptr,                 // parent window
-			nullptr,                // menu
-			instance,              // instance
-			this                  // create parameter recived in WM_CREATE
+			0,                                   // extended style
+			MAKEINTATOM(classAtom),             // class atom or name
+			TEXT("WinAPI Window Title"),       // title
+			WS_OVERLAPPEDWINDOW,              // style
+			0, 0,                            // x, y
+			static_cast<int>(size.width),   // width
+			static_cast<int>(size.height), // height
+			nullptr,                      // parent window
+			nullptr,                     // menu
+			instance,                   // instance
+			this                       // create parameter recived in WM_CREATE
 		);
 		assert(windowHandle != nullptr);
 
