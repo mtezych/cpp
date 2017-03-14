@@ -163,4 +163,13 @@ namespace egl
 
 		return configs;
 	}
+
+	void Display::BindAPI(const EGLenum eglAPI)
+	{
+		assert(eglAPI == EGL_OPENGL_API || eglAPI == EGL_OPENGL_ES_API);
+
+		const auto eglResult = EGLBoolean { eglBindAPI(eglAPI) };
+		assert(eglResult == EGL_TRUE);
+		assert(eglGetError() == EGL_SUCCESS);
+	}
 }

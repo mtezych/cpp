@@ -59,6 +59,8 @@ namespace egl
 		std::vector<Config> Configs () const;
 		std::vector<Config> Configs (const std::vector<EGLint>& requiredAttribs)
 		const;
+
+		void BindAPI(const EGLenum eglAPI);
 	};
 }
 
