@@ -18,7 +18,7 @@ namespace windows
 		WindowProcedure(HWND hWindow, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
 	public:
-		Window(uint32_t width, uint32_t height);
+		Window(const uint32_t width, const uint32_t height);
 		~Window();
 
 		Window(Window&& window);

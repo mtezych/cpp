@@ -3,7 +3,7 @@
 
 namespace windows
 {
-	Window::Window(uint32_t width, uint32_t height)
+	Window::Window(const uint32_t width, const uint32_t height)
 	:
 		windowHandle        { nullptr },
 		classAtom           { 0       },
@@ -37,26 +37,40 @@ namespace windows
 		// https://blogs.msdn.microsoft.com/oldnewthing/20080501-00/?p=22503
 		windowHandle = CreateWindowEx
 		(
-			0,                            // extended style
-			MAKEINTATOM(classAtom),       // class atom or name
+			0,                              // extended style
+			MAKEINTATOM(classAtom),        // class atom or name
 			TEXT("WinAPI Window Title"),  // title
-			WS_OVERLAPPEDWINDOW,          // style
-			0, 0, width, height,          // x, y, width, height
-			nullptr,                      // parent window
-			nullptr,                      // menu
-			instance,                     // instance
-			nullptr                       // parameter
+			WS_OVERLAPPEDWINDOW,         // style
+			0, 0,                       // x, y
+			static_cast<int>(width),   // width
+			static_cast<int>(height), // height
+			nullptr,                 // parent window
+			nullptr,                // menu
+			instance,              // instance
+			this                  // create parameter recived in WM_CREATE
 		);
 		assert(windowHandle != nullptr);
 
 		deviceContextHandle = GetDC(windowHandle);
 		assert(deviceContextHandle != nullptr);
 
+		const auto previousUserData = SetWindowLongPtr
+		(
+			windowHandle, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(this)
+		);
+		assert(previousUserData == 0);
+
 		const auto result = ShowWindow(windowHandle, SW_SHOW);
 	}
 
 	Window::~Window()
 	{
+		const auto previousUserData = SetWindowLongPtr
+		(
+			windowHandle, GWLP_USERDATA, 0
+		);
+		assert(reinterpret_cast<Window*>(previousUserData) == this);
+
 		auto result = ReleaseDC(windowHandle, deviceContextHandle);
 		assert(result != 0);
 
@@ -97,17 +111,29 @@ namespace windows
 	LRESULT CALLBACK
 	Window::WindowProcedure(HWND hWindow, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	{
+		const auto self = reinterpret_cast<Window*>
+		(
+			GetWindowLongPtr(hWindow, GWLP_USERDATA)
+		);
+
 		switch (uMsg)
 		{
+			case WM_CREATE:
+			{
+				const auto createStruct = reinterpret_cast<const LPCREATESTRUCT>(lParam);
+				// create parameter send by CreateWindowEx()
+				const auto createParam = createStruct->lpCreateParams;
+				return 0;
+			}
 			case WM_KEYDOWN :
 			{
 				if (wParam == VK_ESCAPE)
 				{
-					PostMessage(hWindow, WM_CLOSE, 0, 0);
+					const auto result = PostMessage(hWindow, WM_CLOSE, 0, 0);
+					assert(result != 0);
 				}
 				return 0;
 			}
-			case WM_CLOSE :
 			// Usually in response to WM_CLOSE apps call DestoryWindow().
 			//
 			// However, since Window destructor will call DestoryWindow()
@@ -118,6 +144,7 @@ namespace windows
 			//
 			// Note that calling DestoryWindow() posts WM_QUIT message,
 			// which is never pocessed by WindowProc().
+			case WM_CLOSE :
 			case WM_DESTROY :
 			{
 				PostQuitMessage(0);

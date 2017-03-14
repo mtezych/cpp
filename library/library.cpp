@@ -61,7 +61,7 @@
 				const auto wideCharactersNeeded = MultiByteToWideChar
 				(
 					CP_UTF8, 0,
-					&stringUTF8[0], stringUTF8.length(),
+					&stringUTF8[0], static_cast<int>(stringUTF8.length()),
 					nullptr, 0
 				);
 				assert(wideCharactersNeeded > 0);
@@ -71,8 +71,8 @@
 				const auto wideCharactersWritten = MultiByteToWideChar
 				(
 					CP_UTF8, 0,
-					&stringUTF8[0], stringUTF8.length(),
-					&stringUTF16[0], stringUTF16.length()
+					&stringUTF8 [0], static_cast<int>(stringUTF8 .length()),
+					&stringUTF16[0], static_cast<int>(stringUTF16.length())
 				);
 				assert(wideCharactersWritten > 0);
 
