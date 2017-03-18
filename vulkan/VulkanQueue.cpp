@@ -49,7 +49,7 @@ namespace vk
 		);
 		assert(result == VK_SUCCESS);
 
-		return std::move(renderingFinished);
+		return renderingFinished;
 	}
 
 	void VulkanQueue::WaitIdle()

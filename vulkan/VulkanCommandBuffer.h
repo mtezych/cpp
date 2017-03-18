@@ -9,8 +9,8 @@ namespace vk
 {
 	struct VulkanDevice;
 	struct VulkanCommandPool;
-//	struct VulkanRenderPass;
-//	struct VulkanFramebuffer;
+	struct VulkanRenderPass;
+	struct VulkanFramebuffer;
 	struct VulkanPipeline;
 
 	struct VulkanCommandBuffer
@@ -70,13 +70,13 @@ namespace vk
 			const VkClearColorValue&       clearColor
 		);
 
-//		void RecordCommandBeginRenderPass
-//		(
-//			const VulkanRenderPass&  renderPass,
-//			const VulkanFramebuffer& framebuffer,
-//			const VkRect2D&          renderArea,
-//			const VkClearValue&      clear
-//		);
+		void RecordCommandBeginRenderPass
+		(
+			const VulkanRenderPass&  renderPass,
+			const VulkanFramebuffer& framebuffer,
+			const VkRect2D&          renderArea,
+			const VkClearValue&      clear
+		);
 
 		void RecordCommandEndRenderPass();
 

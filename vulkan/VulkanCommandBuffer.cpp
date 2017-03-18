@@ -4,8 +4,8 @@
 #include "VulkanSymbols.h"
 #include "VulkanDevice.h"
 #include "VulkanCommandPool.h"
-// #include "VulkanRenderPass.h"
-// #include "VulkanFramebuffer.h"
+#include "VulkanRenderPass.h"
+#include "VulkanFramebuffer.h"
 #include "VulkanPipeline.h"
 
 #include <cassert>
@@ -234,30 +234,30 @@ namespace vk
 		);
 	}
 
-//	void VulkanCommandBuffer::RecordCommandBeginRenderPass
-//	(
-//		const VulkanRenderPass&  renderPass,
-//		const VulkanFramebuffer& framebuffer,
-//		const VkRect2D&          renderArea,
-//		const VkClearValue&      clear
-//	)
-//	{
-//		const auto beginInfo = VkRenderPassBeginInfo
-//		{
-//			VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO,
-//			nullptr,
-//			renderPass.renderPass,
-//			framebuffer.framebuffer,
-//			renderArea,
-//			1, &clear
-//		};
-//		vkCmdBeginRenderPass
-//		(
-//			commandBuffer,
-//			&beginInfo,
-//			VkSubpassContents { VK_SUBPASS_CONTENTS_INLINE }
-//		);
-//	}
+	void VulkanCommandBuffer::RecordCommandBeginRenderPass
+	(
+		const VulkanRenderPass&  renderPass,
+		const VulkanFramebuffer& framebuffer,
+		const VkRect2D&          renderArea,
+		const VkClearValue&      clear
+	)
+	{
+		const auto beginInfo = VkRenderPassBeginInfo
+		{
+			VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO,
+			nullptr,
+			renderPass.renderPass,
+			framebuffer.framebuffer,
+			renderArea,
+			1, &clear
+		};
+		vkCmdBeginRenderPass
+		(
+			commandBuffer,
+			&beginInfo,
+			VkSubpassContents { VK_SUBPASS_CONTENTS_INLINE }
+		);
+	}
 
 	void VulkanCommandBuffer::RecordCommandEndRenderPass()
 	{

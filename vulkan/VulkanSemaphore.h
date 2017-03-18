@@ -19,7 +19,7 @@ namespace vk
 
 		VulkanSemaphore();
 
-		VulkanSemaphore(const VulkanDevice& device);
+		explicit VulkanSemaphore(const VulkanDevice& device);
 
 		VulkanSemaphore(VulkanSemaphore&& semaphore);
 		VulkanSemaphore& operator = (VulkanSemaphore&& semaphore);

@@ -37,6 +37,7 @@ cmake_minimum_required (VERSION 3.1)
 project(vulkan)
 
 add_executable       (vulkan VulkanSymbols.h
+                             VulkanVersion.h
                              Vulkan.h
                              Vulkan.cpp
                              VulkanInstance.h
