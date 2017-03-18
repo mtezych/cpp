@@ -17,6 +17,17 @@
 │                                                         │
 │ vk Get       Instance Proc Addr                         │
 │                                                         │
+│ ┌─────────────────────────────────────────────────────┐ │
+│ │                    VkSurfaceKHR                     │ │
+│ ├─────────────────────────────────────────────────────┤ │
+│ │ vk Create  Xlib    Surface KHR                      │ │
+│ │ vk Create  Xcb     Surface KHR                      │ │
+│ │ vk Create  Wayland Surface KHR                      │ │
+│ │ vk Create  Android Surface KHR                      │ │
+│ │ vk Create  Win32   Surface KHR                      │ │
+│ │ vk Destroy         Surface KHR                      │ │
+│ └─────────────────────────────────────────────────────┘ │
+│                                                         │
 │ vk Enumerate Physical Devices                           │
 └─────────────────────────────────────────────────────────┘
 
@@ -31,6 +42,16 @@
 │ vk Get Physical Device        Image Format Properties   │
 │ vk Get Physical Device Sparse Image Format Properties   │
 │ vk Get Physical Device Memory              Properties   │
+│                                                         │
+│ vk Get Physical Device Xlib    Presentation Support KHR │
+│ vk Get Physical Device Xcb     Presentation Support KHR │
+│ vk Get Physical Device Wayland Presentation Support KHR │
+│ vk Get Physical Device Win32   Presentation Support KHR │
+│                                                         │
+│ vk Get Physical Device Surface Support       KHR        │
+│ vk Get Physical Device Surface Capabilities  KHR        │
+│ vk Get Physical Device Surface Formats       KHR        │
+│ vk Get Physical Device Surface Present Modes KHR        │
 │                                                         │
 │ vk Enumerate Device Extension Properties                │
 │ vk Enumerate Device Layer     Properties                │
@@ -207,6 +228,15 @@
 │ └─────────────────────────────────────────────────────┘ │
 │                                                         │
 │ ┌─────────────────────────────────────────────────────┐ │
+│ │                   VkSwapchainKHR                    │ │
+│ ├─────────────────────────────────────────────────────┤ │
+│ │ vk Create        Swapchain        KHR               │ │
+│ │ vk Destroy       Swapchain        KHR               │ │
+│ │ vk Get           Swapchain Images KHR               │ │
+│ │ vk Acquire Next            Image  KHR               │ │
+│ └─────────────────────────────────────────────────────┘ │
+│                                                         │
+│ ┌─────────────────────────────────────────────────────┐ │
 │ │                     VkCommandPool                   │ │
 │ ├─────────────────────────────────────────────────────┤ │
 │ │ vk Create  Command Pool                             │ │
@@ -224,6 +254,8 @@
 │ vk Queue Submit                                         │
 │ vk Queue Wait Idle                                      │
 │ vk Queue Bind Sparse                                    │
+│                                                         │
+│ vk Queue Present KHR                                    │
 └─────────────────────────────────────────────────────────┘
 
 ┌─────────────────────────────────────────────────────────┐
@@ -1416,5 +1448,171 @@ void               vkCmdExecuteCommands
     VkCommandBuffer                        commandBuffer,
     uint32_t                               commandBufferCount,
     const VkCommandBuffer*                 pCommandBuffers
+);
+
+
+// VK_KHR_xlib_surface
+
+VkResult           vkCreateXlibSurfaceKHR
+(
+    VkInstance                             instance,
+    const VkXlibSurfaceCreateInfoKHR*      pCreateInfo,
+    const VkAllocationCallbacks*           pAllocator,
+    VkSurfaceKHR*                          pSurface
+);
+
+VkBool32           vkGetPhysicalDeviceXlibPresentationSupportKHR
+(
+    VkPhysicalDevice                       physicalDevice,
+    uint32_t                               queueFamilyIndex,
+    Display*                               dpy,
+    VisualID                               visualID
+);
+
+
+// VK_KHR_xcb_surface
+
+VkResult           vkCreateXcbSurfaceKHR
+(
+    VkInstance                             instance,
+    const VkXcbSurfaceCreateInfoKHR*       pCreateInfo,
+    const VkAllocationCallbacks*           pAllocator,
+    VkSurfaceKHR*                          pSurface
+);
+
+VkBool32           vkGetPhysicalDeviceXcbPresentationSupportKHR
+(
+    VkPhysicalDevice                       physicalDevice,
+    uint32_t                               queueFamilyIndex,
+    xcb_connection_t*                      connection,
+    xcb_visualid_t                         visual_id
+);
+
+
+// VK_KHR_wayland_surface
+
+VkResult           vkCreateWaylandSurfaceKHR
+(
+    VkInstance                             instance,
+    const VkWaylandSurfaceCreateInfoKHR*   pCreateInfo,
+    const VkAllocationCallbacks*           pAllocator,
+    VkSurfaceKHR*                          pSurface
+);
+
+VkBool32           vkGetPhysicalDeviceWaylandPresentationSupportKHR
+(
+    VkPhysicalDevice                       physicalDevice,
+    uint32_t                               queueFamilyIndex,
+    struct wl_display*                     display
+);
+
+
+// VK_KHR_android_surface
+
+VkResult           vkCreateAndroidSurfaceKHR
+(
+    VkInstance                             instance,
+    const VkAndroidSurfaceCreateInfoKHR*   pCreateInfo,
+    const VkAllocationCallbacks*           pAllocator,
+    VkSurfaceKHR*                          pSurface
+);
+
+
+// VK_KHR_win32_surface
+
+VkResult           vkCreateWin32SurfaceKHR
+(
+    VkInstance                             instance,
+    const VkWin32SurfaceCreateInfoKHR*     pCreateInfo,
+    const VkAllocationCallbacks*           pAllocator,
+    VkSurfaceKHR*                          pSurface
+);
+
+VkBool32           vkGetPhysicalDeviceWin32PresentationSupportKHR
+(
+    VkPhysicalDevice                       physicalDevice,
+    uint32_t                               queueFamilyIndex
+);
+
+
+// VK_KHR_surface
+
+void               vkDestroySurfaceKHR
+(
+    VkInstance                             instance,
+    VkSurfaceKHR                           surface,
+    const VkAllocationCallbacks*           pAllocator
+);
+
+VkResult           vkGetPhysicalDeviceSurfaceSupportKHR
+(
+    VkPhysicalDevice                       physicalDevice,
+    uint32_t                               queueFamilyIndex,
+    VkSurfaceKHR                           surface,
+    VkBool32*                              pSupported
+);
+
+VkResult           vkGetPhysicalDeviceSurfaceCapabilitiesKHR
+(
+    VkPhysicalDevice                       physicalDevice,
+    VkSurfaceKHR                           surface,
+    VkSurfaceCapabilitiesKHR*              pSurfaceCapabilities
+);
+
+VkResult           vkGetPhysicalDeviceSurfaceFormatsKHR
+(
+    VkPhysicalDevice                       physicalDevice,
+    VkSurfaceKHR                           surface,
+    uint32_t*                              pSurfaceFormatCount,
+    VkSurfaceFormatKHR*                    pSurfaceFormats);
+
+VkResult           vkGetPhysicalDeviceSurfacePresentModesKHR
+(
+    VkPhysicalDevice                       physicalDevice,
+    VkSurfaceKHR                           surface,
+    uint32_t*                              pPresentModeCount,
+    VkPresentModeKHR*                      pPresentModes
+);
+
+
+// VK_KHR_swapchain
+
+VkResult           vkCreateSwapchainKHR
+(
+    VkDevice                               device,
+    const VkSwapchainCreateInfoKHR*        pCreateInfo,
+    const VkAllocationCallbacks*           pAllocator,
+    VkSwapchainKHR*                        pSwapchain
+);
+
+void               vkDestroySwapchainKHR
+(
+    VkDevice                               device,
+    VkSwapchainKHR                         swapchain,
+    const VkAllocationCallbacks*           pAllocator
+);
+
+VkResult           vkGetSwapchainImagesKHR
+(
+    VkDevice                               device,
+    VkSwapchainKHR                         swapchain,
+    uint32_t*                              pSwapchainImageCount,
+    VkImage*                               pSwapchainImages
+);
+
+VkResult           vkAcquireNextImageKHR
+(
+    VkDevice                               device,
+    VkSwapchainKHR                         swapchain,
+    uint64_t                               timeout,
+    VkSemaphore                            semaphore,
+    VkFence                                fence,
+    uint32_t*                              pImageIndex
+);
+
+VkResult           vkQueuePresentKHR
+(
+    VkQueue                                queue,
+    const VkPresentInfoKHR*                pPresentInfo
 );
 ```
