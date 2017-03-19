@@ -38,8 +38,8 @@ project(vulkan)
 
 add_executable       (vulkan VulkanSymbols.h
                              VulkanVersion.h
-                             Vulkan.h
-                             Vulkan.cpp
+                             VulkanLoader.h
+                             VulkanLoader.cpp
                              VulkanInstance.h
                              VulkanInstance.cpp
                              VulkanSurface.h
