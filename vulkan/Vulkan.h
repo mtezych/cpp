@@ -13,7 +13,7 @@
 
 namespace vk
 {
-	struct Vulkan
+	struct VulkanLoader
 	{
 		platform::Library library;
 
@@ -22,19 +22,19 @@ namespace vk
 		PFN_vkEnumerateInstanceExtensionProperties vkEnumerateInstanceExtensionProperties;
 		PFN_vkEnumerateInstanceLayerProperties     vkEnumerateInstanceLayerProperties;
 
-		Vulkan();
+		VulkanLoader();
 
-		explicit Vulkan(const std::string& libraryPath);
+		explicit VulkanLoader(const std::string& libraryPath);
 
-		~Vulkan() = default;
+		~VulkanLoader() = default;
 
-		Vulkan(const Vulkan& vulkan) = delete;
+		VulkanLoader(const VulkanLoader& loader) = delete;
 
-		Vulkan& operator =(const Vulkan& vulkan) = delete;
+		VulkanLoader& operator =(const VulkanLoader& loader) = delete;
 
-		Vulkan(Vulkan&& vulkan);
+		VulkanLoader(VulkanLoader&& loader);
 
-		Vulkan& operator =(Vulkan&& vulkan);
+		VulkanLoader& operator =(VulkanLoader&& loader);
 
 		template <typename Symbol>
 		typename Symbol::type LoadSymbol() const

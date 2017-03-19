@@ -16,7 +16,7 @@ int main()
 	#error "Unsupported Platform"
 #endif
 
-	const auto vulkan = vk::Vulkan { path };
+	const auto vulkanLoader = vk::VulkanLoader { path };
 
 	const auto applicationInfo = VkApplicationInfo
 	{
@@ -42,7 +42,14 @@ int main()
 		0, nullptr,
 		uint32_t { instanceExtensions.size() }, instanceExtensions.data(),
 	};
-	const auto vulkanInstance = vk::VulkanInstance { vulkan, instanceCreateInfo };
+	const auto vulkanInstance = vk::VulkanInstance
+	{
+		vulkanLoader, instanceCreateInfo
+	};
+
+	for (auto& vulkanPhysicalDevice : vulkanInstance.EnumeratePhysicalDevices())
+	{
+	}
 
 	return 0;
 }

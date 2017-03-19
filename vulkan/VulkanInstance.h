@@ -6,7 +6,7 @@
 
 namespace vk
 {
-	struct Vulkan;
+	struct VulkanLoader;
 
 	struct VulkanInstance
 	{
@@ -22,7 +22,7 @@ namespace vk
 
 		VulkanInstance
 		(
-			const Vulkan& vulkan, const VkInstanceCreateInfo& createInfo
+			const VulkanLoader& loader, const VkInstanceCreateInfo& createInfo
 		);
 
 		~VulkanInstance();

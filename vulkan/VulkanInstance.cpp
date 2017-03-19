@@ -20,12 +20,12 @@ namespace vk
 
 	VulkanInstance::VulkanInstance
 	(
-		const Vulkan& vulkan, const VkInstanceCreateInfo& createInfo
+		const VulkanLoader& loader, const VkInstanceCreateInfo& createInfo
 	):
 		instance { VK_NULL_HANDLE },
 
-		vkGetInstanceProcAddr { vulkan.LoadSymbol         <symbol::vkGetInstanceProcAddr>() },
-		vkCreateInstance      { vulkan.LoadGlobalProcedure<symbol::vkCreateInstance     >() },
+		vkGetInstanceProcAddr { loader.LoadSymbol         <symbol::vkGetInstanceProcAddr>() },
+		vkCreateInstance      { loader.LoadGlobalProcedure<symbol::vkCreateInstance     >() },
 
 		vkDestroyInstance          { nullptr },
 		vkEnumeratePhysicalDevices { nullptr }

@@ -5,7 +5,7 @@
 
 namespace vk
 {
-	Vulkan::Vulkan()
+	VulkanLoader::VulkanLoader()
 	:
 		library { },
 
@@ -15,7 +15,7 @@ namespace vk
 	{
 	}
 
-	Vulkan::Vulkan(const std::string& libraryPath)
+	VulkanLoader::VulkanLoader(const std::string& libraryPath)
 	:
 		library { libraryPath },
 
@@ -34,36 +34,36 @@ namespace vk
 	{
 	}
 
-	Vulkan::Vulkan(Vulkan&& vulkan)
+	VulkanLoader::VulkanLoader(VulkanLoader&& loader)
 	:
-		library { std::move(vulkan.library) },
+		library { std::move(loader.library) },
 
-		vkGetInstanceProcAddr                  { vulkan.vkGetInstanceProcAddr                  },
-		vkEnumerateInstanceExtensionProperties { vulkan.vkEnumerateInstanceExtensionProperties },
-		vkEnumerateInstanceLayerProperties     { vulkan.vkEnumerateInstanceLayerProperties     }
+		vkGetInstanceProcAddr                  { loader.vkGetInstanceProcAddr                  },
+		vkEnumerateInstanceExtensionProperties { loader.vkEnumerateInstanceExtensionProperties },
+		vkEnumerateInstanceLayerProperties     { loader.vkEnumerateInstanceLayerProperties     }
 	{
-		vulkan.vkGetInstanceProcAddr                  = nullptr;
-		vulkan.vkEnumerateInstanceExtensionProperties = nullptr;
-		vulkan.vkEnumerateInstanceLayerProperties     = nullptr;
+		loader.vkGetInstanceProcAddr                  = nullptr;
+		loader.vkEnumerateInstanceExtensionProperties = nullptr;
+		loader.vkEnumerateInstanceLayerProperties     = nullptr;
 	}
 
-	Vulkan& Vulkan::operator =(Vulkan&& vulkan)
+	VulkanLoader& VulkanLoader::operator =(VulkanLoader&& loader)
 	{
-		library = std::move(vulkan.library);
+		library = std::move(loader.library);
 
-		vkGetInstanceProcAddr                  = vulkan.vkGetInstanceProcAddr;
-		vkEnumerateInstanceExtensionProperties = vulkan.vkEnumerateInstanceExtensionProperties;
-		vkEnumerateInstanceLayerProperties     = vulkan.vkEnumerateInstanceLayerProperties;
+		vkGetInstanceProcAddr                  = loader.vkGetInstanceProcAddr;
+		vkEnumerateInstanceExtensionProperties = loader.vkEnumerateInstanceExtensionProperties;
+		vkEnumerateInstanceLayerProperties     = loader.vkEnumerateInstanceLayerProperties;
 
-		vulkan.vkGetInstanceProcAddr                  = nullptr;
-		vulkan.vkEnumerateInstanceExtensionProperties = nullptr;
-		vulkan.vkEnumerateInstanceLayerProperties     = nullptr;
+		loader.vkGetInstanceProcAddr                  = nullptr;
+		loader.vkEnumerateInstanceExtensionProperties = nullptr;
+		loader.vkEnumerateInstanceLayerProperties     = nullptr;
 
 		return *this;
 	}
 
 	std::vector<VkExtensionProperties>
-	Vulkan::EnumerateInstanceExtensionProperties(const std::string& layerName) const
+	VulkanLoader::EnumerateInstanceExtensionProperties(const std::string& layerName) const
 	{
 		auto instanceExtensionPropertiesCount = uint32_t { 0 };
 		auto result = vkEnumerateInstanceExtensionProperties
@@ -91,7 +91,7 @@ namespace vk
 	}
 
 	std::vector<VkLayerProperties>
-	Vulkan::EnumerateInstanceLayerProperties() const
+	VulkanLoader::EnumerateInstanceLayerProperties() const
 	{
 		auto instanceLayerPropertiesCount = uint32_t { 0 };
 		auto result = vkEnumerateInstanceLayerProperties
