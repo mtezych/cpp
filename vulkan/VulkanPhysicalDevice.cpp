@@ -21,6 +21,7 @@ namespace vk
 		{
 			instance.LoadInstanceProcedure<symbol::vkEnumerateDeviceLayerProperties>()
 		},
+
 		vkGetPhysicalDeviceFeatures
 		{
 			instance.LoadInstanceProcedure<symbol::vkGetPhysicalDeviceFeatures>()
@@ -41,13 +42,13 @@ namespace vk
 		{
 			instance.LoadInstanceProcedure<symbol::vkGetPhysicalDeviceImageFormatProperties>()
 		},
-		vkGetPhysicalDeviceMemoryProperties
-		{
-			instance.LoadInstanceProcedure<symbol::vkGetPhysicalDeviceMemoryProperties>()
-		},
 		vkGetPhysicalDeviceSparseImageFormatProperties
 		{
 			instance.LoadInstanceProcedure<symbol::vkGetPhysicalDeviceSparseImageFormatProperties>()
+		},
+		vkGetPhysicalDeviceMemoryProperties
+		{
+			instance.LoadInstanceProcedure<symbol::vkGetPhysicalDeviceMemoryProperties>()
 		},
 
 		vkGetPhysicalDeviceSurfaceSupportKHR
@@ -213,16 +214,6 @@ namespace vk
 		return imageFormatProperties;
 	}
 
-	VkPhysicalDeviceMemoryProperties
-	VulkanPhysicalDevice::GetPhysicalDeviceMemoryProperties() const
-	{
-		auto memoryProperties = VkPhysicalDeviceMemoryProperties { };
-
-		vkGetPhysicalDeviceMemoryProperties(physicalDevice, &memoryProperties);
-
-		return memoryProperties;
-	}
-
 	std::vector<VkSparseImageFormatProperties>
 	VulkanPhysicalDevice::GetPhysicalDeviceSparseImageFormatProperties
 	(
@@ -264,6 +255,16 @@ namespace vk
 		);
 
 		return sparseImageFormatProperties;
+	}
+
+	VkPhysicalDeviceMemoryProperties
+	VulkanPhysicalDevice::GetPhysicalDeviceMemoryProperties() const
+	{
+		auto memoryProperties = VkPhysicalDeviceMemoryProperties { };
+
+		vkGetPhysicalDeviceMemoryProperties(physicalDevice, &memoryProperties);
+
+		return memoryProperties;
 	}
 
 	bool VulkanPhysicalDevice::GetPhysicalDeviceSurfaceSupport

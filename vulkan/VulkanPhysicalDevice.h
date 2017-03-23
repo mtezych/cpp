@@ -18,15 +18,16 @@ namespace vk
 	{
 		VkPhysicalDevice physicalDevice;
 
-		PFN_vkEnumerateDeviceExtensionProperties           vkEnumerateDeviceExtensionProperties;
-		PFN_vkEnumerateDeviceLayerProperties               vkEnumerateDeviceLayerProperties;
+		PFN_vkEnumerateDeviceExtensionProperties vkEnumerateDeviceExtensionProperties;
+		PFN_vkEnumerateDeviceLayerProperties     vkEnumerateDeviceLayerProperties;
+
 		PFN_vkGetPhysicalDeviceFeatures                    vkGetPhysicalDeviceFeatures;
 		PFN_vkGetPhysicalDeviceProperties                  vkGetPhysicalDeviceProperties;
 		PFN_vkGetPhysicalDeviceQueueFamilyProperties       vkGetPhysicalDeviceQueueFamilyProperties;
 		PFN_vkGetPhysicalDeviceFormatProperties            vkGetPhysicalDeviceFormatProperties;
 		PFN_vkGetPhysicalDeviceImageFormatProperties       vkGetPhysicalDeviceImageFormatProperties;
-		PFN_vkGetPhysicalDeviceMemoryProperties            vkGetPhysicalDeviceMemoryProperties;
 		PFN_vkGetPhysicalDeviceSparseImageFormatProperties vkGetPhysicalDeviceSparseImageFormatProperties;
+		PFN_vkGetPhysicalDeviceMemoryProperties            vkGetPhysicalDeviceMemoryProperties;
 
 		PFN_vkGetPhysicalDeviceSurfaceSupportKHR      vkGetPhysicalDeviceSurfaceSupportKHR;
 		PFN_vkGetPhysicalDeviceSurfaceFormatsKHR      vkGetPhysicalDeviceSurfaceFormatsKHR;
@@ -62,9 +63,6 @@ namespace vk
 			const VkImageCreateFlags imageCreateFlags
 		) const;
 
-		VkPhysicalDeviceMemoryProperties
-		GetPhysicalDeviceMemoryProperties() const;
-
 		std::vector<VkSparseImageFormatProperties>
 		GetPhysicalDeviceSparseImageFormatProperties
 		(
@@ -74,6 +72,9 @@ namespace vk
 			const VkImageUsageFlags     imageUsageFlags,
 			const VkImageTiling         imageTiling
 		) const;
+
+		VkPhysicalDeviceMemoryProperties
+		GetPhysicalDeviceMemoryProperties() const;
 
 		bool GetPhysicalDeviceSurfaceSupport
 		(
