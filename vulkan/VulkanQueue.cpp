@@ -11,7 +11,7 @@
 
 namespace vk
 {
-	VulkanQueue::VulkanQueue(const VulkanDevice& device, const VkQueue queue)
+	Queue::Queue(const Device& device, const VkQueue queue)
 	:
 		queue { queue },
 
@@ -23,15 +23,15 @@ namespace vk
 	{
 	}
 
-	VulkanSemaphore VulkanQueue::Submit
+	Semaphore Queue::Submit
 	(
-		const VulkanDevice&        device,
-		const VulkanSemaphore&     imageAvaliable,
+		const Device&              device,
+		const Semaphore&           imageAvaliable,
 		const VkPipelineStageFlags waitPipelineStage,
-		const VulkanCommandBuffer& commandBuffer
+		const CommandBuffer&       commandBuffer
 	) const
 	{
-		auto renderingFinished = VulkanSemaphore { device };
+		auto renderingFinished = Semaphore { device };
 
 		const auto submitInfo = VkSubmitInfo
 		{
@@ -52,17 +52,17 @@ namespace vk
 		return renderingFinished;
 	}
 
-	void VulkanQueue::WaitIdle()
+	void Queue::WaitIdle()
 	{
 		const auto result = vkQueueWaitIdle(queue);
 		assert(result == VK_SUCCESS);
 	}
 
-	void VulkanQueue::Present
+	void Queue::Present
 	(
-		const VulkanSwapchain& swapchain,
-		const uint32_t         imageIndex,
-		const VulkanSemaphore& imageReady
+		const Swapchain& swapchain,
+		const uint32_t   imageIndex,
+		const Semaphore& imageReady
 	) const
 	{
 		const auto presentInfo = VkPresentInfoKHR

@@ -6,10 +6,10 @@
 
 namespace vk
 {
-	VulkanDevice::VulkanDevice
+	Device::Device
 	(
-		const VulkanInstance& instance,
-		const VulkanPhysicalDevice& physicalDevice,
+		const Instance&           instance,
+		const PhysicalDevice&     physicalDevice,
 		const VkDeviceCreateInfo& deviceCreateInfo
 	):
 		device { VK_NULL_HANDLE },
@@ -38,7 +38,7 @@ namespace vk
 		vkDestroyDevice  = LoadDeviceProcedure<symbol::vkDestroyDevice >();
 	}
 
-	VulkanDevice::~VulkanDevice()
+	Device::~Device()
 	{
 		const auto result = vkDeviceWaitIdle(device);
 		assert(result == VK_SUCCESS);
@@ -46,13 +46,13 @@ namespace vk
 		vkDestroyDevice(device, nullptr);
 	}
 
-	VulkanQueue
-	VulkanDevice::Queues(const uint32_t familyIndex, const uint32_t queueIndex) const
+	Queue
+	Device::Queues(const uint32_t familyIndex, const uint32_t queueIndex) const
 	{
 		auto queue = VkQueue { VK_NULL_HANDLE };
 
 		vkGetDeviceQueue(device, familyIndex, queueIndex, &queue);
 
-		return VulkanQueue { *this, queue };
+		return Queue { *this, queue };
 	}
 }

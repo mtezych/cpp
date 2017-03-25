@@ -12,7 +12,7 @@
 
 namespace vk
 {
-	VulkanCommandBuffer::VulkanCommandBuffer()
+	CommandBuffer::CommandBuffer()
 	:
 		commandBuffer { VK_NULL_HANDLE },
 		commandPool   { VK_NULL_HANDLE },
@@ -31,10 +31,10 @@ namespace vk
 	{
 	}
 
-	VulkanCommandBuffer::VulkanCommandBuffer
+	CommandBuffer::CommandBuffer
 	(
-		const VulkanDevice& device,
-		const VulkanCommandPool& commandPool,
+		const Device&              device,
+		const CommandPool&         commandPool,
 		const VkCommandBufferLevel level
 	):
 		commandBuffer { VK_NULL_HANDLE          },
@@ -98,7 +98,7 @@ namespace vk
 		assert(result == VK_SUCCESS);
 	}
 
-	VulkanCommandBuffer::~VulkanCommandBuffer()
+	CommandBuffer::~CommandBuffer()
 	{
 		if (commandBuffer != VK_NULL_HANDLE)
 		{
@@ -106,7 +106,7 @@ namespace vk
 		}
 	}
 
-	VulkanCommandBuffer::VulkanCommandBuffer(VulkanCommandBuffer&& commandBuffer)
+	CommandBuffer::CommandBuffer(CommandBuffer&& commandBuffer)
 	:
 		commandBuffer { commandBuffer.commandBuffer },
 		commandPool   { commandBuffer.commandPool   },
@@ -139,7 +139,7 @@ namespace vk
 		commandBuffer.vkCmdDraw                = nullptr;
 	}
 
-	VulkanCommandBuffer& VulkanCommandBuffer::operator =(VulkanCommandBuffer&& commandBuffer)
+	CommandBuffer& CommandBuffer::operator =(CommandBuffer&& commandBuffer)
 	{
 		if (this->commandBuffer != VK_NULL_HANDLE)
 		{
@@ -179,7 +179,7 @@ namespace vk
 		return *this;
 	}
 
-	void VulkanCommandBuffer::BeginRecording()
+	void CommandBuffer::BeginRecording()
 	{
 		const auto beginInfo = VkCommandBufferBeginInfo
 		{
@@ -192,13 +192,13 @@ namespace vk
 		assert(result == VK_SUCCESS);
 	}
 
-	void VulkanCommandBuffer::EndRecording()
+	void CommandBuffer::EndRecording()
 	{
 		const auto result = vkEndCommandBuffer(commandBuffer);
 		assert(result == VK_SUCCESS);
 	}
 
-	void VulkanCommandBuffer::RecordCommandPipelineBarrier
+	void CommandBuffer::RecordCommandPipelineBarrier
 	(
 		const VkPipelineStageFlags  sourcePipelineStageMask,
 		const VkPipelineStageFlags  destinationPipelineStageMask,
@@ -217,7 +217,7 @@ namespace vk
 		);
 	}
 
-	void VulkanCommandBuffer::RecordCommandClearImage
+	void CommandBuffer::RecordCommandClearImage
 	(
 		VkImage&                       image,
 		const VkImageLayout            imageLayout,
@@ -234,12 +234,12 @@ namespace vk
 		);
 	}
 
-	void VulkanCommandBuffer::RecordCommandBeginRenderPass
+	void CommandBuffer::RecordCommandBeginRenderPass
 	(
-		const VulkanRenderPass&  renderPass,
-		const VulkanFramebuffer& framebuffer,
-		const VkRect2D&          renderArea,
-		const VkClearValue&      clear
+		const RenderPass&   renderPass,
+		const Framebuffer&  framebuffer,
+		const VkRect2D&     renderArea,
+		const VkClearValue& clear
 	)
 	{
 		const auto beginInfo = VkRenderPassBeginInfo
@@ -259,12 +259,12 @@ namespace vk
 		);
 	}
 
-	void VulkanCommandBuffer::RecordCommandEndRenderPass()
+	void CommandBuffer::RecordCommandEndRenderPass()
 	{
 		vkCmdEndRenderPass(commandBuffer);
 	}
 
-	void VulkanCommandBuffer::RecordCommandBindPipeline(const VulkanPipeline& pipeline)
+	void CommandBuffer::RecordCommandBindPipeline(const Pipeline& pipeline)
 	{
 		vkCmdBindPipeline
 		(
@@ -274,7 +274,7 @@ namespace vk
 		);
 	}
 
-	void VulkanCommandBuffer::RecordCommandDraw
+	void CommandBuffer::RecordCommandDraw
 	(
 		uint32_t vertexCount, uint32_t instanceCount,
 		uint32_t firstVertex, uint32_t firstInstance

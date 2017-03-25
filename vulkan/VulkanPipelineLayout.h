@@ -9,26 +9,26 @@
 
 namespace vk
 {
-	struct VulkanDevice;
+	struct Device;
 
-	struct VulkanPipelineLayout
+	struct PipelineLayout
 	{
-		VkDevice        device;
+		VkDevice         device;
 		VkPipelineLayout pipelineLayout;
 
 		PFN_vkCreatePipelineLayout  vkCreatePipelineLayout;
 		PFN_vkDestroyPipelineLayout vkDestroyPipelineLayout;
 
-		VulkanPipelineLayout();
+		PipelineLayout();
 
-		VulkanPipelineLayout
+		PipelineLayout
 		(
-			const VulkanDevice&                       device,
+			const Device&                             device,
 			const std::vector<VkDescriptorSetLayout>& descriptorSetLayouts,
 			const std::vector<VkPushConstantRange>&   pushConstantRanges
 		);
 
-		~VulkanPipelineLayout();
+		~PipelineLayout();
 	};
 }
 

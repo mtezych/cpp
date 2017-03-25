@@ -6,11 +6,11 @@
 
 namespace vk
 {
-	struct VulkanDevice;
-	struct VulkanCommandBuffer;
-	struct VulkanSwapchain;
+	struct Device;
+	struct CommandBuffer;
+	struct Swapchain;
 
-	struct VulkanQueue
+	struct Queue
 	{
 		VkQueue queue;
 
@@ -20,23 +20,23 @@ namespace vk
 
 		PFN_vkQueuePresentKHR   vkQueuePresentKHR;
 
-		VulkanQueue(const VulkanDevice& device, const VkQueue queue);
+		Queue(const Device& device, const VkQueue queue);
 
-		VulkanSemaphore Submit
+		Semaphore Submit
 		(
-			const VulkanDevice&        device,
-			const VulkanSemaphore&     imageAvaliable,
+			const Device&              device,
+			const Semaphore&           imageAvaliable,
 			const VkPipelineStageFlags waitPipelineStage,
-			const VulkanCommandBuffer& commandBuffer
+			const CommandBuffer&       commandBuffer
 		) const;
 
 		void WaitIdle();
 
 		void Present
 		(
-			const VulkanSwapchain& swapchain,
-			const uint32_t         imageIndex,
-			const VulkanSemaphore& imageReady
+			const Swapchain& swapchain,
+			const uint32_t   imageIndex,
+			const Semaphore& imageReady
 		) const;
 	};
 }

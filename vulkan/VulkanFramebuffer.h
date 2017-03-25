@@ -11,10 +11,10 @@
 
 namespace vk
 {
-	struct VulkanDevice;
-	struct VulkanRenderPass;
+	struct Device;
+	struct RenderPass;
 
-	struct VulkanFramebuffer
+	struct Framebuffer
 	{
 		VkDevice      device;
 		VkFramebuffer framebuffer;
@@ -22,24 +22,24 @@ namespace vk
 		PFN_vkCreateFramebuffer  vkCreateFramebuffer;
 		PFN_vkDestroyFramebuffer vkDestroyFramebuffer;
 
-		VulkanFramebuffer();
+		Framebuffer();
 
-		VulkanFramebuffer
+		Framebuffer
 		(
-			const VulkanDevice&                 device,
-			const VulkanRenderPass&             renderPass,
-			const std::vector<VulkanImageView>& imageViews,
-			const VkExtent2D&                   size,
-			const uint32_t                      layers
+			const Device&                 device,
+			const RenderPass&             renderPass,
+			const std::vector<ImageView>& imageViews,
+			const VkExtent2D&             size,
+			const uint32_t                layers
 		);
 
-		~VulkanFramebuffer();
+		~Framebuffer();
 
-		VulkanFramebuffer(VulkanFramebuffer&& framebuffer);
-		VulkanFramebuffer(const VulkanFramebuffer& framebuffer) = delete;
+		Framebuffer(Framebuffer&& framebuffer);
+		Framebuffer(const Framebuffer& framebuffer) = delete;
 
-		VulkanFramebuffer& operator =(VulkanFramebuffer&& framebuffer);
-		VulkanFramebuffer& operator =(const VulkanFramebuffer& framebuffer) = delete;
+		Framebuffer& operator =(Framebuffer&& framebuffer);
+		Framebuffer& operator =(const Framebuffer& framebuffer) = delete;
 	};
 }
 

@@ -12,9 +12,9 @@
 
 namespace vk
 {
-	struct VulkanDevice;
+	struct Device;
 
-	struct VulkanRenderPass
+	struct RenderPass
 	{
 		VkDevice     device;
 		VkRenderPass renderPass;
@@ -22,15 +22,15 @@ namespace vk
 		PFN_vkCreateRenderPass  vkCreateRenderPass;
 		PFN_vkDestroyRenderPass vkDestroyRenderPass;
 
-		VulkanRenderPass
+		RenderPass
 		(
-			const VulkanDevice&                         device,
+			const Device&                               device,
 			const std::vector<VkAttachmentDescription>& attachments,
 			const std::vector<VkSubpassDescription>&    subpasses,
 			const std::vector<VkSubpassDependency>&     dependencies
 		);
 
-		~VulkanRenderPass();
+		~RenderPass();
 	};
 }
 

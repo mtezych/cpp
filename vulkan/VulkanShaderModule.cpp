@@ -6,9 +6,9 @@
 
 namespace vk
 {
-	VulkanShaderModule::VulkanShaderModule
+	ShaderModule::ShaderModule
 	(
-		const VulkanDevice& device,
+		const Device&                device,
 		const std::vector<uint32_t>& spirvCode
 	):
 		device       { device.device  },
@@ -41,7 +41,7 @@ namespace vk
 		assert(result == VK_SUCCESS);
 	}
 
-	VulkanShaderModule::~VulkanShaderModule()
+	ShaderModule::~ShaderModule()
 	{
 		if (shaderModule != VK_NULL_HANDLE)
 		{

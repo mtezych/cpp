@@ -5,9 +5,9 @@
 
 namespace vk
 {
-	VulkanRenderPass::VulkanRenderPass
+	RenderPass::RenderPass
 	(
-		const VulkanDevice&                         device,
+		const Device&                               device,
 		const std::vector<VkAttachmentDescription>& attachments,
 		const std::vector<VkSubpassDescription>&    subpasses,
 		const std::vector<VkSubpassDependency>&     dependencies
@@ -44,7 +44,7 @@ namespace vk
 		assert(result == VK_SUCCESS);
 	}
 
-	VulkanRenderPass::~VulkanRenderPass()
+	RenderPass::~RenderPass()
 	{
 		if (renderPass != VK_NULL_HANDLE)
 		{

@@ -6,9 +6,9 @@
 
 namespace vk
 {
-	VulkanCommandPool::VulkanCommandPool
+	CommandPool::CommandPool
 	(
-		const VulkanDevice& device, const uint32_t queueFamilyIndex
+		const Device& device, const uint32_t queueFamilyIndex
 	):
 		commandPool { VK_NULL_HANDLE },
 		device      { device.device  },
@@ -36,7 +36,7 @@ namespace vk
 		assert(result == VK_SUCCESS);
 	}
 
-	VulkanCommandPool::~VulkanCommandPool()
+	CommandPool::~CommandPool()
 	{
 		if (commandPool != VK_NULL_HANDLE)
 		{

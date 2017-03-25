@@ -7,9 +7,9 @@
 
 namespace vk
 {
-	struct VulkanDevice;
+	struct Device;
 
-	struct VulkanImageView
+	struct ImageView
 	{
 		VkDevice     device;
 		VkImageView  imageView;
@@ -17,23 +17,23 @@ namespace vk
 		PFN_vkCreateImageView  vkCreateImageView;
 		PFN_vkDestroyImageView vkDestroyImageView;
 
-		VulkanImageView();
+		ImageView();
 
 		operator VkImageView() const;
 
-		VulkanImageView
+		ImageView
 		(
-			const VulkanDevice&          device,
+			const Device&                device,
 			const VkImageViewCreateInfo& createInfo
 		);
 
-		~VulkanImageView();
+		~ImageView();
 
-		VulkanImageView(VulkanImageView&& imageView);
-		VulkanImageView(const VulkanImageView& imageView) = delete;
+		ImageView(ImageView&& imageView);
+		ImageView(const ImageView& imageView) = delete;
 
-		VulkanImageView& operator =(VulkanImageView&& imageView);
-		VulkanImageView& operator =(const VulkanImageView& imageView) = delete;
+		ImageView& operator =(ImageView&& imageView);
+		ImageView& operator =(const ImageView& imageView) = delete;
 	};
 }
 

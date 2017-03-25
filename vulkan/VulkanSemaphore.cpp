@@ -6,7 +6,7 @@
 
 namespace vk
 {
-	VulkanSemaphore::VulkanSemaphore ()
+	Semaphore::Semaphore ()
 	:
 		semaphore { VK_NULL_HANDLE },
 		device    { VK_NULL_HANDLE },
@@ -15,7 +15,7 @@ namespace vk
 	{
 	}
 
-	VulkanSemaphore::VulkanSemaphore (const VulkanDevice& device)
+	Semaphore::Semaphore (const Device& device)
 	:
 		semaphore { VK_NULL_HANDLE },
 		device    { device.device  },
@@ -31,7 +31,7 @@ namespace vk
 		vkCreateSemaphore(device.device, &semaphoreCreateInfo, nullptr, &semaphore);
 	}
 
-	VulkanSemaphore::~VulkanSemaphore ()
+	Semaphore::~Semaphore ()
 	{
 		if (semaphore != VK_NULL_HANDLE)
 		{
@@ -39,7 +39,7 @@ namespace vk
 		}
 	}
 
-	VulkanSemaphore::VulkanSemaphore (VulkanSemaphore&& semaphore)
+	Semaphore::Semaphore (Semaphore&& semaphore)
 	:
 		semaphore { semaphore.semaphore },
 		device    { semaphore.device    },
@@ -52,7 +52,7 @@ namespace vk
 		semaphore.vkDestroySemaphore = nullptr;
 	}
 
-	VulkanSemaphore& VulkanSemaphore::operator = (VulkanSemaphore&& semaphore)
+	Semaphore& Semaphore::operator = (Semaphore&& semaphore)
 	{
 		if (this->semaphore != VK_NULL_HANDLE)
 		{

@@ -6,9 +6,9 @@
 
 namespace vk
 {
-	VulkanSurface::VulkanSurface
+	Surface::Surface
 	(
-		const VulkanInstance&    instance,
+		const Instance&          instance,
 		const platform::Display& display,
 		const platform::Window&  window
 	):
@@ -42,7 +42,7 @@ namespace vk
 //		assert(result == VK_SUCCESS);
 	}
 
-	VulkanSurface::~VulkanSurface()
+	Surface::~Surface()
 	{
 		if (surface != VK_NULL_HANDLE)
 		{

@@ -9,7 +9,7 @@
 
 namespace vk
 {
-	VulkanPipeline::VulkanPipeline()
+	Pipeline::Pipeline()
 	:
 		device   { VK_NULL_HANDLE },
 		pipeline { VK_NULL_HANDLE },
@@ -22,10 +22,10 @@ namespace vk
 	{
 	}
 
-	VulkanPipeline::VulkanPipeline
+	Pipeline::Pipeline
 	(
-		const VulkanDevice&                device,
-		const VulkanPipelineCache&         cache,
+		const Device&                      device,
+		const PipelineCache&               cache,
 		const VkComputePipelineCreateInfo& createInfo
 	):
 		device   { device.device  },
@@ -57,10 +57,10 @@ namespace vk
 		assert(result == VK_SUCCESS);
 	}
 
-	VulkanPipeline::VulkanPipeline
+	Pipeline::Pipeline
 	(
-		const VulkanDevice&                 device,
-		const VulkanPipelineCache&          cache,
+		const Device&                       device,
+		const PipelineCache&                cache,
 		const VkGraphicsPipelineCreateInfo& createInfo
 	):
 		device   { device.device  },
@@ -92,7 +92,7 @@ namespace vk
 		assert(result == VK_SUCCESS);
 	}
 
-	VulkanPipeline::~VulkanPipeline()
+	Pipeline::~Pipeline()
 	{
 		if (pipeline != VK_NULL_HANDLE)
 		{

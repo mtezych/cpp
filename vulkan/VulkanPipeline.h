@@ -7,10 +7,10 @@
 
 namespace vk
 {
-	struct VulkanDevice;
-	struct VulkanPipelineCache;
+	struct Device;
+	struct PipelineCache;
 
-	struct VulkanPipeline
+	struct Pipeline
 	{
 		VkDevice   device;
 		VkPipeline pipeline;
@@ -21,23 +21,23 @@ namespace vk
 		PFN_vkCreateGraphicsPipelines vkCreateGraphicsPipelines;
 		PFN_vkDestroyPipeline         vkDestroyPipeline;
 
-		VulkanPipeline();
+		Pipeline();
 
-		VulkanPipeline
+		Pipeline
 		(
-			const VulkanDevice&                device,
-			const VulkanPipelineCache&         cache,
+			const Device&                      device,
+			const PipelineCache&               cache,
 			const VkComputePipelineCreateInfo& createInfo
 		);
 
-		VulkanPipeline
+		Pipeline
 		(
-			const VulkanDevice&                 device,
-			const VulkanPipelineCache&          cache,
+			const Device&                       device,
+			const PipelineCache&                cache,
 			const VkGraphicsPipelineCreateInfo& createInfo
 		);
 
-		~VulkanPipeline();
+		~Pipeline();
 	};
 }
 

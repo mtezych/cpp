@@ -7,27 +7,20 @@
 
 namespace vk
 {
-	struct VulkanVersion
+	struct Version
 	{
-	private:
 		uint32_t version;
 
-	public:
-		explicit VulkanVersion (const uint32_t version)
+		explicit Version (const uint32_t version)
 		:
 			version { version }
 		{
 		}
 
-		VulkanVersion (const uint32_t major, const uint32_t minor, const uint32_t patch)
+		Version (const uint32_t major, const uint32_t minor, const uint32_t patch)
 		:
 			version { VK_MAKE_VERSION(major, minor, patch) }
 		{
-		}
-
-		uint32_t Version () const
-		{
-			return version;
 		}
 
 		uint32_t Major () const

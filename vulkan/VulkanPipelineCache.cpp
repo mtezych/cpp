@@ -8,7 +8,7 @@
 
 namespace vk
 {
-	VulkanPipelineCache::VulkanPipelineCache()
+	PipelineCache::PipelineCache()
 	:
 		device        { VK_NULL_HANDLE },
 		pipelineCache { VK_NULL_HANDLE },
@@ -18,9 +18,9 @@ namespace vk
 	{
 	}
 
-	VulkanPipelineCache::VulkanPipelineCache
+	PipelineCache::PipelineCache
 	(
-		const VulkanDevice&             device,
+		const Device&                   device,
 		const std::vector<const void*>& initialData
 	):
 		device        { device.device  },
@@ -52,7 +52,7 @@ namespace vk
 		assert(result == VK_SUCCESS);
 	}
 
-	VulkanPipelineCache::~VulkanPipelineCache()
+	PipelineCache::~PipelineCache()
 	{
 		if (pipelineCache != VK_NULL_HANDLE)
 		{

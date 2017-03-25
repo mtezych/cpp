@@ -10,7 +10,7 @@
 
 namespace vk
 {
-	VulkanFramebuffer::VulkanFramebuffer()
+	Framebuffer::Framebuffer()
 	:
 		device      { VK_NULL_HANDLE },
 		framebuffer { VK_NULL_HANDLE },
@@ -20,13 +20,13 @@ namespace vk
 	{
 	}
 
-	VulkanFramebuffer::VulkanFramebuffer
+	Framebuffer::Framebuffer
 	(
-		const VulkanDevice&                 device,
-		const VulkanRenderPass&             renderPass,
-		const std::vector<VulkanImageView>& imageViews,
-		const VkExtent2D&                   size,
-		const uint32_t                      layers
+		const Device&                 device,
+		const RenderPass&             renderPass,
+		const std::vector<ImageView>& imageViews,
+		const VkExtent2D&             size,
+		const uint32_t                layers
 	):
 		device      { device.device  },
 		framebuffer { VK_NULL_HANDLE },
@@ -67,7 +67,7 @@ namespace vk
 		assert(result == VK_SUCCESS);
 	}
 
-	VulkanFramebuffer::~VulkanFramebuffer()
+	Framebuffer::~Framebuffer()
 	{
 		if (framebuffer != VK_NULL_HANDLE)
 		{
@@ -75,7 +75,7 @@ namespace vk
 		}
 	}
 
-	VulkanFramebuffer::VulkanFramebuffer(VulkanFramebuffer&& framebuffer)
+	Framebuffer::Framebuffer(Framebuffer&& framebuffer)
 	:
 		device      { framebuffer.device      },
 		framebuffer { framebuffer.framebuffer },
@@ -90,7 +90,7 @@ namespace vk
 		framebuffer.vkDestroyFramebuffer = nullptr;
 	}
 
-	VulkanFramebuffer& VulkanFramebuffer::operator =(VulkanFramebuffer&& framebuffer)
+	Framebuffer& Framebuffer::operator =(Framebuffer&& framebuffer)
 	{
 		if (this->framebuffer != VK_NULL_HANDLE)
 		{

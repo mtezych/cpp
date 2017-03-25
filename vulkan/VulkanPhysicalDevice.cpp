@@ -7,9 +7,9 @@
 
 namespace vk
 {
-	VulkanPhysicalDevice::VulkanPhysicalDevice
+	PhysicalDevice::PhysicalDevice
 	(
-		const VulkanInstance& instance, const VkPhysicalDevice physicalDevice
+		const Instance& instance, const VkPhysicalDevice physicalDevice
 	):
 		physicalDevice { physicalDevice },
 
@@ -71,7 +71,7 @@ namespace vk
 	}
 
 	std::vector<VkExtensionProperties>
-	VulkanPhysicalDevice::EnumerateDeviceExtensionProperties(const std::string& layerName) const
+	PhysicalDevice::EnumerateDeviceExtensionProperties(const std::string& layerName) const
 	{
 		auto deviceExtensionPropertiesCount = uint32_t { 0 };
 		auto result = vkEnumerateDeviceExtensionProperties
@@ -101,7 +101,7 @@ namespace vk
 	}
 
 	std::vector<VkLayerProperties>
-	VulkanPhysicalDevice::EnumerateDeviceLayerProperties() const
+	PhysicalDevice::EnumerateDeviceLayerProperties() const
 	{
 		auto deviceLayerPropertiesCount = uint32_t { 0 };
 		auto result = vkEnumerateDeviceLayerProperties
@@ -129,7 +129,7 @@ namespace vk
 	}
 
 	VkPhysicalDeviceFeatures
-	VulkanPhysicalDevice::GetPhysicalDeviceFeatures() const
+	PhysicalDevice::GetPhysicalDeviceFeatures() const
 	{
 		auto physicalDeviceFeatures = VkPhysicalDeviceFeatures { };
 
@@ -139,7 +139,7 @@ namespace vk
 	}
 
 	VkPhysicalDeviceProperties
-	VulkanPhysicalDevice::GetPhysicalDeviceProperties() const
+	PhysicalDevice::GetPhysicalDeviceProperties() const
 	{
 		auto physicalDeviceProperties = VkPhysicalDeviceProperties { };
 
@@ -149,7 +149,7 @@ namespace vk
 	}
 
 	std::vector<VkQueueFamilyProperties>
-	VulkanPhysicalDevice::GetPhysicalDeviceQueueFamilyProperties() const
+	PhysicalDevice::GetPhysicalDeviceQueueFamilyProperties() const
 	{
 		auto queueFamilyPropertiesCount = uint32_t { };
 		vkGetPhysicalDeviceQueueFamilyProperties
@@ -175,7 +175,7 @@ namespace vk
 	}
 
 	VkFormatProperties
-	VulkanPhysicalDevice::GetPhysicalDeviceFormatProperties(const VkFormat format) const
+	PhysicalDevice::GetPhysicalDeviceFormatProperties(const VkFormat format) const
 	{
 		auto formatProperties = VkFormatProperties { };
 
@@ -188,7 +188,7 @@ namespace vk
 	}
 
 	VkImageFormatProperties
-	VulkanPhysicalDevice::GetPhysicalDeviceImageFormatProperties
+	PhysicalDevice::GetPhysicalDeviceImageFormatProperties
 	(
 		const VkFormat           format,
 		const VkImageType        imageType,
@@ -215,7 +215,7 @@ namespace vk
 	}
 
 	std::vector<VkSparseImageFormatProperties>
-	VulkanPhysicalDevice::GetPhysicalDeviceSparseImageFormatProperties
+	PhysicalDevice::GetPhysicalDeviceSparseImageFormatProperties
 	(
 		const VkFormat              format,
 		const VkImageType           imageType,
@@ -258,7 +258,7 @@ namespace vk
 	}
 
 	VkPhysicalDeviceMemoryProperties
-	VulkanPhysicalDevice::GetPhysicalDeviceMemoryProperties() const
+	PhysicalDevice::GetPhysicalDeviceMemoryProperties() const
 	{
 		auto memoryProperties = VkPhysicalDeviceMemoryProperties { };
 
@@ -267,10 +267,10 @@ namespace vk
 		return memoryProperties;
 	}
 
-	bool VulkanPhysicalDevice::GetPhysicalDeviceSurfaceSupport
+	bool PhysicalDevice::GetPhysicalDeviceSurfaceSupport
 	(
-		const uint32_t       queueFamilyIndex,
-		const VulkanSurface& surface
+		const uint32_t queueFamilyIndex,
+		const Surface& surface
 	) const
 	{
 		auto supported = VkBool32 { VK_FALSE };
@@ -288,10 +288,7 @@ namespace vk
 	}
 
 	std::vector<VkSurfaceFormatKHR>
-	VulkanPhysicalDevice::GetPhysicalDeviceSurfaceFormats
-	(
-		const VulkanSurface& surface
-	) const
+	PhysicalDevice::GetPhysicalDeviceSurfaceFormats (const Surface& surface) const
 	{
 		auto surfaceFormatsCount = uint32_t { 0 };
 		auto result = vkGetPhysicalDeviceSurfaceFormatsKHR
@@ -319,10 +316,7 @@ namespace vk
 	}
 
 	std::vector<VkPresentModeKHR>
-	VulkanPhysicalDevice::GetPhysicalDeviceSurfacePresentModes
-	(
-		const VulkanSurface& surface
-	) const
+	PhysicalDevice::GetPhysicalDeviceSurfacePresentModes (const Surface& surface) const
 	{
 		auto presentModesCount = uint32_t { 0 };
 		auto result = vkGetPhysicalDeviceSurfacePresentModesKHR
@@ -350,10 +344,7 @@ namespace vk
 	}
 
 	VkSurfaceCapabilitiesKHR
-	VulkanPhysicalDevice::GetPhysicalDeviceSurfaceCapabilities
-	(
-		const VulkanSurface& surface
-	) const
+	PhysicalDevice::GetPhysicalDeviceSurfaceCapabilities (const Surface& surface) const
 	{
 		auto surfaceCapabilities = VkSurfaceCapabilitiesKHR { };
 

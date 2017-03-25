@@ -8,7 +8,7 @@
 
 namespace vk
 {
-	VulkanPipelineLayout::VulkanPipelineLayout()
+	PipelineLayout::PipelineLayout()
 	:
 		device         { VK_NULL_HANDLE },
 		pipelineLayout { VK_NULL_HANDLE },
@@ -18,9 +18,9 @@ namespace vk
 	{
 	}
 
-	VulkanPipelineLayout::VulkanPipelineLayout
+	PipelineLayout::PipelineLayout
 	(
-		const VulkanDevice&                       device,
+		const Device&                             device,
 		const std::vector<VkDescriptorSetLayout>& descriptorSetLayouts,
 		const std::vector<VkPushConstantRange>&   pushConstantRanges
 	):
@@ -56,7 +56,7 @@ namespace vk
 		assert(result == VK_SUCCESS);
 	}
 
-	VulkanPipelineLayout::~VulkanPipelineLayout()
+	PipelineLayout::~PipelineLayout()
 	{
 		if (pipelineLayout != VK_NULL_HANDLE)
 		{

@@ -15,9 +15,9 @@ namespace platform
 
 namespace vk
 {
-	struct VulkanInstance;
+	struct Instance;
 
-	struct VulkanSurface
+	struct Surface
 	{
 		VkSurfaceKHR surface;
 		VkInstance   instance;
@@ -25,14 +25,14 @@ namespace vk
 //		PFN_vkCreateXlibSurfaceKHR vkCreateXlibSurfaceKHR;
 		PFN_vkDestroySurfaceKHR    vkDestroySurfaceKHR;
 
-		VulkanSurface
+		Surface
 		(
-			const VulkanInstance&    instance,
+			const Instance&          instance,
 			const platform::Display& display,
 			const platform::Window&  window
 		);
 
-		~VulkanSurface();
+		~Surface();
 	};
 }
 

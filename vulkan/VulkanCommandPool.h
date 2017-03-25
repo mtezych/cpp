@@ -7,9 +7,9 @@
 
 namespace vk
 {
-	struct VulkanDevice;
+	struct Device;
 
-	struct VulkanCommandPool
+	struct CommandPool
 	{
 		VkCommandPool commandPool;
 		VkDevice      device;
@@ -17,9 +17,9 @@ namespace vk
 		PFN_vkCreateCommandPool  vkCreateCommandPool;
 		PFN_vkDestroyCommandPool vkDestroyCommandPool;
 
-		VulkanCommandPool(const VulkanDevice& device, const uint32_t queueFamilyIndex);
+		CommandPool(const Device& device, const uint32_t queueFamilyIndex);
 
-		~VulkanCommandPool();
+		~CommandPool();
 	};
 }
 

@@ -6,7 +6,7 @@
 
 namespace vk
 {
-	VulkanInstance::VulkanInstance()
+	Instance::Instance()
 	:
 		instance { VK_NULL_HANDLE },
 
@@ -18,9 +18,9 @@ namespace vk
 	{
 	}
 
-	VulkanInstance::VulkanInstance
+	Instance::Instance
 	(
-		const VulkanLoader& loader, const VkInstanceCreateInfo& createInfo
+		const Loader& loader, const VkInstanceCreateInfo& createInfo
 	):
 		instance { VK_NULL_HANDLE },
 
@@ -37,7 +37,7 @@ namespace vk
 		vkEnumeratePhysicalDevices = LoadInstanceProcedure<symbol::vkEnumeratePhysicalDevices>();
 	}
 
-	VulkanInstance::~VulkanInstance()
+	Instance::~Instance()
 	{
 		if (instance != VK_NULL_HANDLE)
 		{
@@ -45,7 +45,7 @@ namespace vk
 		}
 	}
 
-	VulkanInstance::VulkanInstance(VulkanInstance&& instance)
+	Instance::Instance(Instance&& instance)
 	:
 		instance { instance.instance },
 
@@ -64,7 +64,7 @@ namespace vk
 		instance.vkEnumeratePhysicalDevices = nullptr;
 	}
 
-	VulkanInstance& VulkanInstance::operator =(VulkanInstance&& instance)
+	Instance& Instance::operator =(Instance&& instance)
 	{
 		if (this->instance != VK_NULL_HANDLE)
 		{
@@ -90,8 +90,7 @@ namespace vk
 		return *this;
 	}
 
-	std::vector<VulkanPhysicalDevice>
-	VulkanInstance::EnumeratePhysicalDevices() const
+	std::vector<PhysicalDevice> Instance::EnumeratePhysicalDevices() const
 	{
 		auto physicalDevicesCount = uint32_t { 0 };
 		auto result = vkEnumeratePhysicalDevices
@@ -111,7 +110,7 @@ namespace vk
 		);
 		assert(result == VK_SUCCESS);
 
-		auto vulkanPhysicalDevices = std::vector<VulkanPhysicalDevice> { };
+		auto vulkanPhysicalDevices = std::vector<PhysicalDevice> { };
 		for (const auto physicalDevice : physicalDevices)
 		{
 			vulkanPhysicalDevices.emplace_back(*this, physicalDevice);

@@ -8,32 +8,32 @@
 
 namespace vk
 {
-	struct VulkanDrvice;
+	struct Device;
 
-	struct VulkanSwapchain
+	struct Swapchain
 	{
 		VkSwapchainKHR swapchain;
-		const VulkanDevice& device;
+		const Device&  device;
 
 		PFN_vkCreateSwapchainKHR    vkCreateSwapchainKHR;
 		PFN_vkDestroySwapchainKHR   vkDestroySwapchainKHR;
 		PFN_vkGetSwapchainImagesKHR vkGetSwapchainImagesKHR;
 		PFN_vkAcquireNextImageKHR   vkAcquireNextImageKHR;
 
-		VulkanSwapchain
+		Swapchain
 		(
-			const VulkanDevice& device,
+			const Device&                   device,
 			const VkSwapchainCreateInfoKHR& swapchainCreateInfo
 		);
 
-		~VulkanSwapchain();
+		~Swapchain();
 
 		std::vector<VkImage> Images() const;
 
 		struct AcquireInfo
 		{
-			uint32_t        imageIndex;
-			VulkanSemaphore imageAvailable;
+			uint32_t  imageIndex;
+			Semaphore imageAvailable;
 		};
 		AcquireInfo Acquire() const;
 	};

@@ -8,10 +8,10 @@
 
 namespace vk
 {
-	struct VulkanInstance;
-	struct VulkanPhysicalDevice;
+	struct Instance;
+	struct PhysicalDevice;
 
-	struct VulkanDevice
+	struct Device
 	{
 		VkDevice device;
 
@@ -22,14 +22,14 @@ namespace vk
 		PFN_vkDeviceWaitIdle    vkDeviceWaitIdle;
 		PFN_vkDestroyDevice     vkDestroyDevice;
 
-		VulkanDevice
+		Device
 		(
-			const VulkanInstance&       instance,
-			const VulkanPhysicalDevice& physicalDevice,
-			const VkDeviceCreateInfo&   deviceCreateInfo
+			const Instance&           instance,
+			const PhysicalDevice&     physicalDevice,
+			const VkDeviceCreateInfo& deviceCreateInfo
 		);
 
-		~VulkanDevice();
+		~Device();
 
 		template <typename Procedure>
 		typename Procedure::type LoadDeviceProcedure() const
@@ -43,7 +43,7 @@ namespace vk
 			return reinterpret_cast<typename Procedure::type>(procedureAddress);
 		}
 
-		VulkanQueue
+		Queue
 		Queues(const uint32_t familyIndex, const uint32_t queueIndex) const;
 	};
 }

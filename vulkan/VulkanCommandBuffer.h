@@ -7,13 +7,13 @@
 
 namespace vk
 {
-	struct VulkanDevice;
-	struct VulkanCommandPool;
-	struct VulkanRenderPass;
-	struct VulkanFramebuffer;
-	struct VulkanPipeline;
+	struct Device;
+	struct CommandPool;
+	struct RenderPass;
+	struct Framebuffer;
+	struct Pipeline;
 
-	struct VulkanCommandBuffer
+	struct CommandBuffer
 	{
 		VkCommandBuffer commandBuffer;
 		VkCommandPool   commandPool;
@@ -30,26 +30,22 @@ namespace vk
 		PFN_vkCmdBindPipeline        vkCmdBindPipeline;
 		PFN_vkCmdDraw                vkCmdDraw;
 
-		VulkanCommandBuffer();
+		CommandBuffer();
 
-		VulkanCommandBuffer
+		CommandBuffer
 		(
-			const VulkanDevice& device,
-			const VulkanCommandPool& commandPool,
+			const Device&              device,
+			const CommandPool&         commandPool,
 			const VkCommandBufferLevel level
 		);
 
-		~VulkanCommandBuffer();
+		~CommandBuffer();
 
-		VulkanCommandBuffer(VulkanCommandBuffer&& commandBuffer);
+		CommandBuffer(CommandBuffer&& commandBuffer);
+		CommandBuffer(const CommandBuffer& commandBuffer) = delete;
 
-		VulkanCommandBuffer(const VulkanCommandBuffer& commandBuffer) = delete;
-
-		VulkanCommandBuffer&
-		operator =(VulkanCommandBuffer&& commandBuffer);
-
-		VulkanCommandBuffer&
-		operator =(const VulkanCommandBuffer& commandBuffer) = delete;
+		CommandBuffer& operator =(CommandBuffer&& commandBuffer);
+		CommandBuffer& operator =(const CommandBuffer& commandBuffer) = delete;
 
 		void BeginRecording();
 
@@ -72,15 +68,15 @@ namespace vk
 
 		void RecordCommandBeginRenderPass
 		(
-			const VulkanRenderPass&  renderPass,
-			const VulkanFramebuffer& framebuffer,
-			const VkRect2D&          renderArea,
-			const VkClearValue&      clear
+			const RenderPass&   renderPass,
+			const Framebuffer&  framebuffer,
+			const VkRect2D&     renderArea,
+			const VkClearValue& clear
 		);
 
 		void RecordCommandEndRenderPass();
 
-		void RecordCommandBindPipeline(const VulkanPipeline& pipeline);
+		void RecordCommandBindPipeline(const Pipeline& pipeline);
 
 		void RecordCommandDraw
 		(

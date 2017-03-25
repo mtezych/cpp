@@ -8,7 +8,7 @@
 
 namespace vk
 {
-	VulkanImageView::VulkanImageView()
+	ImageView::ImageView()
 	:
 		device    { VK_NULL_HANDLE },
 		imageView { VK_NULL_HANDLE },
@@ -18,14 +18,14 @@ namespace vk
 	{
 	}
 
-	VulkanImageView::operator VkImageView() const
+	ImageView::operator VkImageView() const
 	{
 		return imageView;
 	}
 
-	VulkanImageView::VulkanImageView
+	ImageView::ImageView
 	(
-		const VulkanDevice&          device,
+		const Device&                device,
 		const VkImageViewCreateInfo& createInfo
 	):
 		device    { device.device  },
@@ -50,7 +50,7 @@ namespace vk
 		assert(result == VK_SUCCESS);
 	}
 
-	VulkanImageView::~VulkanImageView()
+	ImageView::~ImageView()
 	{
 		if (imageView != VK_NULL_HANDLE)
 		{
@@ -58,7 +58,7 @@ namespace vk
 		}
 	}
 
-	VulkanImageView::VulkanImageView(VulkanImageView&& imageView)
+	ImageView::ImageView(ImageView&& imageView)
 	:
 		device    { imageView.device    },
 		imageView { imageView.imageView },
@@ -73,7 +73,7 @@ namespace vk
 		imageView.vkDestroyImageView = nullptr;
 	}
 
-	VulkanImageView& VulkanImageView::operator =(VulkanImageView&& imageView)
+	ImageView& ImageView::operator =(ImageView&& imageView)
 	{
 		if (this->imageView != VK_NULL_HANDLE)
 		{

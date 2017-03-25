@@ -6,9 +6,9 @@
 
 namespace vk
 {
-	struct VulkanLoader;
+	struct Loader;
 
-	struct VulkanInstance
+	struct Instance
 	{
 		VkInstance instance;
 
@@ -18,22 +18,22 @@ namespace vk
 		PFN_vkDestroyInstance          vkDestroyInstance;
 		PFN_vkEnumeratePhysicalDevices vkEnumeratePhysicalDevices;
 
-		VulkanInstance();
+		Instance();
 
-		VulkanInstance
+		Instance
 		(
-			const VulkanLoader& loader, const VkInstanceCreateInfo& createInfo
+			const Loader& loader, const VkInstanceCreateInfo& createInfo
 		);
 
-		~VulkanInstance();
+		~Instance();
 
-		VulkanInstance(VulkanInstance&& instance);
+		Instance(Instance&& instance);
 
-		VulkanInstance(const VulkanInstance& instance) = delete;
+		Instance(const Instance& instance) = delete;
 
-		VulkanInstance& operator =(VulkanInstance&& instance);
+		Instance& operator =(Instance&& instance);
 
-		VulkanInstance& operator =(const VulkanInstance& instance) = delete;
+		Instance& operator =(const Instance& instance) = delete;
 
 		template <typename Procedure>
 		typename Procedure::type LoadInstanceProcedure() const
@@ -47,7 +47,7 @@ namespace vk
 			return reinterpret_cast<typename Procedure::type>(procedureAddress);
 		}
 
-		std::vector<VulkanPhysicalDevice> EnumeratePhysicalDevices() const;
+		std::vector<PhysicalDevice> EnumeratePhysicalDevices() const;
 	};
 }
 

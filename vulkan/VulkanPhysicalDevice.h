@@ -11,10 +11,10 @@
 
 namespace vk
 {
-	struct VulkanInstance;
-	struct VulkanSurface;
+	struct Instance;
+	struct Surface;
 
-	struct VulkanPhysicalDevice
+	struct PhysicalDevice
 	{
 		VkPhysicalDevice physicalDevice;
 
@@ -34,7 +34,7 @@ namespace vk
 		PFN_vkGetPhysicalDeviceSurfacePresentModesKHR vkGetPhysicalDeviceSurfacePresentModesKHR;
 		PFN_vkGetPhysicalDeviceSurfaceCapabilitiesKHR vkGetPhysicalDeviceSurfaceCapabilitiesKHR;
 
-		VulkanPhysicalDevice(const VulkanInstance& instance, const VkPhysicalDevice physicalDevice);
+		PhysicalDevice(const Instance& instance, const VkPhysicalDevice physicalDevice);
 
 		std::vector<VkExtensionProperties>
 		EnumerateDeviceExtensionProperties(const std::string& layerName) const;
@@ -78,18 +78,18 @@ namespace vk
 
 		bool GetPhysicalDeviceSurfaceSupport
 		(
-			const uint32_t       queueFamilyIndex,
-			const VulkanSurface& surface
+			const uint32_t queueFamilyIndex,
+			const Surface& surface
 		) const;
 
 		std::vector<VkSurfaceFormatKHR>
-		GetPhysicalDeviceSurfaceFormats(const VulkanSurface& surface) const;
+		GetPhysicalDeviceSurfaceFormats(const Surface& surface) const;
 
 		std::vector<VkPresentModeKHR>
-		GetPhysicalDeviceSurfacePresentModes(const VulkanSurface& surface)const;
+		GetPhysicalDeviceSurfacePresentModes(const Surface& surface)const;
 
 		VkSurfaceCapabilitiesKHR
-		GetPhysicalDeviceSurfaceCapabilities(const VulkanSurface& surface)const;
+		GetPhysicalDeviceSurfaceCapabilities(const Surface& surface)const;
 	};
 }
 

@@ -9,9 +9,9 @@
 
 namespace vk
 {
-	struct VulkanDevice;
+	struct Device;
 
-	struct VulkanPipelineCache
+	struct PipelineCache
 	{
 		VkDevice        device;
 		VkPipelineCache pipelineCache;
@@ -19,15 +19,15 @@ namespace vk
 		PFN_vkCreatePipelineCache  vkCreatePipelineCache;
 		PFN_vkDestroyPipelineCache vkDestroyPipelineCache;
 
-		VulkanPipelineCache();
+		PipelineCache();
 
-		VulkanPipelineCache
+		PipelineCache
 		(
-			const VulkanDevice&             device,
+			const Device&                   device,
 			const std::vector<const void*>& initialData
 		);
 
-		~VulkanPipelineCache();
+		~PipelineCache();
 	};
 }
 

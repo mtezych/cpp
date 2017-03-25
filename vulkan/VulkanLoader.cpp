@@ -5,7 +5,7 @@
 
 namespace vk
 {
-	VulkanLoader::VulkanLoader()
+	Loader::Loader()
 	:
 		library { },
 
@@ -15,7 +15,7 @@ namespace vk
 	{
 	}
 
-	VulkanLoader::VulkanLoader(const std::string& libraryPath)
+	Loader::Loader(const std::string& libraryPath)
 	:
 		library { libraryPath },
 
@@ -34,7 +34,7 @@ namespace vk
 	{
 	}
 
-	VulkanLoader::VulkanLoader(VulkanLoader&& loader)
+	Loader::Loader(Loader&& loader)
 	:
 		library { std::move(loader.library) },
 
@@ -47,7 +47,7 @@ namespace vk
 		loader.vkEnumerateInstanceLayerProperties     = nullptr;
 	}
 
-	VulkanLoader& VulkanLoader::operator =(VulkanLoader&& loader)
+	Loader& Loader::operator =(Loader&& loader)
 	{
 		library = std::move(loader.library);
 
@@ -63,7 +63,7 @@ namespace vk
 	}
 
 	std::vector<VkExtensionProperties>
-	VulkanLoader::EnumerateInstanceExtensionProperties(const std::string& layerName) const
+	Loader::EnumerateInstanceExtensionProperties(const std::string& layerName) const
 	{
 		auto instanceExtensionPropertiesCount = uint32_t { 0 };
 		auto result = vkEnumerateInstanceExtensionProperties
@@ -91,7 +91,7 @@ namespace vk
 	}
 
 	std::vector<VkLayerProperties>
-	VulkanLoader::EnumerateInstanceLayerProperties() const
+	Loader::EnumerateInstanceLayerProperties() const
 	{
 		auto instanceLayerPropertiesCount = uint32_t { 0 };
 		auto result = vkEnumerateInstanceLayerProperties

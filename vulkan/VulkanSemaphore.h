@@ -7,9 +7,9 @@
 
 namespace vk
 {
-	struct VulkanDevice;
+	struct Device;
 
-	struct VulkanSemaphore
+	struct Semaphore
 	{
 		VkSemaphore semaphore;
 		VkDevice    device;
@@ -17,14 +17,14 @@ namespace vk
 		PFN_vkCreateSemaphore  vkCreateSemaphore;
 		PFN_vkDestroySemaphore vkDestroySemaphore;
 
-		VulkanSemaphore();
+		Semaphore();
 
-		explicit VulkanSemaphore(const VulkanDevice& device);
+		explicit Semaphore(const Device& device);
 
-		VulkanSemaphore(VulkanSemaphore&& semaphore);
-		VulkanSemaphore& operator = (VulkanSemaphore&& semaphore);
+		Semaphore(Semaphore&& semaphore);
+		Semaphore& operator = (Semaphore&& semaphore);
 
-		~VulkanSemaphore();
+		~Semaphore();
 	};
 }
 

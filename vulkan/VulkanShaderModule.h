@@ -10,9 +10,9 @@
 
 namespace vk
 {
-	struct VulkanDevice;
+	struct Device;
 
-	struct VulkanShaderModule
+	struct ShaderModule
 	{
 		VkDevice       device;
 		VkShaderModule shaderModule;
@@ -20,13 +20,13 @@ namespace vk
 		PFN_vkCreateShaderModule  vkCreateShaderModule;
 		PFN_vkDestroyShaderModule vkDestroyShaderModule;
 
-		VulkanShaderModule
+		ShaderModule
 		(
-			const VulkanDevice& device,
+			const Device&                device,
 			const std::vector<uint32_t>& spirvCode
 		);
 
-		~VulkanShaderModule();
+		~ShaderModule();
 	};
 }
 
