@@ -16,8 +16,8 @@ namespace vk
 
 	struct RenderPass
 	{
-		VkDevice     device;
-		VkRenderPass renderPass;
+		const Device* device;
+		VkRenderPass  vkRenderPass;
 
 		PFN_vkCreateRenderPass  vkCreateRenderPass;
 		PFN_vkDestroyRenderPass vkDestroyRenderPass;

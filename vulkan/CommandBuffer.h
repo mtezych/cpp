@@ -7,7 +7,6 @@
 
 namespace vk
 {
-	struct Device;
 	struct CommandPool;
 	struct RenderPass;
 	struct Framebuffer;
@@ -15,9 +14,8 @@ namespace vk
 
 	struct CommandBuffer
 	{
-		VkCommandBuffer commandBuffer;
-		VkCommandPool   commandPool;
-		VkDevice        device;
+		const CommandPool* commandPool;
+		VkCommandBuffer    vkCommandBuffer;
 
 		PFN_vkAllocateCommandBuffers vkAllocateCommandBuffers;
 		PFN_vkFreeCommandBuffers     vkFreeCommandBuffers;
@@ -34,7 +32,6 @@ namespace vk
 
 		CommandBuffer
 		(
-			const Device&              device,
 			const CommandPool&         commandPool,
 			const VkCommandBufferLevel level
 		);

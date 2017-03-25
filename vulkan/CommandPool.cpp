@@ -10,8 +10,8 @@ namespace vk
 	(
 		const Device& device, const uint32_t queueFamilyIndex
 	):
-		commandPool { VK_NULL_HANDLE },
-		device      { device.device  },
+		device        { &device },
+		vkCommandPool { VK_NULL_HANDLE },
 
 		vkCreateCommandPool
 		{
@@ -31,16 +31,16 @@ namespace vk
 		};
 		const auto result = vkCreateCommandPool
 		(
-			device.device, &createInfo, nullptr, &commandPool
+			device.vkDevice, &createInfo, nullptr, &vkCommandPool
 		);
 		assert(result == VK_SUCCESS);
 	}
 
 	CommandPool::~CommandPool()
 	{
-		if (commandPool != VK_NULL_HANDLE)
+		if (vkCommandPool != VK_NULL_HANDLE)
 		{
-			vkDestroyCommandPool(device, commandPool, nullptr);
+			vkDestroyCommandPool(device->vkDevice, vkCommandPool, nullptr);
 		}
 	}
 }

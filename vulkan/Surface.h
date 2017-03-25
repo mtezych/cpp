@@ -19,8 +19,8 @@ namespace vk
 
 	struct Surface
 	{
-		VkSurfaceKHR surface;
-		VkInstance   instance;
+		const Instance* instance;
+		VkSurfaceKHR    vkSurface;
 
 //		PFN_vkCreateXlibSurfaceKHR vkCreateXlibSurfaceKHR;
 		PFN_vkDestroySurfaceKHR    vkDestroySurfaceKHR;

@@ -12,8 +12,8 @@ namespace vk
 
 	struct Swapchain
 	{
-		VkSwapchainKHR swapchain;
-		const Device&  device;
+		const Device*  device;
+		VkSwapchainKHR vkSwapchain;
 
 		PFN_vkCreateSwapchainKHR    vkCreateSwapchainKHR;
 		PFN_vkDestroySwapchainKHR   vkDestroySwapchainKHR;

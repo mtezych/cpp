@@ -13,8 +13,8 @@ namespace vk
 
 	struct PipelineCache
 	{
-		VkDevice        device;
-		VkPipelineCache pipelineCache;
+		const Device*   device;
+		VkPipelineCache vkPipelineCache;
 
 		PFN_vkCreatePipelineCache  vkCreatePipelineCache;
 		PFN_vkDestroyPipelineCache vkDestroyPipelineCache;

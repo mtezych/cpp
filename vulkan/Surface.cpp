@@ -12,8 +12,9 @@ namespace vk
 		const platform::Display& display,
 		const platform::Window&  window
 	):
-		surface  { VK_NULL_HANDLE    },
-		instance { instance.instance },
+		instance  { &instance },
+		vkSurface { VK_NULL_HANDLE },
+
 
 //		vkCreateXlibSurfaceKHR
 //		{
@@ -34,19 +35,19 @@ namespace vk
 //		};
 //		const auto result = vkCreateXlibSurfaceKHR
 //		(
-//			instance.instance,
+//			instance.vkInstance,
 //			&surfaceCreateInfo,
 //			nullptr,
-//			&surface
+//			&vkSurface
 //		);
 //		assert(result == VK_SUCCESS);
 	}
 
 	Surface::~Surface()
 	{
-		if (surface != VK_NULL_HANDLE)
+		if (vkSurface != VK_NULL_HANDLE)
 		{
-			vkDestroySurfaceKHR(instance, surface, nullptr);
+			vkDestroySurfaceKHR(instance->vkInstance, vkSurface, nullptr);
 		}
 	}
 }

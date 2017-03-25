@@ -8,7 +8,7 @@ namespace vk
 {
 	Instance::Instance()
 	:
-		instance { VK_NULL_HANDLE },
+		vkInstance { VK_NULL_HANDLE },
 
 		vkGetInstanceProcAddr { nullptr },
 		vkCreateInstance      { nullptr },
@@ -22,7 +22,7 @@ namespace vk
 	(
 		const Loader& loader, const VkInstanceCreateInfo& createInfo
 	):
-		instance { VK_NULL_HANDLE },
+		vkInstance { VK_NULL_HANDLE },
 
 		vkGetInstanceProcAddr { loader.LoadSymbol         <symbol::vkGetInstanceProcAddr>() },
 		vkCreateInstance      { loader.LoadGlobalProcedure<symbol::vkCreateInstance     >() },
@@ -30,7 +30,7 @@ namespace vk
 		vkDestroyInstance          { nullptr },
 		vkEnumeratePhysicalDevices { nullptr }
 	{
-		const auto result = vkCreateInstance(&createInfo, nullptr, &instance);
+		const auto result = vkCreateInstance(&createInfo, nullptr, &vkInstance);
 		assert(result == VK_SUCCESS);
 
 		vkDestroyInstance          = LoadInstanceProcedure<symbol::vkDestroyInstance>();
@@ -39,15 +39,15 @@ namespace vk
 
 	Instance::~Instance()
 	{
-		if (instance != VK_NULL_HANDLE)
+		if (vkInstance != VK_NULL_HANDLE)
 		{
-			vkDestroyInstance(instance, nullptr);
+			vkDestroyInstance(vkInstance, nullptr);
 		}
 	}
 
 	Instance::Instance(Instance&& instance)
 	:
-		instance { instance.instance },
+		vkInstance { instance.vkInstance },
 
 		vkGetInstanceProcAddr { instance.vkGetInstanceProcAddr },
 		vkCreateInstance      { instance.vkCreateInstance      },
@@ -55,7 +55,7 @@ namespace vk
 		vkDestroyInstance          { instance.vkDestroyInstance          },
 		vkEnumeratePhysicalDevices { instance.vkEnumeratePhysicalDevices }
 	{
-		instance.instance = VK_NULL_HANDLE;
+		instance.vkInstance = VK_NULL_HANDLE;
 
 		instance.vkGetInstanceProcAddr      = nullptr;
 		instance.vkCreateInstance           = nullptr;
@@ -66,12 +66,12 @@ namespace vk
 
 	Instance& Instance::operator =(Instance&& instance)
 	{
-		if (this->instance != VK_NULL_HANDLE)
+		if (vkInstance != VK_NULL_HANDLE)
 		{
-			vkDestroyInstance(this->instance, nullptr);
+			vkDestroyInstance(vkInstance, nullptr);
 		}
 
-		this->instance = instance.instance;
+		vkInstance = instance.vkInstance;
 
 		vkGetInstanceProcAddr = instance.vkGetInstanceProcAddr;
 		vkCreateInstance      = instance.vkCreateInstance;
@@ -79,7 +79,7 @@ namespace vk
 		vkDestroyInstance          = instance.vkDestroyInstance;
 		vkEnumeratePhysicalDevices = instance.vkEnumeratePhysicalDevices;
 
-		instance.instance = VK_NULL_HANDLE;
+		instance.vkInstance = VK_NULL_HANDLE;
 
 		instance.vkGetInstanceProcAddr      = nullptr;
 		instance.vkCreateInstance           = nullptr;
@@ -95,7 +95,7 @@ namespace vk
 		auto physicalDevicesCount = uint32_t { 0 };
 		auto result = vkEnumeratePhysicalDevices
 		(
-			instance, &physicalDevicesCount, nullptr
+			vkInstance, &physicalDevicesCount, nullptr
 		);
 		assert(result == VK_SUCCESS);
 
@@ -105,7 +105,7 @@ namespace vk
 		);
 		result = vkEnumeratePhysicalDevices
 		(
-			instance,
+			vkInstance,
 			&physicalDevicesCount, physicalDevices.data()
 		);
 		assert(result == VK_SUCCESS);

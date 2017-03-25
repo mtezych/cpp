@@ -11,8 +11,8 @@ namespace vk
 
 	struct CommandPool
 	{
-		VkCommandPool commandPool;
-		VkDevice      device;
+		const Device* device;
+		VkCommandPool vkCommandPool;
 
 		PFN_vkCreateCommandPool  vkCreateCommandPool;
 		PFN_vkDestroyCommandPool vkDestroyCommandPool;

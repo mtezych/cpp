@@ -13,8 +13,8 @@ namespace vk
 
 	struct PipelineLayout
 	{
-		VkDevice         device;
-		VkPipelineLayout pipelineLayout;
+		const Device*    device;
+		VkPipelineLayout vkPipelineLayout;
 
 		PFN_vkCreatePipelineLayout  vkCreatePipelineLayout;
 		PFN_vkDestroyPipelineLayout vkDestroyPipelineLayout;

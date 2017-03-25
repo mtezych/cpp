@@ -16,8 +16,8 @@ namespace vk
 
 	struct Framebuffer
 	{
-		VkDevice      device;
-		VkFramebuffer framebuffer;
+		const Device* device;
+		VkFramebuffer vkFramebuffer;
 
 		PFN_vkCreateFramebuffer  vkCreateFramebuffer;
 		PFN_vkDestroyFramebuffer vkDestroyFramebuffer;

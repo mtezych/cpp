@@ -10,7 +10,7 @@ namespace vk
 
 	struct Instance
 	{
-		VkInstance instance;
+		VkInstance vkInstance;
 
 		PFN_vkGetInstanceProcAddr      vkGetInstanceProcAddr;
 
@@ -40,7 +40,7 @@ namespace vk
 		{
 			const auto procedureAddress = vkGetInstanceProcAddr
 			(
-				instance, Procedure::name
+				vkInstance, Procedure::name
 			);
 			assert(procedureAddress != nullptr);
 

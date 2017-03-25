@@ -8,8 +8,9 @@ namespace vk
 {
 	Semaphore::Semaphore ()
 	:
-		semaphore { VK_NULL_HANDLE },
-		device    { VK_NULL_HANDLE },
+		device      { nullptr },
+		vkSemaphore { VK_NULL_HANDLE },
+
 		vkCreateSemaphore  { nullptr },
 		vkDestroySemaphore { nullptr }
 	{
@@ -17,8 +18,9 @@ namespace vk
 
 	Semaphore::Semaphore (const Device& device)
 	:
-		semaphore { VK_NULL_HANDLE },
-		device    { device.device  },
+		device      { &device },
+		vkSemaphore { VK_NULL_HANDLE },
+
 		vkCreateSemaphore  { device.LoadDeviceProcedure<symbol::vkCreateSemaphore >() },
 		vkDestroySemaphore { device.LoadDeviceProcedure<symbol::vkDestroySemaphore>() }
 	{
@@ -28,44 +30,54 @@ namespace vk
 			nullptr,
 			0,
 		};
-		vkCreateSemaphore(device.device, &semaphoreCreateInfo, nullptr, &semaphore);
+		vkCreateSemaphore
+		(
+			device.vkDevice,
+			&semaphoreCreateInfo,
+			nullptr,
+			&vkSemaphore
+		);
 	}
 
 	Semaphore::~Semaphore ()
 	{
-		if (semaphore != VK_NULL_HANDLE)
+		if (vkSemaphore != VK_NULL_HANDLE)
 		{
-			vkDestroySemaphore(device, semaphore, nullptr);
+			vkDestroySemaphore(device->vkDevice, vkSemaphore, nullptr);
 		}
 	}
 
 	Semaphore::Semaphore (Semaphore&& semaphore)
 	:
-		semaphore { semaphore.semaphore },
-		device    { semaphore.device    },
+		device      { semaphore.device      },
+		vkSemaphore { semaphore.vkSemaphore },
+
 		vkCreateSemaphore  { semaphore.vkCreateSemaphore  },
 		vkDestroySemaphore { semaphore.vkDestroySemaphore }
 	{
-		semaphore.semaphore = VK_NULL_HANDLE;
-		semaphore.device    = VK_NULL_HANDLE;
+		semaphore.device      = nullptr;
+		semaphore.vkSemaphore = VK_NULL_HANDLE;
+
 		semaphore.vkCreateSemaphore  = nullptr;
 		semaphore.vkDestroySemaphore = nullptr;
 	}
 
 	Semaphore& Semaphore::operator = (Semaphore&& semaphore)
 	{
-		if (this->semaphore != VK_NULL_HANDLE)
+		if (vkSemaphore != VK_NULL_HANDLE)
 		{
-			vkDestroySemaphore(device, this->semaphore, nullptr);
+			vkDestroySemaphore(device->vkDevice, vkSemaphore, nullptr);
 		}
 
-		this->semaphore = semaphore.semaphore;
-		this->device    = semaphore.device;
-		this->vkCreateSemaphore  = semaphore.vkCreateSemaphore;
-		this->vkDestroySemaphore = semaphore.vkDestroySemaphore;
+		device      = semaphore.device;
+		vkSemaphore = semaphore.vkSemaphore;
 
-		semaphore.semaphore = VK_NULL_HANDLE;
-		semaphore.device    = VK_NULL_HANDLE;
+		vkCreateSemaphore  = semaphore.vkCreateSemaphore;
+		vkDestroySemaphore = semaphore.vkDestroySemaphore;
+
+		semaphore.device      = nullptr;
+		semaphore.vkSemaphore = VK_NULL_HANDLE;
+
 		semaphore.vkCreateSemaphore  = nullptr;
 		semaphore.vkDestroySemaphore = nullptr;
 

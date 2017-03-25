@@ -11,8 +11,8 @@ namespace vk
 
 	struct Semaphore
 	{
-		VkSemaphore semaphore;
-		VkDevice    device;
+		const Device* device;
+		VkSemaphore   vkSemaphore;
 
 		PFN_vkCreateSemaphore  vkCreateSemaphore;
 		PFN_vkDestroySemaphore vkDestroySemaphore;

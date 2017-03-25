@@ -16,7 +16,7 @@ namespace vk
 
 	struct PhysicalDevice
 	{
-		VkPhysicalDevice physicalDevice;
+		VkPhysicalDevice vkPhysicalDevice;
 
 		PFN_vkEnumerateDeviceExtensionProperties vkEnumerateDeviceExtensionProperties;
 		PFN_vkEnumerateDeviceLayerProperties     vkEnumerateDeviceLayerProperties;
@@ -34,25 +34,25 @@ namespace vk
 		PFN_vkGetPhysicalDeviceSurfacePresentModesKHR vkGetPhysicalDeviceSurfacePresentModesKHR;
 		PFN_vkGetPhysicalDeviceSurfaceCapabilitiesKHR vkGetPhysicalDeviceSurfaceCapabilitiesKHR;
 
-		PhysicalDevice(const Instance& instance, const VkPhysicalDevice physicalDevice);
+		PhysicalDevice (const Instance& instance, const VkPhysicalDevice vkPhysicalDevice);
 
 		std::vector<VkExtensionProperties>
-		EnumerateDeviceExtensionProperties(const std::string& layerName) const;
+		EnumerateDeviceExtensionProperties (const std::string& layerName) const;
 
 		std::vector<VkLayerProperties>
-		EnumerateDeviceLayerProperties() const;
+		EnumerateDeviceLayerProperties () const;
 
 		VkPhysicalDeviceFeatures
-		GetPhysicalDeviceFeatures() const;
+		GetPhysicalDeviceFeatures () const;
 
 		VkPhysicalDeviceProperties
-		GetPhysicalDeviceProperties() const;
+		GetPhysicalDeviceProperties () const;
 
 		std::vector<VkQueueFamilyProperties>
-		GetPhysicalDeviceQueueFamilyProperties() const;
+		GetPhysicalDeviceQueueFamilyProperties () const;
 
 		VkFormatProperties
-		GetPhysicalDeviceFormatProperties(const VkFormat format) const;
+		GetPhysicalDeviceFormatProperties (const VkFormat format) const;
 
 		VkImageFormatProperties GetPhysicalDeviceImageFormatProperties
 		(
@@ -74,7 +74,7 @@ namespace vk
 		) const;
 
 		VkPhysicalDeviceMemoryProperties
-		GetPhysicalDeviceMemoryProperties() const;
+		GetPhysicalDeviceMemoryProperties () const;
 
 		bool GetPhysicalDeviceSurfaceSupport
 		(
@@ -83,13 +83,13 @@ namespace vk
 		) const;
 
 		std::vector<VkSurfaceFormatKHR>
-		GetPhysicalDeviceSurfaceFormats(const Surface& surface) const;
+		GetPhysicalDeviceSurfaceFormats (const Surface& surface) const;
 
 		std::vector<VkPresentModeKHR>
-		GetPhysicalDeviceSurfacePresentModes(const Surface& surface)const;
+		GetPhysicalDeviceSurfacePresentModes (const Surface& surface) const;
 
 		VkSurfaceCapabilitiesKHR
-		GetPhysicalDeviceSurfaceCapabilities(const Surface& surface)const;
+		GetPhysicalDeviceSurfaceCapabilities (const Surface& surface) const;
 	};
 }
 

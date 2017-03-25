@@ -11,9 +11,9 @@
 
 namespace vk
 {
-	Queue::Queue(const Device& device, const VkQueue queue)
+	Queue::Queue(const Device& device, const VkQueue vkQueue)
 	:
-		queue { queue },
+		vkQueue { vkQueue },
 
 		vkGetDeviceQueue  { device.LoadDeviceProcedure<symbol::vkGetDeviceQueue >() },
 		vkQueueSubmit     { device.LoadDeviceProcedure<symbol::vkQueueSubmit    >() },
@@ -37,13 +37,13 @@ namespace vk
 		{
 			VK_STRUCTURE_TYPE_SUBMIT_INFO,
 			nullptr,
-			1, &imageAvaliable.semaphore, &waitPipelineStage,
-			1, &commandBuffer.commandBuffer,
-			1, &renderingFinished.semaphore
+			1, &imageAvaliable.vkSemaphore, &waitPipelineStage,
+			1, &commandBuffer.vkCommandBuffer,
+			1, &renderingFinished.vkSemaphore
 		};
 		const auto result = vkQueueSubmit
 		(
-			queue,
+			vkQueue,
 			1, &submitInfo,
 			VkFence { VK_NULL_HANDLE }
 		);
@@ -54,7 +54,7 @@ namespace vk
 
 	void Queue::WaitIdle()
 	{
-		const auto result = vkQueueWaitIdle(queue);
+		const auto result = vkQueueWaitIdle(vkQueue);
 		assert(result == VK_SUCCESS);
 	}
 
@@ -69,11 +69,11 @@ namespace vk
 		{
 			VK_STRUCTURE_TYPE_PRESENT_INFO_KHR,
 			nullptr,
-			1, &imageReady.semaphore,
-			1, &swapchain.swapchain, &imageIndex,
+			1, &imageReady.vkSemaphore,
+			1, &swapchain.vkSwapchain, &imageIndex,
 			nullptr
 		};
-		const auto result = vkQueuePresentKHR(queue, &presentInfo);
+		const auto result = vkQueuePresentKHR(vkQueue, &presentInfo);
 		assert(result == VK_SUCCESS);
 	}
 }

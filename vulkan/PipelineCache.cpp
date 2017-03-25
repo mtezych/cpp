@@ -10,8 +10,8 @@ namespace vk
 {
 	PipelineCache::PipelineCache()
 	:
-		device        { VK_NULL_HANDLE },
-		pipelineCache { VK_NULL_HANDLE },
+		device          { nullptr },
+		vkPipelineCache { VK_NULL_HANDLE },
 
 		vkCreatePipelineCache  { nullptr },
 		vkDestroyPipelineCache { nullptr }
@@ -23,8 +23,8 @@ namespace vk
 		const Device&                   device,
 		const std::vector<const void*>& initialData
 	):
-		device        { device.device  },
-		pipelineCache { VK_NULL_HANDLE },
+		device          { &device },
+		vkPipelineCache { VK_NULL_HANDLE },
 
 		vkCreatePipelineCache
 		{
@@ -44,19 +44,19 @@ namespace vk
 		};
 		const auto result = vkCreatePipelineCache
 		(
-			device.device,
+			device.vkDevice,
 			&createInfo,
 			nullptr,
-			&pipelineCache
+			&vkPipelineCache
 		);
 		assert(result == VK_SUCCESS);
 	}
 
 	PipelineCache::~PipelineCache()
 	{
-		if (pipelineCache != VK_NULL_HANDLE)
+		if (vkPipelineCache != VK_NULL_HANDLE)
 		{
-			vkDestroyPipelineCache(device, pipelineCache, nullptr);
+			vkDestroyPipelineCache(device->vkDevice, vkPipelineCache, nullptr);
 		}
 	}
 }

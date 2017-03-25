@@ -11,8 +11,8 @@ namespace vk
 		const Device&                device,
 		const std::vector<uint32_t>& spirvCode
 	):
-		device       { device.device  },
-		shaderModule { VK_NULL_HANDLE },
+		device         { &device },
+		vkShaderModule { VK_NULL_HANDLE },
 
 		vkCreateShaderModule
 		{
@@ -33,19 +33,19 @@ namespace vk
 
 		const auto result = vkCreateShaderModule
 		(
-			device.device,
+			device.vkDevice,
 			&createInfo,
 			nullptr,
-			&shaderModule
+			&vkShaderModule
 		);
 		assert(result == VK_SUCCESS);
 	}
 
 	ShaderModule::~ShaderModule()
 	{
-		if (shaderModule != VK_NULL_HANDLE)
+		if (vkShaderModule != VK_NULL_HANDLE)
 		{
-			vkDestroyShaderModule(device, shaderModule, nullptr);
+			vkDestroyShaderModule(device->vkDevice, vkShaderModule, nullptr);
 		}
 	}
 }

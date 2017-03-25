@@ -12,10 +12,9 @@ namespace vk
 
 	struct Pipeline
 	{
-		VkDevice   device;
-		VkPipeline pipeline;
-
-		VkPipelineBindPoint bindPoint;
+		const Device*       device;
+		VkPipeline          vkPipeline;
+		VkPipelineBindPoint vkBindPoint;
 
 		PFN_vkCreateComputePipelines  vkCreateComputePipelines;
 		PFN_vkCreateGraphicsPipelines vkCreateGraphicsPipelines;

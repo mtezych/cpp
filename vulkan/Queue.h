@@ -12,7 +12,7 @@ namespace vk
 
 	struct Queue
 	{
-		VkQueue queue;
+		VkQueue vkQueue;
 
 		PFN_vkGetDeviceQueue    vkGetDeviceQueue;
 		PFN_vkQueueSubmit       vkQueueSubmit;

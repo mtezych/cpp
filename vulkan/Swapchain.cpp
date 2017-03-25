@@ -11,8 +11,8 @@ namespace vk
 		const Device&                   device,
 		const VkSwapchainCreateInfoKHR& swapchainCreateInfo
 	):
-		swapchain { VK_NULL_HANDLE },
-		device    { device },
+		device      { &device },
+		vkSwapchain { VK_NULL_HANDLE },
 
 		vkCreateSwapchainKHR
 		{
@@ -33,19 +33,19 @@ namespace vk
 	{
 		const auto result = vkCreateSwapchainKHR
 		(
-			device.device,
+			device.vkDevice,
 			&swapchainCreateInfo,
 			nullptr,
-			&swapchain
+			&vkSwapchain
 		);
 		assert(result == VK_SUCCESS);
 	}
 
 	Swapchain::~Swapchain()
 	{
-		if (swapchain != VK_NULL_HANDLE)
+		if (vkSwapchain != VK_NULL_HANDLE)
 		{
-			vkDestroySwapchainKHR(device.device, swapchain, nullptr);
+			vkDestroySwapchainKHR(device->vkDevice, vkSwapchain, nullptr);
 		}
 	}
 
@@ -54,7 +54,7 @@ namespace vk
 		auto swapchainImagesCount = uint32_t { 0 };
 		auto result = vkGetSwapchainImagesKHR
 		(
-			device.device, swapchain,
+			device->vkDevice, vkSwapchain,
 			&swapchainImagesCount, nullptr
 		);
 		assert(result == VK_SUCCESS);
@@ -66,7 +66,7 @@ namespace vk
 		);
 		result = vkGetSwapchainImagesKHR
 		(
-			device.device, swapchain,
+			device->vkDevice, vkSwapchain,
 			&swapchainImagesCount, swapchainImages.data()
 		);
 		assert(result == VK_SUCCESS);
@@ -79,13 +79,13 @@ namespace vk
 		auto imageIndex = uint32_t { 0 };
 		constexpr auto timeout = uint64_t { 0 };
 
-		auto imageAvailable = Semaphore { device };
+		auto imageAvailable = Semaphore { *device };
 
 		const auto result = vkAcquireNextImageKHR
 		(
-			device.device, swapchain,
+			device->vkDevice, vkSwapchain,
 			timeout,
-			VkSemaphore { imageAvailable.semaphore },
+			VkSemaphore { imageAvailable.vkSemaphore },
 			VkFence { VK_NULL_HANDLE },
 			&imageIndex
 		);

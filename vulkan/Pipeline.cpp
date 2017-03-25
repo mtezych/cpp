@@ -11,10 +11,9 @@ namespace vk
 {
 	Pipeline::Pipeline()
 	:
-		device   { VK_NULL_HANDLE },
-		pipeline { VK_NULL_HANDLE },
-
-		bindPoint { VK_PIPELINE_BIND_POINT_MAX_ENUM },
+		device      { nullptr },
+		vkPipeline  { VK_NULL_HANDLE },
+		vkBindPoint { VK_PIPELINE_BIND_POINT_MAX_ENUM },
 
 		vkCreateComputePipelines  { nullptr },
 		vkCreateGraphicsPipelines { nullptr },
@@ -28,10 +27,9 @@ namespace vk
 		const PipelineCache&               cache,
 		const VkComputePipelineCreateInfo& createInfo
 	):
-		device   { device.device  },
-		pipeline { VK_NULL_HANDLE },
-
-		bindPoint { VK_PIPELINE_BIND_POINT_COMPUTE },
+		device      { &device },
+		vkPipeline  { VK_NULL_HANDLE },
+		vkBindPoint { VK_PIPELINE_BIND_POINT_COMPUTE },
 
 		vkCreateComputePipelines
 		{
@@ -48,11 +46,11 @@ namespace vk
 	{
 		const auto result = vkCreateComputePipelines
 		(
-			device.device,
-			cache.pipelineCache,
+			device.vkDevice,
+			cache.vkPipelineCache,
 			1, &createInfo,
 			nullptr,
-			&pipeline
+			&vkPipeline
 		);
 		assert(result == VK_SUCCESS);
 	}
@@ -63,10 +61,9 @@ namespace vk
 		const PipelineCache&                cache,
 		const VkGraphicsPipelineCreateInfo& createInfo
 	):
-		device   { device.device  },
-		pipeline { VK_NULL_HANDLE },
-
-		bindPoint { VK_PIPELINE_BIND_POINT_GRAPHICS },
+		device      { &device },
+		vkPipeline  { VK_NULL_HANDLE },
+		vkBindPoint { VK_PIPELINE_BIND_POINT_GRAPHICS },
 
 		vkCreateComputePipelines
 		{
@@ -83,20 +80,20 @@ namespace vk
 	{
 		const auto result = vkCreateGraphicsPipelines
 		(
-			device.device,
-			cache.pipelineCache,
+			device.vkDevice,
+			cache.vkPipelineCache,
 			1, &createInfo,
 			nullptr,
-			&pipeline
+			&vkPipeline
 		);
 		assert(result == VK_SUCCESS);
 	}
 
 	Pipeline::~Pipeline()
 	{
-		if (pipeline != VK_NULL_HANDLE)
+		if (vkPipeline != VK_NULL_HANDLE)
 		{
-			vkDestroyPipeline(device, pipeline, nullptr);
+			vkDestroyPipeline(device->vkDevice, vkPipeline, nullptr);
 		}
 	}
 }

@@ -9,9 +9,9 @@ namespace vk
 {
 	PhysicalDevice::PhysicalDevice
 	(
-		const Instance& instance, const VkPhysicalDevice physicalDevice
+		const Instance& instance, const VkPhysicalDevice vkPhysicalDevice
 	):
-		physicalDevice { physicalDevice },
+		vkPhysicalDevice { vkPhysicalDevice },
 
 		vkEnumerateDeviceExtensionProperties
 		{
@@ -76,7 +76,7 @@ namespace vk
 		auto deviceExtensionPropertiesCount = uint32_t { 0 };
 		auto result = vkEnumerateDeviceExtensionProperties
 		(
-			physicalDevice,
+			vkPhysicalDevice,
 			layerName.empty() ? nullptr : layerName.c_str(),
 			&deviceExtensionPropertiesCount,
 			nullptr
@@ -90,7 +90,7 @@ namespace vk
 		);
 		result = vkEnumerateDeviceExtensionProperties
 		(
-			physicalDevice,
+			vkPhysicalDevice,
 			layerName.empty() ? nullptr : layerName.c_str(),
 			&deviceExtensionPropertiesCount,
 			deviceExtensionProperties.data()
@@ -101,12 +101,12 @@ namespace vk
 	}
 
 	std::vector<VkLayerProperties>
-	PhysicalDevice::EnumerateDeviceLayerProperties() const
+	PhysicalDevice::EnumerateDeviceLayerProperties () const
 	{
 		auto deviceLayerPropertiesCount = uint32_t { 0 };
 		auto result = vkEnumerateDeviceLayerProperties
 		(
-			physicalDevice,
+			vkPhysicalDevice,
 			&deviceLayerPropertiesCount,
 			nullptr
 		);
@@ -119,7 +119,7 @@ namespace vk
 		);
 		result = vkEnumerateDeviceLayerProperties
 		(
-			physicalDevice,
+			vkPhysicalDevice,
 			&deviceLayerPropertiesCount,
 			deviceLayerProperties.data()
 		);
@@ -129,32 +129,32 @@ namespace vk
 	}
 
 	VkPhysicalDeviceFeatures
-	PhysicalDevice::GetPhysicalDeviceFeatures() const
+	PhysicalDevice::GetPhysicalDeviceFeatures () const
 	{
 		auto physicalDeviceFeatures = VkPhysicalDeviceFeatures { };
 
-		vkGetPhysicalDeviceFeatures(physicalDevice, &physicalDeviceFeatures);
+		vkGetPhysicalDeviceFeatures(vkPhysicalDevice, &physicalDeviceFeatures);
 
 		return physicalDeviceFeatures;
 	}
 
 	VkPhysicalDeviceProperties
-	PhysicalDevice::GetPhysicalDeviceProperties() const
+	PhysicalDevice::GetPhysicalDeviceProperties () const
 	{
 		auto physicalDeviceProperties = VkPhysicalDeviceProperties { };
 
-		vkGetPhysicalDeviceProperties(physicalDevice, &physicalDeviceProperties);
+		vkGetPhysicalDeviceProperties(vkPhysicalDevice, &physicalDeviceProperties);
 
 		return physicalDeviceProperties;
 	}
 
 	std::vector<VkQueueFamilyProperties>
-	PhysicalDevice::GetPhysicalDeviceQueueFamilyProperties() const
+	PhysicalDevice::GetPhysicalDeviceQueueFamilyProperties () const
 	{
 		auto queueFamilyPropertiesCount = uint32_t { };
 		vkGetPhysicalDeviceQueueFamilyProperties
 		(
-			physicalDevice,
+			vkPhysicalDevice,
 			&queueFamilyPropertiesCount,
 			nullptr
 		);
@@ -166,7 +166,7 @@ namespace vk
 		);
 		vkGetPhysicalDeviceQueueFamilyProperties
 		(
-			physicalDevice,
+			vkPhysicalDevice,
 			&queueFamilyPropertiesCount,
 			queueFamilyProperties.data()
 		);
@@ -181,7 +181,7 @@ namespace vk
 
 		vkGetPhysicalDeviceFormatProperties
 		(
-			physicalDevice, format, &formatProperties
+			vkPhysicalDevice, format, &formatProperties
 		);
 
 		return formatProperties;
@@ -201,7 +201,7 @@ namespace vk
 
 		const auto result = vkGetPhysicalDeviceImageFormatProperties
 		(
-			physicalDevice,
+			vkPhysicalDevice,
 			format,
 			imageType,
 			imageTiling,
@@ -227,7 +227,7 @@ namespace vk
 		auto sparseImageFormatPropertiesCount = uint32_t { };
 		vkGetPhysicalDeviceSparseImageFormatProperties
 		(
-			physicalDevice,
+			vkPhysicalDevice,
 			format,
 			imageType,
 			sampleCountFlagBits,
@@ -244,7 +244,7 @@ namespace vk
 		);
 		vkGetPhysicalDeviceSparseImageFormatProperties
 		(
-			physicalDevice,
+			vkPhysicalDevice,
 			format,
 			imageType,
 			sampleCountFlagBits,
@@ -258,11 +258,11 @@ namespace vk
 	}
 
 	VkPhysicalDeviceMemoryProperties
-	PhysicalDevice::GetPhysicalDeviceMemoryProperties() const
+	PhysicalDevice::GetPhysicalDeviceMemoryProperties () const
 	{
 		auto memoryProperties = VkPhysicalDeviceMemoryProperties { };
 
-		vkGetPhysicalDeviceMemoryProperties(physicalDevice, &memoryProperties);
+		vkGetPhysicalDeviceMemoryProperties(vkPhysicalDevice, &memoryProperties);
 
 		return memoryProperties;
 	}
@@ -277,9 +277,9 @@ namespace vk
 
 		const auto result = vkGetPhysicalDeviceSurfaceSupportKHR
 		(
-			physicalDevice,
+			vkPhysicalDevice,
 			queueFamilyIndex,
-			surface.surface,
+			surface.vkSurface,
 			&supported
 		);
 		assert(result == VK_SUCCESS);
@@ -293,8 +293,8 @@ namespace vk
 		auto surfaceFormatsCount = uint32_t { 0 };
 		auto result = vkGetPhysicalDeviceSurfaceFormatsKHR
 		(
-			physicalDevice,
-			surface.surface,
+			vkPhysicalDevice,
+			surface.vkSurface,
 			&surfaceFormatsCount, nullptr
 		);
 		assert(result == VK_SUCCESS);
@@ -306,8 +306,8 @@ namespace vk
 		);
 		result = vkGetPhysicalDeviceSurfaceFormatsKHR
 		(
-			physicalDevice,
-			surface.surface,
+			vkPhysicalDevice,
+			surface.vkSurface,
 			&surfaceFormatsCount, surfaceFormats.data()
 		);
 		assert(result == VK_SUCCESS);
@@ -321,8 +321,8 @@ namespace vk
 		auto presentModesCount = uint32_t { 0 };
 		auto result = vkGetPhysicalDeviceSurfacePresentModesKHR
 		(
-			physicalDevice,
-			surface.surface,
+			vkPhysicalDevice,
+			surface.vkSurface,
 			&presentModesCount, nullptr
 		);
 		assert(result == VK_SUCCESS);
@@ -334,8 +334,8 @@ namespace vk
 		);
 		result = vkGetPhysicalDeviceSurfacePresentModesKHR
 		(
-			physicalDevice,
-			surface.surface,
+			vkPhysicalDevice,
+			surface.vkSurface,
 			&presentModesCount, presentModes.data()
 		);
 		assert(result == VK_SUCCESS);
@@ -350,8 +350,8 @@ namespace vk
 
 		const auto result = vkGetPhysicalDeviceSurfaceCapabilitiesKHR
 		(
-			physicalDevice,
-			surface.surface,
+			vkPhysicalDevice,
+			surface.vkSurface,
 			&surfaceCapabilities
 		);
 		assert(result == VK_SUCCESS);

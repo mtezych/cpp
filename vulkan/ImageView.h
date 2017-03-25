@@ -11,8 +11,8 @@ namespace vk
 
 	struct ImageView
 	{
-		VkDevice     device;
-		VkImageView  imageView;
+		const Device* device;
+		VkImageView   vkImageView;
 
 		PFN_vkCreateImageView  vkCreateImageView;
 		PFN_vkDestroyImageView vkDestroyImageView;

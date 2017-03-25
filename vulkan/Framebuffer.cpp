@@ -12,8 +12,8 @@ namespace vk
 {
 	Framebuffer::Framebuffer()
 	:
-		device      { VK_NULL_HANDLE },
-		framebuffer { VK_NULL_HANDLE },
+		device        { nullptr },
+		vkFramebuffer { VK_NULL_HANDLE },
 
 		vkCreateFramebuffer  { nullptr },
 		vkDestroyFramebuffer { nullptr }
@@ -28,8 +28,8 @@ namespace vk
 		const VkExtent2D&             size,
 		const uint32_t                layers
 	):
-		device      { device.device  },
-		framebuffer { VK_NULL_HANDLE },
+		device        { &device },
+		vkFramebuffer { VK_NULL_HANDLE },
 
 		vkCreateFramebuffer
 		{
@@ -51,7 +51,7 @@ namespace vk
 			VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO,
 			nullptr,
 			0,
-			renderPass.renderPass,
+			renderPass.vkRenderPass,
 			uint32_t ( imageViewHandles.size() ),
 			imageViewHandles.data(),
 			size.width, size.height, layers
@@ -59,32 +59,32 @@ namespace vk
 
 		const auto result = vkCreateFramebuffer
 		(
-			device.device,
+			device.vkDevice,
 			&createInfo,
 			nullptr,
-			&framebuffer
+			&vkFramebuffer
 		);
 		assert(result == VK_SUCCESS);
 	}
 
 	Framebuffer::~Framebuffer()
 	{
-		if (framebuffer != VK_NULL_HANDLE)
+		if (vkFramebuffer != VK_NULL_HANDLE)
 		{
-			vkDestroyFramebuffer(device, framebuffer, nullptr);
+			vkDestroyFramebuffer(device->vkDevice, vkFramebuffer, nullptr);
 		}
 	}
 
 	Framebuffer::Framebuffer(Framebuffer&& framebuffer)
 	:
-		device      { framebuffer.device      },
-		framebuffer { framebuffer.framebuffer },
+		device        { framebuffer.device        },
+		vkFramebuffer { framebuffer.vkFramebuffer },
 
 		vkCreateFramebuffer  { framebuffer.vkCreateFramebuffer  },
 		vkDestroyFramebuffer { framebuffer.vkDestroyFramebuffer }
 	{
-		framebuffer.device      = VK_NULL_HANDLE;
-		framebuffer.framebuffer = VK_NULL_HANDLE;
+		framebuffer.device        = nullptr;
+		framebuffer.vkFramebuffer = VK_NULL_HANDLE;
 
 		framebuffer.vkCreateFramebuffer  = nullptr;
 		framebuffer.vkDestroyFramebuffer = nullptr;
@@ -92,19 +92,19 @@ namespace vk
 
 	Framebuffer& Framebuffer::operator =(Framebuffer&& framebuffer)
 	{
-		if (this->framebuffer != VK_NULL_HANDLE)
+		if (vkFramebuffer != VK_NULL_HANDLE)
 		{
-			vkDestroyFramebuffer(this->device, this->framebuffer, nullptr);
+			vkDestroyFramebuffer(device->vkDevice, vkFramebuffer, nullptr);
 		}
 
-		this->device      = framebuffer.device;
-		this->framebuffer = framebuffer.framebuffer;
+		device        = framebuffer.device;
+		vkFramebuffer = framebuffer.vkFramebuffer;
 
-		this->vkCreateFramebuffer  = framebuffer.vkCreateFramebuffer;
-		this->vkDestroyFramebuffer = framebuffer.vkDestroyFramebuffer;
+		vkCreateFramebuffer  = framebuffer.vkCreateFramebuffer;
+		vkDestroyFramebuffer = framebuffer.vkDestroyFramebuffer;
 
-		framebuffer.device      = VK_NULL_HANDLE;
-		framebuffer.framebuffer = VK_NULL_HANDLE;
+		framebuffer.device        = nullptr;
+		framebuffer.vkFramebuffer = VK_NULL_HANDLE;
 
 		framebuffer.vkCreateFramebuffer  = nullptr;
 		framebuffer.vkDestroyFramebuffer = nullptr;

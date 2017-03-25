@@ -10,8 +10,8 @@ namespace vk
 {
 	ImageView::ImageView()
 	:
-		device    { VK_NULL_HANDLE },
-		imageView { VK_NULL_HANDLE },
+		device      { nullptr },
+		vkImageView { VK_NULL_HANDLE },
 
 		vkCreateImageView  { nullptr },
 		vkDestroyImageView { nullptr }
@@ -20,7 +20,7 @@ namespace vk
 
 	ImageView::operator VkImageView() const
 	{
-		return imageView;
+		return vkImageView;
 	}
 
 	ImageView::ImageView
@@ -28,8 +28,8 @@ namespace vk
 		const Device&                device,
 		const VkImageViewCreateInfo& createInfo
 	):
-		device    { device.device  },
-		imageView { VK_NULL_HANDLE },
+		device      { &device },
+		vkImageView { VK_NULL_HANDLE },
 
 		vkCreateImageView
 		{
@@ -42,32 +42,32 @@ namespace vk
 	{
 		const auto result = vkCreateImageView
 		(
-			device.device,
+			device.vkDevice,
 			&createInfo,
 			nullptr,
-			&imageView
+			&vkImageView
 		);
 		assert(result == VK_SUCCESS);
 	}
 
 	ImageView::~ImageView()
 	{
-		if (imageView != VK_NULL_HANDLE)
+		if (vkImageView != VK_NULL_HANDLE)
 		{
-			vkDestroyImageView(device, imageView, nullptr);
+			vkDestroyImageView(device->vkDevice, vkImageView, nullptr);
 		}
 	}
 
 	ImageView::ImageView(ImageView&& imageView)
 	:
-		device    { imageView.device    },
-		imageView { imageView.imageView },
+		device      { imageView.device      },
+		vkImageView { imageView.vkImageView },
 
 		vkCreateImageView  { imageView.vkCreateImageView  },
 		vkDestroyImageView { imageView.vkDestroyImageView }
 	{
-		imageView.device    = VK_NULL_HANDLE;
-		imageView.imageView = VK_NULL_HANDLE;
+		imageView.device      = nullptr;
+		imageView.vkImageView = VK_NULL_HANDLE;
 
 		imageView.vkCreateImageView  = nullptr;
 		imageView.vkDestroyImageView = nullptr;
@@ -75,19 +75,19 @@ namespace vk
 
 	ImageView& ImageView::operator =(ImageView&& imageView)
 	{
-		if (this->imageView != VK_NULL_HANDLE)
+		if (vkImageView != VK_NULL_HANDLE)
 		{
-			vkDestroyImageView(this->device, this->imageView, nullptr);
+			vkDestroyImageView(device->vkDevice, vkImageView, nullptr);
 		}
 
-		this->device    = imageView.device;
-		this->imageView = imageView.imageView;
+		device      = imageView.device;
+		vkImageView = imageView.vkImageView;
 
-		this->vkCreateImageView  = imageView.vkCreateImageView;
-		this->vkDestroyImageView = imageView.vkDestroyImageView;
+		vkCreateImageView  = imageView.vkCreateImageView;
+		vkDestroyImageView = imageView.vkDestroyImageView;
 
-		imageView.device    = VK_NULL_HANDLE;
-		imageView.imageView = VK_NULL_HANDLE;
+		imageView.device      = nullptr;
+		imageView.vkImageView = VK_NULL_HANDLE;
 
 		imageView.vkCreateImageView  = nullptr;
 		imageView.vkDestroyImageView = nullptr;

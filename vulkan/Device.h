@@ -13,7 +13,7 @@ namespace vk
 
 	struct Device
 	{
-		VkDevice device;
+		VkDevice vkDevice;
 
 		PFN_vkCreateDevice      vkCreateDevice;
 		PFN_vkGetDeviceProcAddr vkGetDeviceProcAddr;
@@ -36,7 +36,7 @@ namespace vk
 		{
 			const auto procedureAddress = vkGetDeviceProcAddr
 			(
-				device, Procedure::name
+				vkDevice, Procedure::name
 			);
 			assert(procedureAddress != nullptr);
 
