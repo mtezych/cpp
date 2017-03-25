@@ -14,7 +14,6 @@ namespace vk
 	{
 		VkQueue vkQueue;
 
-		PFN_vkGetDeviceQueue    vkGetDeviceQueue;
 		PFN_vkQueueSubmit       vkQueueSubmit;
 		PFN_vkQueueWaitIdle     vkQueueWaitIdle;
 

@@ -15,7 +15,6 @@ namespace vk
 	:
 		vkQueue { vkQueue },
 
-		vkGetDeviceQueue  { device.LoadDeviceProcedure<symbol::vkGetDeviceQueue >() },
 		vkQueueSubmit     { device.LoadDeviceProcedure<symbol::vkQueueSubmit    >() },
 		vkQueueWaitIdle   { device.LoadDeviceProcedure<symbol::vkQueueWaitIdle  >() },
 
