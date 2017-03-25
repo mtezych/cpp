@@ -2,7 +2,7 @@
 #ifndef VULKAN_INSTANCE
 #define VULKAN_INSTANCE
 
-#include "VulkanPhysicalDevice.h"
+#include "PhysicalDevice.h"
 
 namespace vk
 {

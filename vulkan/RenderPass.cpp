@@ -1,7 +1,7 @@
 
-#include "VulkanRenderPass.h"
+#include "RenderPass.h"
 
-#include "VulkanDevice.h"
+#include "Device.h"
 
 namespace vk
 {

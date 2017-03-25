@@ -5,7 +5,7 @@
 #define VK_NO_PROTOTYPES
 #include <vulkan/vulkan.h>
 
-#include "VulkanImageView.h"
+#include "ImageView.h"
 
 #include <vector>
 

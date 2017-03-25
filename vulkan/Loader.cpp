@@ -1,7 +1,7 @@
 
-#include "VulkanLoader.h"
+#include "Loader.h"
 
-#include "VulkanSymbols.h"
+#include "Symbols.h"
 
 namespace vk
 {

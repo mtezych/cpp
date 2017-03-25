@@ -2,7 +2,7 @@
 #ifndef VULKAN_QUEUE
 #define VULKAN_QUEUE
 
-#include "VulkanSemaphore.h"
+#include "Semaphore.h"
 
 namespace vk
 {

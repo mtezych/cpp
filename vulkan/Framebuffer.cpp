@@ -1,9 +1,9 @@
 
-#include "VulkanFramebuffer.h"
+#include "Framebuffer.h"
 
-#include "VulkanSymbols.h"
-#include "VulkanDevice.h"
-#include "VulkanRenderPass.h"
+#include "Symbols.h"
+#include "Device.h"
+#include "RenderPass.h"
 
 #include <cassert>
 #include <algorithm>

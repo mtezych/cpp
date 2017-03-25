@@ -1,8 +1,8 @@
 
-#include "VulkanPipelineCache.h"
+#include "PipelineCache.h"
 
-#include "VulkanSymbols.h"
-#include "VulkanDevice.h"
+#include "Symbols.h"
+#include "Device.h"
 
 #include <cassert>
 

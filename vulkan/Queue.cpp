@@ -1,10 +1,10 @@
 
-#include "VulkanQueue.h"
+#include "Queue.h"
 
-#include "VulkanSymbols.h"
-#include "VulkanDevice.h"
-#include "VulkanCommandBuffer.h"
-#include "VulkanSwapchain.h"
+#include "Symbols.h"
+#include "Device.h"
+#include "CommandBuffer.h"
+#include "Swapchain.h"
 
 #include <cassert>
 #include <vector>

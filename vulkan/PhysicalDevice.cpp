@@ -1,9 +1,9 @@
 
-#include "VulkanPhysicalDevice.h"
+#include "PhysicalDevice.h"
 
-#include "VulkanSymbols.h"
-#include "VulkanInstance.h"
-#include "VulkanSurface.h"
+#include "Symbols.h"
+#include "Instance.h"
+#include "Surface.h"
 
 namespace vk
 {

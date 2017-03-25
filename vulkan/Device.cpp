@@ -1,8 +1,8 @@
 
-#include "VulkanDevice.h"
+#include "Device.h"
 
-#include "VulkanSymbols.h"
-#include "VulkanInstance.h"
+#include "Symbols.h"
+#include "Instance.h"
 
 namespace vk
 {

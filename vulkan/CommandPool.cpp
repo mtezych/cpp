@@ -1,8 +1,8 @@
 
-#include "VulkanCommandPool.h"
+#include "CommandPool.h"
 
-#include "VulkanSymbols.h"
-#include "VulkanDevice.h"
+#include "Symbols.h"
+#include "Device.h"
 
 namespace vk
 {

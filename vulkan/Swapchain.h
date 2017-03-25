@@ -2,7 +2,7 @@
 #ifndef VULKAN_SWAPCHAIN
 #define VULKAN_SWAPCHAIN
 
-#include "VulkanSemaphore.h"
+#include "Semaphore.h"
 
 #include <vector>
 

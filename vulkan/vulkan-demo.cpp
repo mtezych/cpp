@@ -1,6 +1,6 @@
 
-#include "VulkanLoader.h"
-#include "VulkanInstance.h"
+#include "Loader.h"
+#include "Instance.h"
 
 #include <array>
 

@@ -1,9 +1,9 @@
 
-#include "VulkanPipeline.h"
+#include "Pipeline.h"
 
-#include "VulkanSymbols.h"
-#include "VulkanDevice.h"
-#include "VulkanPipelineCache.h"
+#include "Symbols.h"
+#include "Device.h"
+#include "PipelineCache.h"
 
 #include <cassert>
 

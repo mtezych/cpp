@@ -1,8 +1,8 @@
 
-#include "VulkanImageView.h"
+#include "ImageView.h"
 
-#include "VulkanSymbols.h"
-#include "VulkanDevice.h"
+#include "Symbols.h"
+#include "Device.h"
 
 #include <cassert>
 

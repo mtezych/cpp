@@ -1,8 +1,8 @@
 
-#include "VulkanPipelineLayout.h"
+#include "PipelineLayout.h"
 
-#include "VulkanSymbols.h"
-#include "VulkanDevice.h"
+#include "Symbols.h"
+#include "Device.h"
 
 #include <cassert>
 

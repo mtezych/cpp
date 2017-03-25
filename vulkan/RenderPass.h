@@ -5,7 +5,7 @@
 #define VK_NO_PROTOTYPES
 #include <vulkan/vulkan.h>
 
-#include "VulkanSymbols.h"
+#include "Symbols.h"
 
 #include <cassert>
 #include <vector>

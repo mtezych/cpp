@@ -1,12 +1,12 @@
 
-#include "VulkanCommandBuffer.h"
+#include "CommandBuffer.h"
 
-#include "VulkanSymbols.h"
-#include "VulkanDevice.h"
-#include "VulkanCommandPool.h"
-#include "VulkanRenderPass.h"
-#include "VulkanFramebuffer.h"
-#include "VulkanPipeline.h"
+#include "Symbols.h"
+#include "Device.h"
+#include "CommandPool.h"
+#include "RenderPass.h"
+#include "Framebuffer.h"
+#include "Pipeline.h"
 
 #include <cassert>
 

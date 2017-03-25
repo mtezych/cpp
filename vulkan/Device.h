@@ -2,7 +2,7 @@
 #ifndef VULKAN_DEVICE
 #define VULKAN_DEVICE
 
-#include "VulkanQueue.h"
+#include "Queue.h"
 
 #include <cassert>
 

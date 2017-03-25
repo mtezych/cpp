@@ -36,42 +36,42 @@ cmake_minimum_required (VERSION 3.1)
 
 project(vulkan)
 
-add_executable       (vulkan VulkanSymbols.h
-                             VulkanVersion.h
-                             VulkanLoader.h
-                             VulkanLoader.cpp
-                             VulkanInstance.h
-                             VulkanInstance.cpp
-                             VulkanSurface.h
-                             VulkanSurface.cpp
-                             VulkanPhysicalDevice.h
-                             VulkanPhysicalDevice.cpp
-                             VulkanDevice.h
-                             VulkanDevice.cpp
-                             VulkanQueue.h
-                             VulkanQueue.cpp
-                             VulkanSemaphore.h
-                             VulkanSemaphore.cpp
-                             VulkanCommandPool.h
-                             VulkanCommandPool.cpp
-                             VulkanCommandBuffer.h
-                             VulkanCommandBuffer.cpp
-                             VulkanSwapchain.h
-                             VulkanSwapchain.cpp
-                             VulkanPipeline.h
-                             VulkanPipeline.cpp
-                             VulkanPipelineCache.h
-                             VulkanPipelineCache.cpp
-                             VulkanPipelineLayout.h
-                             VulkanPipelineLayout.cpp
-                             VulkanFramebuffer.h
-                             VulkanFramebuffer.cpp
-                             VulkanRenderPass.h
-                             VulkanRenderPass.cpp
-                             VulkanImageView.h
-                             VulkanImageView.cpp
-                             VulkanShaderModule.h
-                             VulkanShaderModule.cpp
+add_executable       (vulkan Symbols.h
+                             Version.h
+                             Loader.h
+                             Loader.cpp
+                             Instance.h
+                             Instance.cpp
+                             Surface.h
+                             Surface.cpp
+                             PhysicalDevice.h
+                             PhysicalDevice.cpp
+                             Device.h
+                             Device.cpp
+                             Queue.h
+                             Queue.cpp
+                             Semaphore.h
+                             Semaphore.cpp
+                             CommandPool.h
+                             CommandPool.cpp
+                             CommandBuffer.h
+                             CommandBuffer.cpp
+                             Swapchain.h
+                             Swapchain.cpp
+                             Pipeline.h
+                             Pipeline.cpp
+                             PipelineCache.h
+                             PipelineCache.cpp
+                             PipelineLayout.h
+                             PipelineLayout.cpp
+                             Framebuffer.h
+                             Framebuffer.cpp
+                             RenderPass.h
+                             RenderPass.cpp
+                             ImageView.h
+                             ImageView.cpp
+                             ShaderModule.h
+                             ShaderModule.cpp
                              vulkan-demo.cpp)
 
 target_link_libraries(vulkan khronos library)
