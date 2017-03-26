@@ -17,23 +17,11 @@ namespace vk
 		const CommandPool* commandPool;
 		VkCommandBuffer    vkCommandBuffer;
 
-		PFN_vkAllocateCommandBuffers vkAllocateCommandBuffers;
-		PFN_vkFreeCommandBuffers     vkFreeCommandBuffers;
-		PFN_vkBeginCommandBuffer     vkBeginCommandBuffer;
-		PFN_vkEndCommandBuffer       vkEndCommandBuffer;
-		PFN_vkCmdClearColorImage     vkCmdClearColorImage;
-		PFN_vkCmdPipelineBarrier     vkCmdPipelineBarrier;
-		PFN_vkCmdBeginRenderPass     vkCmdBeginRenderPass;
-		PFN_vkCmdEndRenderPass       vkCmdEndRenderPass;
-		PFN_vkCmdBindPipeline        vkCmdBindPipeline;
-		PFN_vkCmdDraw                vkCmdDraw;
-
 		CommandBuffer();
 
 		CommandBuffer
 		(
-			const CommandPool&         commandPool,
-			const VkCommandBufferLevel level
+			const CommandPool& commandPool, const VkCommandBufferLevel level
 		);
 
 		~CommandBuffer();
@@ -45,7 +33,6 @@ namespace vk
 		CommandBuffer& operator =(const CommandBuffer& commandBuffer) = delete;
 
 		void BeginRecording();
-
 		void EndRecording();
 
 		void RecordCommandPipelineBarrier

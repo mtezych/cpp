@@ -12,18 +12,13 @@ namespace vk
 
 	struct Queue
 	{
-		VkQueue vkQueue;
-
-		PFN_vkQueueSubmit       vkQueueSubmit;
-		PFN_vkQueueWaitIdle     vkQueueWaitIdle;
-
-		PFN_vkQueuePresentKHR   vkQueuePresentKHR;
+		const Device* device;
+		VkQueue       vkQueue;
 
 		Queue(const Device& device, const VkQueue queue);
 
 		Semaphore Submit
 		(
-			const Device&              device,
 			const Semaphore&           imageAvaliable,
 			const VkPipelineStageFlags waitPipelineStage,
 			const CommandBuffer&       commandBuffer

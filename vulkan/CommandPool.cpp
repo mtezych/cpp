@@ -11,16 +11,7 @@ namespace vk
 		const Device& device, const uint32_t queueFamilyIndex
 	):
 		device        { &device },
-		vkCommandPool { VK_NULL_HANDLE },
-
-		vkCreateCommandPool
-		{
-			device.LoadDeviceProcedure<symbol::vkCreateCommandPool>()
-		},
-		vkDestroyCommandPool
-		{
-			device.LoadDeviceProcedure<symbol::vkDestroyCommandPool>()
-		}
+		vkCommandPool { VK_NULL_HANDLE }
 	{
 		const auto createInfo = VkCommandPoolCreateInfo
 		{
@@ -29,7 +20,7 @@ namespace vk
 			0,
 			queueFamilyIndex
 		};
-		const auto result = vkCreateCommandPool
+		const auto result = device.vkCreateCommandPool
 		(
 			device.vkDevice, &createInfo, nullptr, &vkCommandPool
 		);
@@ -40,7 +31,7 @@ namespace vk
 	{
 		if (vkCommandPool != VK_NULL_HANDLE)
 		{
-			vkDestroyCommandPool(device->vkDevice, vkCommandPool, nullptr);
+			device->vkDestroyCommandPool(device->vkDevice, vkCommandPool, nullptr);
 		}
 	}
 }

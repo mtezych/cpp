@@ -36,9 +36,121 @@ namespace vk
 		);
 		assert(result == VK_SUCCESS);
 
-		vkGetDeviceQueue = LoadDeviceProcedure<symbol::vkGetDeviceQueue>();
-		vkDeviceWaitIdle = LoadDeviceProcedure<symbol::vkDeviceWaitIdle>();
-		vkDestroyDevice  = LoadDeviceProcedure<symbol::vkDestroyDevice >();
+		/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+		 *                                 VkDevice                                        *
+		 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+		vkDestroyDevice           = LoadDeviceProcedure<symbol::vkDestroyDevice          >();
+
+		vkDeviceWaitIdle          = LoadDeviceProcedure<symbol::vkDeviceWaitIdle         >();
+
+		/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+		 *                                VkSemaphore                                      *
+		 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+		vkCreateSemaphore         = LoadDeviceProcedure<symbol::vkCreateSemaphore        >();
+		vkDestroySemaphore        = LoadDeviceProcedure<symbol::vkDestroySemaphore       >();
+		/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+		/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+		 *                               VkRenderPass                                      *
+		 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+		vkCreateRenderPass        = LoadDeviceProcedure<symbol::vkCreateRenderPass       >();
+		vkDestroyRenderPass       = LoadDeviceProcedure<symbol::vkDestroyRenderPass      >();
+		/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+		/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+		 *                               VkFramebuffer                                     *
+		 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+		vkCreateFramebuffer       = LoadDeviceProcedure<symbol::vkCreateFramebuffer      >();
+		vkDestroyFramebuffer      = LoadDeviceProcedure<symbol::vkDestroyFramebuffer     >();
+		/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+		/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+		 *                             VkShaderModule                                      *
+		 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+		vkCreateShaderModule      = LoadDeviceProcedure<symbol::vkCreateShaderModule     >();
+		vkDestroyShaderModule     = LoadDeviceProcedure<symbol::vkDestroyShaderModule    >();
+		/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+		/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+		 *                            VkPipelineCache                                      *
+		 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+		vkCreatePipelineCache     = LoadDeviceProcedure<symbol::vkCreatePipelineCache    >();
+		vkDestroyPipelineCache    = LoadDeviceProcedure<symbol::vkDestroyPipelineCache   >();
+		/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+		/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+		 *                            VkPipelineLayout                                     *
+		 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+		vkCreatePipelineLayout    = LoadDeviceProcedure<symbol::vkCreatePipelineLayout   >();
+		vkDestroyPipelineLayout   = LoadDeviceProcedure<symbol::vkDestroyPipelineLayout  >();
+		/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+		/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+		 *                               VkPipeline                                        *
+		 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+		vkCreateComputePipelines  = LoadDeviceProcedure<symbol::vkCreateComputePipelines >();
+		vkCreateGraphicsPipelines = LoadDeviceProcedure<symbol::vkCreateGraphicsPipelines>();
+		vkDestroyPipeline         = LoadDeviceProcedure<symbol::vkDestroyPipeline        >();
+		/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+		/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+		 *                               VkImageView                                       *
+		 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+		vkCreateImageView         = LoadDeviceProcedure<symbol::vkCreateImageView        >();
+		vkDestroyImageView        = LoadDeviceProcedure<symbol::vkDestroyImageView       >();
+		/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+		/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+		 *                               VkSwapchain                                       *
+		 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+		vkCreateSwapchainKHR      = LoadDeviceProcedure<symbol::vkCreateSwapchainKHR     >();
+		vkDestroySwapchainKHR     = LoadDeviceProcedure<symbol::vkDestroySwapchainKHR    >();
+
+		vkGetSwapchainImagesKHR   = LoadDeviceProcedure<symbol::vkGetSwapchainImagesKHR  >();
+		vkAcquireNextImageKHR     = LoadDeviceProcedure<symbol::vkAcquireNextImageKHR    >();
+		/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+		/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+		 *                               VkCommandPool                                     *
+		 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+		vkCreateCommandPool       = LoadDeviceProcedure<symbol::vkCreateCommandPool      >();
+		vkDestroyCommandPool      = LoadDeviceProcedure<symbol::vkDestroyCommandPool     >();
+		/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+		vkGetDeviceQueue          = LoadDeviceProcedure<symbol::vkGetDeviceQueue         >();
+		/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+
+		/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+		 *                                     VkQueue                                     *
+		 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+		vkQueueSubmit             = LoadDeviceProcedure<symbol::vkQueueSubmit            >();
+		vkQueueWaitIdle           = LoadDeviceProcedure<symbol::vkQueueWaitIdle          >();
+
+		vkQueuePresentKHR         = LoadDeviceProcedure<symbol::vkQueuePresentKHR        >();
+		/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+
+		/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+		 *                                 VkCommandBuffer                                 *
+		 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+		vkAllocateCommandBuffers  = LoadDeviceProcedure<symbol::vkAllocateCommandBuffers >();
+		vkFreeCommandBuffers      = LoadDeviceProcedure<symbol::vkFreeCommandBuffers     >();
+
+		vkBeginCommandBuffer      = LoadDeviceProcedure<symbol::vkBeginCommandBuffer     >();
+		vkEndCommandBuffer        = LoadDeviceProcedure<symbol::vkEndCommandBuffer       >();
+
+		vkCmdBindPipeline         = LoadDeviceProcedure<symbol::vkCmdBindPipeline        >();
+
+		vkCmdDraw                 = LoadDeviceProcedure<symbol::vkCmdDraw                >();
+
+		vkCmdClearColorImage      = LoadDeviceProcedure<symbol::vkCmdClearColorImage     >();
+
+		vkCmdPipelineBarrier      = LoadDeviceProcedure<symbol::vkCmdPipelineBarrier     >();
+
+		vkCmdBeginRenderPass      = LoadDeviceProcedure<symbol::vkCmdBeginRenderPass     >();
+		vkCmdEndRenderPass        = LoadDeviceProcedure<symbol::vkCmdEndRenderPass       >();
+		/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 	}
 
 	Device::~Device()

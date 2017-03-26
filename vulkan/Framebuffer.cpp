@@ -13,10 +13,7 @@ namespace vk
 	Framebuffer::Framebuffer()
 	:
 		device        { nullptr },
-		vkFramebuffer { VK_NULL_HANDLE },
-
-		vkCreateFramebuffer  { nullptr },
-		vkDestroyFramebuffer { nullptr }
+		vkFramebuffer { VK_NULL_HANDLE }
 	{
 	}
 
@@ -29,16 +26,7 @@ namespace vk
 		const uint32_t                layers
 	):
 		device        { &device },
-		vkFramebuffer { VK_NULL_HANDLE },
-
-		vkCreateFramebuffer
-		{
-			device.LoadDeviceProcedure<symbol::vkCreateFramebuffer>()
-		},
-		vkDestroyFramebuffer
-		{
-			device.LoadDeviceProcedure<symbol::vkDestroyFramebuffer>()
-		}
+		vkFramebuffer { VK_NULL_HANDLE }
 	{
 		auto imageViewHandles = std::vector<VkImageView>
 		(
@@ -57,7 +45,7 @@ namespace vk
 			size.width, size.height, layers
 		};
 
-		const auto result = vkCreateFramebuffer
+		const auto result = device.vkCreateFramebuffer
 		(
 			device.vkDevice,
 			&createInfo,
@@ -71,43 +59,31 @@ namespace vk
 	{
 		if (vkFramebuffer != VK_NULL_HANDLE)
 		{
-			vkDestroyFramebuffer(device->vkDevice, vkFramebuffer, nullptr);
+			device->vkDestroyFramebuffer(device->vkDevice, vkFramebuffer, nullptr);
 		}
 	}
 
 	Framebuffer::Framebuffer(Framebuffer&& framebuffer)
 	:
 		device        { framebuffer.device        },
-		vkFramebuffer { framebuffer.vkFramebuffer },
-
-		vkCreateFramebuffer  { framebuffer.vkCreateFramebuffer  },
-		vkDestroyFramebuffer { framebuffer.vkDestroyFramebuffer }
+		vkFramebuffer { framebuffer.vkFramebuffer }
 	{
 		framebuffer.device        = nullptr;
 		framebuffer.vkFramebuffer = VK_NULL_HANDLE;
-
-		framebuffer.vkCreateFramebuffer  = nullptr;
-		framebuffer.vkDestroyFramebuffer = nullptr;
 	}
 
 	Framebuffer& Framebuffer::operator =(Framebuffer&& framebuffer)
 	{
 		if (vkFramebuffer != VK_NULL_HANDLE)
 		{
-			vkDestroyFramebuffer(device->vkDevice, vkFramebuffer, nullptr);
+			device->vkDestroyFramebuffer(device->vkDevice, vkFramebuffer, nullptr);
 		}
 
 		device        = framebuffer.device;
 		vkFramebuffer = framebuffer.vkFramebuffer;
 
-		vkCreateFramebuffer  = framebuffer.vkCreateFramebuffer;
-		vkDestroyFramebuffer = framebuffer.vkDestroyFramebuffer;
-
 		framebuffer.device        = nullptr;
 		framebuffer.vkFramebuffer = VK_NULL_HANDLE;
-
-		framebuffer.vkCreateFramebuffer  = nullptr;
-		framebuffer.vkDestroyFramebuffer = nullptr;
 
 		return *this;
 	}

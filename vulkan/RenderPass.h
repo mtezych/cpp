@@ -19,9 +19,6 @@ namespace vk
 		const Device* device;
 		VkRenderPass  vkRenderPass;
 
-		PFN_vkCreateRenderPass  vkCreateRenderPass;
-		PFN_vkDestroyRenderPass vkDestroyRenderPass;
-
 		RenderPass
 		(
 			const Device&                               device,

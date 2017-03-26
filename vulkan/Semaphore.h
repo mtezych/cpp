@@ -14,9 +14,6 @@ namespace vk
 		const Device* device;
 		VkSemaphore   vkSemaphore;
 
-		PFN_vkCreateSemaphore  vkCreateSemaphore;
-		PFN_vkDestroySemaphore vkDestroySemaphore;
-
 		Semaphore();
 
 		explicit Semaphore(const Device& device);

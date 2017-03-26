@@ -13,16 +13,7 @@ namespace vk
 		const std::vector<VkSubpassDependency>&     dependencies
 	):
 		device       { &device },
-		vkRenderPass { VK_NULL_HANDLE },
-
-		vkCreateRenderPass
-		{
-			device.LoadDeviceProcedure<symbol::vkCreateRenderPass>()
-		},
-		vkDestroyRenderPass
-		{
-			device.LoadDeviceProcedure<symbol::vkDestroyRenderPass>()
-		}
+		vkRenderPass { VK_NULL_HANDLE }
 	{
 		const auto createInfo = VkRenderPassCreateInfo
 		{
@@ -34,7 +25,7 @@ namespace vk
 			uint32_t ( dependencies.size() ), dependencies.data(),
 		};
 
-		const auto result = vkCreateRenderPass
+		const auto result = device.vkCreateRenderPass
 		(
 			device.vkDevice,
 			&createInfo,
@@ -48,7 +39,7 @@ namespace vk
 	{
 		if (vkRenderPass != VK_NULL_HANDLE)
 		{
-			vkDestroyRenderPass(device->vkDevice, vkRenderPass, nullptr);
+			device->vkDestroyRenderPass(device->vkDevice, vkRenderPass, nullptr);
 		}
 	}
 }

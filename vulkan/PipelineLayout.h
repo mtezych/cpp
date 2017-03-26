@@ -16,9 +16,6 @@ namespace vk
 		const Device*    device;
 		VkPipelineLayout vkPipelineLayout;
 
-		PFN_vkCreatePipelineLayout  vkCreatePipelineLayout;
-		PFN_vkDestroyPipelineLayout vkDestroyPipelineLayout;
-
 		PipelineLayout();
 
 		PipelineLayout

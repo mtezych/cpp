@@ -9,20 +9,14 @@ namespace vk
 	Semaphore::Semaphore ()
 	:
 		device      { nullptr },
-		vkSemaphore { VK_NULL_HANDLE },
-
-		vkCreateSemaphore  { nullptr },
-		vkDestroySemaphore { nullptr }
+		vkSemaphore { VK_NULL_HANDLE }
 	{
 	}
 
 	Semaphore::Semaphore (const Device& device)
 	:
 		device      { &device },
-		vkSemaphore { VK_NULL_HANDLE },
-
-		vkCreateSemaphore  { device.LoadDeviceProcedure<symbol::vkCreateSemaphore >() },
-		vkDestroySemaphore { device.LoadDeviceProcedure<symbol::vkDestroySemaphore>() }
+		vkSemaphore { VK_NULL_HANDLE }
 	{
 		const auto semaphoreCreateInfo = VkSemaphoreCreateInfo
 		{
@@ -30,7 +24,7 @@ namespace vk
 			nullptr,
 			0,
 		};
-		vkCreateSemaphore
+		device.vkCreateSemaphore
 		(
 			device.vkDevice,
 			&semaphoreCreateInfo,
@@ -43,43 +37,31 @@ namespace vk
 	{
 		if (vkSemaphore != VK_NULL_HANDLE)
 		{
-			vkDestroySemaphore(device->vkDevice, vkSemaphore, nullptr);
+			device->vkDestroySemaphore(device->vkDevice, vkSemaphore, nullptr);
 		}
 	}
 
 	Semaphore::Semaphore (Semaphore&& semaphore)
 	:
 		device      { semaphore.device      },
-		vkSemaphore { semaphore.vkSemaphore },
-
-		vkCreateSemaphore  { semaphore.vkCreateSemaphore  },
-		vkDestroySemaphore { semaphore.vkDestroySemaphore }
+		vkSemaphore { semaphore.vkSemaphore }
 	{
 		semaphore.device      = nullptr;
 		semaphore.vkSemaphore = VK_NULL_HANDLE;
-
-		semaphore.vkCreateSemaphore  = nullptr;
-		semaphore.vkDestroySemaphore = nullptr;
 	}
 
 	Semaphore& Semaphore::operator = (Semaphore&& semaphore)
 	{
 		if (vkSemaphore != VK_NULL_HANDLE)
 		{
-			vkDestroySemaphore(device->vkDevice, vkSemaphore, nullptr);
+			device->vkDestroySemaphore(device->vkDevice, vkSemaphore, nullptr);
 		}
 
 		device      = semaphore.device;
 		vkSemaphore = semaphore.vkSemaphore;
 
-		vkCreateSemaphore  = semaphore.vkCreateSemaphore;
-		vkDestroySemaphore = semaphore.vkDestroySemaphore;
-
 		semaphore.device      = nullptr;
 		semaphore.vkSemaphore = VK_NULL_HANDLE;
-
-		semaphore.vkCreateSemaphore  = nullptr;
-		semaphore.vkDestroySemaphore = nullptr;
 
 		return *this;
 	}

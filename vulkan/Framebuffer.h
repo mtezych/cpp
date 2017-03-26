@@ -19,9 +19,6 @@ namespace vk
 		const Device* device;
 		VkFramebuffer vkFramebuffer;
 
-		PFN_vkCreateFramebuffer  vkCreateFramebuffer;
-		PFN_vkDestroyFramebuffer vkDestroyFramebuffer;
-
 		Framebuffer();
 
 		Framebuffer

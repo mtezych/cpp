@@ -11,10 +11,7 @@ namespace vk
 	ImageView::ImageView()
 	:
 		device      { nullptr },
-		vkImageView { VK_NULL_HANDLE },
-
-		vkCreateImageView  { nullptr },
-		vkDestroyImageView { nullptr }
+		vkImageView { VK_NULL_HANDLE }
 	{
 	}
 
@@ -29,18 +26,9 @@ namespace vk
 		const VkImageViewCreateInfo& createInfo
 	):
 		device      { &device },
-		vkImageView { VK_NULL_HANDLE },
-
-		vkCreateImageView
-		{
-			device.LoadDeviceProcedure<symbol::vkCreateImageView>()
-		},
-		vkDestroyImageView
-		{
-			device.LoadDeviceProcedure<symbol::vkDestroyImageView>()
-		}
+		vkImageView { VK_NULL_HANDLE }
 	{
-		const auto result = vkCreateImageView
+		const auto result = device.vkCreateImageView
 		(
 			device.vkDevice,
 			&createInfo,
@@ -54,43 +42,31 @@ namespace vk
 	{
 		if (vkImageView != VK_NULL_HANDLE)
 		{
-			vkDestroyImageView(device->vkDevice, vkImageView, nullptr);
+			device->vkDestroyImageView(device->vkDevice, vkImageView, nullptr);
 		}
 	}
 
 	ImageView::ImageView(ImageView&& imageView)
 	:
 		device      { imageView.device      },
-		vkImageView { imageView.vkImageView },
-
-		vkCreateImageView  { imageView.vkCreateImageView  },
-		vkDestroyImageView { imageView.vkDestroyImageView }
+		vkImageView { imageView.vkImageView }
 	{
 		imageView.device      = nullptr;
 		imageView.vkImageView = VK_NULL_HANDLE;
-
-		imageView.vkCreateImageView  = nullptr;
-		imageView.vkDestroyImageView = nullptr;
 	}
 
 	ImageView& ImageView::operator =(ImageView&& imageView)
 	{
 		if (vkImageView != VK_NULL_HANDLE)
 		{
-			vkDestroyImageView(device->vkDevice, vkImageView, nullptr);
+			device->vkDestroyImageView(device->vkDevice, vkImageView, nullptr);
 		}
 
 		device      = imageView.device;
 		vkImageView = imageView.vkImageView;
 
-		vkCreateImageView  = imageView.vkCreateImageView;
-		vkDestroyImageView = imageView.vkDestroyImageView;
-
 		imageView.device      = nullptr;
 		imageView.vkImageView = VK_NULL_HANDLE;
-
-		imageView.vkCreateImageView  = nullptr;
-		imageView.vkDestroyImageView = nullptr;
 
 		return *this;
 	}

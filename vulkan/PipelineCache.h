@@ -16,9 +16,6 @@ namespace vk
 		const Device*   device;
 		VkPipelineCache vkPipelineCache;
 
-		PFN_vkCreatePipelineCache  vkCreatePipelineCache;
-		PFN_vkDestroyPipelineCache vkDestroyPipelineCache;
-
 		PipelineCache();
 
 		PipelineCache

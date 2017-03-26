@@ -17,9 +17,6 @@ namespace vk
 		const Device*  device;
 		VkShaderModule vkShaderModule;
 
-		PFN_vkCreateShaderModule  vkCreateShaderModule;
-		PFN_vkDestroyShaderModule vkDestroyShaderModule;
-
 		ShaderModule
 		(
 			const Device&                device,

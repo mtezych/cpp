@@ -15,18 +15,7 @@ namespace vk
 	CommandBuffer::CommandBuffer()
 	:
 		commandPool     { nullptr },
-		vkCommandBuffer { VK_NULL_HANDLE },
-
-		vkAllocateCommandBuffers { nullptr },
-		vkFreeCommandBuffers     { nullptr },
-		vkBeginCommandBuffer     { nullptr },
-		vkEndCommandBuffer       { nullptr },
-		vkCmdClearColorImage     { nullptr },
-		vkCmdPipelineBarrier     { nullptr },
-		vkCmdBeginRenderPass     { nullptr },
-		vkCmdEndRenderPass       { nullptr },
-		vkCmdBindPipeline        { nullptr },
-		vkCmdDraw                { nullptr }
+		vkCommandBuffer { VK_NULL_HANDLE }
 	{
 	}
 
@@ -36,48 +25,7 @@ namespace vk
 		const VkCommandBufferLevel level
 	):
 		commandPool     { &commandPool },
-		vkCommandBuffer { VK_NULL_HANDLE },
-
-		vkAllocateCommandBuffers
-		{
-			commandPool.device->LoadDeviceProcedure<symbol::vkAllocateCommandBuffers>()
-		},
-		vkFreeCommandBuffers
-		{
-			commandPool.device->LoadDeviceProcedure<symbol::vkFreeCommandBuffers>()
-		},
-		vkBeginCommandBuffer
-		{
-			commandPool.device->LoadDeviceProcedure<symbol::vkBeginCommandBuffer>()
-		},
-		vkEndCommandBuffer
-		{
-			commandPool.device->LoadDeviceProcedure<symbol::vkEndCommandBuffer>()
-		},
-		vkCmdClearColorImage
-		{
-			commandPool.device->LoadDeviceProcedure<symbol::vkCmdClearColorImage>()
-		},
-		vkCmdPipelineBarrier
-		{
-			commandPool.device->LoadDeviceProcedure<symbol::vkCmdPipelineBarrier>()
-		},
-		vkCmdBeginRenderPass
-		{
-			commandPool.device->LoadDeviceProcedure<symbol::vkCmdBeginRenderPass>()
-		},
-		vkCmdEndRenderPass
-		{
-			commandPool.device->LoadDeviceProcedure<symbol::vkCmdEndRenderPass>()
-		},
-		vkCmdBindPipeline
-		{
-			commandPool.device->LoadDeviceProcedure<symbol::vkCmdBindPipeline>()
-		},
-		vkCmdDraw
-		{
-			commandPool.device->LoadDeviceProcedure<symbol::vkCmdDraw>()
-		}
+		vkCommandBuffer { VK_NULL_HANDLE }
 	{
 		const auto allocateInfo = VkCommandBufferAllocateInfo
 		{
@@ -87,7 +35,7 @@ namespace vk
 			level,
 			1
 		};
-		const auto result = vkAllocateCommandBuffers
+		const auto result = commandPool.device->vkAllocateCommandBuffers
 		(
 			commandPool.device->vkDevice,
 			&allocateInfo,
@@ -100,7 +48,7 @@ namespace vk
 	{
 		if (vkCommandBuffer != VK_NULL_HANDLE)
 		{
-			vkFreeCommandBuffers
+			commandPool->device->vkFreeCommandBuffers
 			(
 				commandPool->device->vkDevice,
 				commandPool->vkCommandPool,
@@ -112,39 +60,17 @@ namespace vk
 	CommandBuffer::CommandBuffer(CommandBuffer&& commandBuffer)
 	:
 		commandPool     { commandBuffer.commandPool     },
-		vkCommandBuffer { commandBuffer.vkCommandBuffer },
-
-		vkAllocateCommandBuffers { commandBuffer.vkAllocateCommandBuffers },
-		vkFreeCommandBuffers     { commandBuffer.vkFreeCommandBuffers     },
-		vkBeginCommandBuffer     { commandBuffer.vkBeginCommandBuffer     },
-		vkEndCommandBuffer       { commandBuffer.vkEndCommandBuffer       },
-		vkCmdClearColorImage     { commandBuffer.vkCmdClearColorImage     },
-		vkCmdPipelineBarrier     { commandBuffer.vkCmdPipelineBarrier     },
-		vkCmdBeginRenderPass     { commandBuffer.vkCmdBeginRenderPass     },
-		vkCmdEndRenderPass       { commandBuffer.vkCmdEndRenderPass       },
-		vkCmdBindPipeline        { commandBuffer.vkCmdBindPipeline        },
-		vkCmdDraw                { commandBuffer.vkCmdDraw                }
+		vkCommandBuffer { commandBuffer.vkCommandBuffer }
 	{
 		commandBuffer.commandPool     = nullptr;
 		commandBuffer.vkCommandBuffer = VK_NULL_HANDLE;
-
-		commandBuffer.vkAllocateCommandBuffers = nullptr;
-		commandBuffer.vkFreeCommandBuffers     = nullptr;
-		commandBuffer.vkBeginCommandBuffer     = nullptr;
-		commandBuffer.vkEndCommandBuffer       = nullptr;
-		commandBuffer.vkCmdClearColorImage     = nullptr;
-		commandBuffer.vkCmdPipelineBarrier     = nullptr;
-		commandBuffer.vkCmdBeginRenderPass     = nullptr;
-		commandBuffer.vkCmdEndRenderPass       = nullptr;
-		commandBuffer.vkCmdBindPipeline        = nullptr;
-		commandBuffer.vkCmdDraw                = nullptr;
 	}
 
 	CommandBuffer& CommandBuffer::operator =(CommandBuffer&& commandBuffer)
 	{
 		if (vkCommandBuffer != VK_NULL_HANDLE)
 		{
-			vkFreeCommandBuffers
+			commandPool->device->vkFreeCommandBuffers
 			(
 				commandPool->device->vkDevice,
 				commandPool->vkCommandPool,
@@ -155,30 +81,8 @@ namespace vk
 		commandPool     = commandBuffer.commandPool;
 		vkCommandBuffer = commandBuffer.vkCommandBuffer;
 
-		vkAllocateCommandBuffers = commandBuffer.vkAllocateCommandBuffers;
-		vkFreeCommandBuffers     = commandBuffer.vkFreeCommandBuffers;
-		vkBeginCommandBuffer     = commandBuffer.vkBeginCommandBuffer;
-		vkEndCommandBuffer       = commandBuffer.vkEndCommandBuffer;
-		vkCmdClearColorImage     = commandBuffer.vkCmdClearColorImage;
-		vkCmdPipelineBarrier     = commandBuffer.vkCmdPipelineBarrier;
-		vkCmdBeginRenderPass     = commandBuffer.vkCmdBeginRenderPass;
-		vkCmdEndRenderPass       = commandBuffer.vkCmdEndRenderPass;
-		vkCmdBindPipeline        = commandBuffer.vkCmdBindPipeline;
-		vkCmdDraw                = commandBuffer.vkCmdDraw;
-
 		commandBuffer.commandPool     = nullptr;
 		commandBuffer.vkCommandBuffer = VK_NULL_HANDLE;
-
-		commandBuffer.vkAllocateCommandBuffers = nullptr;
-		commandBuffer.vkFreeCommandBuffers     = nullptr;
-		commandBuffer.vkBeginCommandBuffer     = nullptr;
-		commandBuffer.vkEndCommandBuffer       = nullptr;
-		commandBuffer.vkCmdClearColorImage     = nullptr;
-		commandBuffer.vkCmdPipelineBarrier     = nullptr;
-		commandBuffer.vkCmdBeginRenderPass     = nullptr;
-		commandBuffer.vkCmdEndRenderPass       = nullptr;
-		commandBuffer.vkCmdBindPipeline        = nullptr;
-		commandBuffer.vkCmdDraw                = nullptr;
 
 		return *this;
 	}
@@ -192,13 +96,19 @@ namespace vk
 			VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT,
 			nullptr,
 		};
-		const auto result = vkBeginCommandBuffer(vkCommandBuffer, &beginInfo);
+		const auto result = commandPool->device->vkBeginCommandBuffer
+		(
+			vkCommandBuffer, &beginInfo
+		);
 		assert(result == VK_SUCCESS);
 	}
 
 	void CommandBuffer::EndRecording()
 	{
-		const auto result = vkEndCommandBuffer(vkCommandBuffer);
+		const auto result = commandPool->device->vkEndCommandBuffer
+		(
+			vkCommandBuffer
+		);
 		assert(result == VK_SUCCESS);
 	}
 
@@ -209,7 +119,7 @@ namespace vk
 		const VkImageMemoryBarrier& imageMemoryBarrier
 	)
 	{
-		vkCmdPipelineBarrier
+		commandPool->device->vkCmdPipelineBarrier
 		(
 			vkCommandBuffer,
 			sourcePipelineStageMask,
@@ -229,7 +139,7 @@ namespace vk
 		const VkClearColorValue&       clearColor
 	)
 	{
-		vkCmdClearColorImage
+		commandPool->device->vkCmdClearColorImage
 		(
 			vkCommandBuffer,
 			image, imageLayout,
@@ -255,7 +165,7 @@ namespace vk
 			renderArea,
 			1, &clear
 		};
-		vkCmdBeginRenderPass
+		commandPool->device->vkCmdBeginRenderPass
 		(
 			vkCommandBuffer,
 			&beginInfo,
@@ -265,12 +175,12 @@ namespace vk
 
 	void CommandBuffer::RecordCommandEndRenderPass()
 	{
-		vkCmdEndRenderPass(vkCommandBuffer);
+		commandPool->device->vkCmdEndRenderPass(vkCommandBuffer);
 	}
 
 	void CommandBuffer::RecordCommandBindPipeline(const Pipeline& pipeline)
 	{
-		vkCmdBindPipeline
+		commandPool->device->vkCmdBindPipeline
 		(
 			vkCommandBuffer,
 			pipeline.vkBindPoint,
@@ -284,7 +194,7 @@ namespace vk
 		uint32_t firstVertex, uint32_t firstInstance
 	)
 	{
-		vkCmdDraw
+		commandPool->device->vkCmdDraw
 		(
 			vkCommandBuffer,
 			vertexCount, instanceCount,

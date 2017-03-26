@@ -11,10 +11,7 @@ namespace vk
 	PipelineLayout::PipelineLayout()
 	:
 		device           { nullptr },
-		vkPipelineLayout { VK_NULL_HANDLE },
-
-		vkCreatePipelineLayout  { nullptr },
-		vkDestroyPipelineLayout { nullptr }
+		vkPipelineLayout { VK_NULL_HANDLE }
 	{
 	}
 
@@ -25,16 +22,7 @@ namespace vk
 		const std::vector<VkPushConstantRange>&   pushConstantRanges
 	):
 		device           { &device },
-		vkPipelineLayout { VK_NULL_HANDLE },
-
-		vkCreatePipelineLayout
-		{
-			device.LoadDeviceProcedure<symbol::vkCreatePipelineLayout>()
-		},
-		vkDestroyPipelineLayout
-		{
-			device.LoadDeviceProcedure<symbol::vkDestroyPipelineLayout>()
-		}
+		vkPipelineLayout { VK_NULL_HANDLE }
 	{
 		const auto createInfo = VkPipelineLayoutCreateInfo
 		{
@@ -46,7 +34,7 @@ namespace vk
 			uint32_t (   pushConstantRanges.size() ),
 			pushConstantRanges.empty() ? nullptr : pushConstantRanges.data(),
 		};
-		const auto result = vkCreatePipelineLayout
+		const auto result = device.vkCreatePipelineLayout
 		(
 			device.vkDevice,
 			&createInfo,
@@ -60,7 +48,7 @@ namespace vk
 	{
 		if (vkPipelineLayout != VK_NULL_HANDLE)
 		{
-			vkDestroyPipelineLayout(device->vkDevice, vkPipelineLayout, nullptr);
+			device->vkDestroyPipelineLayout(device->vkDevice, vkPipelineLayout, nullptr);
 		}
 	}
 }

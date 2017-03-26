@@ -14,9 +14,6 @@ namespace vk
 		const Device* device;
 		VkCommandPool vkCommandPool;
 
-		PFN_vkCreateCommandPool  vkCreateCommandPool;
-		PFN_vkDestroyCommandPool vkDestroyCommandPool;
-
 		CommandPool(const Device& device, const uint32_t queueFamilyIndex);
 
 		~CommandPool();

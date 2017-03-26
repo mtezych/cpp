@@ -12,26 +12,9 @@ namespace vk
 		const VkSwapchainCreateInfoKHR& swapchainCreateInfo
 	):
 		device      { &device },
-		vkSwapchain { VK_NULL_HANDLE },
-
-		vkCreateSwapchainKHR
-		{
-			device.LoadDeviceProcedure<symbol::vkCreateSwapchainKHR >()
-		},
-		vkDestroySwapchainKHR
-		{
-			device.LoadDeviceProcedure<symbol::vkDestroySwapchainKHR>()
-		},
-		vkGetSwapchainImagesKHR
-		{
-			device.LoadDeviceProcedure<symbol::vkGetSwapchainImagesKHR>()
-		},
-		vkAcquireNextImageKHR
-		{
-			device.LoadDeviceProcedure<symbol::vkAcquireNextImageKHR>()
-		}
+		vkSwapchain { VK_NULL_HANDLE }
 	{
-		const auto result = vkCreateSwapchainKHR
+		const auto result = device.vkCreateSwapchainKHR
 		(
 			device.vkDevice,
 			&swapchainCreateInfo,
@@ -45,14 +28,14 @@ namespace vk
 	{
 		if (vkSwapchain != VK_NULL_HANDLE)
 		{
-			vkDestroySwapchainKHR(device->vkDevice, vkSwapchain, nullptr);
+			device->vkDestroySwapchainKHR(device->vkDevice, vkSwapchain, nullptr);
 		}
 	}
 
 	std::vector<VkImage> Swapchain::Images() const
 	{
 		auto swapchainImagesCount = uint32_t { 0 };
-		auto result = vkGetSwapchainImagesKHR
+		auto result = device->vkGetSwapchainImagesKHR
 		(
 			device->vkDevice, vkSwapchain,
 			&swapchainImagesCount, nullptr
@@ -64,7 +47,7 @@ namespace vk
 			swapchainImagesCount,
 			VkImage { VK_NULL_HANDLE }
 		);
-		result = vkGetSwapchainImagesKHR
+		result = device->vkGetSwapchainImagesKHR
 		(
 			device->vkDevice, vkSwapchain,
 			&swapchainImagesCount, swapchainImages.data()
@@ -81,7 +64,7 @@ namespace vk
 
 		auto imageAvailable = Semaphore { *device };
 
-		const auto result = vkAcquireNextImageKHR
+		const auto result = device->vkAcquireNextImageKHR
 		(
 			device->vkDevice, vkSwapchain,
 			timeout,

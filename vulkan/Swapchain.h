@@ -15,11 +15,6 @@ namespace vk
 		const Device*  device;
 		VkSwapchainKHR vkSwapchain;
 
-		PFN_vkCreateSwapchainKHR    vkCreateSwapchainKHR;
-		PFN_vkDestroySwapchainKHR   vkDestroySwapchainKHR;
-		PFN_vkGetSwapchainImagesKHR vkGetSwapchainImagesKHR;
-		PFN_vkAcquireNextImageKHR   vkAcquireNextImageKHR;
-
 		Swapchain
 		(
 			const Device&                   device,

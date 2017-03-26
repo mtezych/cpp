@@ -16,10 +16,6 @@ namespace vk
 		VkPipeline          vkPipeline;
 		VkPipelineBindPoint vkBindPoint;
 
-		PFN_vkCreateComputePipelines  vkCreateComputePipelines;
-		PFN_vkCreateGraphicsPipelines vkCreateGraphicsPipelines;
-		PFN_vkDestroyPipeline         vkDestroyPipeline;
-
 		Pipeline();
 
 		Pipeline

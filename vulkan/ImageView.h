@@ -14,9 +14,6 @@ namespace vk
 		const Device* device;
 		VkImageView   vkImageView;
 
-		PFN_vkCreateImageView  vkCreateImageView;
-		PFN_vkDestroyImageView vkDestroyImageView;
-
 		ImageView();
 
 		operator VkImageView() const;

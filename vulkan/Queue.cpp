@@ -13,24 +13,19 @@ namespace vk
 {
 	Queue::Queue(const Device& device, const VkQueue vkQueue)
 	:
-		vkQueue { vkQueue },
-
-		vkQueueSubmit     { device.LoadDeviceProcedure<symbol::vkQueueSubmit    >() },
-		vkQueueWaitIdle   { device.LoadDeviceProcedure<symbol::vkQueueWaitIdle  >() },
-
-		vkQueuePresentKHR { device.LoadDeviceProcedure<symbol::vkQueuePresentKHR>() }
+		device  { &device },
+		vkQueue { vkQueue }
 	{
 	}
 
 	Semaphore Queue::Submit
 	(
-		const Device&              device,
 		const Semaphore&           imageAvaliable,
 		const VkPipelineStageFlags waitPipelineStage,
 		const CommandBuffer&       commandBuffer
 	) const
 	{
-		auto renderingFinished = Semaphore { device };
+		auto renderingFinished = Semaphore { *device };
 
 		const auto submitInfo = VkSubmitInfo
 		{
@@ -40,7 +35,7 @@ namespace vk
 			1, &commandBuffer.vkCommandBuffer,
 			1, &renderingFinished.vkSemaphore
 		};
-		const auto result = vkQueueSubmit
+		const auto result = device->vkQueueSubmit
 		(
 			vkQueue,
 			1, &submitInfo,
@@ -53,7 +48,7 @@ namespace vk
 
 	void Queue::WaitIdle()
 	{
-		const auto result = vkQueueWaitIdle(vkQueue);
+		const auto result = device->vkQueueWaitIdle(vkQueue);
 		assert(result == VK_SUCCESS);
 	}
 
@@ -72,7 +67,7 @@ namespace vk
 			1, &swapchain.vkSwapchain, &imageIndex,
 			nullptr
 		};
-		const auto result = vkQueuePresentKHR(vkQueue, &presentInfo);
+		const auto result = device->vkQueuePresentKHR(vkQueue, &presentInfo);
 		assert(result == VK_SUCCESS);
 	}
 }
