@@ -17,14 +17,28 @@ namespace vk
 	{
 		platform::Library library;
 
-		PFN_vkGetInstanceProcAddr                  vkGetInstanceProcAddr;
-
-		PFN_vkEnumerateInstanceExtensionProperties vkEnumerateInstanceExtensionProperties;
-		PFN_vkEnumerateInstanceLayerProperties     vkEnumerateInstanceLayerProperties;
+		/*
+		┌──────────────────────────────────────────────────────┐
+		│                      VkInstance                      │
+		├──────────────────────────────────────────────────────┤
+		│*/ PFN_vkGetInstanceProcAddr vkGetInstanceProcAddr; /*│
+		└──────────────────────────────────────────────────────┘
+		┌────────────────────────────────────────────────────────────────────────────────────────┐
+		│                                        VkLoader                                        │
+		├────────────────────────────────────────────────────────────────────────────────────────┤
+		│*/ PFN_vkEnumerateInstanceExtensionProperties vkEnumerateInstanceExtensionProperties; /*│
+		│*/ PFN_vkEnumerateInstanceLayerProperties     vkEnumerateInstanceLayerProperties;     /*│
+		└────────────────────────────────────────────────────────────────────────────────────────┘
+		┌──────────────────────────────────────────────────────┐
+		│                      VkInstance                      │
+		├──────────────────────────────────────────────────────┤
+		│*/ PFN_vkCreateInstance      vkCreateInstance;      /*│
+		└──────────────────────────────────────────────────────┘
+		*/
 
 		Loader();
 
-		explicit Loader(const std::string& libraryPath);
+		explicit Loader(const std::string& path);
 
 		~Loader() = default;
 

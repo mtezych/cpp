@@ -11,18 +11,27 @@ namespace vk
 
 		vkGetInstanceProcAddr                  { nullptr },
 		vkEnumerateInstanceExtensionProperties { nullptr },
-		vkEnumerateInstanceLayerProperties     { nullptr }
+		vkEnumerateInstanceLayerProperties     { nullptr },
+		vkCreateInstance                       { nullptr }
 	{
 	}
 
-	Loader::Loader(const std::string& libraryPath)
+	Loader::Loader(const std::string& path)
 	:
-		library { libraryPath },
+		library { path },
 
+		/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+		 *                          VkInstance                               *
+		 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 		vkGetInstanceProcAddr
 		{
 			LoadSymbol<symbol::vkGetInstanceProcAddr>()
 		},
+		/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+		/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+		 *                       VkLoader                                    *
+		 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 		vkEnumerateInstanceExtensionProperties
 		{
 			LoadGlobalProcedure<symbol::vkEnumerateInstanceExtensionProperties>()
@@ -30,7 +39,17 @@ namespace vk
 		vkEnumerateInstanceLayerProperties
 		{
 			LoadGlobalProcedure<symbol::vkEnumerateInstanceLayerProperties>()
+		},
+		/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+		/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+		 *                                VkInstance                         *
+		 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+		vkCreateInstance
+		{
+			LoadGlobalProcedure<symbol::vkCreateInstance>()
 		}
+		/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 	{
 	}
 
@@ -40,11 +59,13 @@ namespace vk
 
 		vkGetInstanceProcAddr                  { loader.vkGetInstanceProcAddr                  },
 		vkEnumerateInstanceExtensionProperties { loader.vkEnumerateInstanceExtensionProperties },
-		vkEnumerateInstanceLayerProperties     { loader.vkEnumerateInstanceLayerProperties     }
+		vkEnumerateInstanceLayerProperties     { loader.vkEnumerateInstanceLayerProperties     },
+		vkCreateInstance                       { loader.vkCreateInstance                       }
 	{
 		loader.vkGetInstanceProcAddr                  = nullptr;
 		loader.vkEnumerateInstanceExtensionProperties = nullptr;
 		loader.vkEnumerateInstanceLayerProperties     = nullptr;
+		loader.vkCreateInstance                       = nullptr;
 	}
 
 	Loader& Loader::operator =(Loader&& loader)
@@ -54,10 +75,12 @@ namespace vk
 		vkGetInstanceProcAddr                  = loader.vkGetInstanceProcAddr;
 		vkEnumerateInstanceExtensionProperties = loader.vkEnumerateInstanceExtensionProperties;
 		vkEnumerateInstanceLayerProperties     = loader.vkEnumerateInstanceLayerProperties;
+		vkCreateInstance                       = loader.vkCreateInstance;
 
 		loader.vkGetInstanceProcAddr                  = nullptr;
 		loader.vkEnumerateInstanceExtensionProperties = nullptr;
 		loader.vkEnumerateInstanceLayerProperties     = nullptr;
+		loader.vkCreateInstance                       = nullptr;
 
 		return *this;
 	}

@@ -11,62 +11,8 @@ namespace vk
 	(
 		const Instance& instance, const VkPhysicalDevice vkPhysicalDevice
 	):
-		vkPhysicalDevice { vkPhysicalDevice },
-
-		vkEnumerateDeviceExtensionProperties
-		{
-			instance.LoadInstanceProcedure<symbol::vkEnumerateDeviceExtensionProperties>()
-		},
-		vkEnumerateDeviceLayerProperties
-		{
-			instance.LoadInstanceProcedure<symbol::vkEnumerateDeviceLayerProperties>()
-		},
-
-		vkGetPhysicalDeviceFeatures
-		{
-			instance.LoadInstanceProcedure<symbol::vkGetPhysicalDeviceFeatures>()
-		},
-		vkGetPhysicalDeviceProperties
-		{
-			instance.LoadInstanceProcedure<symbol::vkGetPhysicalDeviceProperties>()
-		},
-		vkGetPhysicalDeviceQueueFamilyProperties
-		{
-			instance.LoadInstanceProcedure<symbol::vkGetPhysicalDeviceQueueFamilyProperties>()
-		},
-		vkGetPhysicalDeviceFormatProperties
-		{
-			instance.LoadInstanceProcedure<symbol::vkGetPhysicalDeviceFormatProperties>()
-		},
-		vkGetPhysicalDeviceImageFormatProperties
-		{
-			instance.LoadInstanceProcedure<symbol::vkGetPhysicalDeviceImageFormatProperties>()
-		},
-		vkGetPhysicalDeviceSparseImageFormatProperties
-		{
-			instance.LoadInstanceProcedure<symbol::vkGetPhysicalDeviceSparseImageFormatProperties>()
-		},
-		vkGetPhysicalDeviceMemoryProperties
-		{
-			instance.LoadInstanceProcedure<symbol::vkGetPhysicalDeviceMemoryProperties>()
-		},
-
-		vkGetPhysicalDeviceSurfaceSupportKHR
-		{
-			instance.LoadInstanceProcedure<symbol::vkGetPhysicalDeviceSurfaceSupportKHR>()
-		},
-		vkGetPhysicalDeviceSurfaceFormatsKHR
-		{
-			instance.LoadInstanceProcedure<symbol::vkGetPhysicalDeviceSurfaceFormatsKHR>()
-		},
-		vkGetPhysicalDeviceSurfacePresentModesKHR
-		{
-			instance.LoadInstanceProcedure<symbol::vkGetPhysicalDeviceSurfacePresentModesKHR>()
-		},
-		vkGetPhysicalDeviceSurfaceCapabilitiesKHR
-		{
-			instance.LoadInstanceProcedure<symbol::vkGetPhysicalDeviceSurfaceCapabilitiesKHR>()
-		}
+		instance         { &instance },
+		vkPhysicalDevice { vkPhysicalDevice }
 	{
 	}
 
@@ -74,7 +20,7 @@ namespace vk
 	PhysicalDevice::EnumerateDeviceExtensionProperties(const std::string& layerName) const
 	{
 		auto deviceExtensionPropertiesCount = uint32_t { 0 };
-		auto result = vkEnumerateDeviceExtensionProperties
+		auto result = instance->vkEnumerateDeviceExtensionProperties
 		(
 			vkPhysicalDevice,
 			layerName.empty() ? nullptr : layerName.c_str(),
@@ -88,7 +34,7 @@ namespace vk
 			deviceExtensionPropertiesCount,
 			VkExtensionProperties { }
 		);
-		result = vkEnumerateDeviceExtensionProperties
+		result = instance->vkEnumerateDeviceExtensionProperties
 		(
 			vkPhysicalDevice,
 			layerName.empty() ? nullptr : layerName.c_str(),
@@ -104,7 +50,7 @@ namespace vk
 	PhysicalDevice::EnumerateDeviceLayerProperties () const
 	{
 		auto deviceLayerPropertiesCount = uint32_t { 0 };
-		auto result = vkEnumerateDeviceLayerProperties
+		auto result = instance->vkEnumerateDeviceLayerProperties
 		(
 			vkPhysicalDevice,
 			&deviceLayerPropertiesCount,
@@ -117,7 +63,7 @@ namespace vk
 			deviceLayerPropertiesCount,
 			VkLayerProperties { }
 		);
-		result = vkEnumerateDeviceLayerProperties
+		result = instance->vkEnumerateDeviceLayerProperties
 		(
 			vkPhysicalDevice,
 			&deviceLayerPropertiesCount,
@@ -133,7 +79,7 @@ namespace vk
 	{
 		auto physicalDeviceFeatures = VkPhysicalDeviceFeatures { };
 
-		vkGetPhysicalDeviceFeatures(vkPhysicalDevice, &physicalDeviceFeatures);
+		instance->vkGetPhysicalDeviceFeatures(vkPhysicalDevice, &physicalDeviceFeatures);
 
 		return physicalDeviceFeatures;
 	}
@@ -143,7 +89,7 @@ namespace vk
 	{
 		auto physicalDeviceProperties = VkPhysicalDeviceProperties { };
 
-		vkGetPhysicalDeviceProperties(vkPhysicalDevice, &physicalDeviceProperties);
+		instance->vkGetPhysicalDeviceProperties(vkPhysicalDevice, &physicalDeviceProperties);
 
 		return physicalDeviceProperties;
 	}
@@ -152,7 +98,7 @@ namespace vk
 	PhysicalDevice::GetPhysicalDeviceQueueFamilyProperties () const
 	{
 		auto queueFamilyPropertiesCount = uint32_t { };
-		vkGetPhysicalDeviceQueueFamilyProperties
+		instance->vkGetPhysicalDeviceQueueFamilyProperties
 		(
 			vkPhysicalDevice,
 			&queueFamilyPropertiesCount,
@@ -164,7 +110,7 @@ namespace vk
 			queueFamilyPropertiesCount,
 			VkQueueFamilyProperties { }
 		);
-		vkGetPhysicalDeviceQueueFamilyProperties
+		instance->vkGetPhysicalDeviceQueueFamilyProperties
 		(
 			vkPhysicalDevice,
 			&queueFamilyPropertiesCount,
@@ -179,7 +125,7 @@ namespace vk
 	{
 		auto formatProperties = VkFormatProperties { };
 
-		vkGetPhysicalDeviceFormatProperties
+		instance->vkGetPhysicalDeviceFormatProperties
 		(
 			vkPhysicalDevice, format, &formatProperties
 		);
@@ -199,7 +145,7 @@ namespace vk
 	{
 		auto imageFormatProperties = VkImageFormatProperties { };
 
-		const auto result = vkGetPhysicalDeviceImageFormatProperties
+		const auto result = instance->vkGetPhysicalDeviceImageFormatProperties
 		(
 			vkPhysicalDevice,
 			format,
@@ -225,7 +171,7 @@ namespace vk
 	) const
 	{
 		auto sparseImageFormatPropertiesCount = uint32_t { };
-		vkGetPhysicalDeviceSparseImageFormatProperties
+		instance->vkGetPhysicalDeviceSparseImageFormatProperties
 		(
 			vkPhysicalDevice,
 			format,
@@ -242,7 +188,7 @@ namespace vk
 			sparseImageFormatPropertiesCount,
 			VkSparseImageFormatProperties { }
 		);
-		vkGetPhysicalDeviceSparseImageFormatProperties
+		instance->vkGetPhysicalDeviceSparseImageFormatProperties
 		(
 			vkPhysicalDevice,
 			format,
@@ -262,7 +208,7 @@ namespace vk
 	{
 		auto memoryProperties = VkPhysicalDeviceMemoryProperties { };
 
-		vkGetPhysicalDeviceMemoryProperties(vkPhysicalDevice, &memoryProperties);
+		instance->vkGetPhysicalDeviceMemoryProperties(vkPhysicalDevice, &memoryProperties);
 
 		return memoryProperties;
 	}
@@ -275,7 +221,7 @@ namespace vk
 	{
 		auto supported = VkBool32 { VK_FALSE };
 
-		const auto result = vkGetPhysicalDeviceSurfaceSupportKHR
+		const auto result = instance->vkGetPhysicalDeviceSurfaceSupportKHR
 		(
 			vkPhysicalDevice,
 			queueFamilyIndex,
@@ -291,7 +237,7 @@ namespace vk
 	PhysicalDevice::GetPhysicalDeviceSurfaceFormats (const Surface& surface) const
 	{
 		auto surfaceFormatsCount = uint32_t { 0 };
-		auto result = vkGetPhysicalDeviceSurfaceFormatsKHR
+		auto result = instance->vkGetPhysicalDeviceSurfaceFormatsKHR
 		(
 			vkPhysicalDevice,
 			surface.vkSurface,
@@ -304,7 +250,7 @@ namespace vk
 			surfaceFormatsCount,
 			VkSurfaceFormatKHR { }
 		);
-		result = vkGetPhysicalDeviceSurfaceFormatsKHR
+		result = instance->vkGetPhysicalDeviceSurfaceFormatsKHR
 		(
 			vkPhysicalDevice,
 			surface.vkSurface,
@@ -319,7 +265,7 @@ namespace vk
 	PhysicalDevice::GetPhysicalDeviceSurfacePresentModes (const Surface& surface) const
 	{
 		auto presentModesCount = uint32_t { 0 };
-		auto result = vkGetPhysicalDeviceSurfacePresentModesKHR
+		auto result = instance->vkGetPhysicalDeviceSurfacePresentModesKHR
 		(
 			vkPhysicalDevice,
 			surface.vkSurface,
@@ -332,7 +278,7 @@ namespace vk
 			presentModesCount,
 			VkPresentModeKHR { }
 		);
-		result = vkGetPhysicalDeviceSurfacePresentModesKHR
+		result = instance->vkGetPhysicalDeviceSurfacePresentModesKHR
 		(
 			vkPhysicalDevice,
 			surface.vkSurface,
@@ -348,7 +294,7 @@ namespace vk
 	{
 		auto surfaceCapabilities = VkSurfaceCapabilitiesKHR { };
 
-		const auto result = vkGetPhysicalDeviceSurfaceCapabilitiesKHR
+		const auto result = instance->vkGetPhysicalDeviceSurfaceCapabilitiesKHR
 		(
 			vkPhysicalDevice,
 			surface.vkSurface,

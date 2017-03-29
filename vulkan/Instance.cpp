@@ -8,33 +8,103 @@ namespace vk
 {
 	Instance::Instance()
 	:
+		loader     { nullptr },
 		vkInstance { VK_NULL_HANDLE },
 
-		vkGetInstanceProcAddr { nullptr },
-		vkCreateInstance      { nullptr },
-
-		vkDestroyInstance          { nullptr },
-		vkEnumeratePhysicalDevices { nullptr }
+		vkDestroyInstance                              { nullptr },
+		vkDestroySurfaceKHR                            { nullptr },
+		vkEnumeratePhysicalDevices                     { nullptr },
+		vkGetPhysicalDeviceFeatures                    { nullptr },
+		vkGetPhysicalDeviceProperties                  { nullptr },
+		vkGetPhysicalDeviceQueueFamilyProperties       { nullptr },
+		vkGetPhysicalDeviceFormatProperties            { nullptr },
+		vkGetPhysicalDeviceImageFormatProperties       { nullptr },
+		vkGetPhysicalDeviceSparseImageFormatProperties { nullptr },
+		vkGetPhysicalDeviceMemoryProperties            { nullptr },
+		vkGetPhysicalDeviceSurfaceSupportKHR           { nullptr },
+		vkGetPhysicalDeviceSurfaceFormatsKHR           { nullptr },
+		vkGetPhysicalDeviceSurfacePresentModesKHR      { nullptr },
+		vkGetPhysicalDeviceSurfaceCapabilitiesKHR      { nullptr },
+		vkEnumerateDeviceExtensionProperties           { nullptr },
+		vkEnumerateDeviceLayerProperties               { nullptr },
+		vkCreateDevice                                 { nullptr },
+		vkGetDeviceProcAddr                            { nullptr }
 	{
 	}
 
-	Instance::Instance
-	(
-		const Loader& loader, const VkInstanceCreateInfo& createInfo
-	):
+	Instance::Instance(const Loader& loader, const VkInstanceCreateInfo& createInfo)
+	:
+		loader     { &loader },
 		vkInstance { VK_NULL_HANDLE },
 
-		vkGetInstanceProcAddr { loader.LoadSymbol         <symbol::vkGetInstanceProcAddr>() },
-		vkCreateInstance      { loader.LoadGlobalProcedure<symbol::vkCreateInstance     >() },
-
-		vkDestroyInstance          { nullptr },
-		vkEnumeratePhysicalDevices { nullptr }
+		vkDestroyInstance                              { nullptr },
+		vkDestroySurfaceKHR                            { nullptr },
+		vkEnumeratePhysicalDevices                     { nullptr },
+		vkGetPhysicalDeviceFeatures                    { nullptr },
+		vkGetPhysicalDeviceProperties                  { nullptr },
+		vkGetPhysicalDeviceQueueFamilyProperties       { nullptr },
+		vkGetPhysicalDeviceFormatProperties            { nullptr },
+		vkGetPhysicalDeviceImageFormatProperties       { nullptr },
+		vkGetPhysicalDeviceSparseImageFormatProperties { nullptr },
+		vkGetPhysicalDeviceMemoryProperties            { nullptr },
+		vkGetPhysicalDeviceSurfaceSupportKHR           { nullptr },
+		vkGetPhysicalDeviceSurfaceFormatsKHR           { nullptr },
+		vkGetPhysicalDeviceSurfacePresentModesKHR      { nullptr },
+		vkGetPhysicalDeviceSurfaceCapabilitiesKHR      { nullptr },
+		vkEnumerateDeviceExtensionProperties           { nullptr },
+		vkEnumerateDeviceLayerProperties               { nullptr },
+		vkCreateDevice                                 { nullptr },
+		vkGetDeviceProcAddr                            { nullptr }
 	{
-		const auto result = vkCreateInstance(&createInfo, nullptr, &vkInstance);
+		const auto result = loader.vkCreateInstance
+		(
+			&createInfo, nullptr, &vkInstance
+		);
 		assert(result == VK_SUCCESS);
 
-		vkDestroyInstance          = LoadInstanceProcedure<symbol::vkDestroyInstance>();
+		/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+		 *                                      VkInstance                                     *
+		 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+		vkDestroyInstance          = LoadInstanceProcedure<symbol::vkDestroyInstance         >();
+
+		/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+		 *                                      VkSurface                                      *
+		 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+		vkDestroySurfaceKHR        = LoadInstanceProcedure<symbol::vkDestroySurfaceKHR       >();
+		/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
 		vkEnumeratePhysicalDevices = LoadInstanceProcedure<symbol::vkEnumeratePhysicalDevices>();
+		/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+
+		/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+		 *                                VkPhysicalDevice                                                                             *
+		 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+		vkGetPhysicalDeviceFeatures                    = LoadInstanceProcedure<symbol::vkGetPhysicalDeviceFeatures                   >();
+
+		vkGetPhysicalDeviceProperties                  = LoadInstanceProcedure<symbol::vkGetPhysicalDeviceProperties                 >();
+		vkGetPhysicalDeviceQueueFamilyProperties       = LoadInstanceProcedure<symbol::vkGetPhysicalDeviceQueueFamilyProperties      >();
+		vkGetPhysicalDeviceFormatProperties            = LoadInstanceProcedure<symbol::vkGetPhysicalDeviceFormatProperties           >();
+		vkGetPhysicalDeviceImageFormatProperties       = LoadInstanceProcedure<symbol::vkGetPhysicalDeviceImageFormatProperties      >();
+		vkGetPhysicalDeviceSparseImageFormatProperties = LoadInstanceProcedure<symbol::vkGetPhysicalDeviceSparseImageFormatProperties>();
+		vkGetPhysicalDeviceMemoryProperties            = LoadInstanceProcedure<symbol::vkGetPhysicalDeviceMemoryProperties           >();
+
+		vkGetPhysicalDeviceSurfaceSupportKHR           = LoadInstanceProcedure<symbol::vkGetPhysicalDeviceSurfaceSupportKHR          >();
+		vkGetPhysicalDeviceSurfaceFormatsKHR           = LoadInstanceProcedure<symbol::vkGetPhysicalDeviceSurfaceFormatsKHR          >();
+		vkGetPhysicalDeviceSurfacePresentModesKHR      = LoadInstanceProcedure<symbol::vkGetPhysicalDeviceSurfacePresentModesKHR     >();
+		vkGetPhysicalDeviceSurfaceCapabilitiesKHR      = LoadInstanceProcedure<symbol::vkGetPhysicalDeviceSurfaceCapabilitiesKHR     >();
+
+		vkEnumerateDeviceExtensionProperties           = LoadInstanceProcedure<symbol::vkEnumerateDeviceExtensionProperties          >();
+		vkEnumerateDeviceLayerProperties               = LoadInstanceProcedure<symbol::vkEnumerateDeviceLayerProperties              >();
+		/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+
+		/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+		 *                               VkDevice                                *
+		 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+		vkCreateDevice      = LoadInstanceProcedure<symbol::vkCreateDevice     >();
+		vkGetDeviceProcAddr = LoadInstanceProcedure<symbol::vkGetDeviceProcAddr>();
+		/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 	}
 
 	Instance::~Instance()
@@ -47,21 +117,49 @@ namespace vk
 
 	Instance::Instance(Instance&& instance)
 	:
+		loader     { instance.loader     },
 		vkInstance { instance.vkInstance },
 
-		vkGetInstanceProcAddr { instance.vkGetInstanceProcAddr },
-		vkCreateInstance      { instance.vkCreateInstance      },
-
-		vkDestroyInstance          { instance.vkDestroyInstance          },
-		vkEnumeratePhysicalDevices { instance.vkEnumeratePhysicalDevices }
+		vkDestroyInstance                              { instance.vkDestroyInstance                              },
+		vkDestroySurfaceKHR                            { instance.vkDestroySurfaceKHR                            },
+		vkEnumeratePhysicalDevices                     { instance.vkEnumeratePhysicalDevices                     },
+		vkGetPhysicalDeviceFeatures                    { instance.vkGetPhysicalDeviceFeatures                    },
+		vkGetPhysicalDeviceProperties                  { instance.vkGetPhysicalDeviceProperties                  },
+		vkGetPhysicalDeviceQueueFamilyProperties       { instance.vkGetPhysicalDeviceQueueFamilyProperties       },
+		vkGetPhysicalDeviceFormatProperties            { instance.vkGetPhysicalDeviceFormatProperties            },
+		vkGetPhysicalDeviceImageFormatProperties       { instance.vkGetPhysicalDeviceImageFormatProperties       },
+		vkGetPhysicalDeviceSparseImageFormatProperties { instance.vkGetPhysicalDeviceSparseImageFormatProperties },
+		vkGetPhysicalDeviceMemoryProperties            { instance.vkGetPhysicalDeviceMemoryProperties            },
+		vkGetPhysicalDeviceSurfaceSupportKHR           { instance.vkGetPhysicalDeviceSurfaceSupportKHR           },
+		vkGetPhysicalDeviceSurfaceFormatsKHR           { instance.vkGetPhysicalDeviceSurfaceFormatsKHR           },
+		vkGetPhysicalDeviceSurfacePresentModesKHR      { instance.vkGetPhysicalDeviceSurfacePresentModesKHR      },
+		vkGetPhysicalDeviceSurfaceCapabilitiesKHR      { instance.vkGetPhysicalDeviceSurfaceCapabilitiesKHR      },
+		vkEnumerateDeviceExtensionProperties           { instance.vkEnumerateDeviceExtensionProperties           },
+		vkEnumerateDeviceLayerProperties               { instance.vkEnumerateDeviceLayerProperties               },
+		vkCreateDevice                                 { instance.vkCreateDevice                                 },
+		vkGetDeviceProcAddr                            { instance.vkGetDeviceProcAddr                            }
 	{
+		instance.loader     = nullptr;
 		instance.vkInstance = VK_NULL_HANDLE;
 
-		instance.vkGetInstanceProcAddr      = nullptr;
-		instance.vkCreateInstance           = nullptr;
-
-		instance.vkDestroyInstance          = nullptr;
-		instance.vkEnumeratePhysicalDevices = nullptr;
+		instance.vkDestroyInstance                              = nullptr;
+		instance.vkDestroySurfaceKHR                            = nullptr;
+		instance.vkEnumeratePhysicalDevices                     = nullptr;
+		instance.vkGetPhysicalDeviceFeatures                    = nullptr;
+		instance.vkGetPhysicalDeviceProperties                  = nullptr;
+		instance.vkGetPhysicalDeviceQueueFamilyProperties       = nullptr;
+		instance.vkGetPhysicalDeviceFormatProperties            = nullptr;
+		instance.vkGetPhysicalDeviceImageFormatProperties       = nullptr;
+		instance.vkGetPhysicalDeviceSparseImageFormatProperties = nullptr;
+		instance.vkGetPhysicalDeviceMemoryProperties            = nullptr;
+		instance.vkGetPhysicalDeviceSurfaceSupportKHR           = nullptr;
+		instance.vkGetPhysicalDeviceSurfaceFormatsKHR           = nullptr;
+		instance.vkGetPhysicalDeviceSurfacePresentModesKHR      = nullptr;
+		instance.vkGetPhysicalDeviceSurfaceCapabilitiesKHR      = nullptr;
+		instance.vkEnumerateDeviceExtensionProperties           = nullptr;
+		instance.vkEnumerateDeviceLayerProperties               = nullptr;
+		instance.vkCreateDevice                                 = nullptr;
+		instance.vkGetDeviceProcAddr                            = nullptr;
 	}
 
 	Instance& Instance::operator =(Instance&& instance)
@@ -71,21 +169,49 @@ namespace vk
 			vkDestroyInstance(vkInstance, nullptr);
 		}
 
+		loader     = instance.loader;
 		vkInstance = instance.vkInstance;
 
-		vkGetInstanceProcAddr = instance.vkGetInstanceProcAddr;
-		vkCreateInstance      = instance.vkCreateInstance;
+		vkDestroyInstance                              = instance.vkDestroyInstance;
+		vkDestroySurfaceKHR                            = instance.vkDestroySurfaceKHR;
+		vkEnumeratePhysicalDevices                     = instance.vkEnumeratePhysicalDevices;
+		vkGetPhysicalDeviceFeatures                    = instance.vkGetPhysicalDeviceFeatures;
+		vkGetPhysicalDeviceProperties                  = instance.vkGetPhysicalDeviceProperties;
+		vkGetPhysicalDeviceQueueFamilyProperties       = instance.vkGetPhysicalDeviceQueueFamilyProperties;
+		vkGetPhysicalDeviceFormatProperties            = instance.vkGetPhysicalDeviceFormatProperties;
+		vkGetPhysicalDeviceImageFormatProperties       = instance.vkGetPhysicalDeviceImageFormatProperties;
+		vkGetPhysicalDeviceSparseImageFormatProperties = instance.vkGetPhysicalDeviceSparseImageFormatProperties;
+		vkGetPhysicalDeviceMemoryProperties            = instance.vkGetPhysicalDeviceMemoryProperties;
+		vkGetPhysicalDeviceSurfaceSupportKHR           = instance.vkGetPhysicalDeviceSurfaceSupportKHR;
+		vkGetPhysicalDeviceSurfaceFormatsKHR           = instance.vkGetPhysicalDeviceSurfaceFormatsKHR;
+		vkGetPhysicalDeviceSurfacePresentModesKHR      = instance.vkGetPhysicalDeviceSurfacePresentModesKHR;
+		vkGetPhysicalDeviceSurfaceCapabilitiesKHR      = instance.vkGetPhysicalDeviceSurfaceCapabilitiesKHR;
+		vkEnumerateDeviceExtensionProperties           = instance.vkEnumerateDeviceExtensionProperties;
+		vkEnumerateDeviceLayerProperties               = instance.vkEnumerateDeviceLayerProperties;
+		vkCreateDevice                                 = instance.vkCreateDevice;
+		vkGetDeviceProcAddr                            = instance.vkGetDeviceProcAddr;
 
-		vkDestroyInstance          = instance.vkDestroyInstance;
-		vkEnumeratePhysicalDevices = instance.vkEnumeratePhysicalDevices;
-
+		instance.loader     = nullptr;
 		instance.vkInstance = VK_NULL_HANDLE;
 
-		instance.vkGetInstanceProcAddr      = nullptr;
-		instance.vkCreateInstance           = nullptr;
-
-		instance.vkDestroyInstance          = nullptr;
-		instance.vkEnumeratePhysicalDevices = nullptr;
+		instance.vkDestroyInstance                              = nullptr;
+		instance.vkDestroySurfaceKHR                            = nullptr;
+		instance.vkEnumeratePhysicalDevices                     = nullptr;
+		instance.vkGetPhysicalDeviceFeatures                    = nullptr;
+		instance.vkGetPhysicalDeviceProperties                  = nullptr;
+		instance.vkGetPhysicalDeviceQueueFamilyProperties       = nullptr;
+		instance.vkGetPhysicalDeviceFormatProperties            = nullptr;
+		instance.vkGetPhysicalDeviceImageFormatProperties       = nullptr;
+		instance.vkGetPhysicalDeviceSparseImageFormatProperties = nullptr;
+		instance.vkGetPhysicalDeviceMemoryProperties            = nullptr;
+		instance.vkGetPhysicalDeviceSurfaceSupportKHR           = nullptr;
+		instance.vkGetPhysicalDeviceSurfaceFormatsKHR           = nullptr;
+		instance.vkGetPhysicalDeviceSurfacePresentModesKHR      = nullptr;
+		instance.vkGetPhysicalDeviceSurfaceCapabilitiesKHR      = nullptr;
+		instance.vkEnumerateDeviceExtensionProperties           = nullptr;
+		instance.vkEnumerateDeviceLayerProperties               = nullptr;
+		instance.vkCreateDevice                                 = nullptr;
+		instance.vkGetDeviceProcAddr                            = nullptr;
 
 		return *this;
 	}

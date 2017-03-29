@@ -16,23 +16,8 @@ namespace vk
 
 	struct PhysicalDevice
 	{
+		const Instance*  instance;
 		VkPhysicalDevice vkPhysicalDevice;
-
-		PFN_vkEnumerateDeviceExtensionProperties vkEnumerateDeviceExtensionProperties;
-		PFN_vkEnumerateDeviceLayerProperties     vkEnumerateDeviceLayerProperties;
-
-		PFN_vkGetPhysicalDeviceFeatures                    vkGetPhysicalDeviceFeatures;
-		PFN_vkGetPhysicalDeviceProperties                  vkGetPhysicalDeviceProperties;
-		PFN_vkGetPhysicalDeviceQueueFamilyProperties       vkGetPhysicalDeviceQueueFamilyProperties;
-		PFN_vkGetPhysicalDeviceFormatProperties            vkGetPhysicalDeviceFormatProperties;
-		PFN_vkGetPhysicalDeviceImageFormatProperties       vkGetPhysicalDeviceImageFormatProperties;
-		PFN_vkGetPhysicalDeviceSparseImageFormatProperties vkGetPhysicalDeviceSparseImageFormatProperties;
-		PFN_vkGetPhysicalDeviceMemoryProperties            vkGetPhysicalDeviceMemoryProperties;
-
-		PFN_vkGetPhysicalDeviceSurfaceSupportKHR      vkGetPhysicalDeviceSurfaceSupportKHR;
-		PFN_vkGetPhysicalDeviceSurfaceFormatsKHR      vkGetPhysicalDeviceSurfaceFormatsKHR;
-		PFN_vkGetPhysicalDeviceSurfacePresentModesKHR vkGetPhysicalDeviceSurfacePresentModesKHR;
-		PFN_vkGetPhysicalDeviceSurfaceCapabilitiesKHR vkGetPhysicalDeviceSurfaceCapabilitiesKHR;
 
 		PhysicalDevice (const Instance& instance, const VkPhysicalDevice vkPhysicalDevice);
 

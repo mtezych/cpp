@@ -19,7 +19,10 @@ namespace vk
 		explicit Semaphore(const Device& device);
 
 		Semaphore(Semaphore&& semaphore);
+		Semaphore(const Semaphore& semaphore) = delete;
+
 		Semaphore& operator = (Semaphore&& semaphore);
+		Semaphore& operator = (const Semaphore& semaphore) = delete;
 
 		~Semaphore();
 	};
