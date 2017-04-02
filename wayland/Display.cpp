@@ -3,7 +3,7 @@
 
 #include <cassert>
 
-namespace wl
+namespace wayland
 {
 	Display::Display (const char* name)
 	:

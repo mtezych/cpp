@@ -8,7 +8,7 @@
 // ~ Architecture       -> https://wayland.freedesktop.org/architecture.html
 // ~ Client Programming -> https://jan.newmarch.name/Wayland/ProgrammingClient
 
-namespace wl
+namespace wayland
 {
 	struct Display
 	{

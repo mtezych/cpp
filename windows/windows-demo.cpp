@@ -6,7 +6,7 @@
 
 int main()
 {
-	const auto window = windows::Window { { 512, 512 } };
+	const auto window = windows::Window { util::uvec2 { 512, 512 } };
 
 	const auto render = []()
 	{

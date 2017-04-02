@@ -140,10 +140,10 @@ namespace windows
 			// anyway posting WM_QUIT by calling PostQuitMessage() is OK.
 			//
 			// This design allows ReciveMessages() to be called multiple times
-			// and preserves valifity of Window until it will be destroyed.
+			// and preserves validity of Window until it will be destroyed.
 			//
 			// Note that calling DestoryWindow() posts WM_QUIT message,
-			// which is never pocessed by WindowProc().
+			// which is never possessed by WindowProc().
 			case WM_CLOSE :
 			case WM_DESTROY :
 			{

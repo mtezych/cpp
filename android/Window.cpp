@@ -32,26 +32,15 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifdef __ANDROID__
+#include "Window.h"
 
-#include <android/native_window.h>
+#include <vec.h>
 
-#include <gui/Surface.h>
-#include <gui/SurfaceComposerClient.h>
+#include <limits>
 
-#include <cassert>
-
-// https://github.com/waynewolf/waynewolf.github.io
-// https://source.android.com/devices/graphics/arch-sf-hwc.html
-
-class Window
+namespace android
 {
-	android::sp<android::SurfaceComposerClient> surfaceComposerClient;
-	android::sp<android::SurfaceControl>        surfaceControl;
-	android::sp<android::Surface>               surface;
-
-public:
-	Window(uint32_t width, uint32_t height)
+	Window::Window(const util::uvec2& size)
 	:
 		surfaceComposerClient { nullptr },
 		surfaceControl        { nullptr },
@@ -68,7 +57,7 @@ public:
 		surfaceControl = surfaceComposerClient->createSurface
 		(
 			android::String8 { "Android Surface Title" },
-			width, height,
+			size.width, size.height,
 			android::PIXEL_FORMAT_RGBA_8888
 		);
 		assert(surfaceControl != nullptr);
@@ -91,13 +80,12 @@ public:
 		surface = surfaceControl->getSurface();
 	}
 
-	ANativeWindow* NativeHandle() const
+	ANativeWindow* Window::NativeHandle() const
 	{
 		return surface.get();
 	}
 
-	void
-	Clear(const uint8_t R, const uint8_t G, const uint8_t B, const uint8_t A)
+	void Window::Clear (const util::vec4& color)
 	{
 		auto buffer = ANativeWindow_Buffer { };
 
@@ -112,40 +100,24 @@ public:
 			{
 				for (auto x = int32_t { 0 }; x < buffer.width; ++x)
 				{
-					data[y * buffer.stride * 4 + x * 4 + 0] = R;
-					data[y * buffer.stride * 4 + x * 4 + 1] = G;
-					data[y * buffer.stride * 4 + x * 4 + 2] = B;
-					data[y * buffer.stride * 4 + x * 4 + 3] = A;
+					constexpr auto scale = std::numeric_limits<uint8_t>::max();
+
+					const auto sample = util::Vector4<uint8_t>
+					{
+						static_cast<uint8_t>(scale * color.red  ),
+						static_cast<uint8_t>(scale * color.green),
+						static_cast<uint8_t>(scale * color.blue ),
+						static_cast<uint8_t>(scale * color.alpha),
+					};
+
+					data[y * buffer.stride * 4 + x * 4 + 0] = sample.red;
+					data[y * buffer.stride * 4 + x * 4 + 1] = sample.green;
+					data[y * buffer.stride * 4 + x * 4 + 2] = sample.blue;
+					data[y * buffer.stride * 4 + x * 4 + 3] = sample.alpha;
 				}
 			}
 		}
 		result = surface->unlockAndPost();
 		assert(result == android::NO_ERROR);
 	}
-};
-
-#include <thread>
-#include <chrono>
-
-int main()
-{
-	auto window = Window { 512, 512 };
-
-	const auto nativeHandle = window.NativeHandle();
-	assert(nativeHandle != nullptr);
-
-	window.Clear(0x00, 0xFF, 0x00, 0x77);
-
-	std::this_thread::sleep_for(std::chrono::seconds { 4 });
-
-	return 0;
 }
-
-#else
-
-int main()
-{
-	return 0;
-}
-
-#endif

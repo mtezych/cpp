@@ -3,7 +3,7 @@
 
 int main()
 {
-	const auto display = wl::Display { };
+	const auto display = wayland::Display { };
 
 	return 0;
 }

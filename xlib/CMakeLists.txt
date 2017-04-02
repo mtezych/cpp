@@ -38,36 +38,36 @@ project(xlib)
 
 if(CMAKE_SYSTEM_NAME MATCHES Linux)
 
- add_library               (xlib STATIC Display.h
-                                        Display.cpp
-                                        Visual.h
-                                        Visual.cpp
-                                        Drawable.h
-                                        Drawable.cpp
-                                        Window.h
-                                        Window.cpp
-                                        Pixmap.h
-                                        Pixmap.cpp
-                                        Image.h
-                                        Image.cpp)
+    add_library               (xlib STATIC Display.h
+                                           Display.cpp
+                                           Visual.h
+                                           Visual.cpp
+                                           Drawable.h
+                                           Drawable.cpp
+                                           Window.h
+                                           Window.cpp
+                                           Pixmap.h
+                                           Pixmap.cpp
+                                           Image.h
+                                           Image.cpp)
 
- target_include_directories(xlib PUBLIC .)
+    target_include_directories(xlib PUBLIC .)
 
- target_link_libraries     (xlib X11 util)
+    target_link_libraries     (xlib X11 util)
 
- set_target_properties     (xlib PROPERTIES CXX_STANDARD          14
-                                            CXX_STANDARD_REQUIRED ON)
+    set_target_properties     (xlib PROPERTIES CXX_STANDARD          14
+                                               CXX_STANDARD_REQUIRED ON)
 
 
- add_executable            (xlib-demo xlib-demo.cpp)
+    add_executable            (xlib-demo xlib-demo.cpp)
 
- target_link_libraries     (xlib-demo xlib)
+    target_link_libraries     (xlib-demo xlib)
 
- set_target_properties     (xlib-demo PROPERTIES CXX_STANDARD          14
-                                                 CXX_STANDARD_REQUIRED ON)
+    set_target_properties     (xlib-demo PROPERTIES CXX_STANDARD          14
+                                                    CXX_STANDARD_REQUIRED ON)
 
 else()
 
- message("[xlib] Only building for GNU/Linux is supported.")
+    message("[xlib] Only building for GNU/Linux is supported.")
 
 endif()

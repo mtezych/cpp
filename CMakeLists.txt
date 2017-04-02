@@ -38,7 +38,7 @@ project(cpp)
 
 add_subdirectory(googletest)
 add_subdirectory(libsync)
-add_subdirectory(android-demos)
+add_subdirectory(android)
 add_subdirectory(adt)
 add_subdirectory(allocator)
 add_subdirectory(threading)

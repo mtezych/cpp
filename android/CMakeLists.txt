@@ -34,22 +34,23 @@
 
 cmake_minimum_required (VERSION 3.1)
 
-project(android-demos)
+project(android)
 
 if(CMAKE_SYSTEM_NAME MATCHES Android)
 
  if(ANDROID_SOURCE AND ANDROID_SYSROOT)
 
-  add_executable            (android-window android-window.cpp)
+  add_library               (android-window STATIC Window.h
+                                                   Window.cpp)
 
-  target_include_directories(android-window PUBLIC
-                                ${ANDROID_SOURCE}/frameworks/native/include
-                                ${ANDROID_SOURCE}/system/core/include
-                                ${ANDROID_SOURCE}/hardware/libhardware/include)
+  target_include_directories(android-window PUBLIC .
+                                 ${ANDROID_SOURCE}/frameworks/native/include
+                                 ${ANDROID_SOURCE}/system/core/include
+                                 ${ANDROID_SOURCE}/hardware/libhardware/include)
 
-  target_link_libraries     (android-window
-                                ${ANDROID_SYSROOT}/system/lib/libgui.so
-                                ${ANDROID_SYSROOT}/system/lib/libutils.so)
+  target_link_libraries     (android-window util
+                                 ${ANDROID_SYSROOT}/system/lib/libgui.so
+                                 ${ANDROID_SYSROOT}/system/lib/libutils.so)
 
   set_target_properties     (android-window PROPERTIES CXX_STANDARD          14
                                                        CXX_STANDARD_REQUIRED ON)
@@ -60,8 +61,16 @@ if(CMAKE_SYSTEM_NAME MATCHES Android)
 
  endif()
 
+
+ add_executable             (android-demo android-demo.cpp)
+
+ target_link_libraries      (android-demo android-window)
+
+ set_target_properties      (android-demo PROPERTIES CXX_STANDARD          14
+                                                     CXX_STANDARD_REQUIRED ON)
+
 else()
 
- message("[android-demos] Only building for Android is supported.")
+ message("[android-demo] Only building for Android is supported.")
 
 endif()
