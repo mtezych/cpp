@@ -36,45 +36,66 @@ cmake_minimum_required (VERSION 3.1)
 
 project(vulkan)
 
-add_executable       (vulkan Symbols.h
-                             Version.h
-                             Loader.h
-                             Loader.cpp
-                             Instance.h
-                             Instance.cpp
-                             Surface.h
-                             Surface.cpp
-                             PhysicalDevice.h
-                             PhysicalDevice.cpp
-                             Device.h
-                             Device.cpp
-                             Queue.h
-                             Queue.cpp
-                             Semaphore.h
-                             Semaphore.cpp
-                             CommandPool.h
-                             CommandPool.cpp
-                             CommandBuffer.h
-                             CommandBuffer.cpp
-                             Swapchain.h
-                             Swapchain.cpp
-                             Pipeline.h
-                             Pipeline.cpp
-                             PipelineCache.h
-                             PipelineCache.cpp
-                             PipelineLayout.h
-                             PipelineLayout.cpp
-                             Framebuffer.h
-                             Framebuffer.cpp
-                             RenderPass.h
-                             RenderPass.cpp
-                             ImageView.h
-                             ImageView.cpp
-                             ShaderModule.h
-                             ShaderModule.cpp
-                             vulkan-demo.cpp)
+add_executable               (vulkan Symbols.h
+                                     Version.h
+                                     Loader.h
+                                     Loader.cpp
+                                     Instance.h
+                                     Instance.cpp
+                                     Surface.h
+                                     Surface.cpp
+                                     PhysicalDevice.h
+                                     PhysicalDevice.cpp
+                                     Device.h
+                                     Device.cpp
+                                     Queue.h
+                                     Queue.cpp
+                                     Semaphore.h
+                                     Semaphore.cpp
+                                     CommandPool.h
+                                     CommandPool.cpp
+                                     CommandBuffer.h
+                                     CommandBuffer.cpp
+                                     Swapchain.h
+                                     Swapchain.cpp
+                                     Pipeline.h
+                                     Pipeline.cpp
+                                     PipelineCache.h
+                                     PipelineCache.cpp
+                                     PipelineLayout.h
+                                     PipelineLayout.cpp
+                                     Framebuffer.h
+                                     Framebuffer.cpp
+                                     RenderPass.h
+                                     RenderPass.cpp
+                                     ImageView.h
+                                     ImageView.cpp
+                                     ShaderModule.h
+                                     ShaderModule.cpp
+                                     vulkan-demo.cpp)
 
-target_link_libraries(vulkan khronos library)
+if     (CMAKE_SYSTEM_NAME MATCHES Linux)
 
-set_target_properties(vulkan PROPERTIES CXX_STANDARD          14
-                                        CXX_STANDARD_REQUIRED ON)
+    target_compile_definitions(vulkan PRIVATE VK_USE_PLATFORM_XLIB_KHR)
+    target_link_libraries     (vulkan xlib)
+
+elseif (CMAKE_SYSTEM_NAME MATCHES Android)
+
+    target_compile_definitions(vulkan PRIVATE VK_USE_PLATFORM_ANDROID_KHR)
+    target_link_libraries     (vulkan android-window)
+
+elseif (CMAKE_SYSTEM_NAME MATCHES Windows)
+
+    target_compile_definitions(vulkan PRIVATE VK_USE_PLATFORM_WIN32_KHR)
+    target_link_libraries     (vulkan windows)
+
+else ()
+
+    message("[vulkan] Only building for GNU/Linux, Android & Windows is supported.")
+
+endif ()
+
+target_link_libraries         (vulkan khronos library)
+
+set_target_properties         (vulkan PROPERTIES CXX_STANDARD          14
+                                                 CXX_STANDARD_REQUIRED ON)

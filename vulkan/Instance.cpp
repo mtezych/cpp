@@ -12,6 +12,18 @@ namespace vk
 		vkInstance { VK_NULL_HANDLE },
 
 		vkDestroyInstance                              { nullptr },
+#ifdef VK_USE_PLATFORM_XLIB_KHR
+		vkCreateXlibSurfaceKHR                         { nullptr },
+#endif
+#ifdef VK_USE_PLATFORM_WAYLAND_KHR
+		vkCreateWaylandSurfaceKHR                      { nullptr },
+#endif
+#ifdef VK_USE_PLATFORM_ANDROID_KHR
+		vkCreateAndroidSurfaceKHR                      { nullptr },
+#endif
+#ifdef VK_USE_PLATFORM_WIN32_KHR
+		vkCreateWin32SurfaceKHR                        { nullptr },
+#endif
 		vkDestroySurfaceKHR                            { nullptr },
 		vkEnumeratePhysicalDevices                     { nullptr },
 		vkGetPhysicalDeviceFeatures                    { nullptr },
@@ -38,6 +50,18 @@ namespace vk
 		vkInstance { VK_NULL_HANDLE },
 
 		vkDestroyInstance                              { nullptr },
+#ifdef VK_USE_PLATFORM_XLIB_KHR
+		vkCreateXlibSurfaceKHR                         { nullptr },
+#endif
+#ifdef VK_USE_PLATFORM_WAYLAND_KHR
+		vkCreateWaylandSurfaceKHR                      { nullptr },
+#endif
+#ifdef VK_USE_PLATFORM_ANDROID_KHR
+		vkCreateAndroidSurfaceKHR                      { nullptr },
+#endif
+#ifdef VK_USE_PLATFORM_WIN32_KHR
+		vkCreateWin32SurfaceKHR                        { nullptr },
+#endif
 		vkDestroySurfaceKHR                            { nullptr },
 		vkEnumeratePhysicalDevices                     { nullptr },
 		vkGetPhysicalDeviceFeatures                    { nullptr },
@@ -70,6 +94,18 @@ namespace vk
 		/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 		 *                                      VkSurface                                      *
 		 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+#ifdef VK_USE_PLATFORM_XLIB_KHR
+		vkCreateXlibSurfaceKHR     = LoadInstanceProcedure<symbol::vkCreateXlibSurfaceKHR    >();
+#endif
+#ifdef VK_USE_PLATFORM_WAYLAND_KHR
+		vkCreateWaylandSurfaceKHR  = LoadInstanceProcedure<symbol::vkCreateWaylandSurfaceKHR >();
+#endif
+#ifdef VK_USE_PLATFORM_ANDROID_KHR
+		vkCreateAndroidSurfaceKHR  = LoadInstanceProcedure<symbol::vkCreateAndroidSurfaceKHR >();
+#endif
+#ifdef VK_USE_PLATFORM_WIN32_KHR
+		vkCreateWin32SurfaceKHR    = LoadInstanceProcedure<symbol::vkCreateWin32SurfaceKHR   >();
+#endif
 		vkDestroySurfaceKHR        = LoadInstanceProcedure<symbol::vkDestroySurfaceKHR       >();
 		/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
@@ -121,6 +157,18 @@ namespace vk
 		vkInstance { instance.vkInstance },
 
 		vkDestroyInstance                              { instance.vkDestroyInstance                              },
+#ifdef VK_USE_PLATFORM_XLIB_KHR
+		vkCreateXlibSurfaceKHR                         { instance.vkCreateXlibSurfaceKHR                         },
+#endif
+#ifdef VK_USE_PLATFORM_WAYLAND_KHR
+		vkCreateWaylandSurfaceKHR                      { instance.vkCreateWaylandSurfaceKHR                      },
+#endif
+#ifdef VK_USE_PLATFORM_ANDROID_KHR
+		vkCreateAndroidSurfaceKHR                      { instance.vkCreateAndroidSurfaceKHR                      },
+#endif
+#ifdef VK_USE_PLATFORM_WIN32_KHR
+		vkCreateWin32SurfaceKHR                        { instance.vkCreateWin32SurfaceKHR                        },
+#endif
 		vkDestroySurfaceKHR                            { instance.vkDestroySurfaceKHR                            },
 		vkEnumeratePhysicalDevices                     { instance.vkEnumeratePhysicalDevices                     },
 		vkGetPhysicalDeviceFeatures                    { instance.vkGetPhysicalDeviceFeatures                    },
@@ -143,6 +191,18 @@ namespace vk
 		instance.vkInstance = VK_NULL_HANDLE;
 
 		instance.vkDestroyInstance                              = nullptr;
+#ifdef VK_USE_PLATFORM_XLIB_KHR
+		vkCreateXlibSurfaceKHR                                  = nullptr;
+#endif
+#ifdef VK_USE_PLATFORM_WAYLAND_KHR
+		vkCreateWaylandSurfaceKHR                               = nullptr;
+#endif
+#ifdef VK_USE_PLATFORM_ANDROID_KHR
+		vkCreateAndroidSurfaceKHR                               = nullptr;
+#endif
+#ifdef VK_USE_PLATFORM_WIN32_KHR
+		vkCreateWin32SurfaceKHR                                 = nullptr;
+#endif
 		instance.vkDestroySurfaceKHR                            = nullptr;
 		instance.vkEnumeratePhysicalDevices                     = nullptr;
 		instance.vkGetPhysicalDeviceFeatures                    = nullptr;
@@ -173,6 +233,18 @@ namespace vk
 		vkInstance = instance.vkInstance;
 
 		vkDestroyInstance                              = instance.vkDestroyInstance;
+#ifdef VK_USE_PLATFORM_XLIB_KHR
+		vkCreateXlibSurfaceKHR                         = instance.vkCreateXlibSurfaceKHR;
+#endif
+#ifdef VK_USE_PLATFORM_WAYLAND_KHR
+		vkCreateWaylandSurfaceKHR                      = instance.vkCreateWaylandSurfaceKHR;
+#endif
+#ifdef VK_USE_PLATFORM_ANDROID_KHR
+		vkCreateAndroidSurfaceKHR                      = instance.vkCreateAndroidSurfaceKHR;
+#endif
+#ifdef VK_USE_PLATFORM_WIN32_KHR
+		vkCreateWin32SurfaceKHR                        = instance.vkCreateWin32SurfaceKHR;
+#endif
 		vkDestroySurfaceKHR                            = instance.vkDestroySurfaceKHR;
 		vkEnumeratePhysicalDevices                     = instance.vkEnumeratePhysicalDevices;
 		vkGetPhysicalDeviceFeatures                    = instance.vkGetPhysicalDeviceFeatures;
@@ -195,6 +267,18 @@ namespace vk
 		instance.vkInstance = VK_NULL_HANDLE;
 
 		instance.vkDestroyInstance                              = nullptr;
+#ifdef VK_USE_PLATFORM_XLIB_KHR
+		vkCreateXlibSurfaceKHR                                  = nullptr;
+#endif
+#ifdef VK_USE_PLATFORM_WAYLAND_KHR
+		vkCreateWaylandSurfaceKHR                               = nullptr;
+#endif
+#ifdef VK_USE_PLATFORM_ANDROID_KHR
+		vkCreateAndroidSurfaceKHR                               = nullptr;
+#endif
+#ifdef VK_USE_PLATFORM_WIN32_KHR
+		vkCreateWin32SurfaceKHR                                 = nullptr;
+#endif
 		instance.vkDestroySurfaceKHR                            = nullptr;
 		instance.vkEnumeratePhysicalDevices                     = nullptr;
 		instance.vkGetPhysicalDeviceFeatures                    = nullptr;

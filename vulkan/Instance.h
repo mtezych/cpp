@@ -13,51 +13,62 @@ namespace vk
 		VkInstance    vkInstance;
 
 		/*
-		┌────────────────────────────────────────────────────────────────┐
-		│                           VkInstance                           │
-		├────────────────────────────────────────────────────────────────┤
-		│*/ PFN_vkDestroyInstance          vkDestroyInstance;          /*│
-		│                                                                │
-		│ ┌────────────────────────────────────────────────────────────┐ │
-		│ │                         VkSurface                          │ │
-		│ ├────────────────────────────────────────────────────────────┤ │
-		│ │ vk Create  Xlib    Surface KHR                             │ │
-		│ │ vk Create  Xcb     Surface KHR                             │ │
-		│ │ vk Create  Wayland Surface KHR                             │ │
-		│ │ vk Create  Android Surface KHR                             │ │
-		│ │ vk Create  Win32   Surface KHR                             │ │
-		│ │*/ PFN_vkDestroySurfaceKHR      vkDestroySurfaceKHR;      /*│ │
-		│ └────────────────────────────────────────────────────────────┘ │
-		│                                                                │
-		│*/ PFN_vkEnumeratePhysicalDevices vkEnumeratePhysicalDevices; /*│
-		└────────────────────────────────────────────────────────────────┘
-		┌────────────────────────────────────────────────────────────────────────────────────────────────────────┐
-		│                                            VkPhysicalDevice                                            │
-		├────────────────────────────────────────────────────────────────────────────────────────────────────────┤
-		│*/ PFN_vkGetPhysicalDeviceFeatures                    vkGetPhysicalDeviceFeatures;                    /*│
-		│                                                                                                        │
-		│*/ PFN_vkGetPhysicalDeviceProperties                  vkGetPhysicalDeviceProperties;                  /*│
-		│*/ PFN_vkGetPhysicalDeviceQueueFamilyProperties       vkGetPhysicalDeviceQueueFamilyProperties;       /*│
-		│*/ PFN_vkGetPhysicalDeviceFormatProperties            vkGetPhysicalDeviceFormatProperties;            /*│
-		│*/ PFN_vkGetPhysicalDeviceImageFormatProperties       vkGetPhysicalDeviceImageFormatProperties;       /*│
-		│*/ PFN_vkGetPhysicalDeviceSparseImageFormatProperties vkGetPhysicalDeviceSparseImageFormatProperties; /*│
-		│*/ PFN_vkGetPhysicalDeviceMemoryProperties            vkGetPhysicalDeviceMemoryProperties;            /*│
-		│                                                                                                        │
-		│*/ PFN_vkGetPhysicalDeviceSurfaceSupportKHR           vkGetPhysicalDeviceSurfaceSupportKHR;           /*│
-		│*/ PFN_vkGetPhysicalDeviceSurfaceFormatsKHR           vkGetPhysicalDeviceSurfaceFormatsKHR;           /*│
-		│*/ PFN_vkGetPhysicalDeviceSurfacePresentModesKHR      vkGetPhysicalDeviceSurfacePresentModesKHR;      /*│
-		│*/ PFN_vkGetPhysicalDeviceSurfaceCapabilitiesKHR      vkGetPhysicalDeviceSurfaceCapabilitiesKHR;      /*│
-		│                                                                                                        │
-		│*/ PFN_vkEnumerateDeviceExtensionProperties           vkEnumerateDeviceExtensionProperties;           /*│
-		│*/ PFN_vkEnumerateDeviceLayerProperties               vkEnumerateDeviceLayerProperties;               /*│
-		└────────────────────────────────────────────────────────────────────────────────────────────────────────┘
-		┌──────────────────────────────────────────────────┐
-		│                     VkDevice                     │
-		├──────────────────────────────────────────────────┤
-		│*/ PFN_vkCreateDevice      vkCreateDevice;      /*│
-		│                                                  │
-		│*/ PFN_vkGetDeviceProcAddr vkGetDeviceProcAddr; /*│
-		└──────────────────────────────────────────────────┘
+		  ┌──────────────────────────────────────────────────────────────────┐
+		  │                            VkInstance                            │
+		  ├──────────────────────────────────────────────────────────────────┤
+		  │*/  PFN_vkDestroyInstance          vkDestroyInstance;           /*│
+		  │                                                                  │
+		  │ ┌──────────────────────────────────────────────────────────────┐ │
+		  │ │                          VkSurface                           │ │
+		  │ ├──────────────────────────────────────────────────────────────┤ │*/
+		/*│ │*/#ifdef VK_USE_PLATFORM_XLIB_KHR                           /*│ │*/
+		/*│ │*/ PFN_vkCreateXlibSurfaceKHR    vkCreateXlibSurfaceKHR;    /*│ │*/
+		/*│ │*/#endif                                                    /*│ │*/
+		/*│ │                                                              │ │*/
+		/*│ │*/#ifdef VK_USE_PLATFORM_WAYLAND_KHR                        /*│ │*/
+		/*│ │*/ PFN_vkCreateWaylandSurfaceKHR vkCreateWaylandSurfaceKHR; /*│ │*/
+		/*│ │*/#endif                                                    /*│ │*/
+		/*│ │                                                              │ │*/
+		/*│ │*/#ifdef VK_USE_PLATFORM_ANDROID_KHR                        /*│ │*/
+		/*│ │*/ PFN_vkCreateAndroidSurfaceKHR vkCreateAndroidSurfaceKHR; /*│ │*/
+		/*│ │*/#endif                                                    /*│ │*/
+		/*│ │                                                              │ │*/
+		/*│ │*/#ifdef VK_USE_PLATFORM_WIN32_KHR                          /*│ │*/
+		/*│ │*/ PFN_vkCreateWin32SurfaceKHR   vkCreateWin32SurfaceKHR;   /*│ │*/
+		/*│ │*/#endif                                                    /*│ │*/
+		/*│ │                                                              │ │
+		  │ │*/ PFN_vkDestroySurfaceKHR       vkDestroySurfaceKHR;       /*│ │
+		  │ └──────────────────────────────────────────────────────────────┘ │
+		  │                                                                  │
+		  │*/ PFN_vkEnumeratePhysicalDevices vkEnumeratePhysicalDevices;   /*│
+		  └──────────────────────────────────────────────────────────────────┘
+		  ┌────────────────────────────────────────────────────────────────────────────────────────────────────────┐
+		  │                                            VkPhysicalDevice                                            │
+		  ├────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+		  │*/ PFN_vkGetPhysicalDeviceFeatures                    vkGetPhysicalDeviceFeatures;                    /*│
+		  │                                                                                                        │
+		  │*/ PFN_vkGetPhysicalDeviceProperties                  vkGetPhysicalDeviceProperties;                  /*│
+		  │*/ PFN_vkGetPhysicalDeviceQueueFamilyProperties       vkGetPhysicalDeviceQueueFamilyProperties;       /*│
+		  │*/ PFN_vkGetPhysicalDeviceFormatProperties            vkGetPhysicalDeviceFormatProperties;            /*│
+		  │*/ PFN_vkGetPhysicalDeviceImageFormatProperties       vkGetPhysicalDeviceImageFormatProperties;       /*│
+		  │*/ PFN_vkGetPhysicalDeviceSparseImageFormatProperties vkGetPhysicalDeviceSparseImageFormatProperties; /*│
+		  │*/ PFN_vkGetPhysicalDeviceMemoryProperties            vkGetPhysicalDeviceMemoryProperties;            /*│
+		  │                                                                                                        │
+		  │*/ PFN_vkGetPhysicalDeviceSurfaceSupportKHR           vkGetPhysicalDeviceSurfaceSupportKHR;           /*│
+		  │*/ PFN_vkGetPhysicalDeviceSurfaceFormatsKHR           vkGetPhysicalDeviceSurfaceFormatsKHR;           /*│
+		  │*/ PFN_vkGetPhysicalDeviceSurfacePresentModesKHR      vkGetPhysicalDeviceSurfacePresentModesKHR;      /*│
+		  │*/ PFN_vkGetPhysicalDeviceSurfaceCapabilitiesKHR      vkGetPhysicalDeviceSurfaceCapabilitiesKHR;      /*│
+		  │                                                                                                        │
+		  │*/ PFN_vkEnumerateDeviceExtensionProperties           vkEnumerateDeviceExtensionProperties;           /*│
+		  │*/ PFN_vkEnumerateDeviceLayerProperties               vkEnumerateDeviceLayerProperties;               /*│
+		  └────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+		  ┌──────────────────────────────────────────────────┐
+		  │                     VkDevice                     │
+		  ├──────────────────────────────────────────────────┤
+		  │*/ PFN_vkCreateDevice      vkCreateDevice;      /*│
+		  │                                                  │
+		  │*/ PFN_vkGetDeviceProcAddr vkGetDeviceProcAddr; /*│
+		  └──────────────────────────────────────────────────┘
 		*/
 
 		Instance ();

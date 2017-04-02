@@ -5,13 +5,23 @@
 #define VK_NO_PROTOTYPES
 #include <vulkan/vulkan.h>
 
-// #include <Window.h>
+#ifdef VK_USE_PLATFORM_XLIB_KHR
+#include "Display.h"
+#include "Window.h"
+#endif
 
-namespace platform
-{
-	struct Display;
-	struct Window;
-}
+#ifdef VK_USE_PLATFORM_WAYLAND_KHR
+#include "Display.h"
+#include "Surface.h"
+#endif
+
+#ifdef VK_USE_PLATFORM_ANDROID_KHR
+#include "Window.h"
+#endif
+
+#ifdef VK_USE_PLATFORM_WIN32_KHR
+#include "Window.h"
+#endif
 
 namespace vk
 {
@@ -22,15 +32,39 @@ namespace vk
 		const Instance* instance;
 		VkSurfaceKHR    vkSurface;
 
-//		PFN_vkCreateXlibSurfaceKHR vkCreateXlibSurfaceKHR;
-		PFN_vkDestroySurfaceKHR    vkDestroySurfaceKHR;
-
+#ifdef VK_USE_PLATFORM_XLIB_KHR
 		Surface
 		(
-			const Instance&          instance,
-			const platform::Display& display,
-			const platform::Window&  window
+			const Instance&      instance,
+			const xlib::Display& display,
+			const xlib::Window&  window
 		);
+#endif
+
+#ifdef VK_USE_PLATFORM_WAYLAND_KHR
+		Surface
+		(
+			const Instance&         instance,
+			const wayland::Display& display,
+			const wayland::Surface& surface
+		);
+#endif
+
+#ifdef VK_USE_PLATFORM_ANDROID_KHR
+		Surface
+		(
+			const Instance&        instance,
+			const android::Window& window
+		);
+#endif
+
+#ifdef VK_USE_PLATFORM_WIN32_KHR
+		Surface
+		(
+			const Instance&        instance,
+			const windows::Window& window,
+		);
+#endif
 
 		~Surface();
 	};
