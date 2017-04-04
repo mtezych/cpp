@@ -71,7 +71,6 @@ namespace vk
 		  └──────────────────────────────────────────────────┘
 		*/
 
-		Instance ();
 		Instance (const Loader& loader, const VkInstanceCreateInfo& createInfo);
 
 		~Instance ();

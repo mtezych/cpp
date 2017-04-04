@@ -10,13 +10,6 @@
 
 namespace vk
 {
-	Framebuffer::Framebuffer()
-	:
-		device        { nullptr },
-		vkFramebuffer { VK_NULL_HANDLE }
-	{
-	}
-
 	Framebuffer::Framebuffer
 	(
 		const Device&                 device,

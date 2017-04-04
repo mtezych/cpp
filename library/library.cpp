@@ -100,12 +100,6 @@
 
 namespace platform
 {
-	Library::Library()
-	:
-		handle { nullptr }
-	{
-	}
-
 	Library::Library(const std::string& path)
 	:
 		handle { NativeLibrary::Init(path) }

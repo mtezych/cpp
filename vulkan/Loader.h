@@ -36,28 +36,24 @@ namespace vk
 		└──────────────────────────────────────────────────────┘
 		*/
 
-		Loader();
+		explicit Loader (const std::string& path);
 
-		explicit Loader(const std::string& path);
+		~Loader () = default;
 
-		~Loader() = default;
+		Loader (Loader&& loader);
+		Loader (const Loader& loader) = delete;
 
-		Loader(const Loader& loader) = delete;
-
-		Loader& operator =(const Loader& loader) = delete;
-
-		Loader(Loader&& loader);
-
-		Loader& operator =(Loader&& loader);
+		Loader& operator = (Loader&& loader);
+		Loader& operator = (const Loader& loader) = delete;
 
 		template <typename Symbol>
-		typename Symbol::type LoadSymbol() const
+		typename Symbol::type LoadSymbol () const
 		{
 			return library.LoadSymbol<typename Symbol::type>(Symbol::name);
 		}
 
 		template <typename Procedure>
-		typename Procedure::type LoadGlobalProcedure() const
+		typename Procedure::type LoadGlobalProcedure () const
 		{
 			const auto procedureAddress = vkGetInstanceProcAddr(nullptr, Procedure::name);
 			assert(procedureAddress != nullptr);
@@ -66,10 +62,10 @@ namespace vk
 		}
 
 		std::vector<VkExtensionProperties>
-		EnumerateInstanceExtensionProperties(const std::string& layerName) const;
+		EnumerateInstanceExtensionProperties (const std::string& layerName) const;
 
 		std::vector<VkLayerProperties>
-		EnumerateInstanceLayerProperties() const;
+		EnumerateInstanceLayerProperties () const;
 	};
 }
 

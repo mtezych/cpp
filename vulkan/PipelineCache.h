@@ -16,8 +16,6 @@ namespace vk
 		const Device*   device;
 		VkPipelineCache vkPipelineCache;
 
-		PipelineCache();
-
 		PipelineCache
 		(
 			const Device&                   device,

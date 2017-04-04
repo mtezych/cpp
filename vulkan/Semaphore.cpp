@@ -6,13 +6,6 @@
 
 namespace vk
 {
-	Semaphore::Semaphore ()
-	:
-		device      { nullptr },
-		vkSemaphore { VK_NULL_HANDLE }
-	{
-	}
-
 	Semaphore::Semaphore (const Device& device)
 	:
 		device      { &device },

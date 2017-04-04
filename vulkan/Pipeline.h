@@ -16,8 +16,6 @@ namespace vk
 		VkPipeline          vkPipeline;
 		VkPipelineBindPoint vkBindPoint;
 
-		Pipeline();
-
 		Pipeline
 		(
 			const Device&                      device,

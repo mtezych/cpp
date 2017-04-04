@@ -108,6 +108,14 @@ namespace vk
 			window.windowHandle,
 			window.deviceContextHandle
 		};
+		const auto result = instance.vkCreateWin32SurfaceKHR
+		(
+			instance.vkInstance,
+			&surfaceCreateInfo,
+			nullptr,
+			&vkSurface
+		);
+		assert(result == VK_SUCCESS);
 	}
 #endif
 

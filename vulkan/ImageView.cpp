@@ -8,13 +8,6 @@
 
 namespace vk
 {
-	ImageView::ImageView()
-	:
-		device      { nullptr },
-		vkImageView { VK_NULL_HANDLE }
-	{
-	}
-
 	ImageView::operator VkImageView() const
 	{
 		return vkImageView;

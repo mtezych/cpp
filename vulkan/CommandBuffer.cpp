@@ -12,13 +12,6 @@
 
 namespace vk
 {
-	CommandBuffer::CommandBuffer()
-	:
-		commandPool     { nullptr },
-		vkCommandBuffer { VK_NULL_HANDLE }
-	{
-	}
-
 	CommandBuffer::CommandBuffer
 	(
 		const CommandPool&         commandPool,

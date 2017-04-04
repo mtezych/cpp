@@ -9,14 +9,6 @@
 
 namespace vk
 {
-	Pipeline::Pipeline()
-	:
-		device      { nullptr },
-		vkPipeline  { VK_NULL_HANDLE },
-		vkBindPoint { VK_PIPELINE_BIND_POINT_MAX_ENUM }
-	{
-	}
-
 	Pipeline::Pipeline
 	(
 		const Device&                      device,

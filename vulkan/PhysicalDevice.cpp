@@ -17,7 +17,7 @@ namespace vk
 	}
 
 	std::vector<VkExtensionProperties>
-	PhysicalDevice::EnumerateDeviceExtensionProperties(const std::string& layerName) const
+	PhysicalDevice::EnumerateDeviceExtensionProperties (const std::string& layerName) const
 	{
 		auto deviceExtensionPropertiesCount = uint32_t { 0 };
 		auto result = instance->vkEnumerateDeviceExtensionProperties
@@ -121,7 +121,7 @@ namespace vk
 	}
 
 	VkFormatProperties
-	PhysicalDevice::GetPhysicalDeviceFormatProperties(const VkFormat format) const
+	PhysicalDevice::GetPhysicalDeviceFormatProperties (const VkFormat format) const
 	{
 		auto formatProperties = VkFormatProperties { };
 

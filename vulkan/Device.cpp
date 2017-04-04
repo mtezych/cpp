@@ -180,7 +180,7 @@ namespace vk
 		/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 	}
 
-	Device::~Device()
+	Device::~Device ()
 	{
 		if (vkDevice != VK_NULL_HANDLE)
 		{
@@ -191,7 +191,7 @@ namespace vk
 		}
 	}
 
-	Device::Device(Device&& device)
+	Device::Device (Device&& device)
 	:
 		instance { device.instance },
 		vkDevice { device.vkDevice },
@@ -380,7 +380,7 @@ namespace vk
 	}
 
 	Queue
-	Device::Queues(const uint32_t familyIndex, const uint32_t queueIndex) const
+	Device::Queues (const uint32_t familyIndex, const uint32_t queueIndex) const
 	{
 		auto queue = VkQueue { VK_NULL_HANDLE };
 

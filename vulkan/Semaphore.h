@@ -14,8 +14,6 @@ namespace vk
 		const Device* device;
 		VkSemaphore   vkSemaphore;
 
-		Semaphore();
-
 		explicit Semaphore(const Device& device);
 
 		Semaphore(Semaphore&& semaphore);

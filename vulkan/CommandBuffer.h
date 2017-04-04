@@ -17,8 +17,6 @@ namespace vk
 		const CommandPool* commandPool;
 		VkCommandBuffer    vkCommandBuffer;
 
-		CommandBuffer();
-
 		CommandBuffer
 		(
 			const CommandPool& commandPool, const VkCommandBufferLevel level

@@ -16,8 +16,6 @@ namespace vk
 		const Device*    device;
 		VkPipelineLayout vkPipelineLayout;
 
-		PipelineLayout();
-
 		PipelineLayout
 		(
 			const Device&                             device,

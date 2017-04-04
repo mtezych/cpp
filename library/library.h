@@ -84,8 +84,6 @@ namespace platform
 
 	public:
 
-		Library();
-
 		explicit Library(const std::string& path);
 
 		~Library();

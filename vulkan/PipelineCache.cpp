@@ -8,13 +8,6 @@
 
 namespace vk
 {
-	PipelineCache::PipelineCache()
-	:
-		device          { nullptr },
-		vkPipelineCache { VK_NULL_HANDLE }
-	{
-	}
-
 	PipelineCache::PipelineCache
 	(
 		const Device&                   device,

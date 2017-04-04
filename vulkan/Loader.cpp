@@ -5,17 +5,6 @@
 
 namespace vk
 {
-	Loader::Loader()
-	:
-		library { },
-
-		vkGetInstanceProcAddr                  { nullptr },
-		vkEnumerateInstanceExtensionProperties { nullptr },
-		vkEnumerateInstanceLayerProperties     { nullptr },
-		vkCreateInstance                       { nullptr }
-	{
-	}
-
 	Loader::Loader(const std::string& path)
 	:
 		library { path },

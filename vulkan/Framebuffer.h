@@ -19,8 +19,6 @@ namespace vk
 		const Device* device;
 		VkFramebuffer vkFramebuffer;
 
-		Framebuffer();
-
 		Framebuffer
 		(
 			const Device&                 device,

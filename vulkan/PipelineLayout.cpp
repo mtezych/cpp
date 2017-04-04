@@ -8,13 +8,6 @@
 
 namespace vk
 {
-	PipelineLayout::PipelineLayout()
-	:
-		device           { nullptr },
-		vkPipelineLayout { VK_NULL_HANDLE }
-	{
-	}
-
 	PipelineLayout::PipelineLayout
 	(
 		const Device&                             device,

@@ -6,45 +6,7 @@
 
 namespace vk
 {
-	Instance::Instance()
-	:
-		loader     { nullptr },
-		vkInstance { VK_NULL_HANDLE },
-
-		vkDestroyInstance                              { nullptr },
-#ifdef VK_USE_PLATFORM_XLIB_KHR
-		vkCreateXlibSurfaceKHR                         { nullptr },
-#endif
-#ifdef VK_USE_PLATFORM_WAYLAND_KHR
-		vkCreateWaylandSurfaceKHR                      { nullptr },
-#endif
-#ifdef VK_USE_PLATFORM_ANDROID_KHR
-		vkCreateAndroidSurfaceKHR                      { nullptr },
-#endif
-#ifdef VK_USE_PLATFORM_WIN32_KHR
-		vkCreateWin32SurfaceKHR                        { nullptr },
-#endif
-		vkDestroySurfaceKHR                            { nullptr },
-		vkEnumeratePhysicalDevices                     { nullptr },
-		vkGetPhysicalDeviceFeatures                    { nullptr },
-		vkGetPhysicalDeviceProperties                  { nullptr },
-		vkGetPhysicalDeviceQueueFamilyProperties       { nullptr },
-		vkGetPhysicalDeviceFormatProperties            { nullptr },
-		vkGetPhysicalDeviceImageFormatProperties       { nullptr },
-		vkGetPhysicalDeviceSparseImageFormatProperties { nullptr },
-		vkGetPhysicalDeviceMemoryProperties            { nullptr },
-		vkGetPhysicalDeviceSurfaceSupportKHR           { nullptr },
-		vkGetPhysicalDeviceSurfaceFormatsKHR           { nullptr },
-		vkGetPhysicalDeviceSurfacePresentModesKHR      { nullptr },
-		vkGetPhysicalDeviceSurfaceCapabilitiesKHR      { nullptr },
-		vkEnumerateDeviceExtensionProperties           { nullptr },
-		vkEnumerateDeviceLayerProperties               { nullptr },
-		vkCreateDevice                                 { nullptr },
-		vkGetDeviceProcAddr                            { nullptr }
-	{
-	}
-
-	Instance::Instance(const Loader& loader, const VkInstanceCreateInfo& createInfo)
+	Instance::Instance (const Loader& loader, const VkInstanceCreateInfo& createInfo)
 	:
 		loader     { &loader },
 		vkInstance { VK_NULL_HANDLE },
@@ -143,7 +105,7 @@ namespace vk
 		/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 	}
 
-	Instance::~Instance()
+	Instance::~Instance ()
 	{
 		if (vkInstance != VK_NULL_HANDLE)
 		{
@@ -222,7 +184,7 @@ namespace vk
 		instance.vkGetDeviceProcAddr                            = nullptr;
 	}
 
-	Instance& Instance::operator =(Instance&& instance)
+	Instance& Instance::operator = (Instance&& instance)
 	{
 		if (vkInstance != VK_NULL_HANDLE)
 		{
