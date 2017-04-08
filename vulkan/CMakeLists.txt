@@ -68,6 +68,8 @@ add_executable               (vulkan Symbols.h
                                      Framebuffer.cpp
                                      RenderPass.h
                                      RenderPass.cpp
+                                     Image.h
+                                     Image.cpp
                                      ImageView.h
                                      ImageView.cpp
                                      ShaderModule.h

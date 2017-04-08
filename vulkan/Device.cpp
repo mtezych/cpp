@@ -31,6 +31,8 @@ namespace vk
 		vkCreateComputePipelines  { nullptr },
 		vkCreateGraphicsPipelines { nullptr },
 		vkDestroyPipeline         { nullptr },
+		vkCreateImage             { nullptr },
+		vkDestroyImage            { nullptr },
 		vkCreateImageView         { nullptr },
 		vkDestroyImageView        { nullptr },
 		vkCreateSwapchainKHR      { nullptr },
@@ -118,6 +120,13 @@ namespace vk
 		vkCreateComputePipelines  = LoadDeviceProcedure<symbol::vkCreateComputePipelines >();
 		vkCreateGraphicsPipelines = LoadDeviceProcedure<symbol::vkCreateGraphicsPipelines>();
 		vkDestroyPipeline         = LoadDeviceProcedure<symbol::vkDestroyPipeline        >();
+		/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+		/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+		 *                                     VkImage                                     *
+		 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+		vkCreateImage             = LoadDeviceProcedure<symbol::vkCreateImage            >();
+		vkDestroyImage            = LoadDeviceProcedure<symbol::vkDestroyImage           >();
 		/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 		/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -213,6 +222,8 @@ namespace vk
 		vkCreateComputePipelines  { device.vkCreateComputePipelines  },
 		vkCreateGraphicsPipelines { device.vkCreateGraphicsPipelines },
 		vkDestroyPipeline         { device.vkDestroyPipeline         },
+		vkCreateImage             { device.vkCreateImage             },
+		vkDestroyImage            { device.vkDestroyImage            },
 		vkCreateImageView         { device.vkCreateImageView         },
 		vkDestroyImageView        { device.vkDestroyImageView        },
 		vkCreateSwapchainKHR      { device.vkCreateSwapchainKHR      },
@@ -256,6 +267,8 @@ namespace vk
 		vkCreateComputePipelines  = nullptr;
 		vkCreateGraphicsPipelines = nullptr;
 		vkDestroyPipeline         = nullptr;
+		vkCreateImage             = nullptr;
+		vkDestroyImage            = nullptr;
 		vkCreateImageView         = nullptr;
 		vkDestroyImageView        = nullptr;
 		vkCreateSwapchainKHR      = nullptr;
@@ -310,6 +323,8 @@ namespace vk
 		vkCreateComputePipelines  = device.vkCreateComputePipelines;
 		vkCreateGraphicsPipelines = device.vkCreateGraphicsPipelines;
 		vkDestroyPipeline         = device.vkDestroyPipeline;
+		vkCreateImage             = device.vkCreateImage;
+		vkDestroyImage            = device.vkDestroyImage;
 		vkCreateImageView         = device.vkCreateImageView;
 		vkDestroyImageView        = device.vkDestroyImageView;
 		vkCreateSwapchainKHR      = device.vkCreateSwapchainKHR;
@@ -353,6 +368,8 @@ namespace vk
 		vkCreateComputePipelines  = nullptr;
 		vkCreateGraphicsPipelines = nullptr;
 		vkDestroyPipeline         = nullptr;
+		vkCreateImage             = nullptr;
+		vkDestroyImage            = nullptr;
 		vkCreateImageView         = nullptr;
 		vkDestroyImageView        = nullptr;
 		vkCreateSwapchainKHR      = nullptr;

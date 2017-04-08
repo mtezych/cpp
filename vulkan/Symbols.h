@@ -319,6 +319,18 @@ namespace symbol
 		static constexpr auto name =    "vkDestroyRenderPass";
 	};
 
+	struct vkCreateImage
+	{
+		using                 type = PFN_vkCreateImage;
+		static constexpr auto name =    "vkCreateImage";
+	};
+
+	struct vkDestroyImage
+	{
+		using                 type = PFN_vkDestroyImage;
+		static constexpr auto name =    "vkDestroyImage";
+	};
+
 	struct vkCreateImageView
 	{
 		using                 type = PFN_vkCreateImageView;

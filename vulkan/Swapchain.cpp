@@ -4,6 +4,8 @@
 #include "Symbols.h"
 #include "Device.h"
 
+#include <algorithm>
+
 namespace vk
 {
 	Swapchain::Swapchain
@@ -32,35 +34,43 @@ namespace vk
 		}
 	}
 
-	std::vector<VkImage> Swapchain::Images() const
+	std::vector<Image> Swapchain::Images() const
 	{
-		auto swapchainImagesCount = uint32_t { 0 };
+		auto imagesCount = uint32_t { 0 };
 		auto result = device->vkGetSwapchainImagesKHR
 		(
 			device->vkDevice, vkSwapchain,
-			&swapchainImagesCount, nullptr
+			&imagesCount, nullptr
 		);
 		assert(result == VK_SUCCESS);
 
-		auto swapchainImages = std::vector<VkImage>
+		auto vkImages = std::vector<VkImage>
 		(
-			swapchainImagesCount,
+			imagesCount,
 			VkImage { VK_NULL_HANDLE }
 		);
 		result = device->vkGetSwapchainImagesKHR
 		(
 			device->vkDevice, vkSwapchain,
-			&swapchainImagesCount, swapchainImages.data()
+			&imagesCount, vkImages.data()
 		);
 		assert(result == VK_SUCCESS);
 
-		return swapchainImages;
+		auto images = std::vector<Image> { };
+		images.reserve(imagesCount);
+		for (const auto vkImage : vkImages)
+		{
+			images.emplace_back(*device, vkImage);
+		}
+
+		return images;
 	}
 
 	Swapchain::AcquireInfo Swapchain::Acquire() const
 	{
-		auto imageIndex = uint32_t { 0 };
 		constexpr auto timeout = uint64_t { 0 };
+
+		auto imageIndex = uint32_t { 0 };
 
 		auto imageAvailable = Semaphore { *device };
 

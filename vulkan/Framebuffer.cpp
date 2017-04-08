@@ -29,7 +29,7 @@ namespace vk
 		(
 			imageViews.begin(), imageViews.end(), vkImageViews.begin(),
 
-			[](const ImageView& imageView)
+			[](const ImageView& imageView) -> VkImageView
 			{
 				return imageView.vkImageView;
 			}

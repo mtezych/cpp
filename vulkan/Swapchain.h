@@ -3,6 +3,7 @@
 #define VULKAN_SWAPCHAIN
 
 #include "Semaphore.h"
+#include "Image.h"
 
 #include <vector>
 
@@ -23,7 +24,7 @@ namespace vk
 
 		~Swapchain();
 
-		std::vector<VkImage> Images() const;
+		std::vector<Image> Images() const;
 
 		struct AcquireInfo
 		{
