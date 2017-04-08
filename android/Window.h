@@ -59,5 +59,14 @@ namespace android
 		ANativeWindow* NativeHandle() const;
 
 		void Clear (const util::vec4& color);
+
+		template <typename Callable>
+		void RecieveMessages(const Callable& render) const
+		{
+			while (true)
+			{
+				render();
+			}
+		}
 	};
 }

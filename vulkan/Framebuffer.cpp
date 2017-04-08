@@ -21,11 +21,19 @@ namespace vk
 		device        { &device },
 		vkFramebuffer { VK_NULL_HANDLE }
 	{
-		auto imageViewHandles = std::vector<VkImageView>
+		auto vkImageViews = std::vector<VkImageView>
 		(
 			imageViews.size(), VK_NULL_HANDLE
 		);
-		std::copy(imageViews.begin(), imageViews.end(), imageViewHandles.begin());
+		std::transform
+		(
+			imageViews.begin(), imageViews.end(), vkImageViews.begin(),
+
+			[](const ImageView& imageView)
+			{
+				return imageView.vkImageView;
+			}
+		);
 
 		const auto createInfo = VkFramebufferCreateInfo
 		{
@@ -33,8 +41,7 @@ namespace vk
 			nullptr,
 			0,
 			renderPass.vkRenderPass,
-			uint32_t ( imageViewHandles.size() ),
-			imageViewHandles.data(),
+			uint32_t ( vkImageViews.size() ), vkImageViews.data(),
 			size.width, size.height, layers
 		};
 

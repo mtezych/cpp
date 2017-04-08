@@ -14,8 +14,6 @@ namespace vk
 		const Device* device;
 		VkImageView   vkImageView;
 
-		operator VkImageView() const;
-
 		ImageView
 		(
 			const Device&                device,

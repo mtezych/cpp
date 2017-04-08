@@ -8,11 +8,6 @@
 
 namespace vk
 {
-	ImageView::operator VkImageView() const
-	{
-		return vkImageView;
-	}
-
 	ImageView::ImageView
 	(
 		const Device&                device,
