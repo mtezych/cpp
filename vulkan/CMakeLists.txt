@@ -97,7 +97,7 @@ else ()
 
 endif ()
 
-target_link_libraries         (vulkan khronos library)
+target_link_libraries         (vulkan khronos platform)
 
 set_target_properties         (vulkan PROPERTIES CXX_STANDARD          14
                                                  CXX_STANDARD_REQUIRED ON)

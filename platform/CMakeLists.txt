@@ -34,24 +34,24 @@
 
 cmake_minimum_required (VERSION 3.1)
 
-project(library)
+project(platform)
 
 find_package(Threads REQUIRED)
 
-add_library               (library STATIC library.h
-                                          library.cpp)
+add_library               (platform STATIC Library.h
+                                           Library.cpp)
 
-target_include_directories(library PUBLIC .)
+target_include_directories(platform PUBLIC .)
 
-target_link_libraries     (library ${CMAKE_DL_LIBS})
+target_link_libraries     (platform ${CMAKE_DL_LIBS})
 
-set_target_properties     (library PROPERTIES CXX_STANDARD          14
-                                              CXX_STANDARD_REQUIRED ON)
+set_target_properties     (platform PROPERTIES CXX_STANDARD          14
+                                               CXX_STANDARD_REQUIRED ON)
 
-add_executable       (test-library test-library.cpp)
+add_executable       (test-platform test-platform.cpp)
 
-target_link_libraries(test-library library
-                                   gtest)
+target_link_libraries(test-platform platform
+                                    gtest)
 
-set_target_properties(test-library PROPERTIES CXX_STANDARD          14
-                                              CXX_STANDARD_REQUIRED ON)
+set_target_properties(test-platform PROPERTIES CXX_STANDARD          14
+                                               CXX_STANDARD_REQUIRED ON)

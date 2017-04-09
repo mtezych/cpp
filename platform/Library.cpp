@@ -32,7 +32,7 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "library.h"
+#include "Library.h"
 
 #if defined(__unix__)
 
