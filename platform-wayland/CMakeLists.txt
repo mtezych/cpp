@@ -34,12 +34,31 @@
 
 cmake_minimum_required (VERSION 3.1)
 
-project(util)
+project(platform-wayland)
 
-add_library               (util STATIC include/util/vec.h
-                                             source/vec.cpp)
+if(CMAKE_SYSTEM_NAME MATCHES Linux)
 
-target_include_directories(util PUBLIC include)
+ add_library               (platform-wayland STATIC include/wayland/Display.h
+                                                             source/Display.cpp)
 
-set_target_properties     (util PROPERTIES CXX_STANDARD          14
-                                           CXX_STANDARD_REQUIRED ON)
+ target_include_directories(platform-wayland PUBLIC include)
+
+ target_link_libraries     (platform-wayland util
+                                             wayland-client)
+
+ set_target_properties     (platform-wayland PROPERTIES CXX_STANDARD          14
+                                                        CXX_STANDARD_REQUIRED ON)
+
+
+ add_executable            (wayland-demo demo/wayland-demo.cpp)
+
+ target_link_libraries     (wayland-demo platform-wayland)
+
+ set_target_properties     (wayland-demo PROPERTIES CXX_STANDARD          14
+                                                    CXX_STANDARD_REQUIRED ON)
+
+else()
+
+ message("[Wayland] Only building for GNU/Linux is supported.")
+
+endif()

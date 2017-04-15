@@ -36,68 +36,77 @@ cmake_minimum_required (VERSION 3.1)
 
 project(vulkan)
 
-add_executable               (vulkan Symbols.h
-                                     Version.h
-                                     Loader.h
-                                     Loader.cpp
-                                     Instance.h
-                                     Instance.cpp
-                                     Surface.h
-                                     Surface.cpp
-                                     PhysicalDevice.h
-                                     PhysicalDevice.cpp
-                                     Device.h
-                                     Device.cpp
-                                     Queue.h
-                                     Queue.cpp
-                                     Semaphore.h
-                                     Semaphore.cpp
-                                     CommandPool.h
-                                     CommandPool.cpp
-                                     CommandBuffer.h
-                                     CommandBuffer.cpp
-                                     Swapchain.h
-                                     Swapchain.cpp
-                                     Pipeline.h
-                                     Pipeline.cpp
-                                     PipelineCache.h
-                                     PipelineCache.cpp
-                                     PipelineLayout.h
-                                     PipelineLayout.cpp
-                                     Framebuffer.h
-                                     Framebuffer.cpp
-                                     RenderPass.h
-                                     RenderPass.cpp
-                                     Image.h
-                                     Image.cpp
-                                     ImageView.h
-                                     ImageView.cpp
-                                     ShaderModule.h
-                                     ShaderModule.cpp
-                                     vulkan-demo.cpp)
+add_library               (vulkan STATIC include/vulkan/Symbols.h
+                                         include/vulkan/Version.h
+                                         include/vulkan/Loader.h
+                                         include/vulkan/Instance.h
+                                         include/vulkan/Surface.h
+                                         include/vulkan/PhysicalDevice.h
+                                         include/vulkan/Device.h
+                                         include/vulkan/Queue.h
+                                         include/vulkan/Semaphore.h
+                                         include/vulkan/CommandPool.h
+                                         include/vulkan/CommandBuffer.h
+                                         include/vulkan/Swapchain.h
+                                         include/vulkan/Pipeline.h
+                                         include/vulkan/PipelineCache.h
+                                         include/vulkan/PipelineLayout.h
+                                         include/vulkan/Framebuffer.h
+                                         include/vulkan/RenderPass.h
+                                         include/vulkan/Image.h
+                                         include/vulkan/ImageView.h
+                                         include/vulkan/ShaderModule.h
+                                                 source/Loader.cpp
+                                                 source/Instance.cpp
+                                                 source/Surface.cpp
+                                                 source/PhysicalDevice.cpp
+                                                 source/Device.cpp
+                                                 source/Queue.cpp
+                                                 source/Semaphore.cpp
+                                                 source/CommandPool.cpp
+                                                 source/CommandBuffer.cpp
+                                                 source/Swapchain.cpp
+                                                 source/Pipeline.cpp
+                                                 source/PipelineCache.cpp
+                                                 source/PipelineLayout.cpp
+                                                 source/Framebuffer.cpp
+                                                 source/RenderPass.cpp
+                                                 source/Image.cpp
+                                                 source/ImageView.cpp
+                                                 source/ShaderModule.cpp)
+
+target_include_directories(vulkan PUBLIC include)
 
 if     (CMAKE_SYSTEM_NAME MATCHES Linux)
 
-    target_compile_definitions(vulkan PRIVATE VK_USE_PLATFORM_XLIB_KHR)
-    target_link_libraries     (vulkan xlib)
+target_compile_definitions(vulkan PUBLIC VK_USE_PLATFORM_XLIB_KHR)
+target_link_libraries     (vulkan platform-xlib)
 
 elseif (CMAKE_SYSTEM_NAME MATCHES Android)
 
-    target_compile_definitions(vulkan PRIVATE VK_USE_PLATFORM_ANDROID_KHR)
-    target_link_libraries     (vulkan android-window)
+target_compile_definitions(vulkan PUBLIC VK_USE_PLATFORM_ANDROID_KHR)
+target_link_libraries     (vulkan platform-android)
 
 elseif (CMAKE_SYSTEM_NAME MATCHES Windows)
 
-    target_compile_definitions(vulkan PRIVATE VK_USE_PLATFORM_WIN32_KHR)
-    target_link_libraries     (vulkan windows)
+target_compile_definitions(vulkan PUBLIC VK_USE_PLATFORM_WIN32_KHR)
+target_link_libraries     (vulkan platform-windows)
 
 else ()
 
-    message("[vulkan] Only building for GNU/Linux, Android & Windows is supported.")
+message("[vulkan] Only building for GNU/Linux, Android & Windows is supported.")
 
 endif ()
 
-target_link_libraries         (vulkan khronos platform)
+target_link_libraries     (vulkan khronos platform)
 
-set_target_properties         (vulkan PROPERTIES CXX_STANDARD          14
-                                                 CXX_STANDARD_REQUIRED ON)
+set_target_properties     (vulkan PROPERTIES CXX_STANDARD          14
+                                             CXX_STANDARD_REQUIRED ON)
+
+
+add_executable            (vulkan-demo demo/vulkan-demo.cpp)
+
+target_link_libraries     (vulkan-demo vulkan)
+
+set_target_properties     (vulkan-demo PROPERTIES CXX_STANDARD          14
+                                                  CXX_STANDARD_REQUIRED ON)

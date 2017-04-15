@@ -36,22 +36,44 @@ cmake_minimum_required (VERSION 3.1)
 
 project(platform)
 
-find_package(Threads REQUIRED)
+add_library               (platform STATIC include/platform/Library.h
+                                           include/platform/Display.h
+                                           include/platform/Window.h
+                                                     source/Library.cpp)
 
-add_library               (platform STATIC Library.h
-                                           Library.cpp)
-
-target_include_directories(platform PUBLIC .)
+target_include_directories(platform PUBLIC include)
 
 target_link_libraries     (platform ${CMAKE_DL_LIBS})
+
+if     (CMAKE_SYSTEM_NAME MATCHES Linux)
+
+target_compile_definitions(platform PUBLIC PLATFORM_XLIB)
+target_link_libraries     (platform platform-xlib)
+
+elseif (CMAKE_SYSTEM_NAME MATCHES Android)
+
+target_compile_definitions(platform PUBLIC PLATFORM_ANDROID)
+target_link_libraries     (platform platform-android)
+
+elseif (CMAKE_SYSTEM_NAME MATCHES Windows)
+
+target_compile_definitions(platform PUBLIC PLATFORM_WINDOWS)
+target_link_libraries     (platform platform-windows)
+
+else ()
+
+message("[platform] Only building for GNU/Linux, Android & Windows is supported.")
+
+endif ()
 
 set_target_properties     (platform PROPERTIES CXX_STANDARD          14
                                                CXX_STANDARD_REQUIRED ON)
 
-add_executable       (test-platform test-platform.cpp)
 
-target_link_libraries(test-platform platform
-                                    gtest)
+add_executable            (platform-tests tests/platform-tests.cpp)
 
-set_target_properties(test-platform PROPERTIES CXX_STANDARD          14
-                                               CXX_STANDARD_REQUIRED ON)
+target_link_libraries     (platform-tests platform
+                                          gtest)
+
+set_target_properties     (platform-tests PROPERTIES CXX_STANDARD          14
+                                                     CXX_STANDARD_REQUIRED ON)

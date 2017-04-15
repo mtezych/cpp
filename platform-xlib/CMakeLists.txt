@@ -34,12 +34,40 @@
 
 cmake_minimum_required (VERSION 3.1)
 
-project(util)
+project(xlib)
 
-add_library               (util STATIC include/util/vec.h
-                                             source/vec.cpp)
+if(CMAKE_SYSTEM_NAME MATCHES Linux)
 
-target_include_directories(util PUBLIC include)
+    add_library               (platform-xlib STATIC include/xlib/Display.h
+                                                    include/xlib/Visual.h
+                                                    include/xlib/Drawable.h
+                                                    include/xlib/Window.h
+                                                    include/xlib/Pixmap.h
+                                                    include/xlib/Image.h
+                                                          source/Display.cpp
+                                                          source/Visual.cpp
+                                                          source/Drawable.cpp
+                                                          source/Window.cpp
+                                                          source/Pixmap.cpp
+                                                          source/Image.cpp)
 
-set_target_properties     (util PROPERTIES CXX_STANDARD          14
-                                           CXX_STANDARD_REQUIRED ON)
+    target_include_directories(platform-xlib PUBLIC include)
+
+    target_link_libraries     (platform-xlib util X11)
+
+    set_target_properties     (platform-xlib PROPERTIES CXX_STANDARD          14
+                                                        CXX_STANDARD_REQUIRED ON)
+
+
+    add_executable            (xlib-demo demo/xlib-demo.cpp)
+
+    target_link_libraries     (xlib-demo platform-xlib)
+
+    set_target_properties     (xlib-demo PROPERTIES CXX_STANDARD          14
+                                                    CXX_STANDARD_REQUIRED ON)
+
+else()
+
+    message("[xlib] Only building for GNU/Linux is supported.")
+
+endif()

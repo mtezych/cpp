@@ -34,12 +34,30 @@
 
 cmake_minimum_required (VERSION 3.1)
 
-project(util)
+project(platform-windows)
 
-add_library               (util STATIC include/util/vec.h
-                                             source/vec.cpp)
+if(CMAKE_SYSTEM_NAME MATCHES Windows)
 
-target_include_directories(util PUBLIC include)
+ add_library               (platform-windows STATIC include/windows/Window.h
+                                                             source/Window.cpp)
 
-set_target_properties     (util PROPERTIES CXX_STANDARD          14
-                                           CXX_STANDARD_REQUIRED ON)
+ target_include_directories(platform-windows PUBLIC include)
+
+ target_link_libraries     (platform-windows util)
+
+ set_target_properties     (platform-windows PROPERTIES CXX_STANDARD          14
+                                                        CXX_STANDARD_REQUIRED ON)
+
+
+ add_executable            (windows-demo demo/windows-demo.cpp)
+
+ target_link_libraries     (windows-demo platform-windows)
+
+ set_target_properties     (windows-demo PROPERTIES CXX_STANDARD          14
+                                                    CXX_STANDARD_REQUIRED ON)
+
+else()
+
+ message("[windows] Only building for Windows is supported.")
+
+endif()

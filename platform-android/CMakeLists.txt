@@ -34,12 +34,43 @@
 
 cmake_minimum_required (VERSION 3.1)
 
-project(util)
+project(platform-android)
 
-add_library               (util STATIC include/util/vec.h
-                                             source/vec.cpp)
+if(CMAKE_SYSTEM_NAME MATCHES Android)
 
-target_include_directories(util PUBLIC include)
+ if(ANDROID_SOURCE AND ANDROID_SYSROOT)
 
-set_target_properties     (util PROPERTIES CXX_STANDARD          14
-                                           CXX_STANDARD_REQUIRED ON)
+  add_library               (platform-android STATIC include/android/Window.h
+                                                              source/Window.cpp)
+
+  target_include_directories(platform-android PUBLIC include
+                                 ${ANDROID_SOURCE}/frameworks/native/include
+                                 ${ANDROID_SOURCE}/system/core/include
+                                 ${ANDROID_SOURCE}/hardware/libhardware/include)
+
+  target_link_libraries     (platform-android util
+                                 ${ANDROID_SYSROOT}/system/lib/libgui.so
+                                 ${ANDROID_SYSROOT}/system/lib/libutils.so)
+
+  set_target_properties     (platform-android PROPERTIES CXX_STANDARD          14
+                                                         CXX_STANDARD_REQUIRED ON)
+
+ else()
+
+  message("[platform-android] Android source code and sysroot are required.")
+
+ endif()
+
+
+ add_executable             (android-demo demo/android-demo.cpp)
+
+ target_link_libraries      (android-demo platform-android)
+
+ set_target_properties      (android-demo PROPERTIES CXX_STANDARD          14
+                                                     CXX_STANDARD_REQUIRED ON)
+
+else()
+
+ message("[android-window] Only building for Android is supported.")
+
+endif()
