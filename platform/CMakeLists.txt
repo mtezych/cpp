@@ -39,11 +39,12 @@ project(platform)
 add_library               (platform STATIC include/platform/Library.h
                                            include/platform/Display.h
                                            include/platform/Window.h
-                                                     source/Library.cpp)
+                                                     source/Library.cpp
+                                                     source/Window.cpp)
 
 target_include_directories(platform PUBLIC include)
 
-target_link_libraries     (platform ${CMAKE_DL_LIBS})
+target_link_libraries     (platform util ${CMAKE_DL_LIBS})
 
 if     (CMAKE_SYSTEM_NAME MATCHES Linux)
 

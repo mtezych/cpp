@@ -77,7 +77,7 @@ namespace xlib
 		XMapRaised(xDisplay, xWindow);
 	}
 
-	Window::~Window()
+	Window::~Window ()
 	{
 		if (xWindow != None)
 		{

@@ -68,6 +68,6 @@ if(CMAKE_SYSTEM_NAME MATCHES Linux)
 
 else()
 
-    message("[xlib] Only building for GNU/Linux is supported.")
+    message("[platform-xlib] Only building for GNU/Linux is supported.")
 
 endif()

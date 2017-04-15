@@ -58,6 +58,6 @@ if(CMAKE_SYSTEM_NAME MATCHES Windows)
 
 else()
 
- message("[windows] Only building for Windows is supported.")
+ message("[platform-windows] Only building for Windows is supported.")
 
 endif()

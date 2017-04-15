@@ -50,17 +50,17 @@ namespace egl
 		EGLContext eglContext;
 		EGLDisplay eglDisplay;
 
-		Context (const Display& display);
+		Context (const egl::Display& display);
 
 		Context
 		(
-			const Display& display, const Config& config,
+			const egl::Display& display, const Config& config,
 			const std::vector<EGLint>& attribs
 		);
 
 		Context
 		(
-			const Display& display, const Config& config,
+			const egl::Display& display, const Config& config,
 			const Context& sharedContext,
 			const std::vector<EGLint>& attribs
 		);

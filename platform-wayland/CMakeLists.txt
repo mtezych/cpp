@@ -59,6 +59,6 @@ if(CMAKE_SYSTEM_NAME MATCHES Linux)
 
 else()
 
- message("[Wayland] Only building for GNU/Linux is supported.")
+ message("[platfrom-wayland] Only building for GNU/Linux is supported.")
 
 endif()

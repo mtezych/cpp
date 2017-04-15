@@ -53,7 +53,7 @@ namespace egl
 		const Display& display, const Config& config,
 		const std::vector<EGLint>& attribs
 	):
-		Context(display, config, Context { display }, attribs)
+		Context { display, config, Context { display }, attribs }
 	{
 	}
 

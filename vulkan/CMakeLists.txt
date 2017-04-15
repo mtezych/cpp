@@ -77,6 +77,8 @@ add_library               (vulkan STATIC include/vulkan/Symbols.h
 
 target_include_directories(vulkan PUBLIC include)
 
+target_link_libraries     (vulkan khronos platform)
+
 if     (CMAKE_SYSTEM_NAME MATCHES Linux)
 
 target_compile_definitions(vulkan PUBLIC VK_USE_PLATFORM_XLIB_KHR)
@@ -97,8 +99,6 @@ else ()
 message("[vulkan] Only building for GNU/Linux, Android & Windows is supported.")
 
 endif ()
-
-target_link_libraries     (vulkan khronos platform)
 
 set_target_properties     (vulkan PROPERTIES CXX_STANDARD          14
                                              CXX_STANDARD_REQUIRED ON)

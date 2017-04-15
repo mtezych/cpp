@@ -38,11 +38,11 @@ project(googletest)
 
 find_package(Threads REQUIRED)
 
-add_library               (gtest STATIC     include/gtest/gtest.h
-                                            src/gtest-all.cc
-                                            src/gtest_main.cc)
+add_library               (gtest STATIC include/gtest/gtest.h
+                                                  src/gtest-all.cc
+                                                  src/gtest_main.cc)
 
-target_include_directories(gtest PUBLIC     include)
+target_include_directories(gtest PUBLIC include)
 
 target_link_libraries     (gtest ${CMAKE_THREAD_LIBS_INIT})
 
