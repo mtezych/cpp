@@ -16,6 +16,7 @@ namespace xlib
 		xScreen  { XDefaultScreenOfDisplay(xDisplay) }
 	{
 		auto xVisualInfo = XVisualInfo { };
+
 		const auto status = XMatchVisualInfo
 		(
 			xDisplay, XScreenNumberOfScreen(xScreen),

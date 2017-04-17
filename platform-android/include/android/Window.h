@@ -61,7 +61,7 @@ namespace android
 		void Clear (const util::vec4& color);
 
 		template <typename Callable>
-		void RecieveMessages(const Callable& render) const
+		void ReceiveMessages(const Callable& render) const
 		{
 			while (true)
 			{

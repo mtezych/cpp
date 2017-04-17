@@ -34,7 +34,7 @@ namespace windows
 		Window& operator = (const Window& window) = delete;
 
 		template <typename Callable>
-		void RecieveMessages(const Callable& render) const
+		void ReceiveMessages(const Callable& render) const
 		{
 			while (true)
 			{

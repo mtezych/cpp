@@ -12,7 +12,7 @@ int main()
 	{
 		std::this_thread::sleep_for(std::chrono::milliseconds { 160 });
 	};
-	window.RecieveMessages(render);
+	window.ReceiveMessages(render);
 
 	return 0;
 }

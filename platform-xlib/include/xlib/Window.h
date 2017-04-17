@@ -33,7 +33,7 @@ namespace xlib
 		bool HandleEvent(const XEvent& event) const;
 
 		template <typename Callable>
-		void RecieveMessages(const Callable& render) const
+		void ReceiveMessages(const Callable& render) const
 		{
 			while (true)
 			{

@@ -72,7 +72,7 @@ int main()
 
 		std::this_thread::sleep_for(std::chrono::milliseconds { 16 });
 	};
-	window.RecieveMessages(render);
+	window.ReceiveMessages(render);
 
 	pixmap.Draw(window);
 
