@@ -62,7 +62,7 @@ namespace vk
 		Surface
 		(
 			const Instance&        instance,
-			const windows::Window& window,
+			const windows::Window& window
 		);
 #endif
 

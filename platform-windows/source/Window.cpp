@@ -1,16 +1,38 @@
 
 #include <windows/Window.h>
 
+namespace
+{
+	HMODULE CurrentModuleHandle()
+	{
+		auto moduleHandle = HMODULE { nullptr };
+
+		const auto addressWithinModule = CurrentModuleHandle;
+
+		const auto result = GetModuleHandleEx
+		(
+			GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS |
+			GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT,
+			reinterpret_cast<LPCTSTR>(addressWithinModule),
+			&moduleHandle
+		);
+		assert(result != 0);
+		assert(moduleHandle != nullptr);
+
+		return moduleHandle;
+	}
+}
+
 namespace windows
 {
 	Window::Window(const util::uvec2& size)
 	:
+		moduleHandle        { nullptr },
 		windowHandle        { nullptr },
 		classAtom           { 0       },
 		deviceContextHandle { nullptr }
 	{
-		const auto instance = HINSTANCE { GetModuleHandle(nullptr) };
-		assert(instance != nullptr);
+		const auto moduleHandle = CurrentModuleHandle();
 
 		const auto windowClass = WNDCLASSEX
 		{
@@ -19,7 +41,7 @@ namespace windows
 			WindowProcedure,                    // window procedure
 			0,                                  // class  extra data
 			0,                                  // window extra data
-			instance,                           // instance
+			HINSTANCE { moduleHandle },         // instance
 			LoadIcon(nullptr, IDI_APPLICATION), // icon
 			LoadCursor(nullptr, IDC_ARROW),     // cursor
 			nullptr,                            // background brush
@@ -46,7 +68,7 @@ namespace windows
 			static_cast<int>(size.height), // height
 			nullptr,                      // parent window
 			nullptr,                     // menu
-			instance,                   // instance
+			HINSTANCE { moduleHandle }, // instance
 			this                       // create parameter recived in WM_CREATE
 		);
 		assert(windowHandle != nullptr);
@@ -77,19 +99,18 @@ namespace windows
 		result = DestroyWindow(windowHandle);
 		assert(result != 0);
 
-		const auto instance = HINSTANCE { GetModuleHandle(nullptr) };
-		assert(instance != nullptr);
-
-		result = UnregisterClass(MAKEINTATOM(classAtom), instance);
+		result = UnregisterClass(MAKEINTATOM(classAtom), moduleHandle);
 		assert(result != 0);
 	}
 
 	Window::Window(Window&& window)
 	:
+		moduleHandle        { window.moduleHandle        },
 		windowHandle        { window.windowHandle        },
 		classAtom           { window.classAtom           },
 		deviceContextHandle { window.deviceContextHandle }
 	{
+		window.moduleHandle        = nullptr;
 		window.windowHandle        = nullptr;
 		window.classAtom           = 0;
 		window.deviceContextHandle = nullptr;
@@ -97,10 +118,12 @@ namespace windows
 
 	Window& Window::operator = (Window&& window)
 	{
+		moduleHandle        = window.moduleHandle;
 		windowHandle        = window.windowHandle;
 		classAtom           = window.classAtom;
 		deviceContextHandle = window.deviceContextHandle;
 
+		window.moduleHandle        = nullptr;
 		window.windowHandle        = nullptr;
 		window.classAtom           = 0;
 		window.deviceContextHandle = nullptr;

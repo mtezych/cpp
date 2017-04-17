@@ -92,7 +92,7 @@ namespace vk
 #endif
 
 #ifdef VK_USE_PLATFORM_WIN32_KHR
-	Surface
+	Surface::Surface
 	(
 		const Instance&        instance,
 		const windows::Window& window
@@ -105,8 +105,8 @@ namespace vk
 			VK_STRUCTURE_TYPE_ANDROID_SURFACE_CREATE_INFO_KHR,
 			nullptr,
 			0,
+			window.moduleHandle,
 			window.windowHandle,
-			window.deviceContextHandle
 		};
 		const auto result = instance.vkCreateWin32SurfaceKHR
 		(

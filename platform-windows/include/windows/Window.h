@@ -11,17 +11,19 @@
 
 namespace windows
 {
-	class Window
+	struct Window
 	{
-	private:
-		HWND windowHandle;
-		ATOM classAtom;
-		HDC  deviceContextHandle;
+		// For Win32 HINSTANCE and HMODULE are both the base address of module.
+		// https://blogs.msdn.microsoft.com/oldnewthing/20040614-00/?p=38903
+
+		HMODULE moduleHandle;
+		HWND    windowHandle;
+		ATOM    classAtom;
+		HDC     deviceContextHandle;
 
 		static LRESULT CALLBACK
 		WindowProcedure(HWND hWindow, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-	public:
 		Window(const util::uvec2& size);
 		~Window();
 
