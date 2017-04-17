@@ -36,6 +36,7 @@ cmake_minimum_required (VERSION 3.1)
 
 project(platform)
 
+
 add_library               (platform STATIC include/platform/Library.h
                                            include/platform/Display.h
                                            include/platform/Window.h
@@ -78,3 +79,10 @@ target_link_libraries     (platform-tests platform
 
 set_target_properties     (platform-tests PROPERTIES CXX_STANDARD          14
                                                      CXX_STANDARD_REQUIRED ON)
+
+add_executable            (platform-demo demo/platform-demo.cpp)
+
+target_link_libraries     (platform-demo platform)
+
+set_target_properties     (platform-demo PROPERTIES CXX_STANDARD          14
+                                                    CXX_STANDARD_REQUIRED ON)

@@ -2,12 +2,12 @@
 #ifndef PLATFORM_WINDOW
 #define PLATFORM_WINDOW
 
+#include <platform/Display.h>
+
 #include <util/vec.h>
 
 namespace platform
 {
-	struct Display;
-
 	struct Window
 	{
 		Window (const Display& display, const util::uvec2& size);
@@ -22,6 +22,7 @@ namespace platform
 		template <typename Callable>
 		void ReceiveMessages(const Callable& render) const
 		{
+			static_cast<void>(render);
 		}
 	};
 }
