@@ -4,24 +4,17 @@
 namespace platform
 {
 	Window::Window (const Display& display, const util::uvec2& size)
+	:
+#if defined(PLATFORM_XLIB)
+
+		window { display, size }
+
+#elif defined(PLATFORM_ANDROID) || defined(PLATFORM_WINDOWS)
+
+		window { size }
+
+#endif
 	{
 		static_cast<void>(display);
-		static_cast<void>(size);
-	}
-
-	Window::~Window ()
-	{
-	}
-
-	Window::Window (Window&& window)
-	{
-		static_cast<void>(window);
-	}
-
-	Window& Window::operator = (Window&& window)
-	{
-		static_cast<void>(window);
-
-		return *this;
 	}
 }
