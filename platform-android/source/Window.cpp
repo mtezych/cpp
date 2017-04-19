@@ -40,7 +40,7 @@
 
 namespace android
 {
-	Window::Window(const util::uvec2& size)
+	Window::Window (const util::uvec2& size)
 	:
 		surfaceComposerClient { nullptr },
 		surfaceControl        { nullptr },
@@ -80,7 +80,7 @@ namespace android
 		surface = surfaceControl->getSurface();
 	}
 
-	ANativeWindow* Window::NativeHandle() const
+	ANativeWindow* Window::NativeHandle () const
 	{
 		return surface.get();
 	}

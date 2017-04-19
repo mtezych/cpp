@@ -43,8 +43,7 @@ if(CMAKE_SYSTEM_NAME MATCHES Linux)
 
  target_include_directories(platform-wayland PUBLIC include)
 
- target_link_libraries     (platform-wayland util
-                                             wayland-client)
+ target_link_libraries     (platform-wayland util wayland-client)
 
  set_target_properties     (platform-wayland PROPERTIES CXX_STANDARD          14
                                                         CXX_STANDARD_REQUIRED ON)

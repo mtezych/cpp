@@ -71,6 +71,6 @@ if(CMAKE_SYSTEM_NAME MATCHES Android)
 
 else()
 
- message("[android-window] Only building for Android is supported.")
+ message("[platform-android] Only building for Android is supported.")
 
 endif()

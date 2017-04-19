@@ -22,19 +22,19 @@ namespace windows
 		HDC     deviceContextHandle;
 
 		static LRESULT CALLBACK
-		WindowProcedure(HWND hWindow, UINT uMsg, WPARAM wParam, LPARAM lParam);
+		WindowProcedure (HWND hWindow, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-		Window(const util::uvec2& size);
-		~Window();
+		Window (const util::uvec2& size);
+		~Window ();
 
-		Window(Window&& window);
-		Window(const Window& window) = delete;
+		Window (Window&& window);
+		Window (const Window& window) = delete;
 
 		Window& operator = (Window&& window);
 		Window& operator = (const Window& window) = delete;
 
 		template <typename Callable>
-		void ReceiveMessages(const Callable& render) const
+		void ReceiveMessages (const Callable& render) const
 		{
 			while (true)
 			{

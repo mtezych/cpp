@@ -54,14 +54,14 @@ namespace android
 		android::sp<android::Surface>               surface;
 
 	public:
-		Window(const util::uvec2& size);
+		Window (const util::uvec2& size);
 
-		ANativeWindow* NativeHandle() const;
+		ANativeWindow* NativeHandle () const;
 
 		void Clear (const util::vec4& color);
 
 		template <typename Callable>
-		void ReceiveMessages(const Callable& render) const
+		void ReceiveMessages (const Callable& render) const
 		{
 			while (true)
 			{

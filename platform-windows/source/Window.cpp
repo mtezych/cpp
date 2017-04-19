@@ -32,7 +32,7 @@ namespace windows
 		classAtom           { 0       },
 		deviceContextHandle { nullptr }
 	{
-		const auto moduleHandle = CurrentModuleHandle();
+		moduleHandle = CurrentModuleHandle();
 
 		const auto windowClass = WNDCLASSEX
 		{

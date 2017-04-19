@@ -1,4 +1,6 @@
 
+#ifdef _WIN32
+
 #include <windows/Window.h>
 
 #include <chrono>
@@ -16,3 +18,12 @@ int main()
 
 	return 0;
 }
+
+#else
+
+int main()
+{
+	return 0;
+}
+
+#endif
