@@ -7,11 +7,11 @@ namespace platform
 	:
 #if defined(PLATFORM_XLIB)
 
-		window { display, size }
+		nativeWindow { display, size }
 
 #elif defined(PLATFORM_ANDROID) || defined(PLATFORM_WINDOWS)
 
-		window { size }
+		nativeWindow { size }
 
 #endif
 	{

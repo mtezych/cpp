@@ -74,8 +74,7 @@ set_target_properties     (platform PROPERTIES CXX_STANDARD          14
 
 add_executable            (platform-tests tests/platform-tests.cpp)
 
-target_link_libraries     (platform-tests platform
-                                          gtest)
+target_link_libraries     (platform-tests platform gtest)
 
 set_target_properties     (platform-tests PROPERTIES CXX_STANDARD          14
                                                      CXX_STANDARD_REQUIRED ON)

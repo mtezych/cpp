@@ -27,15 +27,15 @@ namespace platform
 
 #if defined(PLATFORM_XLIB)
 
-		xlib::Window window;
+		xlib::Window nativeWindow;
 
 #elif defined(PLATFORM_ANDROID)
 
-		android::Window window;
+		android::Window nativeWindow;
 
 #elif defined(PLATFORM_WINDOWS)
 
-		windows::Window window;
+		windows::Window nativeWindow;
 
 #endif
 
@@ -49,9 +49,9 @@ namespace platform
 		Window& operator = (const Window& window) = delete;
 
 		template <typename Callable>
-		void ReceiveMessages(const Callable& render) const
+		void ReceiveMessages (const Callable& render) const
 		{
-			window.ReceiveMessages(render);
+			nativeWindow.ReceiveMessages(render);
 		}
 	};
 }

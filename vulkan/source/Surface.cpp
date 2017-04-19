@@ -6,6 +6,24 @@
 
 namespace vk
 {
+	Surface::Surface
+	(
+		const Instance&          instance,
+		const platform::Display& display,
+		const platform::Window&  window
+	):
+#if defined(PLATFORM_XLIB)
+
+		Surface { instance, display, window.nativeWindow }
+
+#elif defined(PLATFORM_ANDROID) || defined(PLATFORM_WINDOWS)
+
+		Surface { instance, window.nativeWindow }
+
+#endif
+	{
+	}
+
 #ifdef VK_USE_PLATFORM_XLIB_KHR
 	Surface::Surface
 	(

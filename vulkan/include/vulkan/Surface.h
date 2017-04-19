@@ -5,22 +5,33 @@
 #define VK_NO_PROTOTYPES
 #include <vulkan/vulkan.h>
 
+#include <platform/Display.h>
+#include <platform/Window.h>
+
 #ifdef VK_USE_PLATFORM_XLIB_KHR
-#include <xlib/Display.h>
-#include <xlib/Window.h>
+
+	#include <xlib/Display.h>
+	#include <xlib/Window.h>
+
 #endif
 
 #ifdef VK_USE_PLATFORM_WAYLAND_KHR
-#include <wayland/Display.h>
-#include <wayland/Surface.h>
+
+	#include <wayland/Display.h>
+	#include <wayland/Surface.h>
+
 #endif
 
 #ifdef VK_USE_PLATFORM_ANDROID_KHR
-#include <android/Window.h>
+
+	#include <android/Window.h>
+
 #endif
 
 #ifdef VK_USE_PLATFORM_WIN32_KHR
-#include <windows/Window.h>
+
+	#include <windows/Window.h>
+
 #endif
 
 namespace vk
@@ -31,6 +42,13 @@ namespace vk
 	{
 		const Instance* instance;
 		VkSurfaceKHR    vkSurface;
+
+		Surface
+		(
+			const Instance&          instance,
+			const platform::Display& display,
+			const platform::Window&  window
+		);
 
 #ifdef VK_USE_PLATFORM_XLIB_KHR
 		Surface

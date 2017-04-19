@@ -4,11 +4,11 @@
 
 #if defined(PLATFORM_XLIB)
 
-#include <xlib/Display.h>
+	#include <xlib/Display.h>
 
 #elif defined(PLATFORM_WAYLAND)
 
-#include <wayland/Display.h>
+	#include <wayland/Display.h>
 
 #endif
 
