@@ -1,6 +1,6 @@
 
-#ifndef XLIB_VISUAL
-#define XLIB_VISUAL
+#ifndef PLATFORM_XLIB_VISUAL
+#define PLATFORM_XLIB_VISUAL
 
 #include <X11/Xlib.h>
 

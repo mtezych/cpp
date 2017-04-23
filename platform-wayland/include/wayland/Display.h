@@ -1,6 +1,6 @@
 
-#ifndef WAYLAND_DISPLAY
-#define WAYLAND_DISPLAY
+#ifndef PLATFORM_WAYLAND_DISPLAY
+#define PLATFORM_WAYLAND_DISPLAY
 
 #include <wayland-client.h>
 

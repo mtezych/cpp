@@ -1,6 +1,6 @@
 
-#ifndef WINDOWS_WINDOW
-#define WINDOWS_WINDOW
+#ifndef PLATFORM_WINDOWS_WINDOW
+#define PLATFORM_WINDOWS_WINDOW
 
 #define UNICODE
 #include <Windows.h>

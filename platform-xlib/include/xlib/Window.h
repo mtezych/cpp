@@ -1,14 +1,12 @@
 
-#ifndef XLIB_WINDOW
-#define XLIB_WINDOW
+#ifndef PLATFORM_XLIB_WINDOW
+#define PLATFORM_XLIB_WINDOW
 
 #include <X11/Xlib.h>
 
 #include <xlib/Drawable.h>
 
 #include <util/vec.h>
-
-#include <cstdint>
 
 namespace xlib
 {

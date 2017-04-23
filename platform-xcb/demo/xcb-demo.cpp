@@ -32,52 +32,34 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef PLATFORM_ANDROID_WINDOW
-#define PLATFORM_ANDROID_WINDOW
+#ifdef __gnu_linux__
 
-#include <android/native_window.h>
+#include <xcb/Connection.h>
+#include <xcb/Window.h>
 
-#include <gui/Surface.h>
-#include <gui/SurfaceComposerClient.h>
+#include <chrono>
+#include <thread>
 
-#include <util/vec.h>
-
-#include <cassert>
-
-// https://github.com/waynewolf/waynewolf.github.io
-// https://source.android.com/devices/graphics/arch-sf-hwc.html
-
-namespace android
+int main()
 {
-	class Window
+	const auto connection = xcb::Connection { };
+
+	const auto window = xcb::Window { connection, { 512, 512 } };
+
+	const auto render = []()
 	{
-	private:
-		android::sp<android::SurfaceComposerClient> surfaceComposerClient;
-		android::sp<android::SurfaceControl>        surfaceControl;
-		android::sp<android::Surface>               surface;
-
-	public:
-		Window (const util::uvec2& size);
-
-		Window (Window&& window) = default;
-		Window (const Window& window) = delete;
-
-		Window& operator = (Window&& window) = default;
-		Window& operator = (const Window& window) = delete;
-
-		ANativeWindow* NativeHandle () const;
-
-		void Clear (const util::vec4& color);
-
-		template <typename Callable>
-		void ReceiveMessages (const Callable& render) const
-		{
-			while (true)
-			{
-				render();
-			}
-		}
+		std::this_thread::sleep_for(std::chrono::milliseconds { 16 });
 	};
+	window.ReceiveMessages(render);
+
+	return 0;
+}
+
+#else
+
+int main()
+{
+	return 0;
 }
 
 #endif

@@ -34,23 +34,32 @@
 
 cmake_minimum_required (VERSION 3.1)
 
-project(cpp)
+project(xcb)
 
-add_subdirectory(googletest)
-add_subdirectory(libsync)
-add_subdirectory(platform-android)
-add_subdirectory(adt)
-add_subdirectory(allocator)
-add_subdirectory(threading)
-add_subdirectory(libdrm-example)
-add_subdirectory(khronos)
-add_subdirectory(egl)
-add_subdirectory(platform-xlib)
-add_subdirectory(platform-xcb)
-add_subdirectory(vulkan)
-add_subdirectory(platform-wayland)
-add_subdirectory(util)
-add_subdirectory(platform)
-add_subdirectory(platform-windows)
-add_subdirectory(ieee754)
-add_subdirectory(concepts-lite)
+if(CMAKE_SYSTEM_NAME MATCHES Linux)
+
+    add_library               (platform-xcb STATIC include/xcb/Connection.h
+                                                   include/xcb/Window.h
+                                                        source/Connection.cpp
+                                                        source/Window.cpp)
+
+    target_include_directories(platform-xcb PUBLIC include)
+
+    target_link_libraries     (platform-xcb util xcb)
+
+    set_target_properties     (platform-xcb PROPERTIES CXX_STANDARD          14
+                                                       CXX_STANDARD_REQUIRED ON)
+
+
+    add_executable            (xcb-demo demo/xcb-demo.cpp)
+
+    target_link_libraries     (xcb-demo platform-xcb)
+
+    set_target_properties     (xcb-demo PROPERTIES CXX_STANDARD          14
+                                                   CXX_STANDARD_REQUIRED ON)
+
+else()
+
+    message("[platform-xcb] Only building for GNU/Linux is supported.")
+
+endif()

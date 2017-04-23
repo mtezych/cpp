@@ -1,6 +1,6 @@
 
-#ifndef XLIB_IMAGE
-#define XLIB_IMAGE
+#ifndef PLATFORM_XLIB_IMAGE
+#define PLATFORM_XLIB_IMAGE
 
 #include <X11/Xlib.h>
 

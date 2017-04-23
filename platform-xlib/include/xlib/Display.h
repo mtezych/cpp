@@ -1,6 +1,6 @@
 
-#ifndef XLIB_DISPLAY
-#define XLIB_DISPLAY
+#ifndef PLATFORM_XLIB_DISPLAY
+#define PLATFORM_XLIB_DISPLAY
 
 // @todo: Enable transparency by creating TrueColor Colormap.
 // https://gist.github.com/je-so/903479/834dfd78705b16ec5f7bbd10925980ace4049e17

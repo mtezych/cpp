@@ -29,8 +29,8 @@ namespace xlib
 		assert(xColormap != None);
 
 		auto attribs = XSetWindowAttributes { };
-		attribs.border_pixel     = XWhitePixelOfScreen(xScreen);
 		attribs.background_pixel = XBlackPixelOfScreen(xScreen);
+		attribs.border_pixel     = XWhitePixelOfScreen(xScreen);
 		attribs.colormap         = xColormap;
 		attribs.event_mask       = NoEventMask;
 

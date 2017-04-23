@@ -1,6 +1,6 @@
 
-#ifndef XLIB_DRAWABLE
-#define XLIB_DRAWABLE
+#ifndef PLATFORM_XLIB_DRAWABLE
+#define PLATFORM_XLIB_DRAWABLE
 
 #include <X11/Xlib.h>
 

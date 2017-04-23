@@ -1,6 +1,6 @@
 
-#ifndef XLIB_PIXMAP
-#define XLIB_PIXMAP
+#ifndef PLATFORM_XLIB_PIXMAP
+#define PLATFORM_XLIB_PIXMAP
 
 #include <X11/Xlib.h>
 
