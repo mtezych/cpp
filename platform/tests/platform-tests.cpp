@@ -5,6 +5,7 @@
 
 TEST(LibraryTest, libc_sprintf)
 {
+
 #if defined(__ANDROID__)
 
 	const auto path = "libc.so";

@@ -84,6 +84,9 @@ if     (CMAKE_SYSTEM_NAME MATCHES Linux)
 target_compile_definitions(vulkan PUBLIC VK_USE_PLATFORM_XLIB_KHR)
 target_link_libraries     (vulkan platform-xlib)
 
+target_compile_definitions(vulkan PUBLIC VK_USE_PLATFORM_XCB_KHR)
+target_link_libraries     (vulkan platform-xcb)
+
 elseif (CMAKE_SYSTEM_NAME MATCHES Android)
 
 target_compile_definitions(vulkan PUBLIC VK_USE_PLATFORM_ANDROID_KHR)

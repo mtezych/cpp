@@ -8,6 +8,10 @@
 
 	#include <xlib/Window.h>
 
+#elif defined(PLATFORM_XCB)
+
+	#include <xcb/Window.h>
+
 #elif defined(PLATFORM_ANDROID)
 
 	#include <android/Window.h>
@@ -28,6 +32,10 @@ namespace platform
 #if defined(PLATFORM_XLIB)
 
 		xlib::Window nativeWindow;
+
+#elif defined(PLATFORM_XCB)
+
+		xcb::Window nativeWindow;
 
 #elif defined(PLATFORM_ANDROID)
 
