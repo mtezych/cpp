@@ -5,7 +5,28 @@
 
 namespace vk
 {
-	Loader::Loader(const std::string& path)
+	namespace
+	{
+#if defined(__ANDROID__)
+
+		constexpr auto path = "libvulkan.so";
+
+#elif defined(__gnu_linux__)
+
+		constexpr auto path = "libvulkan.so.1";
+
+#elif defined(_WIN32)
+
+		constexpr auto path = "vulkan-1.dll";
+
+#else
+
+		#error "Unsupported Platform"
+
+#endif
+	}
+
+	Loader::Loader()
 	:
 		library { path },
 

@@ -15,6 +15,9 @@ namespace vk
 #ifdef VK_USE_PLATFORM_XLIB_KHR
 		vkCreateXlibSurfaceKHR                         { nullptr },
 #endif
+#ifdef VK_USE_PLATFORM_XCB_KHR
+		vkCreateXcbSurfaceKHR                          { nullptr },
+#endif
 #ifdef VK_USE_PLATFORM_WAYLAND_KHR
 		vkCreateWaylandSurfaceKHR                      { nullptr },
 #endif
@@ -58,6 +61,9 @@ namespace vk
 		 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 #ifdef VK_USE_PLATFORM_XLIB_KHR
 		vkCreateXlibSurfaceKHR     = LoadInstanceProcedure<symbol::vkCreateXlibSurfaceKHR    >();
+#endif
+#ifdef VK_USE_PLATFORM_XCB_KHR
+		vkCreateXcbSurfaceKHR      = LoadInstanceProcedure<symbol::vkCreateXcbSurfaceKHR     >();
 #endif
 #ifdef VK_USE_PLATFORM_WAYLAND_KHR
 		vkCreateWaylandSurfaceKHR  = LoadInstanceProcedure<symbol::vkCreateWaylandSurfaceKHR >();
@@ -122,6 +128,9 @@ namespace vk
 #ifdef VK_USE_PLATFORM_XLIB_KHR
 		vkCreateXlibSurfaceKHR                         { instance.vkCreateXlibSurfaceKHR                         },
 #endif
+#ifdef VK_USE_PLATFORM_XCB_KHR
+		vkCreateXcbSurfaceKHR                          { instance.vkCreateXcbSurfaceKHR                          },
+#endif
 #ifdef VK_USE_PLATFORM_WAYLAND_KHR
 		vkCreateWaylandSurfaceKHR                      { instance.vkCreateWaylandSurfaceKHR                      },
 #endif
@@ -155,6 +164,9 @@ namespace vk
 		instance.vkDestroyInstance                              = nullptr;
 #ifdef VK_USE_PLATFORM_XLIB_KHR
 		vkCreateXlibSurfaceKHR                                  = nullptr;
+#endif
+#ifdef VK_USE_PLATFORM_XCB_KHR
+		vkCreateXcbSurfaceKHR                                   = nullptr;
 #endif
 #ifdef VK_USE_PLATFORM_WAYLAND_KHR
 		vkCreateWaylandSurfaceKHR                               = nullptr;
@@ -198,6 +210,9 @@ namespace vk
 #ifdef VK_USE_PLATFORM_XLIB_KHR
 		vkCreateXlibSurfaceKHR                         = instance.vkCreateXlibSurfaceKHR;
 #endif
+#ifdef VK_USE_PLATFORM_XCB_KHR
+		vkCreateXcbSurfaceKHR                          = instance.vkCreateXcbSurfaceKHR;
+#endif
 #ifdef VK_USE_PLATFORM_WAYLAND_KHR
 		vkCreateWaylandSurfaceKHR                      = instance.vkCreateWaylandSurfaceKHR;
 #endif
@@ -231,6 +246,9 @@ namespace vk
 		instance.vkDestroyInstance                              = nullptr;
 #ifdef VK_USE_PLATFORM_XLIB_KHR
 		vkCreateXlibSurfaceKHR                                  = nullptr;
+#endif
+#ifdef VK_USE_PLATFORM_XCB_KHR
+		vkCreateXcbSurfaceKHR                                   = nullptr;
 #endif
 #ifdef VK_USE_PLATFORM_WAYLAND_KHR
 		vkCreateWaylandSurfaceKHR                               = nullptr;

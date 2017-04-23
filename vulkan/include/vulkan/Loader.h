@@ -36,7 +36,7 @@ namespace vk
 		└──────────────────────────────────────────────────────┘
 		*/
 
-		explicit Loader (const std::string& path);
+		Loader ();
 
 		~Loader () = default;
 

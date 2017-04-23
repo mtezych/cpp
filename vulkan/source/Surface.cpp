@@ -12,7 +12,7 @@ namespace vk
 		const platform::Display& display,
 		const platform::Window&  window
 	):
-#if defined(PLATFORM_XLIB)
+#if defined(PLATFORM_XLIB) || defined(PLATFORM_XCB)
 
 		Surface { instance, display, window.nativeWindow }
 
@@ -43,6 +43,35 @@ namespace vk
 			window.xWindow
 		};
 		const auto result = instance.vkCreateXlibSurfaceKHR
+		(
+			instance.vkInstance,
+			&surfaceCreateInfo,
+			nullptr,
+			&vkSurface
+		);
+		assert(result == VK_SUCCESS);
+	}
+#endif
+
+#ifdef VK_USE_PLATFORM_XCB_KHR
+	Surface::Surface
+	(
+		const Instance&        instance,
+		const xcb::Connection& connection,
+		const xcb::Window&     window
+	):
+		instance  { &instance },
+		vkSurface { VK_NULL_HANDLE }
+	{
+		const auto surfaceCreateInfo = VkXcbSurfaceCreateInfoKHR
+		{
+			VK_STRUCTURE_TYPE_XLIB_SURFACE_CREATE_INFO_KHR,
+			nullptr,
+			0,
+			connection.xcbConnection,
+			window.xcbWindow
+		};
+		const auto result = instance.vkCreateXcbSurfaceKHR
 		(
 			instance.vkInstance,
 			&surfaceCreateInfo,

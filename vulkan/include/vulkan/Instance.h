@@ -25,6 +25,10 @@ namespace vk
 		/*│ │*/ PFN_vkCreateXlibSurfaceKHR    vkCreateXlibSurfaceKHR;    /*│ │*/
 		/*│ │*/#endif                                                    /*│ │*/
 		/*│ │                                                              │ │*/
+		/*│ │*/#ifdef VK_USE_PLATFORM_XCB_KHR                            /*│ │*/
+		/*│ │*/ PFN_vkCreateXcbSurfaceKHR     vkCreateXcbSurfaceKHR;     /*│ │*/
+		/*│ │*/#endif                                                    /*│ │*/
+		/*│ │                                                              │ │*/
 		/*│ │*/#ifdef VK_USE_PLATFORM_WAYLAND_KHR                        /*│ │*/
 		/*│ │*/ PFN_vkCreateWaylandSurfaceKHR vkCreateWaylandSurfaceKHR; /*│ │*/
 		/*│ │*/#endif                                                    /*│ │*/

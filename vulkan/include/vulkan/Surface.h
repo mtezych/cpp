@@ -5,6 +5,28 @@
 #define VK_NO_PROTOTYPES
 #include <vulkan/vulkan.h>
 
+#if defined(PLATFORM_XLIB)
+
+#define VK_KHR_PLATFORM_SURFACE_EXTENSION_NAME VK_KHR_XLIB_SURFACE_EXTENSION_NAME
+
+#elif defined(PLATFORM_XCB)
+
+#define VK_KHR_PLATFORM_SURFACE_EXTENSION_NAME VK_KHR_XCB_SURFACE_EXTENSION_NAME
+
+#elif defined(PLATFORM_WAYLAND)
+
+#define VK_KHR_PLATFORM_SURFACE_EXTENSION_NAME VK_KHR_WAYLAND_SURFACE_EXTENSION_NAME
+
+#elif defined(PLATFORM_ANDROID)
+
+#define VK_KHR_PLATFORM_SURFACE_EXTENSION_NAME VK_KHR_ANDROID_SURFACE_EXTENSION_NAME
+
+#elif defined(PLATFORM_WINDOWS)
+
+#define VK_KHR_PLATFORM_SURFACE_EXTENSION_NAME VK_KHR_WIN32_SURFACE_EXTENSION_NAME
+
+#endif
+
 #include <platform/Display.h>
 #include <platform/Window.h>
 
@@ -12,6 +34,13 @@
 
 	#include <xlib/Display.h>
 	#include <xlib/Window.h>
+
+#endif
+
+#ifdef VK_USE_PLATFORM_XCB_KHR
+
+	#include <xcb/Connection.h>
+	#include <xcb/Window.h>
 
 #endif
 
@@ -56,6 +85,15 @@ namespace vk
 			const Instance&      instance,
 			const xlib::Display& display,
 			const xlib::Window&  window
+		);
+#endif
+
+#ifdef VK_USE_PLATFORM_XCB_KHR
+		Surface
+		(
+			const Instance&        instance,
+			const xcb::Connection& connection,
+			const xcb::Window&     window
 		);
 #endif
 
