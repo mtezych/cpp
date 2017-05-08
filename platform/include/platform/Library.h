@@ -46,9 +46,9 @@
 	{
 		using Handle = void*;
 
-		Handle Init(const std::string& path);
+		Handle Init (const std::string& path);
 
-		void Deinit(const Handle& handle);
+		void Deinit (const Handle& handle);
 
 		constexpr auto LoadSymbol = dlsym;
 	}
@@ -61,9 +61,9 @@
 	{
 		using Handle = HMODULE;
 
-		Handle Init(const std::string& path);
+		Handle Init (const std::string& path);
 
-		void Deinit(const Handle& handle);
+		void Deinit (const Handle& handle);
 
 		constexpr auto LoadSymbol = GetProcAddress;
 	}
@@ -84,20 +84,20 @@ namespace platform
 
 	public:
 
-		explicit Library(const std::string& path);
+		explicit Library (const std::string& path);
 
-		~Library();
+		~Library ();
 
-		Library(const Library& library) = delete;
+		Library (const Library& library) = delete;
 
-		Library& operator =(const Library& library) = delete;
+		Library& operator = (const Library& library) = delete;
 
-		Library(Library&& library);
+		Library (Library&& library);
 
-		Library& operator =(Library&& library);
+		Library& operator = (Library&& library);
 
 		template <typename SymbolType>
-		SymbolType LoadSymbol(const std::string& symbolName) const
+		SymbolType LoadSymbol (const std::string& symbolName) const
 		{
 			assert(handle != nullptr);
 

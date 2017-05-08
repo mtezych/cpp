@@ -139,16 +139,16 @@ namespace vk
 			const PhysicalDevice&     physicalDevice,
 			const VkDeviceCreateInfo& deviceCreateInfo
 		);
-		~Device();
+		~Device ();
 
-		Device(Device&& device);
-		Device(const Device& device) = delete;
+		Device (Device&& device);
+		Device (const Device& device) = delete;
 
 		Device& operator = (Device&& device);
 		Device& operator = (const Device& device) = delete;
 
 		template <typename Procedure>
-		typename Procedure::type LoadDeviceProcedure() const
+		typename Procedure::type LoadDeviceProcedure () const
 		{
 			const auto procedureAddress = instance->vkGetDeviceProcAddr
 			(
@@ -160,7 +160,7 @@ namespace vk
 		}
 
 		Queue
-		Queues(const uint32_t familyIndex, const uint32_t queueIndex) const;
+		Queues (const uint32_t familyIndex, const uint32_t queueIndex) const;
 	};
 }
 

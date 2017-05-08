@@ -26,7 +26,7 @@ namespace vk
 		assert(result == VK_SUCCESS);
 	}
 
-	ImageView::~ImageView()
+	ImageView::~ImageView ()
 	{
 		if (vkImageView != VK_NULL_HANDLE)
 		{
@@ -34,7 +34,7 @@ namespace vk
 		}
 	}
 
-	ImageView::ImageView(ImageView&& imageView)
+	ImageView::ImageView (ImageView&& imageView)
 	:
 		device      { imageView.device      },
 		vkImageView { imageView.vkImageView }
@@ -43,7 +43,7 @@ namespace vk
 		imageView.vkImageView = VK_NULL_HANDLE;
 	}
 
-	ImageView& ImageView::operator =(ImageView&& imageView)
+	ImageView& ImageView::operator = (ImageView&& imageView)
 	{
 		if (vkImageView != VK_NULL_HANDLE)
 		{

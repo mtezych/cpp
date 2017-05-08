@@ -51,7 +51,7 @@ namespace vk
 		assert(result == VK_SUCCESS);
 	}
 
-	Pipeline::~Pipeline()
+	Pipeline::~Pipeline ()
 	{
 		if (vkPipeline != VK_NULL_HANDLE)
 		{

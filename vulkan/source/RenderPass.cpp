@@ -35,7 +35,7 @@ namespace vk
 		assert(result == VK_SUCCESS);
 	}
 
-	RenderPass::~RenderPass()
+	RenderPass::~RenderPass ()
 	{
 		if (vkRenderPass != VK_NULL_HANDLE)
 		{

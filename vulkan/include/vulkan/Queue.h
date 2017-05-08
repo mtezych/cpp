@@ -22,16 +22,18 @@ namespace vk
 			const Semaphore&           imageAvaliable,
 			const VkPipelineStageFlags waitPipelineStage,
 			const CommandBuffer&       commandBuffer
-		) const;
+		)
+		const;
 
-		void WaitIdle();
+		void WaitIdle ();
 
 		void Present
 		(
 			const Swapchain& swapchain,
 			const uint32_t   imageIndex,
 			const Semaphore& imageReady
-		) const;
+		)
+		const;
 	};
 }
 

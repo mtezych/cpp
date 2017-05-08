@@ -31,11 +31,11 @@ namespace platform
 
 #if defined(PLATFORM_XLIB)
 
-		xlib::Window nativeWindow;
+		xlib::Window    nativeWindow;
 
 #elif defined(PLATFORM_XCB)
 
-		xcb::Window nativeWindow;
+		xcb::Window     nativeWindow;
 
 #elif defined(PLATFORM_ANDROID)
 

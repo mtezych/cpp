@@ -7,6 +7,7 @@
 #include <vulkan/RenderPass.h>
 #include <vulkan/Framebuffer.h>
 #include <vulkan/Pipeline.h>
+#include <vulkan/Image.h>
 
 #include <cassert>
 
@@ -37,7 +38,7 @@ namespace vk
 		assert(result == VK_SUCCESS);
 	}
 
-	CommandBuffer::~CommandBuffer()
+	CommandBuffer::~CommandBuffer ()
 	{
 		if (vkCommandBuffer != VK_NULL_HANDLE)
 		{
@@ -50,7 +51,7 @@ namespace vk
 		}
 	}
 
-	CommandBuffer::CommandBuffer(CommandBuffer&& commandBuffer)
+	CommandBuffer::CommandBuffer (CommandBuffer&& commandBuffer)
 	:
 		commandPool     { commandBuffer.commandPool     },
 		vkCommandBuffer { commandBuffer.vkCommandBuffer }
@@ -59,7 +60,7 @@ namespace vk
 		commandBuffer.vkCommandBuffer = VK_NULL_HANDLE;
 	}
 
-	CommandBuffer& CommandBuffer::operator =(CommandBuffer&& commandBuffer)
+	CommandBuffer& CommandBuffer::operator = (CommandBuffer&& commandBuffer)
 	{
 		if (vkCommandBuffer != VK_NULL_HANDLE)
 		{
@@ -80,7 +81,7 @@ namespace vk
 		return *this;
 	}
 
-	void CommandBuffer::BeginRecording()
+	void CommandBuffer::BeginRecording ()
 	{
 		const auto beginInfo = VkCommandBufferBeginInfo
 		{
@@ -96,7 +97,7 @@ namespace vk
 		assert(result == VK_SUCCESS);
 	}
 
-	void CommandBuffer::EndRecording()
+	void CommandBuffer::EndRecording ()
 	{
 		const auto result = commandPool->device->vkEndCommandBuffer
 		(
@@ -126,7 +127,7 @@ namespace vk
 
 	void CommandBuffer::RecordCommandClearImage
 	(
-		VkImage&                       image,
+		const Image&                   image,
 		const VkImageLayout            imageLayout,
 		const VkImageSubresourceRange& imageSubresourceRange,
 		const VkClearColorValue&       clearColor
@@ -135,7 +136,7 @@ namespace vk
 		commandPool->device->vkCmdClearColorImage
 		(
 			vkCommandBuffer,
-			image, imageLayout,
+			image.vkImage, imageLayout,
 			&clearColor,
 			1, &imageSubresourceRange
 		);
@@ -166,12 +167,12 @@ namespace vk
 		);
 	}
 
-	void CommandBuffer::RecordCommandEndRenderPass()
+	void CommandBuffer::RecordCommandEndRenderPass ()
 	{
 		commandPool->device->vkCmdEndRenderPass(vkCommandBuffer);
 	}
 
-	void CommandBuffer::RecordCommandBindPipeline(const Pipeline& pipeline)
+	void CommandBuffer::RecordCommandBindPipeline (const Pipeline& pipeline)
 	{
 		commandPool->device->vkCmdBindPipeline
 		(

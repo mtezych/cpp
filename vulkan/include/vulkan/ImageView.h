@@ -20,13 +20,13 @@ namespace vk
 			const VkImageViewCreateInfo& createInfo
 		);
 
-		~ImageView();
+		~ImageView ();
 
-		ImageView(ImageView&& imageView);
-		ImageView(const ImageView& imageView) = delete;
+		ImageView (ImageView&& imageView);
+		ImageView (const ImageView& imageView) = delete;
 
-		ImageView& operator =(ImageView&& imageView);
-		ImageView& operator =(const ImageView& imageView) = delete;
+		ImageView& operator = (ImageView&& imageView);
+		ImageView& operator = (const ImageView& imageView) = delete;
 	};
 }
 

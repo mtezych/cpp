@@ -33,7 +33,7 @@ namespace vk
 		assert(result == VK_SUCCESS);
 	}
 
-	PipelineCache::~PipelineCache()
+	PipelineCache::~PipelineCache ()
 	{
 		if (vkPipelineCache != VK_NULL_HANDLE)
 		{

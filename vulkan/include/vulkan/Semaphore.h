@@ -14,10 +14,10 @@ namespace vk
 		const Device* device;
 		VkSemaphore   vkSemaphore;
 
-		explicit Semaphore(const Device& device);
+		explicit Semaphore (const Device& device);
 
-		Semaphore(Semaphore&& semaphore);
-		Semaphore(const Semaphore& semaphore) = delete;
+		Semaphore (Semaphore&& semaphore);
+		Semaphore (const Semaphore& semaphore) = delete;
 
 		Semaphore& operator = (Semaphore&& semaphore);
 		Semaphore& operator = (const Semaphore& semaphore) = delete;

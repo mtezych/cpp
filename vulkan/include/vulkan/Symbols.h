@@ -140,51 +140,63 @@ namespace symbol
 	};
 
 #ifdef VK_USE_PLATFORM_XLIB_KHR
+
 	struct vkCreateXlibSurfaceKHR
 	{
 		using                 type = PFN_vkCreateXlibSurfaceKHR;
 		static constexpr auto name =    "vkCreateXlibSurfaceKHR";
 	};
+
 #endif
 
 #ifdef VK_USE_PLATFORM_XCB_KHR
+
 	struct vkCreateXcbSurfaceKHR
 	{
 		using                 type = PFN_vkCreateXcbSurfaceKHR;
 		static constexpr auto name =    "vkCreateXcbSurfaceKHR";
 	};
+
 #endif
 
 #ifdef VK_USE_PLATFORM_WAYLAND_KHR
+
 	struct vkCreateWaylandSurfaceKHR
 	{
 		using                 type = PFN_vkCreateWaylandSurfaceKHR;
 		static constexpr auto name =    "vkCreateWaylandSurfaceKHR";
 	};
+
 #endif
 
 #ifdef VK_USE_PLATFORM_MIR_KHR
+
 	struct vkCreateMirSurfaceKHR
 	{
 		using                 type = PFN_vkCreateMirSurfaceKHR;
 		static constexpr auto name =    "vkCreateMirSurfaceKHR";
 	};
+
 #endif
 
 #ifdef VK_USE_PLATFORM_ANDROID_KHR
+
 	struct vkCreateAndroidSurfaceKHR
 	{
 		using                 type = PFN_vkCreateAndroidSurfaceKHR;
 		static constexpr auto name =    "vkCreateAndroidSurfaceKHR";
 	};
+
 #endif
 
 #ifdef VK_USE_PLATFORM_WIN32_KHR
+
 	struct vkCreateWin32SurfaceKHR
 	{
 		using                 type = PFN_vkCreateWin32SurfaceKHR;
 		static constexpr auto name =    "vkCreateWin32SurfaceKHR";
 	};
+
 #endif
 
 	struct vkDestroySurfaceKHR

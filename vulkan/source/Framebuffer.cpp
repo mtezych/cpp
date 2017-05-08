@@ -55,7 +55,7 @@ namespace vk
 		assert(result == VK_SUCCESS);
 	}
 
-	Framebuffer::~Framebuffer()
+	Framebuffer::~Framebuffer ()
 	{
 		if (vkFramebuffer != VK_NULL_HANDLE)
 		{
@@ -63,7 +63,7 @@ namespace vk
 		}
 	}
 
-	Framebuffer::Framebuffer(Framebuffer&& framebuffer)
+	Framebuffer::Framebuffer (Framebuffer&& framebuffer)
 	:
 		device        { framebuffer.device        },
 		vkFramebuffer { framebuffer.vkFramebuffer }
@@ -72,7 +72,7 @@ namespace vk
 		framebuffer.vkFramebuffer = VK_NULL_HANDLE;
 	}
 
-	Framebuffer& Framebuffer::operator =(Framebuffer&& framebuffer)
+	Framebuffer& Framebuffer::operator = (Framebuffer&& framebuffer)
 	{
 		if (vkFramebuffer != VK_NULL_HANDLE)
 		{

@@ -14,9 +14,9 @@ namespace vk
 		const Device* device;
 		VkCommandPool vkCommandPool;
 
-		CommandPool(const Device& device, const uint32_t queueFamilyIndex);
+		CommandPool (const Device& device, const uint32_t queueFamilyIndex);
 
-		~CommandPool();
+		~CommandPool ();
 	};
 }
 

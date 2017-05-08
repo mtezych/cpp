@@ -119,7 +119,7 @@ namespace vk
 		}
 	}
 
-	Instance::Instance(Instance&& instance)
+	Instance::Instance (Instance&& instance)
 	:
 		loader     { instance.loader     },
 		vkInstance { instance.vkInstance },
@@ -280,7 +280,7 @@ namespace vk
 		return *this;
 	}
 
-	std::vector<PhysicalDevice> Instance::EnumeratePhysicalDevices() const
+	std::vector<PhysicalDevice> Instance::EnumeratePhysicalDevices () const
 	{
 		auto physicalDevicesCount = uint32_t { 0 };
 		auto result = vkEnumeratePhysicalDevices

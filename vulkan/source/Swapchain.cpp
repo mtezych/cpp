@@ -26,7 +26,7 @@ namespace vk
 		assert(result == VK_SUCCESS);
 	}
 
-	Swapchain::~Swapchain()
+	Swapchain::~Swapchain ()
 	{
 		if (vkSwapchain != VK_NULL_HANDLE)
 		{
@@ -34,7 +34,7 @@ namespace vk
 		}
 	}
 
-	std::vector<Image> Swapchain::Images() const
+	std::vector<Image> Swapchain::Images () const
 	{
 		auto imagesCount = uint32_t { 0 };
 		auto result = device->vkGetSwapchainImagesKHR
@@ -46,8 +46,7 @@ namespace vk
 
 		auto vkImages = std::vector<VkImage>
 		(
-			imagesCount,
-			VkImage { VK_NULL_HANDLE }
+			imagesCount, VkImage { VK_NULL_HANDLE }
 		);
 		result = device->vkGetSwapchainImagesKHR
 		(
@@ -66,7 +65,7 @@ namespace vk
 		return images;
 	}
 
-	Swapchain::AcquireInfo Swapchain::Acquire() const
+	Swapchain::AcquireInfo Swapchain::Acquire () const
 	{
 		constexpr auto timeout = uint64_t { 0 };
 
@@ -78,7 +77,7 @@ namespace vk
 		(
 			device->vkDevice, vkSwapchain,
 			timeout,
-			VkSemaphore { imageAvailable.vkSemaphore },
+			imageAvailable.vkSemaphore,
 			VkFence { VK_NULL_HANDLE },
 			&imageIndex
 		);

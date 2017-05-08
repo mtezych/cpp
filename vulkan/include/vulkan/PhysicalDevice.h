@@ -19,7 +19,10 @@ namespace vk
 		const Instance*  instance;
 		VkPhysicalDevice vkPhysicalDevice;
 
-		PhysicalDevice (const Instance& instance, const VkPhysicalDevice vkPhysicalDevice);
+		PhysicalDevice
+		(
+			const Instance& instance, const VkPhysicalDevice vkPhysicalDevice
+		);
 
 		std::vector<VkExtensionProperties>
 		EnumerateDeviceExtensionProperties (const std::string& layerName) const;
@@ -46,7 +49,8 @@ namespace vk
 			const VkImageTiling      imageTiling,
 			const VkImageUsageFlags  imageUsageFlags,
 			const VkImageCreateFlags imageCreateFlags
-		) const;
+		)
+		const;
 
 		std::vector<VkSparseImageFormatProperties>
 		GetPhysicalDeviceSparseImageFormatProperties
@@ -56,7 +60,8 @@ namespace vk
 			const VkSampleCountFlagBits sampleCountFlagBits,
 			const VkImageUsageFlags     imageUsageFlags,
 			const VkImageTiling         imageTiling
-		) const;
+		)
+		const;
 
 		VkPhysicalDeviceMemoryProperties
 		GetPhysicalDeviceMemoryProperties () const;
@@ -65,7 +70,8 @@ namespace vk
 		(
 			const uint32_t queueFamilyIndex,
 			const Surface& surface
-		) const;
+		)
+		const;
 
 		std::vector<VkSurfaceFormatKHR>
 		GetPhysicalDeviceSurfaceFormats (const Surface& surface) const;

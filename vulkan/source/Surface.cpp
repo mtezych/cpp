@@ -166,7 +166,7 @@ namespace vk
 	}
 #endif
 
-	Surface::~Surface()
+	Surface::~Surface ()
 	{
 		if (vkSurface != VK_NULL_HANDLE)
 		{

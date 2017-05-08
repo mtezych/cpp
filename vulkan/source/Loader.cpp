@@ -26,7 +26,7 @@ namespace vk
 #endif
 	}
 
-	Loader::Loader()
+	Loader::Loader ()
 	:
 		library { path },
 
@@ -63,7 +63,7 @@ namespace vk
 	{
 	}
 
-	Loader::Loader(Loader&& loader)
+	Loader::Loader (Loader&& loader)
 	:
 		library { std::move(loader.library) },
 
@@ -78,7 +78,7 @@ namespace vk
 		loader.vkCreateInstance                       = nullptr;
 	}
 
-	Loader& Loader::operator =(Loader&& loader)
+	Loader& Loader::operator = (Loader&& loader)
 	{
 		library = std::move(loader.library);
 
@@ -96,7 +96,7 @@ namespace vk
 	}
 
 	std::vector<VkExtensionProperties>
-	Loader::EnumerateInstanceExtensionProperties(const std::string& layerName) const
+	Loader::EnumerateInstanceExtensionProperties (const std::string& layerName) const
 	{
 		auto instanceExtensionPropertiesCount = uint32_t { 0 };
 		auto result = vkEnumerateInstanceExtensionProperties

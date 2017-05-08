@@ -46,7 +46,7 @@ namespace vk
 		return renderingFinished;
 	}
 
-	void Queue::WaitIdle()
+	void Queue::WaitIdle ()
 	{
 		const auto result = device->vkQueueWaitIdle(vkQueue);
 		assert(result == VK_SUCCESS);

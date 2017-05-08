@@ -27,7 +27,7 @@ namespace vk
 		assert(result == VK_SUCCESS);
 	}
 
-	CommandPool::~CommandPool()
+	CommandPool::~CommandPool ()
 	{
 		if (vkCommandPool != VK_NULL_HANDLE)
 		{

@@ -37,7 +37,7 @@ namespace vk
 		assert(result == VK_SUCCESS);
 	}
 
-	PipelineLayout::~PipelineLayout()
+	PipelineLayout::~PipelineLayout ()
 	{
 		if (vkPipelineLayout != VK_NULL_HANDLE)
 		{

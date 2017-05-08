@@ -32,7 +32,7 @@ namespace vk
 		assert(result == VK_SUCCESS);
 	}
 
-	ShaderModule::~ShaderModule()
+	ShaderModule::~ShaderModule ()
 	{
 		if (vkShaderModule != VK_NULL_HANDLE)
 		{

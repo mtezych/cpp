@@ -79,14 +79,14 @@ namespace vk
 
 		~Instance ();
 
-		Instance(Instance&& instance);
-		Instance(const Instance& instance) = delete;
+		Instance (Instance&& instance);
+		Instance (const Instance& instance) = delete;
 
-		Instance& operator =(Instance&& instance);
-		Instance& operator =(const Instance& instance) = delete;
+		Instance& operator = (Instance&& instance);
+		Instance& operator = (const Instance& instance) = delete;
 
 		template <typename Procedure>
-		typename Procedure::type LoadInstanceProcedure() const
+		typename Procedure::type LoadInstanceProcedure () const
 		{
 			const auto procedureAddress = loader->vkGetInstanceProcAddr
 			(
@@ -97,7 +97,7 @@ namespace vk
 			return reinterpret_cast<typename Procedure::type>(procedureAddress);
 		}
 
-		std::vector<PhysicalDevice> EnumeratePhysicalDevices() const;
+		std::vector<PhysicalDevice> EnumeratePhysicalDevices () const;
 	};
 }
 

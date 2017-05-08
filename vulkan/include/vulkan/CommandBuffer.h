@@ -11,6 +11,7 @@ namespace vk
 	struct RenderPass;
 	struct Framebuffer;
 	struct Pipeline;
+	struct Image;
 
 	struct CommandBuffer
 	{
@@ -22,16 +23,16 @@ namespace vk
 			const CommandPool& commandPool, const VkCommandBufferLevel level
 		);
 
-		~CommandBuffer();
+		~CommandBuffer ();
 
-		CommandBuffer(CommandBuffer&& commandBuffer);
-		CommandBuffer(const CommandBuffer& commandBuffer) = delete;
+		CommandBuffer (CommandBuffer&& commandBuffer);
+		CommandBuffer (const CommandBuffer& commandBuffer) = delete;
 
-		CommandBuffer& operator =(CommandBuffer&& commandBuffer);
-		CommandBuffer& operator =(const CommandBuffer& commandBuffer) = delete;
+		CommandBuffer& operator = (CommandBuffer&& commandBuffer);
+		CommandBuffer& operator = (const CommandBuffer& commandBuffer) = delete;
 
-		void BeginRecording();
-		void EndRecording();
+		void BeginRecording ();
+		void EndRecording ();
 
 		void RecordCommandPipelineBarrier
 		(
@@ -42,7 +43,7 @@ namespace vk
 
 		void RecordCommandClearImage
 		(
-			VkImage&                       image,
+			const Image&                   image,
 			const VkImageLayout            imageLayout,
 			const VkImageSubresourceRange& imageSubresourceRange,
 			const VkClearColorValue&       clearColor
@@ -56,9 +57,9 @@ namespace vk
 			const VkClearValue& clear
 		);
 
-		void RecordCommandEndRenderPass();
+		void RecordCommandEndRenderPass ();
 
-		void RecordCommandBindPipeline(const Pipeline& pipeline);
+		void RecordCommandBindPipeline (const Pipeline& pipeline);
 
 		void RecordCommandDraw
 		(

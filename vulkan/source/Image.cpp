@@ -32,7 +32,7 @@ namespace vk
 		assert(result == VK_SUCCESS);
 	}
 
-	Image::~Image()
+	Image::~Image ()
 	{
 		if (vkImage != VK_NULL_HANDLE && !isWSI)
 		{
@@ -40,7 +40,7 @@ namespace vk
 		}
 	}
 
-	Image::Image(Image&& image)
+	Image::Image (Image&& image)
 	:
 		device  { image.device  },
 		vkImage { image.vkImage },
@@ -51,7 +51,7 @@ namespace vk
 		image.isWSI   = false;
 	}
 
-	Image& Image::operator =(Image&& image)
+	Image& Image::operator = (Image&& image)
 	{
 		if (vkImage != VK_NULL_HANDLE && !isWSI)
 		{

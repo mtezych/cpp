@@ -28,13 +28,13 @@ namespace vk
 			const uint32_t                layers
 		);
 
-		~Framebuffer();
+		~Framebuffer ();
 
-		Framebuffer(Framebuffer&& framebuffer);
-		Framebuffer(const Framebuffer& framebuffer) = delete;
+		Framebuffer (Framebuffer&& framebuffer);
+		Framebuffer (const Framebuffer& framebuffer) = delete;
 
-		Framebuffer& operator =(Framebuffer&& framebuffer);
-		Framebuffer& operator =(const Framebuffer& framebuffer) = delete;
+		Framebuffer& operator = (Framebuffer&& framebuffer);
+		Framebuffer& operator = (const Framebuffer& framebuffer) = delete;
 	};
 }
 
