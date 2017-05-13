@@ -9,15 +9,15 @@ namespace vk
 	{
 #if defined(__ANDROID__)
 
-		constexpr auto path = "libvulkan.so";
+		constexpr auto defaultPath = "libvulkan.so";
 
 #elif defined(__gnu_linux__)
 
-		constexpr auto path = "libvulkan.so.1";
+		constexpr auto defaultPath = "libvulkan.so.1";
 
 #elif defined(_WIN32)
 
-		constexpr auto path = "vulkan-1.dll";
+		constexpr auto defaultPath = "vulkan-1.dll";
 
 #else
 
@@ -26,7 +26,13 @@ namespace vk
 #endif
 	}
 
-	Loader::Loader ()
+	Loader::Loader()
+	:
+		Loader { defaultPath }
+	{
+	}
+
+	Loader::Loader (const std::string& path)
 	:
 		library { path },
 
