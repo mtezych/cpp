@@ -124,7 +124,7 @@ namespace vk
 	}
 
 	std::vector<VkLayerProperties>
-	Loader::EnumerateInstanceLayerProperties() const
+	Loader::EnumerateInstanceLayerProperties () const
 	{
 		auto instanceLayerPropertiesCount = uint32_t { 0 };
 		auto result = vkEnumerateInstanceLayerProperties

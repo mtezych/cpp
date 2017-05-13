@@ -6,7 +6,37 @@
 
 namespace vk
 {
-	Instance::Instance (const Loader& loader, const VkInstanceCreateInfo& createInfo)
+	Instance::CreateInfo::CreateInfo
+	(
+		const std::string&              applicationName,
+		const Version                   applicationVersion,
+		const std::string&              engineName,
+		const Version                   engineVersion,
+		const Version                   apiVersion,
+		const std::vector<const char*>& layers,
+		const std::vector<const char*>& extensions
+	):
+		appInfo
+		{
+			VK_STRUCTURE_TYPE_APPLICATION_INFO,
+			nullptr,
+			applicationName.c_str(), applicationVersion.version,
+			     engineName.c_str(),      engineVersion.version,
+			                                 apiVersion.version,
+		},
+		createInfo
+		{
+			VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO,
+			nullptr,
+			0,
+			&appInfo,
+			static_cast<uint32_t>(    layers.size()),     layers.data(),
+			static_cast<uint32_t>(extensions.size()), extensions.data(),
+		}
+	{
+	}
+
+	Instance::Instance (const Loader& loader, const CreateInfo& createInfo)
 	:
 		loader     { &loader },
 		vkInstance { VK_NULL_HANDLE },
@@ -47,7 +77,7 @@ namespace vk
 	{
 		const auto result = loader.vkCreateInstance
 		(
-			&createInfo, nullptr, &vkInstance
+			&createInfo.createInfo, nullptr, &vkInstance
 		);
 		assert(result == VK_SUCCESS);
 

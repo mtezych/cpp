@@ -4,11 +4,31 @@
 
 #include <vulkan/Loader.h>
 #include <vulkan/PhysicalDevice.h>
+#include <vulkan/Version.h>
+
+#include <vector>
 
 namespace vk
 {
 	struct Instance
 	{
+		struct CreateInfo
+		{
+			VkApplicationInfo       appInfo;
+			VkInstanceCreateInfo createInfo;
+
+			CreateInfo
+			(
+				const std::string&              applicationName,
+				const Version                   applicationVersion,
+				const std::string&              engineName,
+				const Version                   engineVersion,
+				const Version                   apiVersion,
+				const std::vector<const char*>& layers,
+				const std::vector<const char*>& extensions
+			);
+		};
+
 		const Loader* loader;
 		VkInstance    vkInstance;
 
@@ -75,7 +95,7 @@ namespace vk
 		  └──────────────────────────────────────────────────┘
 		*/
 
-		Instance (const Loader& loader, const VkInstanceCreateInfo& createInfo);
+		Instance (const Loader& loader, const CreateInfo& createInfo);
 
 		~Instance ();
 
