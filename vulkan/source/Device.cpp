@@ -6,10 +6,38 @@
 
 namespace vk
 {
+	Device::CreateInfo::CreateInfo
+	(
+		const std::vector<Queue::CreateInfo>& queueCreateInfos,
+		const std::vector<const char*>&       layers,
+		const std::vector<const char*>&       extensions,
+		const VkPhysicalDeviceFeatures&       enabledFeatures
+	):
+		createInfo
+		{
+			VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO,
+			nullptr,
+			0,
+			static_cast<uint32_t>(queueCreateInfos.size()),           nullptr,
+			static_cast<uint32_t>(          layers.size()),     layers.data(),
+			static_cast<uint32_t>(      extensions.size()), extensions.data(),
+			&enabledFeatures,
+		}
+	{
+		static_assert
+		(
+			sizeof(VkDeviceQueueCreateInfo) == sizeof(Queue::CreateInfo),
+			"The same memory representations are required."
+		);
+
+		createInfo.pQueueCreateInfos =
+		reinterpret_cast<const VkDeviceQueueCreateInfo*>(queueCreateInfos.data());
+}
+
 	Device::Device
 	(
-		const PhysicalDevice&     physicalDevice,
-		const VkDeviceCreateInfo& deviceCreateInfo
+		const PhysicalDevice& physicalDevice,
+		const CreateInfo&     createInfo
 	):
 		instance { physicalDevice.instance },
 		vkDevice { VK_NULL_HANDLE },
@@ -59,7 +87,7 @@ namespace vk
 		const auto result = instance->vkCreateDevice
 		(
 			physicalDevice.vkPhysicalDevice,
-			&deviceCreateInfo,
+			&createInfo.createInfo,
 			nullptr,
 			&vkDevice
 		);

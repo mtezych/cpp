@@ -11,6 +11,22 @@
 
 namespace vk
 {
+	Queue::CreateInfo::CreateInfo
+	(
+		const uint32_t            familyIndex,
+		const std::vector<float>& priorities
+	):
+		createInfo
+		{
+			VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO,
+			nullptr,
+			0,
+			familyIndex,
+			static_cast<uint32_t>(priorities.size()), priorities.data(),
+		}
+	{
+	}
+
 	Queue::Queue(const Device& device, const VkQueue vkQueue)
 	:
 		device  { &device },

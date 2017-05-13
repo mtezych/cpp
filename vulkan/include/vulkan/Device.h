@@ -6,11 +6,25 @@
 #include <vulkan/Queue.h>
 
 #include <cassert>
+#include <vector>
 
 namespace vk
 {
 	struct Device
 	{
+		struct CreateInfo
+		{
+			VkDeviceCreateInfo createInfo;
+
+			CreateInfo
+			(
+				const std::vector<Queue::CreateInfo>& queueCreateInfos,
+				const std::vector<const char*>&       layers,
+				const std::vector<const char*>&       extensions,
+				const VkPhysicalDeviceFeatures&       enabledFeatures
+			);
+		};
+
 		const Instance* instance;
 		VkDevice        vkDevice;
 
@@ -136,8 +150,8 @@ namespace vk
 
 		Device
 		(
-			const PhysicalDevice&     physicalDevice,
-			const VkDeviceCreateInfo& deviceCreateInfo
+			const PhysicalDevice& physicalDevice,
+			const CreateInfo&     createInfo
 		);
 		~Device ();
 

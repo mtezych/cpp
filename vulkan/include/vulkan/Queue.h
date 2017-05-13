@@ -4,6 +4,8 @@
 
 #include <vulkan/Semaphore.h>
 
+#include <vector>
+
 namespace vk
 {
 	struct Device;
@@ -12,6 +14,20 @@ namespace vk
 
 	struct Queue
 	{
+		struct CreateInfo
+		{
+			VkDeviceQueueCreateInfo createInfo;
+
+			//
+			// @note: Size of priorities is queue count.
+			//
+			CreateInfo
+			(
+				const uint32_t            familyIndex,
+				const std::vector<float>& priorities
+			);
+		};
+
 		const Device* device;
 		VkQueue       vkQueue;
 
