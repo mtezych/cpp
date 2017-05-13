@@ -175,6 +175,8 @@ namespace vk
 			return reinterpret_cast<typename Procedure::type>(procedureAddress);
 		}
 
+		void WaitIdle() const;
+
 		Queue
 		GetQueue (const uint32_t familyIndex, const uint32_t queueIndex) const;
 	};

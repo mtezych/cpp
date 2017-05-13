@@ -424,6 +424,12 @@ namespace vk
 		return *this;
 	}
 
+	void Device::WaitIdle () const
+	{
+		const auto result = vkDeviceWaitIdle(vkDevice);
+		assert(result == VK_SUCCESS);
+	}
+
 	Queue
 	Device::GetQueue (const uint32_t familyIndex, const uint32_t queueIndex) const
 	{
