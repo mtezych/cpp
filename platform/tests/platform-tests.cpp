@@ -5,7 +5,6 @@
 
 TEST(LibraryTest, libc_sprintf)
 {
-
 #if defined(__ANDROID__)
 
 	const auto path = "libc.so";
@@ -22,7 +21,8 @@ TEST(LibraryTest, libc_sprintf)
 
 #else
 
-	#error "Unsupported Platform"
+	FAIL() << "Unsupported Platform";
+	const auto path = "C standard library";
 
 #endif
 
