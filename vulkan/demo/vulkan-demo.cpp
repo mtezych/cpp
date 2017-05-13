@@ -73,7 +73,7 @@ int main()
 			vk::Swapchain { },                     // old swapchain
 		}
 	};
-	const auto swapchainImages = swapchain.Images();
+	const auto swapchainImages = swapchain.GetImages();
 
 	const auto render = []()
 	{

@@ -93,7 +93,7 @@ namespace vk
 		}
 	}
 
-	std::vector<Image> Swapchain::Images () const
+	std::vector<Image> Swapchain::GetImages () const
 	{
 		auto imagesCount = uint32_t { 0 };
 		auto result = device->vkGetSwapchainImagesKHR

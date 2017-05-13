@@ -49,7 +49,7 @@ namespace vk
 
 		~Swapchain();
 
-		std::vector<Image> Images() const;
+		std::vector<Image> GetImages() const;
 
 		struct AcquireInfo
 		{
