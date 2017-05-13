@@ -2,7 +2,6 @@
 #ifndef VULKAN_PHYSICAL_DEVICE
 #define VULKAN_PHYSICAL_DEVICE
 
-#define VK_NO_PROTOTYPES
 #include <vulkan/vulkan.h>
 
 #include <vector>

@@ -2,7 +2,6 @@
 #ifndef VULKAN_PIPELINE
 #define VULKAN_PIPELINE
 
-#define VK_NO_PROTOTYPES
 #include <vulkan/vulkan.h>
 
 namespace vk

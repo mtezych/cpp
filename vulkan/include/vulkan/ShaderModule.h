@@ -2,7 +2,6 @@
 #ifndef VULKAN_SHADER_MODULE
 #define VULKAN_SHADER_MODULE
 
-#define VK_NO_PROTOTYPES
 #include <vulkan/vulkan.h>
 
 #include <cassert>

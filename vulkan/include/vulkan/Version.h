@@ -2,7 +2,6 @@
 #ifndef VULKAN_VERSION
 #define VULKAN_VERSION
 
-#define VK_NO_PROTOTYPES
 #include <vulkan/vulkan.h>
 
 namespace vk

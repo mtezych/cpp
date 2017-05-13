@@ -2,7 +2,6 @@
 #ifndef VULKAN_RENDER_PASS
 #define VULKAN_RENDER_PASS
 
-#define VK_NO_PROTOTYPES
 #include <vulkan/vulkan.h>
 
 #include <vulkan/Symbols.h>

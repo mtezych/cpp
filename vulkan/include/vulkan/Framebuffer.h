@@ -2,7 +2,6 @@
 #ifndef VULKAN_FRAMEBUFFER
 #define VULKAN_FRAMEBUFFER
 
-#define VK_NO_PROTOTYPES
 #include <vulkan/vulkan.h>
 
 #include <vulkan/ImageView.h>

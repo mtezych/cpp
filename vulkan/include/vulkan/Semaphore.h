@@ -2,7 +2,6 @@
 #ifndef VULKAN_SEMAPHORE
 #define VULKAN_SEMAPHORE
 
-#define VK_NO_PROTOTYPES
 #include <vulkan/vulkan.h>
 
 namespace vk

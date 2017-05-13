@@ -2,7 +2,6 @@
 #ifndef VULKAN_SURFACE
 #define VULKAN_SURFACE
 
-#define VK_NO_PROTOTYPES
 #include <vulkan/vulkan.h>
 
 #include <platform/Display.h>

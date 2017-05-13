@@ -2,7 +2,6 @@
 #ifndef VULKAN_SYMBOLS
 #define VULKAN_SYMBOLS
 
-#define VK_NO_PROTOTYPES
 #include <vulkan/vulkan.h>
 
 namespace symbol

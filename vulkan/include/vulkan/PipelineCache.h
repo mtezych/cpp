@@ -2,7 +2,6 @@
 #ifndef VULKAN_PIPELINE_CACHE
 #define VULKAN_PIPELINE_CACHE
 
-#define VK_NO_PROTOTYPES
 #include <vulkan/vulkan.h>
 
 #include <vector>

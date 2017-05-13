@@ -77,6 +77,8 @@ add_library               (vulkan STATIC include/vulkan/Symbols.h
 
 target_include_directories(vulkan PUBLIC include)
 
+target_compile_definitions(vulkan PUBLIC VK_NO_PROTOTYPES)
+
 target_link_libraries     (vulkan khronos platform)
 
 if     (CMAKE_SYSTEM_NAME MATCHES Linux)

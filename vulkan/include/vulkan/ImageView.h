@@ -2,7 +2,6 @@
 #ifndef VULKAN_IMAGE_VIEW
 #define VULKAN_IMAGE_VIEW
 
-#define VK_NO_PROTOTYPES
 #include <vulkan/vulkan.h>
 
 namespace vk
