@@ -235,7 +235,7 @@ namespace xcb
 				}
 				break;
 			}
-			case XCB_KEY_PRESS:
+			case XCB_KEY_PRESS :
 			default:
 			{
 				break;

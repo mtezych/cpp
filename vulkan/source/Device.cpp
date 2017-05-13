@@ -39,8 +39,8 @@ namespace vk
 		const PhysicalDevice& physicalDevice,
 		const CreateInfo&     createInfo
 	):
-		instance { physicalDevice.instance },
-		vkDevice { VK_NULL_HANDLE },
+		physicalDevice { &physicalDevice },
+		vkDevice       { VK_NULL_HANDLE  },
 
 		vkDestroyDevice           { nullptr },
 		vkDeviceWaitIdle          { nullptr },
@@ -84,7 +84,7 @@ namespace vk
 		vkCmdBeginRenderPass      { nullptr },
 		vkCmdEndRenderPass        { nullptr }
 	{
-		const auto result = instance->vkCreateDevice
+		const auto result = physicalDevice.instance->vkCreateDevice
 		(
 			physicalDevice.vkPhysicalDevice,
 			&createInfo.createInfo,
@@ -230,8 +230,8 @@ namespace vk
 
 	Device::Device (Device&& device)
 	:
-		instance { device.instance },
-		vkDevice { device.vkDevice },
+		physicalDevice { device.physicalDevice },
+		vkDevice       { device.vkDevice       },
 
 		vkDestroyDevice           { device.vkDestroyDevice           },
 		vkDeviceWaitIdle          { device.vkDeviceWaitIdle          },
@@ -275,8 +275,8 @@ namespace vk
 		vkCmdBeginRenderPass      { device.vkCmdBeginRenderPass      },
 		vkCmdEndRenderPass        { device.vkCmdEndRenderPass        }
 	{
-		instance = nullptr;
-		vkDevice = VK_NULL_HANDLE;
+		physicalDevice = nullptr;
+		vkDevice       = VK_NULL_HANDLE;
 
 		vkDestroyDevice           = nullptr;
 		vkDeviceWaitIdle          = nullptr;
@@ -331,8 +331,8 @@ namespace vk
 			vkDestroyDevice(vkDevice, nullptr);
 		}
 
-		instance = device.instance;
-		vkDevice = device.vkDevice;
+		physicalDevice = device.physicalDevice;
+		vkDevice       = device.vkDevice;
 
 		vkDestroyDevice           = device.vkDestroyDevice;
 		vkDeviceWaitIdle          = device.vkDeviceWaitIdle;
@@ -376,8 +376,8 @@ namespace vk
 		vkCmdBeginRenderPass      = device.vkCmdBeginRenderPass;
 		vkCmdEndRenderPass        = device.vkCmdEndRenderPass;
 
-		instance = nullptr;
-		vkDevice = VK_NULL_HANDLE;
+		physicalDevice = nullptr;
+		vkDevice       = VK_NULL_HANDLE;
 
 		vkDestroyDevice           = nullptr;
 		vkDeviceWaitIdle          = nullptr;
@@ -425,7 +425,7 @@ namespace vk
 	}
 
 	Queue
-	Device::Queues (const uint32_t familyIndex, const uint32_t queueIndex) const
+	Device::GetQueue (const uint32_t familyIndex, const uint32_t queueIndex) const
 	{
 		auto queue = VkQueue { VK_NULL_HANDLE };
 

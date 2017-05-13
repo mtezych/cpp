@@ -25,8 +25,8 @@ namespace vk
 			);
 		};
 
-		const Instance* instance;
-		VkDevice        vkDevice;
+		const PhysicalDevice* physicalDevice;
+		VkDevice              vkDevice;
 
 		/*
 		┌──────────────────────────────────────────────────────────────────┐
@@ -164,6 +164,8 @@ namespace vk
 		template <typename Procedure>
 		typename Procedure::type LoadDeviceProcedure () const
 		{
+			const auto instance = physicalDevice->instance;
+
 			const auto procedureAddress = instance->vkGetDeviceProcAddr
 			(
 				vkDevice, Procedure::name
@@ -174,7 +176,7 @@ namespace vk
 		}
 
 		Queue
-		Queues (const uint32_t familyIndex, const uint32_t queueIndex) const;
+		GetQueue (const uint32_t familyIndex, const uint32_t queueIndex) const;
 	};
 }
 
