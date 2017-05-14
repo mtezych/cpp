@@ -100,6 +100,12 @@ namespace vk
 #endif
 
 		~Surface();
+
+		Surface (Surface&& surface);
+		Surface (const Surface& surface) = delete;
+
+		Surface& operator = (Surface&& surface);
+		Surface& operator = (const Surface& surface) = delete;
 	};
 }
 

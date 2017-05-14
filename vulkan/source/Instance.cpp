@@ -2,7 +2,6 @@
 #include <vulkan/Instance.h>
 
 #include <vulkan/Symbols.h>
-#include <vulkan/Loader.h>
 
 namespace vk
 {
@@ -193,19 +192,19 @@ namespace vk
 
 		instance.vkDestroyInstance                              = nullptr;
 #ifdef VK_USE_PLATFORM_XLIB_KHR
-		vkCreateXlibSurfaceKHR                                  = nullptr;
+		instance.vkCreateXlibSurfaceKHR                         = nullptr;
 #endif
 #ifdef VK_USE_PLATFORM_XCB_KHR
-		vkCreateXcbSurfaceKHR                                   = nullptr;
+		instance.vkCreateXcbSurfaceKHR                          = nullptr;
 #endif
 #ifdef VK_USE_PLATFORM_WAYLAND_KHR
-		vkCreateWaylandSurfaceKHR                               = nullptr;
+		instance.vkCreateWaylandSurfaceKHR                      = nullptr;
 #endif
 #ifdef VK_USE_PLATFORM_ANDROID_KHR
-		vkCreateAndroidSurfaceKHR                               = nullptr;
+		instance.vkCreateAndroidSurfaceKHR                      = nullptr;
 #endif
 #ifdef VK_USE_PLATFORM_WIN32_KHR
-		vkCreateWin32SurfaceKHR                                 = nullptr;
+		instance.vkCreateWin32SurfaceKHR                        = nullptr;
 #endif
 		instance.vkDestroySurfaceKHR                            = nullptr;
 		instance.vkEnumeratePhysicalDevices                     = nullptr;
@@ -275,19 +274,19 @@ namespace vk
 
 		instance.vkDestroyInstance                              = nullptr;
 #ifdef VK_USE_PLATFORM_XLIB_KHR
-		vkCreateXlibSurfaceKHR                                  = nullptr;
+		instance.vkCreateXlibSurfaceKHR                         = nullptr;
 #endif
 #ifdef VK_USE_PLATFORM_XCB_KHR
-		vkCreateXcbSurfaceKHR                                   = nullptr;
+		instance.vkCreateXcbSurfaceKHR                          = nullptr;
 #endif
 #ifdef VK_USE_PLATFORM_WAYLAND_KHR
-		vkCreateWaylandSurfaceKHR                               = nullptr;
+		instance.vkCreateWaylandSurfaceKHR                      = nullptr;
 #endif
 #ifdef VK_USE_PLATFORM_ANDROID_KHR
-		vkCreateAndroidSurfaceKHR                               = nullptr;
+		instance.vkCreateAndroidSurfaceKHR                      = nullptr;
 #endif
 #ifdef VK_USE_PLATFORM_WIN32_KHR
-		vkCreateWin32SurfaceKHR                                 = nullptr;
+		instance.vkCreateWin32SurfaceKHR                        = nullptr;
 #endif
 		instance.vkDestroySurfaceKHR                            = nullptr;
 		instance.vkEnumeratePhysicalDevices                     = nullptr;

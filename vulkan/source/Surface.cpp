@@ -173,4 +173,29 @@ namespace vk
 			instance->vkDestroySurfaceKHR(instance->vkInstance, vkSurface, nullptr);
 		}
 	}
+
+	Surface::Surface (Surface&& surface)
+	:
+		instance  { surface.instance  },
+		vkSurface { surface.vkSurface }
+	{
+		surface.instance  = nullptr;
+		surface.vkSurface = VK_NULL_HANDLE;
+	}
+
+	Surface& Surface::operator = (Surface&& surface)
+	{
+		if (vkSurface != VK_NULL_HANDLE)
+		{
+			instance->vkDestroySurfaceKHR(instance->vkInstance, vkSurface, nullptr);
+		}
+
+		instance  = surface.instance;
+		vkSurface = surface.vkSurface;
+
+		surface.instance  = nullptr;
+		surface.vkSurface = VK_NULL_HANDLE;
+
+		return *this;
+	}
 }

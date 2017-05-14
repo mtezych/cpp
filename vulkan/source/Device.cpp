@@ -32,7 +32,7 @@ namespace vk
 
 		createInfo.pQueueCreateInfos =
 		reinterpret_cast<const VkDeviceQueueCreateInfo*>(queueCreateInfos.data());
-}
+	}
 
 	Device::Device
 	(
@@ -275,50 +275,50 @@ namespace vk
 		vkCmdBeginRenderPass      { device.vkCmdBeginRenderPass      },
 		vkCmdEndRenderPass        { device.vkCmdEndRenderPass        }
 	{
-		physicalDevice = nullptr;
-		vkDevice       = VK_NULL_HANDLE;
+		device.physicalDevice = nullptr;
+		device.vkDevice       = VK_NULL_HANDLE;
 
-		vkDestroyDevice           = nullptr;
-		vkDeviceWaitIdle          = nullptr;
-		vkCreateSemaphore         = nullptr;
-		vkDestroySemaphore        = nullptr;
-		vkCreateRenderPass        = nullptr;
-		vkDestroyRenderPass       = nullptr;
-		vkCreateFramebuffer       = nullptr;
-		vkDestroyFramebuffer      = nullptr;
-		vkCreateShaderModule      = nullptr;
-		vkDestroyShaderModule     = nullptr;
-		vkCreatePipelineCache     = nullptr;
-		vkDestroyPipelineCache    = nullptr;
-		vkCreatePipelineLayout    = nullptr;
-		vkDestroyPipelineLayout   = nullptr;
-		vkCreateComputePipelines  = nullptr;
-		vkCreateGraphicsPipelines = nullptr;
-		vkDestroyPipeline         = nullptr;
-		vkCreateImage             = nullptr;
-		vkDestroyImage            = nullptr;
-		vkCreateImageView         = nullptr;
-		vkDestroyImageView        = nullptr;
-		vkCreateSwapchainKHR      = nullptr;
-		vkDestroySwapchainKHR     = nullptr;
-		vkGetSwapchainImagesKHR   = nullptr;
-		vkAcquireNextImageKHR     = nullptr;
-		vkCreateCommandPool       = nullptr;
-		vkDestroyCommandPool      = nullptr;
-		vkGetDeviceQueue          = nullptr;
-		vkQueueSubmit             = nullptr;
-		vkQueueWaitIdle           = nullptr;
-		vkQueuePresentKHR         = nullptr;
-		vkAllocateCommandBuffers  = nullptr;
-		vkFreeCommandBuffers      = nullptr;
-		vkBeginCommandBuffer      = nullptr;
-		vkEndCommandBuffer        = nullptr;
-		vkCmdBindPipeline         = nullptr;
-		vkCmdDraw                 = nullptr;
-		vkCmdClearColorImage      = nullptr;
-		vkCmdPipelineBarrier      = nullptr;
-		vkCmdBeginRenderPass      = nullptr;
-		vkCmdEndRenderPass        = nullptr;
+		device.vkDestroyDevice           = nullptr;
+		device.vkDeviceWaitIdle          = nullptr;
+		device.vkCreateSemaphore         = nullptr;
+		device.vkDestroySemaphore        = nullptr;
+		device.vkCreateRenderPass        = nullptr;
+		device.vkDestroyRenderPass       = nullptr;
+		device.vkCreateFramebuffer       = nullptr;
+		device.vkDestroyFramebuffer      = nullptr;
+		device.vkCreateShaderModule      = nullptr;
+		device.vkDestroyShaderModule     = nullptr;
+		device.vkCreatePipelineCache     = nullptr;
+		device.vkDestroyPipelineCache    = nullptr;
+		device.vkCreatePipelineLayout    = nullptr;
+		device.vkDestroyPipelineLayout   = nullptr;
+		device.vkCreateComputePipelines  = nullptr;
+		device.vkCreateGraphicsPipelines = nullptr;
+		device.vkDestroyPipeline         = nullptr;
+		device.vkCreateImage             = nullptr;
+		device.vkDestroyImage            = nullptr;
+		device.vkCreateImageView         = nullptr;
+		device.vkDestroyImageView        = nullptr;
+		device.vkCreateSwapchainKHR      = nullptr;
+		device.vkDestroySwapchainKHR     = nullptr;
+		device.vkGetSwapchainImagesKHR   = nullptr;
+		device.vkAcquireNextImageKHR     = nullptr;
+		device.vkCreateCommandPool       = nullptr;
+		device.vkDestroyCommandPool      = nullptr;
+		device.vkGetDeviceQueue          = nullptr;
+		device.vkQueueSubmit             = nullptr;
+		device.vkQueueWaitIdle           = nullptr;
+		device.vkQueuePresentKHR         = nullptr;
+		device.vkAllocateCommandBuffers  = nullptr;
+		device.vkFreeCommandBuffers      = nullptr;
+		device.vkBeginCommandBuffer      = nullptr;
+		device.vkEndCommandBuffer        = nullptr;
+		device.vkCmdBindPipeline         = nullptr;
+		device.vkCmdDraw                 = nullptr;
+		device.vkCmdClearColorImage      = nullptr;
+		device.vkCmdPipelineBarrier      = nullptr;
+		device.vkCmdBeginRenderPass      = nullptr;
+		device.vkCmdEndRenderPass        = nullptr;
 	}
 
 	Device& Device::operator = (Device&& device)
@@ -376,50 +376,50 @@ namespace vk
 		vkCmdBeginRenderPass      = device.vkCmdBeginRenderPass;
 		vkCmdEndRenderPass        = device.vkCmdEndRenderPass;
 
-		physicalDevice = nullptr;
-		vkDevice       = VK_NULL_HANDLE;
+		device.physicalDevice = nullptr;
+		device.vkDevice       = VK_NULL_HANDLE;
 
-		vkDestroyDevice           = nullptr;
-		vkDeviceWaitIdle          = nullptr;
-		vkCreateSemaphore         = nullptr;
-		vkDestroySemaphore        = nullptr;
-		vkCreateRenderPass        = nullptr;
-		vkDestroyRenderPass       = nullptr;
-		vkCreateFramebuffer       = nullptr;
-		vkDestroyFramebuffer      = nullptr;
-		vkCreateShaderModule      = nullptr;
-		vkDestroyShaderModule     = nullptr;
-		vkCreatePipelineCache     = nullptr;
-		vkDestroyPipelineCache    = nullptr;
-		vkCreatePipelineLayout    = nullptr;
-		vkDestroyPipelineLayout   = nullptr;
-		vkCreateComputePipelines  = nullptr;
-		vkCreateGraphicsPipelines = nullptr;
-		vkDestroyPipeline         = nullptr;
-		vkCreateImage             = nullptr;
-		vkDestroyImage            = nullptr;
-		vkCreateImageView         = nullptr;
-		vkDestroyImageView        = nullptr;
-		vkCreateSwapchainKHR      = nullptr;
-		vkDestroySwapchainKHR     = nullptr;
-		vkGetSwapchainImagesKHR   = nullptr;
-		vkAcquireNextImageKHR     = nullptr;
-		vkCreateCommandPool       = nullptr;
-		vkDestroyCommandPool      = nullptr;
-		vkGetDeviceQueue          = nullptr;
-		vkQueueSubmit             = nullptr;
-		vkQueueWaitIdle           = nullptr;
-		vkQueuePresentKHR         = nullptr;
-		vkAllocateCommandBuffers  = nullptr;
-		vkFreeCommandBuffers      = nullptr;
-		vkBeginCommandBuffer      = nullptr;
-		vkEndCommandBuffer        = nullptr;
-		vkCmdBindPipeline         = nullptr;
-		vkCmdDraw                 = nullptr;
-		vkCmdClearColorImage      = nullptr;
-		vkCmdPipelineBarrier      = nullptr;
-		vkCmdBeginRenderPass      = nullptr;
-		vkCmdEndRenderPass        = nullptr;
+		device.vkDestroyDevice           = nullptr;
+		device.vkDeviceWaitIdle          = nullptr;
+		device.vkCreateSemaphore         = nullptr;
+		device.vkDestroySemaphore        = nullptr;
+		device.vkCreateRenderPass        = nullptr;
+		device.vkDestroyRenderPass       = nullptr;
+		device.vkCreateFramebuffer       = nullptr;
+		device.vkDestroyFramebuffer      = nullptr;
+		device.vkCreateShaderModule      = nullptr;
+		device.vkDestroyShaderModule     = nullptr;
+		device.vkCreatePipelineCache     = nullptr;
+		device.vkDestroyPipelineCache    = nullptr;
+		device.vkCreatePipelineLayout    = nullptr;
+		device.vkDestroyPipelineLayout   = nullptr;
+		device.vkCreateComputePipelines  = nullptr;
+		device.vkCreateGraphicsPipelines = nullptr;
+		device.vkDestroyPipeline         = nullptr;
+		device.vkCreateImage             = nullptr;
+		device.vkDestroyImage            = nullptr;
+		device.vkCreateImageView         = nullptr;
+		device.vkDestroyImageView        = nullptr;
+		device.vkCreateSwapchainKHR      = nullptr;
+		device.vkDestroySwapchainKHR     = nullptr;
+		device.vkGetSwapchainImagesKHR   = nullptr;
+		device.vkAcquireNextImageKHR     = nullptr;
+		device.vkCreateCommandPool       = nullptr;
+		device.vkDestroyCommandPool      = nullptr;
+		device.vkGetDeviceQueue          = nullptr;
+		device.vkQueueSubmit             = nullptr;
+		device.vkQueueWaitIdle           = nullptr;
+		device.vkQueuePresentKHR         = nullptr;
+		device.vkAllocateCommandBuffers  = nullptr;
+		device.vkFreeCommandBuffers      = nullptr;
+		device.vkBeginCommandBuffer      = nullptr;
+		device.vkEndCommandBuffer        = nullptr;
+		device.vkCmdBindPipeline         = nullptr;
+		device.vkCmdDraw                 = nullptr;
+		device.vkCmdClearColorImage      = nullptr;
+		device.vkCmdPipelineBarrier      = nullptr;
+		device.vkCmdBeginRenderPass      = nullptr;
+		device.vkCmdEndRenderPass        = nullptr;
 
 		return *this;
 	}
