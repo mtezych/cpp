@@ -93,6 +93,31 @@ namespace vk
 		}
 	}
 
+	Swapchain::Swapchain (Swapchain&& swapchain)
+	:
+		device      { swapchain.device      },
+		vkSwapchain { swapchain.vkSwapchain }
+	{
+		swapchain.device      = nullptr;
+		swapchain.vkSwapchain = VK_NULL_HANDLE;
+	}
+
+	Swapchain& Swapchain::operator = (Swapchain&& swapchain)
+	{
+		if (vkSwapchain != VK_NULL_HANDLE)
+		{
+			device->vkDestroySwapchainKHR(device->vkDevice, vkSwapchain, nullptr);
+		}
+
+		device      = swapchain.device;
+		vkSwapchain = swapchain.vkSwapchain;
+
+		swapchain.device      = nullptr;
+		swapchain.vkSwapchain = VK_NULL_HANDLE;
+
+		return *this;
+	}
+
 	std::vector<Image> Swapchain::GetImages () const
 	{
 		auto imagesCount = uint32_t { 0 };

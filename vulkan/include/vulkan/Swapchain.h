@@ -49,6 +49,12 @@ namespace vk
 
 		~Swapchain();
 
+		Swapchain (Swapchain&& swapchain);
+		Swapchain (const Swapchain& swapchain) = delete;
+
+		Swapchain& operator = (Swapchain&& swapchain);
+		Swapchain& operator = (const Swapchain& swapchain) = delete;
+
 		std::vector<Image> GetImages() const;
 
 		struct AcquireInfo
