@@ -40,4 +40,29 @@ namespace vk
 			device->vkDestroyPipelineCache(device->vkDevice, vkPipelineCache, nullptr);
 		}
 	}
+
+	PipelineCache::PipelineCache (PipelineCache&& pipelineCache)
+	:
+		device          { pipelineCache.device          },
+		vkPipelineCache { pipelineCache.vkPipelineCache }
+	{
+		pipelineCache.device          = nullptr;
+		pipelineCache.vkPipelineCache = VK_NULL_HANDLE;
+	}
+
+	PipelineCache& PipelineCache::operator = (PipelineCache&& pipelineCache)
+	{
+		if (vkPipelineCache != VK_NULL_HANDLE)
+		{
+			device->vkDestroyPipelineCache(device->vkDevice, vkPipelineCache, nullptr);
+		}
+
+		device          = pipelineCache.device;
+		vkPipelineCache = pipelineCache.vkPipelineCache;
+
+		pipelineCache.device           = nullptr;
+		pipelineCache.vkPipelineCache = VK_NULL_HANDLE;
+
+		return *this;
+	}
 }

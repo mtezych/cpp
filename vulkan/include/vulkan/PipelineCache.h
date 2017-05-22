@@ -21,7 +21,13 @@ namespace vk
 			const std::vector<const void*>& initialData
 		);
 
-		~PipelineCache();
+		~PipelineCache ();
+
+		PipelineCache (PipelineCache&& pipelineCache);
+		PipelineCache (const PipelineCache& pipelineCache) = delete;
+
+		PipelineCache& operator = (PipelineCache&& pipelineCache);
+		PipelineCache& operator = (const PipelineCache& pipelineCache) = delete;
 	};
 }
 

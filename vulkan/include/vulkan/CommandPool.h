@@ -16,6 +16,12 @@ namespace vk
 		CommandPool (const Device& device, const uint32_t queueFamilyIndex);
 
 		~CommandPool ();
+
+		CommandPool (CommandPool&& commandPool);
+		CommandPool (const CommandPool& commandPool) = delete;
+
+		CommandPool& operator = (CommandPool&& commandPool);
+		CommandPool& operator = (const CommandPool& commandPool) = delete;
 	};
 }
 

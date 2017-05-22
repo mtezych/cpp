@@ -22,7 +22,13 @@ namespace vk
 			const std::vector<VkPushConstantRange>&   pushConstantRanges
 		);
 
-		~PipelineLayout();
+		~PipelineLayout ();
+
+		PipelineLayout (PipelineLayout&& pipelineLayout);
+		PipelineLayout (const PipelineLayout& pipelineLayout) = delete;
+
+		PipelineLayout& operator = (PipelineLayout&& pipelineLayout);
+		PipelineLayout& operator = (const PipelineLayout& pipelineLayout) = delete;
 	};
 }
 

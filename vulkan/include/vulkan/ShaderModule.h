@@ -18,11 +18,16 @@ namespace vk
 
 		ShaderModule
 		(
-			const Device&                device,
-			const std::vector<uint32_t>& spirvCode
+			const Device& device, const std::vector<uint32_t>& spirvCode
 		);
 
-		~ShaderModule();
+		~ShaderModule ();
+
+		ShaderModule (ShaderModule&& shaderModule);
+		ShaderModule (const ShaderModule& shaderModule) = delete;
+
+		ShaderModule& operator = (ShaderModule&& shaderModule);
+		ShaderModule& operator = (const ShaderModule& shaderModule) = delete;
 	};
 }
 

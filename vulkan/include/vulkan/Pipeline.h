@@ -29,7 +29,7 @@ namespace vk
 			const VkGraphicsPipelineCreateInfo& createInfo
 		);
 
-		~Pipeline();
+		~Pipeline ();
 	};
 }
 

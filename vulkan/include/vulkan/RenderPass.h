@@ -27,6 +27,12 @@ namespace vk
 		);
 
 		~RenderPass();
+
+		RenderPass (RenderPass&& renderPass);
+		RenderPass (const RenderPass& renderPass) = delete;
+
+		RenderPass& operator = (RenderPass&& renderPass);
+		RenderPass& operator = (const RenderPass& renderPass) = delete;
 	};
 }
 

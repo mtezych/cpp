@@ -42,4 +42,29 @@ namespace vk
 			device->vkDestroyRenderPass(device->vkDevice, vkRenderPass, nullptr);
 		}
 	}
+
+	RenderPass::RenderPass (RenderPass&& renderPass)
+	:
+		device       { renderPass.device       },
+		vkRenderPass { renderPass.vkRenderPass }
+	{
+		renderPass.device       = nullptr;
+		renderPass.vkRenderPass = VK_NULL_HANDLE;
+	}
+
+	RenderPass& RenderPass::operator = (RenderPass&& renderPass)
+	{
+		if (vkRenderPass != VK_NULL_HANDLE)
+		{
+			device->vkDestroyRenderPass(device->vkDevice, vkRenderPass, nullptr);
+		}
+
+		device       = renderPass.device;
+		vkRenderPass = renderPass.vkRenderPass;
+
+		renderPass.device       = nullptr;
+		renderPass.vkRenderPass = VK_NULL_HANDLE;
+
+		return *this;
+	}
 }

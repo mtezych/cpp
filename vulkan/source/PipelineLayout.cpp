@@ -44,4 +44,29 @@ namespace vk
 			device->vkDestroyPipelineLayout(device->vkDevice, vkPipelineLayout, nullptr);
 		}
 	}
+
+	PipelineLayout::PipelineLayout (PipelineLayout&& pipelineLayout)
+	:
+		device           { pipelineLayout.device           },
+		vkPipelineLayout { pipelineLayout.vkPipelineLayout }
+	{
+		pipelineLayout.device           = nullptr;
+		pipelineLayout.vkPipelineLayout = VK_NULL_HANDLE;
+	}
+
+	PipelineLayout& PipelineLayout::operator = (PipelineLayout&& pipelineLayout)
+	{
+		if (vkPipelineLayout != VK_NULL_HANDLE)
+		{
+			device->vkDestroyPipelineLayout(device->vkDevice, vkPipelineLayout, nullptr);
+		}
+
+		device           = pipelineLayout.device;
+		vkPipelineLayout = pipelineLayout.vkPipelineLayout;
+
+		pipelineLayout.device           = nullptr;
+		pipelineLayout.vkPipelineLayout = VK_NULL_HANDLE;
+
+		return *this;
+	}
 }

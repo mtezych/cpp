@@ -34,4 +34,29 @@ namespace vk
 			device->vkDestroyCommandPool(device->vkDevice, vkCommandPool, nullptr);
 		}
 	}
+
+	CommandPool::CommandPool (CommandPool&& commandPool)
+	:
+		device        { commandPool.device        },
+		vkCommandPool { commandPool.vkCommandPool }
+	{
+		commandPool.device        = nullptr;
+		commandPool.vkCommandPool = VK_NULL_HANDLE;
+	}
+
+	CommandPool& CommandPool::operator = (CommandPool&& commandPool)
+	{
+		if (vkCommandPool != VK_NULL_HANDLE)
+		{
+			device->vkDestroyCommandPool(device->vkDevice, vkCommandPool, nullptr);
+		}
+
+		device        = commandPool.device;
+		vkCommandPool = commandPool.vkCommandPool;
+
+		commandPool.device        = nullptr;
+		commandPool.vkCommandPool = VK_NULL_HANDLE;
+
+		return *this;
+	}
 }

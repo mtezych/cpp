@@ -31,7 +31,7 @@ namespace vk
 		const Device* device;
 		VkQueue       vkQueue;
 
-		Queue(const Device& device, const VkQueue queue);
+		Queue (const Device& device, const VkQueue queue);
 
 		Semaphore Submit
 		(

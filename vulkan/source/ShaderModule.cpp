@@ -39,4 +39,29 @@ namespace vk
 			device->vkDestroyShaderModule(device->vkDevice, vkShaderModule, nullptr);
 		}
 	}
+
+	ShaderModule::ShaderModule (ShaderModule&& shaderModule)
+	:
+		device         { shaderModule.device         },
+		vkShaderModule { shaderModule.vkShaderModule }
+	{
+		shaderModule.device         = nullptr;
+		shaderModule.vkShaderModule = VK_NULL_HANDLE;
+	}
+
+	ShaderModule& ShaderModule::operator = (ShaderModule&& shaderModule)
+	{
+		if (vkShaderModule != VK_NULL_HANDLE)
+		{
+			device->vkDestroyShaderModule(device->vkDevice, vkShaderModule, nullptr);
+		}
+
+		device         = shaderModule.device;
+		vkShaderModule = shaderModule.vkShaderModule;
+
+		shaderModule.device         = nullptr;
+		shaderModule.vkShaderModule = VK_NULL_HANDLE;
+
+		return *this;
+	}
 }
