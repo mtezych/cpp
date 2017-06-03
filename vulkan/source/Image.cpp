@@ -132,12 +132,12 @@ namespace vk
 		auto subresourceLayout = VkSubresourceLayout { };
 
 		device->vkGetImageSubresourceLayout
-			(
-				device->vkDevice,
-				vkImage,
-				&subresource,
-				&subresourceLayout
-			);
+		(
+			device->vkDevice,
+			vkImage,
+			&subresource,
+			&subresourceLayout
+		);
 
 		return subresourceLayout;
 	}
