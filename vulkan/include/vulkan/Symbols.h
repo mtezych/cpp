@@ -348,6 +348,12 @@ namespace symbol
 		static constexpr auto name =    "vkBindImageMemory";
 	};
 
+	struct vkGetImageSubresourceLayout
+	{
+		using                 type = PFN_vkGetImageSubresourceLayout;
+		static constexpr auto name =    "vkGetImageSubresourceLayout";
+	};
+
 	struct vkCreateImageView
 	{
 		using                 type = PFN_vkCreateImageView;

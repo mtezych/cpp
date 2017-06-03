@@ -55,6 +55,9 @@ namespace vk
 			const DeviceMemory& deviceMemory,
 			const VkDeviceSize  deviceMemoryOffset
 		);
+
+		VkSubresourceLayout
+		GetSubresourceLayout (const VkImageSubresource& subresource) const;
 	};
 }
 

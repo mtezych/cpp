@@ -125,4 +125,20 @@ namespace vk
 		);
 		assert(result == VK_SUCCESS);
 	}
+
+	VkSubresourceLayout
+	Image::GetSubresourceLayout (const VkImageSubresource& subresource) const
+	{
+		auto subresourceLayout = VkSubresourceLayout { };
+
+		device->vkGetImageSubresourceLayout
+			(
+				device->vkDevice,
+				vkImage,
+				&subresource,
+				&subresourceLayout
+			);
+
+		return subresourceLayout;
+	}
 }
