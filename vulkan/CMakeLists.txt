@@ -60,6 +60,7 @@ add_library               (vulkan STATIC include/vulkan/Symbols.h
                                          include/vulkan/Buffer.h
                                          include/vulkan/BufferView.h
                                          include/vulkan/Fence.h
+                                         include/vulkan/DescriptorPool.h
                                                  source/Loader.cpp
                                                  source/Instance.cpp
                                                  source/Surface.cpp
@@ -81,7 +82,8 @@ add_library               (vulkan STATIC include/vulkan/Symbols.h
                                                  source/DeviceMemory.cpp
                                                  source/Buffer.cpp
                                                  source/BufferView.cpp
-                                                 source/Fence.cpp)
+                                                 source/Fence.cpp
+                                                 source/DescriptorPool.cpp)
 
 target_include_directories(vulkan PUBLIC include)
 

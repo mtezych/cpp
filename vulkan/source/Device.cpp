@@ -79,12 +79,16 @@ namespace vk
 		vkGetImageSubresourceLayout { nullptr },
 		vkCreateImageView           { nullptr },
 		vkDestroyImageView          { nullptr },
+		vkCreateDescriptorPool      { nullptr },
+		vkDestroyDescriptorPool     { nullptr },
+		vkResetDescriptorPool       { nullptr },
 		vkCreateSwapchainKHR        { nullptr },
 		vkDestroySwapchainKHR       { nullptr },
 		vkGetSwapchainImagesKHR     { nullptr },
 		vkAcquireNextImageKHR       { nullptr },
 		vkCreateCommandPool         { nullptr },
 		vkDestroyCommandPool        { nullptr },
+		vkResetCommandPool          { nullptr },
 		vkGetDeviceQueue            { nullptr },
 		vkQueueSubmit               { nullptr },
 		vkQueueWaitIdle             { nullptr },
@@ -222,6 +226,15 @@ namespace vk
 		/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 		/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+		 *                                  VkDescriptorPool                                   *
+		 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+		vkCreateDescriptorPool      = LoadDeviceProcedure<symbol::vkCreateDescriptorPool     >();
+		vkDestroyDescriptorPool     = LoadDeviceProcedure<symbol::vkDestroyDescriptorPool    >();
+
+		vkResetDescriptorPool       = LoadDeviceProcedure<symbol::vkResetDescriptorPool      >();
+		/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+		/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 		 *                                     VkSwapchain                                     *
 		 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 		vkCreateSwapchainKHR        = LoadDeviceProcedure<symbol::vkCreateSwapchainKHR       >();
@@ -236,6 +249,8 @@ namespace vk
 		 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 		vkCreateCommandPool         = LoadDeviceProcedure<symbol::vkCreateCommandPool        >();
 		vkDestroyCommandPool        = LoadDeviceProcedure<symbol::vkDestroyCommandPool       >();
+
+		vkResetCommandPool          = LoadDeviceProcedure<symbol::vkResetCommandPool         >();
 		/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 		vkGetDeviceQueue            = LoadDeviceProcedure<symbol::vkGetDeviceQueue           >();
@@ -327,12 +342,16 @@ namespace vk
 		vkGetImageSubresourceLayout { device.vkGetImageSubresourceLayout },
 		vkCreateImageView           { device.vkCreateImageView           },
 		vkDestroyImageView          { device.vkDestroyImageView          },
+		vkCreateDescriptorPool      { device.vkCreateDescriptorPool      },
+		vkDestroyDescriptorPool     { device.vkDestroyDescriptorPool     },
+		vkResetDescriptorPool       { device.vkResetDescriptorPool       },
 		vkCreateSwapchainKHR        { device.vkCreateSwapchainKHR        },
 		vkDestroySwapchainKHR       { device.vkDestroySwapchainKHR       },
 		vkGetSwapchainImagesKHR     { device.vkGetSwapchainImagesKHR     },
 		vkAcquireNextImageKHR       { device.vkAcquireNextImageKHR       },
 		vkCreateCommandPool         { device.vkCreateCommandPool         },
 		vkDestroyCommandPool        { device.vkDestroyCommandPool        },
+		vkResetCommandPool          { device.vkResetCommandPool          },
 		vkGetDeviceQueue            { device.vkGetDeviceQueue            },
 		vkQueueSubmit               { device.vkQueueSubmit               },
 		vkQueueWaitIdle             { device.vkQueueWaitIdle             },
@@ -388,12 +407,16 @@ namespace vk
 		device.vkGetImageSubresourceLayout = nullptr;
 		device.vkCreateImageView           = nullptr;
 		device.vkDestroyImageView          = nullptr;
+		device.vkCreateDescriptorPool      = nullptr;
+		device.vkDestroyDescriptorPool     = nullptr;
+		device.vkResetDescriptorPool       = nullptr;
 		device.vkCreateSwapchainKHR        = nullptr;
 		device.vkDestroySwapchainKHR       = nullptr;
 		device.vkGetSwapchainImagesKHR     = nullptr;
 		device.vkAcquireNextImageKHR       = nullptr;
 		device.vkCreateCommandPool         = nullptr;
 		device.vkDestroyCommandPool        = nullptr;
+		device.vkResetCommandPool          = nullptr;
 		device.vkGetDeviceQueue            = nullptr;
 		device.vkQueueSubmit               = nullptr;
 		device.vkQueueWaitIdle             = nullptr;
@@ -460,12 +483,16 @@ namespace vk
 		vkGetImageSubresourceLayout = device.vkGetImageSubresourceLayout;
 		vkCreateImageView           = device.vkCreateImageView;
 		vkDestroyImageView          = device.vkDestroyImageView;
+		vkCreateDescriptorPool      = device.vkCreateDescriptorPool;
+		vkDestroyDescriptorPool     = device.vkDestroyDescriptorPool;
+		vkResetDescriptorPool       = device.vkResetDescriptorPool;
 		vkCreateSwapchainKHR        = device.vkCreateSwapchainKHR;
 		vkDestroySwapchainKHR       = device.vkDestroySwapchainKHR;
 		vkGetSwapchainImagesKHR     = device.vkGetSwapchainImagesKHR;
 		vkAcquireNextImageKHR       = device.vkAcquireNextImageKHR;
 		vkCreateCommandPool         = device.vkCreateCommandPool;
 		vkDestroyCommandPool        = device.vkDestroyCommandPool;
+		vkResetCommandPool          = device.vkResetCommandPool;
 		vkGetDeviceQueue            = device.vkGetDeviceQueue;
 		vkQueueSubmit               = device.vkQueueSubmit;
 		vkQueueWaitIdle             = device.vkQueueWaitIdle;
@@ -521,12 +548,16 @@ namespace vk
 		device.vkGetImageSubresourceLayout = nullptr;
 		device.vkCreateImageView           = nullptr;
 		device.vkDestroyImageView          = nullptr;
+		device.vkCreateDescriptorPool      = nullptr;
+		device.vkDestroyDescriptorPool     = nullptr;
+		device.vkResetDescriptorPool       = nullptr;
 		device.vkCreateSwapchainKHR        = nullptr;
 		device.vkDestroySwapchainKHR       = nullptr;
 		device.vkGetSwapchainImagesKHR     = nullptr;
 		device.vkAcquireNextImageKHR       = nullptr;
 		device.vkCreateCommandPool         = nullptr;
 		device.vkDestroyCommandPool        = nullptr;
+		device.vkResetCommandPool          = nullptr;
 		device.vkGetDeviceQueue            = nullptr;
 		device.vkQueueSubmit               = nullptr;
 		device.vkQueueWaitIdle             = nullptr;

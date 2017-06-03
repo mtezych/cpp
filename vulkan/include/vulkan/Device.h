@@ -136,6 +136,15 @@ namespace vk
 		│ └──────────────────────────────────────────────────────────────────┘ │
 		│                                                                      │
 		│ ┌──────────────────────────────────────────────────────────────────┐ │
+		│ │                         VkDescriptorPool                         │ │
+		│ ├──────────────────────────────────────────────────────────────────┤ │
+		│ │*/ PFN_vkCreateDescriptorPool      vkCreateDescriptorPool;      /*│ │
+		│ │*/ PFN_vkDestroyDescriptorPool     vkDestroyDescriptorPool;     /*│ │
+		│ │                                                                  │ │
+		│ │*/ PFN_vkResetDescriptorPool       vkResetDescriptorPool;       /*│ │
+		│ └──────────────────────────────────────────────────────────────────┘ │
+		│                                                                      │
+		│ ┌──────────────────────────────────────────────────────────────────┐ │
 		│ │                           VkSwapchain                            │ │
 		│ ├──────────────────────────────────────────────────────────────────┤ │
 		│ │*/ PFN_vkCreateSwapchainKHR        vkCreateSwapchainKHR;        /*│ │
@@ -150,6 +159,8 @@ namespace vk
 		│ ├──────────────────────────────────────────────────────────────────┤ │
 		│ │*/ PFN_vkCreateCommandPool         vkCreateCommandPool;         /*│ │
 		│ │*/ PFN_vkDestroyCommandPool        vkDestroyCommandPool;        /*│ │
+		│ │                                                                  │ │
+		│ │*/ PFN_vkResetCommandPool          vkResetCommandPool;          /*│ │
 		│ └──────────────────────────────────────────────────────────────────┘ │
 		│                                                                      │
 		│*/ PFN_vkGetDeviceQueue              vkGetDeviceQueue;              /*│

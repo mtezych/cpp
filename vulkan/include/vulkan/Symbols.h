@@ -282,6 +282,12 @@ namespace symbol
 		static constexpr auto name =    "vkDestroyCommandPool";
 	};
 
+	struct vkResetCommandPool
+	{
+		using                 type = PFN_vkResetCommandPool;
+		static constexpr auto name =    "vkResetCommandPool";
+	};
+
 	struct vkAllocateCommandBuffers
 	{
 		using                 type = PFN_vkAllocateCommandBuffers;
@@ -544,6 +550,24 @@ namespace symbol
 	{
 		using                 type = PFN_vkWaitForFences;
 		static constexpr auto name =    "vkWaitForFences";
+	};
+
+	struct vkCreateDescriptorPool
+	{
+		using                 type = PFN_vkCreateDescriptorPool;
+		static constexpr auto name =    "vkCreateDescriptorPool";
+	};
+
+	struct vkDestroyDescriptorPool
+	{
+		using                 type = PFN_vkDestroyDescriptorPool;
+		static constexpr auto name =    "vkDestroyDescriptorPool";
+	};
+
+	struct vkResetDescriptorPool
+	{
+		using                 type = PFN_vkResetDescriptorPool;
+		static constexpr auto name =    "vkResetDescriptorPool";
 	};
 }
 
