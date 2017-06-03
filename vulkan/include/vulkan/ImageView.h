@@ -7,16 +7,31 @@
 namespace vk
 {
 	struct Device;
+	struct Image;
 
 	struct ImageView
 	{
+		struct CreateInfo
+		{
+			VkImageViewCreateInfo createInfo;
+
+			CreateInfo
+			(
+				const VkImageViewType          viewType,
+				const VkFormat                 format,
+				const VkComponentMapping       components,
+				const VkImageSubresourceRange& subresourceRange
+			);
+		};
+
 		const Device* device;
 		VkImageView   vkImageView;
 
 		ImageView
 		(
-			const Device&                device,
-			const VkImageViewCreateInfo& createInfo
+			const Device&     device,
+			const Image&      image,
+			const CreateInfo& createInfo
 		);
 
 		~ImageView ();

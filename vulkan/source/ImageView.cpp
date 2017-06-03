@@ -3,23 +3,49 @@
 
 #include <vulkan/Symbols.h>
 #include <vulkan/Device.h>
+#include <vulkan/Image.h>
 
 #include <cassert>
 
 namespace vk
 {
+	ImageView::CreateInfo::CreateInfo
+	(
+		const VkImageViewType          viewType,
+		const VkFormat                 format,
+		const VkComponentMapping       components,
+		const VkImageSubresourceRange& subresourceRange
+	):
+		createInfo
+		{
+			VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO,
+			nullptr,
+			0,
+			VkImage { VK_NULL_HANDLE },
+			viewType,
+			format,
+			components,
+			subresourceRange,
+		}
+	{
+	}
+
 	ImageView::ImageView
 	(
-		const Device&                device,
-		const VkImageViewCreateInfo& createInfo
+		const Device&     device,
+		const Image&      image,
+		const CreateInfo& createInfo
 	):
-		device      { &device },
+		device      { &device        },
 		vkImageView { VK_NULL_HANDLE }
 	{
+		auto createInfoCopy = createInfo.createInfo;
+		createInfoCopy.image = image.vkImage;
+
 		const auto result = device.vkCreateImageView
 		(
 			device.vkDevice,
-			&createInfo,
+			&createInfoCopy,
 			nullptr,
 			&vkImageView
 		);

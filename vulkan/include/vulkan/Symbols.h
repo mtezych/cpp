@@ -342,6 +342,12 @@ namespace symbol
 		static constexpr auto name =    "vkDestroyImage";
 	};
 
+	struct vkBindImageMemory
+	{
+		using                 type = PFN_vkBindImageMemory;
+		static constexpr auto name =    "vkBindImageMemory";
+	};
+
 	struct vkCreateImageView
 	{
 		using                 type = PFN_vkCreateImageView;

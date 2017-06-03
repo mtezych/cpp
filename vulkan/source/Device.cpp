@@ -70,6 +70,7 @@ namespace vk
 		vkDestroyBufferView       { nullptr },
 		vkCreateImage             { nullptr },
 		vkDestroyImage            { nullptr },
+		vkBindImageMemory         { nullptr },
 		vkCreateImageView         { nullptr },
 		vkDestroyImageView        { nullptr },
 		vkCreateSwapchainKHR      { nullptr },
@@ -190,6 +191,8 @@ namespace vk
 		 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 		vkCreateImage             = LoadDeviceProcedure<symbol::vkCreateImage            >();
 		vkDestroyImage            = LoadDeviceProcedure<symbol::vkDestroyImage           >();
+
+		vkBindImageMemory         = LoadDeviceProcedure<symbol::vkBindImageMemory        >();
 		/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 		/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -296,6 +299,7 @@ namespace vk
 		vkDestroyBufferView       { device.vkDestroyBufferView       },
 		vkCreateImage             { device.vkCreateImage             },
 		vkDestroyImage            { device.vkDestroyImage            },
+		vkBindImageMemory         { device.vkBindImageMemory         },
 		vkCreateImageView         { device.vkCreateImageView         },
 		vkDestroyImageView        { device.vkDestroyImageView        },
 		vkCreateSwapchainKHR      { device.vkCreateSwapchainKHR      },
@@ -350,6 +354,7 @@ namespace vk
 		device.vkDestroyBufferView       = nullptr;
 		device.vkCreateImage             = nullptr;
 		device.vkDestroyImage            = nullptr;
+		device.vkBindImageMemory         = nullptr;
 		device.vkCreateImageView         = nullptr;
 		device.vkDestroyImageView        = nullptr;
 		device.vkCreateSwapchainKHR      = nullptr;
@@ -415,6 +420,7 @@ namespace vk
 		vkDestroyBufferView       = device.vkDestroyBufferView;
 		vkCreateImage             = device.vkCreateImage;
 		vkDestroyImage            = device.vkDestroyImage;
+		vkBindImageMemory         = device.vkBindImageMemory;
 		vkCreateImageView         = device.vkCreateImageView;
 		vkDestroyImageView        = device.vkDestroyImageView;
 		vkCreateSwapchainKHR      = device.vkCreateSwapchainKHR;
@@ -469,6 +475,7 @@ namespace vk
 		device.vkDestroyBufferView       = nullptr;
 		device.vkCreateImage             = nullptr;
 		device.vkDestroyImage            = nullptr;
+		device.vkBindImageMemory         = nullptr;
 		device.vkCreateImageView         = nullptr;
 		device.vkDestroyImageView        = nullptr;
 		device.vkCreateSwapchainKHR      = nullptr;

@@ -113,6 +113,8 @@ namespace vk
 		│ ├──────────────────────────────────────────────────────────────┤ │
 		│ │*/ PFN_vkCreateImage             vkCreateImage;             /*│ │
 		│ │*/ PFN_vkDestroyImage            vkDestroyImage;            /*│ │
+		│ │                                                              │ │
+		│ │*/ PFN_vkBindImageMemory         vkBindImageMemory;         /*│ │
 		│ └──────────────────────────────────────────────────────────────┘ │
 		│ ┌──────────────────────────────────────────────────────────────┐ │
 		│ │                         VkImageView                          │ │

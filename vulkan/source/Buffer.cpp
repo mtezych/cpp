@@ -79,4 +79,20 @@ namespace vk
 
 		return *this;
 	}
+
+	void Buffer::BindDeviceMemory
+	(
+		const DeviceMemory &deviceMemory,
+		const VkDeviceSize deviceMemoryOffset
+	)
+	{
+		const auto result = device->vkBindBufferMemory
+		(
+			device->vkDevice,
+			vkBuffer,
+			deviceMemory.vkDeviceMemory,
+			deviceMemoryOffset
+		);
+		assert(result == VK_SUCCESS);
+	}
 }

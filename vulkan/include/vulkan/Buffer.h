@@ -9,6 +9,7 @@
 namespace vk
 {
 	struct Device;
+	struct DeviceMemory;
 
 	struct Buffer
 	{
@@ -38,6 +39,12 @@ namespace vk
 
 		Buffer& operator = (Buffer&& buffer);
 		Buffer& operator = (const Buffer& buffer) = delete;
+
+		void BindDeviceMemory
+		(
+			const DeviceMemory& deviceMemory,
+			const VkDeviceSize  deviceMemoryOffset
+		);
 	};
 }
 
