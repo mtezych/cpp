@@ -17,13 +17,14 @@ namespace vk
 			nullptr,
 			0,
 		};
-		device.vkCreateSemaphore
+		const auto result = device.vkCreateSemaphore
 		(
 			device.vkDevice,
 			&semaphoreCreateInfo,
 			nullptr,
 			&vkSemaphore
 		);
+		assert(result == VK_SUCCESS);
 	}
 
 	Semaphore::~Semaphore ()

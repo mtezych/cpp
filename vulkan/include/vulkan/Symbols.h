@@ -443,6 +443,66 @@ namespace symbol
 		using                 type = PFN_vkCmdDraw;
 		static constexpr auto name =    "vkCmdDraw";
 	};
+
+	struct vkAllocateMemory
+	{
+		using                 type = PFN_vkAllocateMemory;
+		static constexpr auto name =    "vkAllocateMemory";
+	};
+
+	struct vkFreeMemory
+	{
+		using                 type = PFN_vkFreeMemory;
+		static constexpr auto name =    "vkFreeMemory";
+	};
+
+	struct vkMapMemory
+	{
+		using                 type = PFN_vkMapMemory;
+		static constexpr auto name =    "vkMapMemory";
+	};
+
+	struct vkUnmapMemory
+	{
+		using                 type = PFN_vkUnmapMemory;
+		static constexpr auto name =    "vkUnmapMemory";
+	};
+
+	struct vkCreateBuffer
+	{
+		using                 type = PFN_vkCreateBuffer;
+		static constexpr auto name =    "vkCreateBuffer";
+	};
+
+	struct vkDestroyBuffer
+	{
+		using                 type = PFN_vkDestroyBuffer;
+		static constexpr auto name =    "vkDestroyBuffer";
+	};
+
+	struct vkGetBufferMemoryRequirements
+	{
+		using                 type = PFN_vkGetBufferMemoryRequirements;
+		static constexpr auto name =    "vkGetBufferMemoryRequirements";
+	};
+
+	struct vkBindBufferMemory
+	{
+		using                 type = PFN_vkBindBufferMemory;
+		static constexpr auto name =    "vkBindBufferMemory";
+	};
+
+	struct vkCreateBufferView
+	{
+		using                 type = PFN_vkCreateBufferView;
+		static constexpr auto name =    "vkCreateBufferView";
+	};
+
+	struct vkDestroyBufferView
+	{
+		using                 type = PFN_vkDestroyBufferView;
+		static constexpr auto name =    "vkDestroyBufferView";
+	};
 }
 
 #endif

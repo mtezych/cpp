@@ -59,6 +59,15 @@ namespace vk
 		vkCreateComputePipelines  { nullptr },
 		vkCreateGraphicsPipelines { nullptr },
 		vkDestroyPipeline         { nullptr },
+		vkAllocateMemory          { nullptr },
+		vkFreeMemory              { nullptr },
+		vkMapMemory               { nullptr },
+		vkUnmapMemory             { nullptr },
+		vkCreateBuffer            { nullptr },
+		vkDestroyBuffer           { nullptr },
+		vkBindBufferMemory        { nullptr },
+		vkCreateBufferView        { nullptr },
+		vkDestroyBufferView       { nullptr },
 		vkCreateImage             { nullptr },
 		vkDestroyImage            { nullptr },
 		vkCreateImageView         { nullptr },
@@ -148,6 +157,32 @@ namespace vk
 		vkCreateComputePipelines  = LoadDeviceProcedure<symbol::vkCreateComputePipelines >();
 		vkCreateGraphicsPipelines = LoadDeviceProcedure<symbol::vkCreateGraphicsPipelines>();
 		vkDestroyPipeline         = LoadDeviceProcedure<symbol::vkDestroyPipeline        >();
+		/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+		/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+		 *                                 VkDeviceMemory                                  *
+		 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+		vkAllocateMemory          = LoadDeviceProcedure<symbol::vkAllocateMemory         >();
+		vkFreeMemory              = LoadDeviceProcedure<symbol::vkFreeMemory             >();
+
+		vkMapMemory               = LoadDeviceProcedure<symbol::vkMapMemory              >();
+		vkUnmapMemory             = LoadDeviceProcedure<symbol::vkUnmapMemory            >();
+		/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+		/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+		 *                                    VkBuffer                                     *
+		 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+		vkCreateBuffer            = LoadDeviceProcedure<symbol::vkCreateBuffer           >();
+		vkDestroyBuffer           = LoadDeviceProcedure<symbol::vkDestroyBuffer          >();
+
+		vkBindBufferMemory        = LoadDeviceProcedure<symbol::vkBindBufferMemory       >();
+		/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+		/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+		 *                                  VkBufferView                                   *
+		 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+		vkCreateBufferView        = LoadDeviceProcedure<symbol::vkCreateBufferView       >();
+		vkDestroyBufferView       = LoadDeviceProcedure<symbol::vkDestroyBufferView      >();
 		/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 		/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -250,6 +285,15 @@ namespace vk
 		vkCreateComputePipelines  { device.vkCreateComputePipelines  },
 		vkCreateGraphicsPipelines { device.vkCreateGraphicsPipelines },
 		vkDestroyPipeline         { device.vkDestroyPipeline         },
+		vkAllocateMemory          { device.vkAllocateMemory          },
+		vkFreeMemory              { device.vkFreeMemory              },
+		vkMapMemory               { device.vkMapMemory               },
+		vkUnmapMemory             { device.vkUnmapMemory             },
+		vkCreateBuffer            { device.vkCreateBuffer            },
+		vkDestroyBuffer           { device.vkDestroyBuffer           },
+		vkBindBufferMemory        { device.vkBindBufferMemory        },
+		vkCreateBufferView        { device.vkCreateBufferView        },
+		vkDestroyBufferView       { device.vkDestroyBufferView       },
 		vkCreateImage             { device.vkCreateImage             },
 		vkDestroyImage            { device.vkDestroyImage            },
 		vkCreateImageView         { device.vkCreateImageView         },
@@ -295,6 +339,15 @@ namespace vk
 		device.vkCreateComputePipelines  = nullptr;
 		device.vkCreateGraphicsPipelines = nullptr;
 		device.vkDestroyPipeline         = nullptr;
+		device.vkAllocateMemory          = nullptr;
+		device.vkFreeMemory              = nullptr;
+		device.vkMapMemory               = nullptr;
+		device.vkUnmapMemory             = nullptr;
+		device.vkCreateBuffer            = nullptr;
+		device.vkDestroyBuffer           = nullptr;
+		device.vkBindBufferMemory        = nullptr;
+		device.vkCreateBufferView        = nullptr;
+		device.vkDestroyBufferView       = nullptr;
 		device.vkCreateImage             = nullptr;
 		device.vkDestroyImage            = nullptr;
 		device.vkCreateImageView         = nullptr;
@@ -351,6 +404,15 @@ namespace vk
 		vkCreateComputePipelines  = device.vkCreateComputePipelines;
 		vkCreateGraphicsPipelines = device.vkCreateGraphicsPipelines;
 		vkDestroyPipeline         = device.vkDestroyPipeline;
+		vkAllocateMemory          = device.vkAllocateMemory;
+		vkFreeMemory              = device.vkFreeMemory;
+		vkMapMemory               = device.vkMapMemory;
+		vkUnmapMemory             = device.vkUnmapMemory;
+		vkCreateBuffer            = device.vkCreateBuffer;
+		vkDestroyBuffer           = device.vkDestroyBuffer;
+		vkBindBufferMemory        = device.vkBindBufferMemory;
+		vkCreateBufferView        = device.vkCreateBufferView;
+		vkDestroyBufferView       = device.vkDestroyBufferView;
 		vkCreateImage             = device.vkCreateImage;
 		vkDestroyImage            = device.vkDestroyImage;
 		vkCreateImageView         = device.vkCreateImageView;
@@ -396,6 +458,15 @@ namespace vk
 		device.vkCreateComputePipelines  = nullptr;
 		device.vkCreateGraphicsPipelines = nullptr;
 		device.vkDestroyPipeline         = nullptr;
+		device.vkAllocateMemory          = nullptr;
+		device.vkFreeMemory              = nullptr;
+		device.vkMapMemory               = nullptr;
+		device.vkUnmapMemory             = nullptr;
+		device.vkCreateBuffer            = nullptr;
+		device.vkDestroyBuffer           = nullptr;
+		device.vkBindBufferMemory        = nullptr;
+		device.vkCreateBufferView        = nullptr;
+		device.vkDestroyBufferView       = nullptr;
 		device.vkCreateImage             = nullptr;
 		device.vkDestroyImage            = nullptr;
 		device.vkCreateImageView         = nullptr;

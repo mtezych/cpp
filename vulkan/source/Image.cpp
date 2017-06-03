@@ -8,6 +8,46 @@
 
 namespace vk
 {
+	Image::CreateInfo::CreateInfo
+	(
+		const VkImageCreateFlags     flags,
+		const VkImageType            imageType,
+		const VkFormat               format,
+		const VkExtent3D&            extent,
+		const uint32_t               mipLevels,
+		const uint32_t               arrayLayers,
+		const VkSampleCountFlagBits  samples,
+		const VkImageTiling          tiling,
+		const VkImageUsageFlags      usage,
+		const VkSharingMode          sharingMode,
+		const std::vector<uint32_t>& queueFamilyIndices,
+		const VkImageLayout          initialLayout
+	):
+		createInfo
+		{
+			VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO,
+			nullptr,
+			flags,
+			imageType,
+			format,
+			extent,
+			mipLevels,
+			arrayLayers,
+			samples,
+			tiling,
+			usage,
+			sharingMode,
+			static_cast<uint32_t>(queueFamilyIndices.size()),
+			queueFamilyIndices.data(),
+			initialLayout,
+		}
+	{
+		if (sharingMode == VK_SHARING_MODE_CONCURRENT)
+		{
+			assert(queueFamilyIndices.size() == 0);
+		}
+	}
+
 	Image::Image (const Device& device, const VkImage vkImage)
 	:
 		device  { &device },
@@ -16,7 +56,7 @@ namespace vk
 	{
 	}
 
-	Image::Image (const Device& device, const VkImageCreateInfo& createInfo)
+	Image::Image (const Device& device, const CreateInfo& createInfo)
 	:
 		device  { &device },
 		vkImage { VK_NULL_HANDLE },
@@ -25,7 +65,7 @@ namespace vk
 		const auto result = device.vkCreateImage
 		(
 			device.vkDevice,
-			&createInfo,
+			&createInfo.createInfo,
 			nullptr,
 			&vkImage
 		);
