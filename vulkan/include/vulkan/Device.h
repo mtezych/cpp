@@ -42,6 +42,16 @@ namespace vk
 		│ │*/ PFN_vkCreateSemaphore         vkCreateSemaphore;         /*│ │
 		│ │*/ PFN_vkDestroySemaphore        vkDestroySemaphore;        /*│ │
 		│ └──────────────────────────────────────────────────────────────┘ │
+		│ ┌──────────────────────────────────────────────────────────────┐ │
+		│ │                           VkFence                            │ │
+		│ ├──────────────────────────────────────────────────────────────┤ │
+		│ │*/ PFN_vkCreateFence             vkCreateFence;             /*│ │
+		│ │*/ PFN_vkDestroyFence            vkDestroyFence;            /*│ │
+		│ │                                                              │ │
+		│ │*/ PFN_vkGetFenceStatus          vkGetFenceStatus;          /*│ │
+		│ │*/ PFN_vkResetFences             vkResetFences;             /*│ │
+		│ │*/ PFN_vkWaitForFences           vkWaitForFences;           /*│ │
+		│ └──────────────────────────────────────────────────────────────┘ │
 		│                                                                  │
 		│ ┌──────────────────────────────────────────────────────────────┐ │
 		│ │                         VkRenderPass                         │ │

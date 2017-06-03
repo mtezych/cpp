@@ -46,6 +46,11 @@ namespace vk
 		vkDeviceWaitIdle          { nullptr },
 		vkCreateSemaphore         { nullptr },
 		vkDestroySemaphore        { nullptr },
+		vkCreateFence             { nullptr },
+		vkDestroyFence            { nullptr },
+		vkGetFenceStatus          { nullptr },
+		vkResetFences             { nullptr },
+		vkWaitForFences           { nullptr },
 		vkCreateRenderPass        { nullptr },
 		vkDestroyRenderPass       { nullptr },
 		vkCreateFramebuffer       { nullptr },
@@ -115,6 +120,17 @@ namespace vk
 		 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 		vkCreateSemaphore         = LoadDeviceProcedure<symbol::vkCreateSemaphore        >();
 		vkDestroySemaphore        = LoadDeviceProcedure<symbol::vkDestroySemaphore       >();
+		/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+		/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+		 *                                     VkFence                                     *
+		 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+		vkCreateFence             = LoadDeviceProcedure<symbol::vkCreateFence            >();
+		vkDestroyFence            = LoadDeviceProcedure<symbol::vkDestroyFence           >();
+
+		vkGetFenceStatus          = LoadDeviceProcedure<symbol::vkGetFenceStatus         >();
+		vkResetFences             = LoadDeviceProcedure<symbol::vkResetFences            >();
+		vkWaitForFences           = LoadDeviceProcedure<symbol::vkWaitForFences          >();
 		/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 		/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -275,6 +291,11 @@ namespace vk
 		vkDeviceWaitIdle          { device.vkDeviceWaitIdle          },
 		vkCreateSemaphore         { device.vkCreateSemaphore         },
 		vkDestroySemaphore        { device.vkDestroySemaphore        },
+		vkCreateFence             { device.vkCreateFence             },
+		vkDestroyFence            { device.vkDestroyFence            },
+		vkGetFenceStatus          { device.vkGetFenceStatus          },
+		vkResetFences             { device.vkResetFences             },
+		vkWaitForFences           { device.vkWaitForFences           },
 		vkCreateRenderPass        { device.vkCreateRenderPass        },
 		vkDestroyRenderPass       { device.vkDestroyRenderPass       },
 		vkCreateFramebuffer       { device.vkCreateFramebuffer       },
@@ -330,6 +351,11 @@ namespace vk
 		device.vkDeviceWaitIdle          = nullptr;
 		device.vkCreateSemaphore         = nullptr;
 		device.vkDestroySemaphore        = nullptr;
+		device.vkCreateFence             = nullptr;
+		device.vkDestroyFence            = nullptr;
+		device.vkGetFenceStatus          = nullptr;
+		device.vkResetFences             = nullptr;
+		device.vkWaitForFences           = nullptr;
 		device.vkCreateRenderPass        = nullptr;
 		device.vkDestroyRenderPass       = nullptr;
 		device.vkCreateFramebuffer       = nullptr;
@@ -396,6 +422,11 @@ namespace vk
 		vkDeviceWaitIdle          = device.vkDeviceWaitIdle;
 		vkCreateSemaphore         = device.vkCreateSemaphore;
 		vkDestroySemaphore        = device.vkDestroySemaphore;
+		vkCreateFence             = device.vkCreateFence;
+		vkDestroyFence            = device.vkDestroyFence;
+		vkGetFenceStatus          = device.vkGetFenceStatus;
+		vkResetFences             = device.vkResetFences;
+		vkWaitForFences           = device.vkWaitForFences;
 		vkCreateRenderPass        = device.vkCreateRenderPass;
 		vkDestroyRenderPass       = device.vkDestroyRenderPass;
 		vkCreateFramebuffer       = device.vkCreateFramebuffer;
@@ -451,6 +482,11 @@ namespace vk
 		device.vkDeviceWaitIdle          = nullptr;
 		device.vkCreateSemaphore         = nullptr;
 		device.vkDestroySemaphore        = nullptr;
+		device.vkCreateFence             = nullptr;
+		device.vkDestroyFence            = nullptr;
+		device.vkGetFenceStatus          = nullptr;
+		device.vkResetFences             = nullptr;
+		device.vkWaitForFences           = nullptr;
 		device.vkCreateRenderPass        = nullptr;
 		device.vkDestroyRenderPass       = nullptr;
 		device.vkCreateFramebuffer       = nullptr;

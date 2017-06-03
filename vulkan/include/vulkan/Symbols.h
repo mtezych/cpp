@@ -509,6 +509,36 @@ namespace symbol
 		using                 type = PFN_vkDestroyBufferView;
 		static constexpr auto name =    "vkDestroyBufferView";
 	};
+
+	struct vkCreateFence
+	{
+		using                 type = PFN_vkCreateFence;
+		static constexpr auto name =    "vkCreateFence";
+	};
+
+	struct vkDestroyFence
+	{
+		using                 type = PFN_vkDestroyFence;
+		static constexpr auto name =    "vkDestroyFence";
+	};
+
+	struct vkGetFenceStatus
+	{
+		using                 type = PFN_vkGetFenceStatus;
+		static constexpr auto name =    "vkGetFenceStatus";
+	};
+
+	struct vkResetFences
+	{
+		using                 type = PFN_vkResetFences;
+		static constexpr auto name =    "vkResetFences";
+	};
+
+	struct vkWaitForFences
+	{
+		using                 type = PFN_vkWaitForFences;
+		static constexpr auto name =    "vkWaitForFences";
+	};
 }
 
 #endif
