@@ -3,6 +3,9 @@
 
 #include <vulkan/Symbols.h>
 #include <vulkan/Device.h>
+#include <vulkan/DeviceMemory.h>
+
+#include <cassert>
 
 namespace vk
 {

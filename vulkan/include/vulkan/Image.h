@@ -9,6 +9,7 @@
 namespace vk
 {
 	struct Device;
+	struct DeviceMemory;
 
 	struct Image
 	{
@@ -48,6 +49,12 @@ namespace vk
 
 		Image& operator = (Image&& image);
 		Image& operator = (const Image& image) = delete;
+
+		void BindDeviceMemory
+		(
+			const DeviceMemory& deviceMemory,
+			const VkDeviceSize  deviceMemoryOffset
+		);
 	};
 }
 

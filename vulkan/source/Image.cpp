@@ -3,6 +3,7 @@
 
 #include <vulkan/Symbols.h>
 #include <vulkan/Device.h>
+#include <vulkan/DeviceMemory.h>
 
 #include <cassert>
 
@@ -107,5 +108,21 @@ namespace vk
 		image.isWSI   = false;
 
 		return *this;
+	}
+
+	void Image::BindDeviceMemory
+	(
+		const DeviceMemory& deviceMemory,
+		const VkDeviceSize  deviceMemoryOffset
+	)
+	{
+		const auto result = device->vkBindImageMemory
+		(
+			device->vkDevice,
+			vkImage,
+			deviceMemory.vkDeviceMemory,
+			deviceMemoryOffset
+		);
+		assert(result == VK_SUCCESS);
 	}
 }
