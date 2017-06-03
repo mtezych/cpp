@@ -88,19 +88,15 @@ namespace platform
 
 		~Library ();
 
+		Library (Library&& library);
 		Library (const Library& library) = delete;
 
-		Library& operator = (const Library& library) = delete;
-
-		Library (Library&& library);
-
 		Library& operator = (Library&& library);
+		Library& operator = (const Library& library) = delete;
 
 		template <typename SymbolType>
 		SymbolType LoadSymbol (const std::string& symbolName) const
 		{
-			assert(handle != nullptr);
-
 			const auto symbolAddress = NativeLibrary::LoadSymbol
 			(
 				handle, symbolName.c_str()

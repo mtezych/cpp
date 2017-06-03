@@ -58,4 +58,33 @@ namespace vk
 			device->vkDestroyPipeline(device->vkDevice, vkPipeline, nullptr);
 		}
 	}
+
+	Pipeline::Pipeline (Pipeline&& pipeline)
+	:
+		device      { pipeline.device      },
+		vkPipeline  { pipeline.vkPipeline  },
+		vkBindPoint { pipeline.vkBindPoint }
+	{
+		pipeline.device      = nullptr;
+		pipeline.vkPipeline  = VK_NULL_HANDLE;
+		pipeline.vkBindPoint = VK_PIPELINE_BIND_POINT_MAX_ENUM;
+	}
+
+	Pipeline& Pipeline::operator = (Pipeline&& pipeline)
+	{
+		if (vkPipeline != VK_NULL_HANDLE)
+		{
+			device->vkDestroyPipeline(device->vkDevice, vkPipeline, nullptr);
+		}
+
+		device      = pipeline.device;
+		vkPipeline  = pipeline.vkPipeline;
+		vkBindPoint = pipeline.vkBindPoint;
+
+		pipeline.device      = nullptr;
+		pipeline.vkPipeline  = VK_NULL_HANDLE;
+		pipeline.vkBindPoint = VK_PIPELINE_BIND_POINT_MAX_ENUM;
+
+		return *this;
+	}
 }

@@ -30,6 +30,12 @@ namespace vk
 		);
 
 		~Pipeline ();
+
+		Pipeline (Pipeline&& pipeline);
+		Pipeline (const Pipeline& pipeline) = delete;
+
+		Pipeline& operator = (Pipeline&& pipeline);
+		Pipeline& operator = (const Pipeline& pipeline) = delete;
 	};
 }
 

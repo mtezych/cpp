@@ -63,7 +63,7 @@ namespace vk
 		}
 
 		std::vector<VkExtensionProperties>
-		EnumerateInstanceExtensionProperties (const std::string& layerName) const;
+		EnumerateInstanceExtensionProperties (const std::string& layerName = "") const;
 
 		std::vector<VkLayerProperties>
 		EnumerateInstanceLayerProperties () const;
