@@ -569,6 +569,30 @@ namespace symbol
 		using                 type = PFN_vkResetDescriptorPool;
 		static constexpr auto name =    "vkResetDescriptorPool";
 	};
+
+	struct vkCreateDescriptorSetLayout
+	{
+		using                 type = PFN_vkCreateDescriptorSetLayout;
+		static constexpr auto name =    "vkCreateDescriptorSetLayout";
+	};
+
+	struct vkDestroyDescriptorSetLayout
+	{
+		using                 type = PFN_vkDestroyDescriptorSetLayout;
+		static constexpr auto name =    "vkDestroyDescriptorSetLayout";
+	};
+
+	struct vkCreateSampler
+	{
+		using                 type = PFN_vkCreateSampler;
+		static constexpr auto name =    "vkCreateSampler";
+	};
+
+	struct vkDestroySampler
+	{
+		using                 type = PFN_vkDestroySampler;
+		static constexpr auto name =    "vkDestroySampler";
+	};
 }
 
 #endif
