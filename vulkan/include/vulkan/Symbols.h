@@ -593,6 +593,24 @@ namespace symbol
 		using                 type = PFN_vkDestroySampler;
 		static constexpr auto name =    "vkDestroySampler";
 	};
+
+	struct vkAllocateDescriptorSets
+	{
+		using                 type = PFN_vkAllocateDescriptorSets;
+		static constexpr auto name =    "vkAllocateDescriptorSets";
+	};
+
+	struct vkFreeDescriptorSets
+	{
+		using                 type = PFN_vkFreeDescriptorSets;
+		static constexpr auto name =    "vkFreeDescriptorSets";
+	};
+
+	struct vkUpdateDescriptorSets
+	{
+		using                 type = PFN_vkUpdateDescriptorSets;
+		static constexpr auto name =    "vkUpdateDescriptorSets";
+	};
 }
 
 #endif

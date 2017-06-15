@@ -86,6 +86,9 @@ namespace vk
 		vkCreateDescriptorPool       { nullptr },
 		vkDestroyDescriptorPool      { nullptr },
 		vkResetDescriptorPool        { nullptr },
+		vkAllocateDescriptorSets     { nullptr },
+		vkFreeDescriptorSets         { nullptr },
+		vkUpdateDescriptorSets       { nullptr },
 		vkCreateSwapchainKHR         { nullptr },
 		vkDestroySwapchainKHR        { nullptr },
 		vkGetSwapchainImagesKHR      { nullptr },
@@ -237,7 +240,7 @@ namespace vk
 		/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 		/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-		 *                                   VkDescriptorPool                                    *
+		 *                                 VkDescriptorSetLayout                                 *
 		 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 		vkCreateDescriptorSetLayout  = LoadDeviceProcedure<symbol::vkCreateDescriptorSetLayout >();
 		vkDestroyDescriptorSetLayout = LoadDeviceProcedure<symbol::vkDestroyDescriptorSetLayout>();
@@ -250,6 +253,15 @@ namespace vk
 		vkDestroyDescriptorPool      = LoadDeviceProcedure<symbol::vkDestroyDescriptorPool     >();
 
 		vkResetDescriptorPool        = LoadDeviceProcedure<symbol::vkResetDescriptorPool       >();
+		/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+		/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+		 *                                   VkDescriptorSet                                     *
+		 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+		vkAllocateDescriptorSets     = LoadDeviceProcedure<symbol::vkAllocateDescriptorSets    >();
+		vkFreeDescriptorSets         = LoadDeviceProcedure<symbol::vkFreeDescriptorSets        >();
+
+		vkUpdateDescriptorSets       = LoadDeviceProcedure<symbol::vkUpdateDescriptorSets      >();
 		/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 		/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -367,6 +379,9 @@ namespace vk
 		vkCreateDescriptorPool       { device.vkCreateDescriptorPool       },
 		vkDestroyDescriptorPool      { device.vkDestroyDescriptorPool      },
 		vkResetDescriptorPool        { device.vkResetDescriptorPool        },
+		vkAllocateDescriptorSets     { device.vkAllocateDescriptorSets     },
+		vkFreeDescriptorSets         { device.vkFreeDescriptorSets         },
+		vkUpdateDescriptorSets       { device.vkUpdateDescriptorSets       },
 		vkCreateSwapchainKHR         { device.vkCreateSwapchainKHR         },
 		vkDestroySwapchainKHR        { device.vkDestroySwapchainKHR        },
 		vkGetSwapchainImagesKHR      { device.vkGetSwapchainImagesKHR      },
@@ -436,6 +451,9 @@ namespace vk
 		device.vkCreateDescriptorPool       = nullptr;
 		device.vkDestroyDescriptorPool      = nullptr;
 		device.vkResetDescriptorPool        = nullptr;
+		device.vkAllocateDescriptorSets     = nullptr;
+		device.vkFreeDescriptorSets         = nullptr;
+		device.vkUpdateDescriptorSets       = nullptr;
 		device.vkCreateSwapchainKHR         = nullptr;
 		device.vkDestroySwapchainKHR        = nullptr;
 		device.vkGetSwapchainImagesKHR      = nullptr;
@@ -516,6 +534,9 @@ namespace vk
 		vkCreateDescriptorPool       = device.vkCreateDescriptorPool;
 		vkDestroyDescriptorPool      = device.vkDestroyDescriptorPool;
 		vkResetDescriptorPool        = device.vkResetDescriptorPool;
+		vkAllocateDescriptorSets     = device.vkAllocateDescriptorSets;
+		vkFreeDescriptorSets         = device.vkFreeDescriptorSets;
+		vkUpdateDescriptorSets       = device.vkUpdateDescriptorSets;
 		vkCreateSwapchainKHR         = device.vkCreateSwapchainKHR;
 		vkDestroySwapchainKHR        = device.vkDestroySwapchainKHR;
 		vkGetSwapchainImagesKHR      = device.vkGetSwapchainImagesKHR;
@@ -585,6 +606,9 @@ namespace vk
 		device.vkCreateDescriptorPool       = nullptr;
 		device.vkDestroyDescriptorPool      = nullptr;
 		device.vkResetDescriptorPool        = nullptr;
+		device.vkAllocateDescriptorSets     = nullptr;
+		device.vkFreeDescriptorSets         = nullptr;
+		device.vkUpdateDescriptorSets       = nullptr;
 		device.vkCreateSwapchainKHR         = nullptr;
 		device.vkDestroySwapchainKHR        = nullptr;
 		device.vkGetSwapchainImagesKHR      = nullptr;

@@ -156,6 +156,14 @@ namespace vk
 		│ │                                                                    │ │
 		│ │*/ PFN_vkResetDescriptorPool        vkResetDescriptorPool;        /*│ │
 		│ └────────────────────────────────────────────────────────────────────┘ │
+		│ ┌────────────────────────────────────────────────────────────────────┐ │
+		│ │                           VkDescriptorSet                          │ │
+		│ ├────────────────────────────────────────────────────────────────────┤ │
+		│ │*/ PFN_vkAllocateDescriptorSets     vkAllocateDescriptorSets;     /*│ │
+		│ │*/ PFN_vkFreeDescriptorSets         vkFreeDescriptorSets;         /*│ │
+		│ │                                                                    │ │
+		│ │*/ PFN_vkUpdateDescriptorSets       vkUpdateDescriptorSets;       /*│ │
+		│ └────────────────────────────────────────────────────────────────────┘ │
 		│                                                                        │
 		│ ┌────────────────────────────────────────────────────────────────────┐ │
 		│ │                             VkSwapchain                            │ │
