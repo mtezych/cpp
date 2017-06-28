@@ -48,6 +48,7 @@ if(CMAKE_SYSTEM_NAME MATCHES Windows)
  set_target_properties     (platform-windows PROPERTIES CXX_STANDARD          14
                                                         CXX_STANDARD_REQUIRED ON)
 
+ target_compile_definitions(platform-windows PUBLIC NOMINMAX)
 
  add_executable            (windows-demo demo/windows-demo.cpp)
 
