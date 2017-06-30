@@ -1,6 +1,8 @@
 
 #include <windows/Window.h>
 
+#include <string>
+
 namespace
 {
 	HMODULE CurrentModuleHandle()
@@ -21,6 +23,21 @@ namespace
 
 		return moduleHandle;
 	}
+
+	std::wstring GenerateUniqueClassName()
+	{
+		auto guid = GUID { };
+
+		const auto resultHandle = CoCreateGuid(&guid);
+		assert(resultHandle == S_OK);
+
+		auto guidString = std::wstring { L"{XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX}~" };
+
+		const auto charsWritten = StringFromGUID2(guid, &guidString[0], guidString.size());
+		assert(charsWritten == guidString.size());
+
+		return guidString;
+	}
 }
 
 namespace windows
@@ -34,6 +51,8 @@ namespace windows
 	{
 		moduleHandle = CurrentModuleHandle();
 
+		const auto className = GenerateUniqueClassName();
+
 		const auto windowClass = WNDCLASSEX
 		{
 			sizeof(WNDCLASSEX),                 // size
@@ -46,7 +65,7 @@ namespace windows
 			LoadCursor(nullptr, IDC_ARROW),     // cursor
 			nullptr,                            // background brush
 			nullptr,                            // menu name
-			TEXT("WindowClass"),                // class name
+			className.c_str(),                  // class name
 			nullptr,                            // small icon
 		};
 		assert(windowClass.hIcon   != nullptr);

@@ -5,16 +5,31 @@
 
 #include <chrono>
 #include <thread>
+#include <array>
 
-int main()
+void window_task ()
 {
 	const auto window = windows::Window { util::uvec2 { 512, 512 } };
 
 	const auto render = []()
 	{
-		std::this_thread::sleep_for(std::chrono::milliseconds { 160 });
+		std::this_thread::sleep_for(std::chrono::milliseconds { 16 });
 	};
 	window.ReceiveMessages(render);
+}
+
+int main()
+{
+	auto threads = std::array<std::thread, 2>
+	{
+		std::thread { window_task },
+		std::thread { window_task },
+	};
+
+	for (auto& thread : threads)
+	{
+		thread.join();
+	}
 
 	return 0;
 }

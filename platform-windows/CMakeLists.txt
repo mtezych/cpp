@@ -50,6 +50,7 @@ if(CMAKE_SYSTEM_NAME MATCHES Windows)
 
  target_compile_definitions(platform-windows PUBLIC NOMINMAX)
 
+
  add_executable            (windows-demo demo/windows-demo.cpp)
 
  target_link_libraries     (windows-demo platform-windows)
