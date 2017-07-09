@@ -32,27 +32,29 @@
 # EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #
 
-cmake_minimum_required (VERSION 3.1)
+cmake_minimum_required (VERSION 3.9)
 
-project(cpp)
+project(gameboy)
 
-add_subdirectory(googletest)
-add_subdirectory(libsync)
-add_subdirectory(platform-android)
-add_subdirectory(adt)
-add_subdirectory(allocator)
-add_subdirectory(threading)
-add_subdirectory(libdrm-example)
-add_subdirectory(khronos)
-add_subdirectory(egl)
-add_subdirectory(platform-xlib)
-add_subdirectory(platform-xcb)
-add_subdirectory(vulkan)
-add_subdirectory(platform-wayland)
-add_subdirectory(util)
-add_subdirectory(platform)
-add_subdirectory(platform-windows)
-add_subdirectory(ieee754)
-add_subdirectory(concepts-lite)
-add_subdirectory(zlang)
-add_subdirectory(gameboy)
+add_library               (gameboy STATIC include/gameboy/Registers.h
+                                          include/gameboy/Instruction.h
+                                          include/gameboy/InstructionDecoder.h
+                                          include/gameboy/ArithmeticLogicUnit.h
+                                          include/gameboy/Processor.h
+                                          include/gameboy/Memory.h
+                                          include/gameboy/Cartridge.h
+                                          include/gameboy/GameBoy.h
+                                                   source/Cartridge.cpp
+                                                   source/GameBoy.cpp)
+
+target_include_directories(gameboy PUBLIC include)
+
+set_target_properties     (gameboy PROPERTIES CXX_STANDARD          17
+                                              CXX_STANDARD_REQUIRED ON)
+
+add_executable            (gameboy-demo demo/gameboy-demo.cpp)
+
+target_link_libraries     (gameboy-demo gameboy)
+
+set_target_properties     (gameboy-demo PROPERTIES CXX_STANDARD          17
+                                                   CXX_STANDARD_REQUIRED ON)
