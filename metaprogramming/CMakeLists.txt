@@ -32,10 +32,10 @@
 # EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #
 
-cmake_minimum_required (VERSION 3.1)
+cmake_minimum_required (VERSION 3.9)
 
 project(metaprogramming)
 
 add_executable       (metaprogramming metaprogramming.cpp)
-set_target_properties(metaprogramming PROPERTIES CXX_STANDARD          14
+set_target_properties(metaprogramming PROPERTIES CXX_STANDARD          17
                                                  CXX_STANDARD_REQUIRED ON)

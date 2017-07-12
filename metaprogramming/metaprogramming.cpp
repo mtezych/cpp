@@ -61,16 +61,18 @@ namespace meta
 	// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ //
 
 	template <typename Type>
-	struct remove_const
+	struct identity
 	{
 		using type = Type;
 	};
 
+	// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ //
+
 	template <typename Type>
-	struct remove_const <const Type>
-	{
-		using type = Type;
-	};
+	struct remove_const : identity<Type> { };
+
+	template <typename Type>
+	struct remove_const <const Type> : identity<Type> { };
 
 	template <typename Type>
 	using remove_const_t = typename remove_const<Type>::type;
@@ -78,16 +80,10 @@ namespace meta
 	// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ //
 
 	template <typename Type>
-	struct remove_volatile
-	{
-		using type = Type;
-	};
+	struct remove_volatile : identity<Type> { };
 
 	template <typename Type>
-	struct remove_volatile <volatile Type>
-	{
-		using type = Type;
-	};
+	struct remove_volatile <volatile Type> : identity<Type> { };
 
 	template <typename Type>
 	using remove_volatile_t = typename remove_volatile<Type>::type;
@@ -106,16 +102,10 @@ namespace meta
 	struct conditional;
 
 	template <typename ThenType, typename ElseType>
-	struct conditional<true, ThenType, ElseType>
-	{
-		using type = ThenType;
-	};
+	struct conditional<true, ThenType, ElseType> : identity<ThenType> { };
 
 	template <typename ThenType, typename ElseType>
-	struct conditional<false, ThenType, ElseType>
-	{
-		using type = ElseType;
-	};
+	struct conditional<false, ThenType, ElseType> : identity<ElseType> { };
 
 	template <bool Condition, typename ThenType, typename ElseType>
 	using conditional_t = typename conditional<Condition, ThenType, ElseType>::type;
@@ -126,15 +116,10 @@ namespace meta
 	struct enable_if;
 
 	template <typename Type>
-	struct enable_if <true, Type>
-	{
-		using type = Type;
-	};
+	struct enable_if <true, Type> : identity<Type> { };
 
 	template <typename Type>
-	struct enable_if <false, Type>
-	{
-	};
+	struct enable_if <false, Type> { };
 
 	template <bool Condition, typename Type>
 	using enable_if_t = typename enable_if<Condition, Type>::type;
@@ -146,19 +131,15 @@ namespace meta
 	 * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 	template <typename T>
-	enable_if_t<std::is_integral<T>::value, char>
-	foo (const T)
+	enable_if_t<std::is_integral<T>::value, char> foo (const T)
 	{
-		// overload for integral types
-		return 'i';
+		return 'i'; // overload for integral types
 	}
 
 	template <typename T>
-	enable_if_t<std::is_floating_point<T>::value, char>
-	foo (const T)
+	enable_if_t<std::is_floating_point<T>::value, char> foo (const T)
 	{
-		// overload for floating point types
-		return 'f';
+		return 'f'; // overload for floating point types
 	}
 
 	// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ //
@@ -169,10 +150,16 @@ namespace meta
 	template <typename Type>
 	struct is_same <Type, Type> : true_type { };
 
+	template <typename FirstType, typename SecondType>
+	constexpr auto is_same_v = is_same<FirstType, SecondType>::value;
+
 	// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ //
 
 	template <typename Type>
 	using is_void = is_same<typename remove_cv<Type>::type, void>;
+
+	template <typename Type>
+	constexpr auto is_void_v = is_void<Type>::value;
 }
 
 namespace assert
@@ -233,14 +220,14 @@ int main()
 	assert(meta::foo(5)   == 'i');
 	assert(meta::foo(5.0) == 'f');
 
-	assert::equal_values<meta::is_same<char, char>::value,  true>();
-	assert::equal_values<meta::is_same<char, long>::value, false>();
+	assert::equal_values<meta::is_same_v<char, char>,  true>();
+	assert::equal_values<meta::is_same_v<char, long>, false>();
 
-	assert::equal_values<meta::is_void<               void>::value,  true>();
-	assert::equal_values<meta::is_void<const          void>::value,  true>();
-	assert::equal_values<meta::is_void<      volatile void>::value,  true>();
-	assert::equal_values<meta::is_void<const volatile void>::value,  true>();
-	assert::equal_values<meta::is_void<               long>::value, false>();
+	assert::equal_values<meta::is_void_v<               void>,  true>();
+	assert::equal_values<meta::is_void_v<const          void>,  true>();
+	assert::equal_values<meta::is_void_v<      volatile void>,  true>();
+	assert::equal_values<meta::is_void_v<const volatile void>,  true>();
+	assert::equal_values<meta::is_void_v<               long>, false>();
 
 	return 0;
 }
