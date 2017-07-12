@@ -57,6 +57,23 @@ namespace meta
 	};
 
 
+	template <typename Type>
+	struct remove_volatile
+	{
+		using type = Type;
+	};
+
+	template <typename Type>
+	struct remove_volatile <volatile Type>
+	{
+		using type = Type;
+	};
+
+
+	template <typename Type>
+	using remove_cv = remove_volatile<typename remove_const<Type>::type>;
+
+
 	template <bool Condition, typename ThenType, typename ElseType>
 	struct conditional;
 
@@ -105,6 +122,23 @@ namespace meta
 		// overload for floating point types
 		return 'f';
 	}
+
+
+	template <typename FirstType, typename SecondType>
+	struct is_same
+	{
+		static constexpr auto value = false;
+	};
+
+	template <typename Type>
+	struct is_same <Type, Type>
+	{
+		static constexpr auto value = true;
+	};
+
+
+	template <typename Type>
+	using is_void = is_same<typename remove_cv<Type>::type, void>;
 }
 
 int main()
@@ -124,12 +158,29 @@ int main()
 	static_assert(std::is_same<meta::remove_const<const    int>::type,          int>::value, "");
 	static_assert(std::is_same<meta::remove_const<volatile int>::type, volatile int>::value, "");
 
+	static_assert(std::is_same<meta::remove_volatile<volatile int>::type,       int>::value, "");
+	static_assert(std::is_same<meta::remove_volatile<const    int>::type, const int>::value, "");
+
+	static_assert(std::is_same<meta::remove_cv<               int>::type,       int>::value, "");
+	static_assert(std::is_same<meta::remove_cv<      volatile int>::type,       int>::value, "");
+	static_assert(std::is_same<meta::remove_cv<const          int>::type,       int>::value, "");
+	static_assert(std::is_same<meta::remove_cv<const volatile int>::type,       int>::value, "");
+
 	static_assert(std::is_same<meta::conditional< true, char, long>::type, char>::value, "");
 	static_assert(std::is_same<meta::conditional<false, char, long>::type, long>::value, "");
 
 	static_assert(std::is_same<meta::enable_if<true, char>::type, char>::value, "");
 	assert(meta::foo(5)   == 'i');
 	assert(meta::foo(5.0) == 'f');
+
+	static_assert( meta::is_same<char, char>::value, "");
+	static_assert(!meta::is_same<char, long>::value, "");
+
+	static_assert( meta::is_void<               void>::value, "");
+	static_assert( meta::is_void<const          void>::value, "");
+	static_assert( meta::is_void<      volatile void>::value, "");
+	static_assert( meta::is_void<const volatile void>::value, "");
+	static_assert(!meta::is_void<               long>::value, "");
 
 	return 0;
 }
