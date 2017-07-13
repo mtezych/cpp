@@ -3,6 +3,13 @@
 #include <cassert>
 #include <type_traits>
 
+//
+// CppCon 2014: Walter E. Brown "Modern Template Metaprogramming: A Compendium"
+//
+//   ~ https://www.youtube.com/watch?v=Am2is2QCvxY
+//   ~ https://www.youtube.com/watch?v=a0FliKwcwXE
+//
+
 namespace meta
 {
 	template <int N>
