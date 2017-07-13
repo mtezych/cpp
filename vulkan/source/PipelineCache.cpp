@@ -21,7 +21,8 @@ namespace vk
 			VK_STRUCTURE_TYPE_PIPELINE_CACHE_CREATE_INFO,
 			nullptr,
 			0,
-			initialData.size(), initialData.data()
+			initialData.size(),
+			(initialData.size() > 0) ? initialData.data() : nullptr,
 		};
 		const auto result = device.vkCreatePipelineCache
 		(
