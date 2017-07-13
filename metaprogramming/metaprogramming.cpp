@@ -160,6 +160,33 @@ namespace meta
 
 	template <typename Type>
 	constexpr auto is_void_v = is_void<Type>::value;
+
+	// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ //
+
+	template <typename ...>
+	using void_t = void;
+
+	// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ //
+
+	template <typename Type, typename = void>
+	struct has_type_member : false_type { };
+
+	template <typename Type>
+	struct has_type_member <Type, void_t<typename Type::type>> : true_type { };
+
+	template <typename Type>
+	constexpr auto has_type_member_v = has_type_member<Type>::value;
+
+	// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ //
+
+	template <typename Type, typename = void>
+	struct has_value_member : false_type { };
+
+	template <typename Type>
+	struct has_value_member <Type, void_t<decltype(Type::value)>> : true_type { };
+
+	template <typename Type>
+	constexpr auto has_value_member_v = has_value_member<Type>::value;
 }
 
 namespace assert
@@ -182,6 +209,19 @@ namespace assert
 			FirstValue == SecondValue,
 			"Values have to be the equal!"
 		);
+	};
+}
+
+namespace
+{
+	struct Foo
+	{
+		using type = Foo;
+	};
+
+	struct Bar
+	{
+		static constexpr auto value = Foo { };
 	};
 }
 
@@ -228,6 +268,12 @@ int main()
 	assert::equal_values<meta::is_void_v<      volatile void>,  true>();
 	assert::equal_values<meta::is_void_v<const volatile void>,  true>();
 	assert::equal_values<meta::is_void_v<               long>, false>();
+
+	assert::equal_values<meta::has_type_member_v<Foo>,  true>();
+	assert::equal_values<meta::has_type_member_v<Bar>, false>();
+
+	assert::equal_values<meta::has_value_member_v<Bar>,  true>();
+	assert::equal_values<meta::has_value_member_v<Foo>, false>();
 
 	return 0;
 }
