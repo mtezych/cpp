@@ -24,10 +24,14 @@ namespace gb
 
 		void Execute (LoadReg8Reg8& load)
 		{
-			load.dst = load.src;
+			load.dstReg = load.srcReg;
 		}
 
-		void Execute (LoadMemReg8& load)
+		void Execute (LoadReg8Immediate& load)
+		{
+		}
+
+		void Execute (LoadMemoryReg8& load)
 		{
 		}
 	};

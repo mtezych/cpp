@@ -61,31 +61,54 @@ namespace gb
 	//
 	struct LoadReg8Reg8 : Instruction
 	{
-		      Reg8& dst;
-		const Reg8& src;
+		Reg8&       dstReg;
+		const Reg8& srcReg;
 
-		LoadReg8Reg8 (Reg8& dst, const Reg8& src)
+		LoadReg8Reg8 (Reg8& dstReg, const Reg8& srcReg)
 		:
 			Instruction { Mnemonic::LD },
-			dst { dst },
-			src { src }
+			dstReg      { dstReg       },
+			srcReg      { srcReg       }
 		{
 		}
 	};
 
-	struct LoadMemReg8 : Instruction
+	//
+	//         x6              xE
+	//    +---------+     +---------+
+	// 0x | LD B,d8 |     | LD C,d8 |
+	// 1x | LD D,d8 | ... | LD E,d8 |
+	// 2x | LD H,d8 |     | LD L,d8 |
+	// 3x |         |     | LD A,d8 |
+	//    +---------+     +---------+
+	//
+	struct LoadReg8Immediate : Instruction
 	{
-		const Reg8& src;
+		Reg8&         reg;
+		const uint8_t immediate;
 
-		LoadMemReg8 (const Reg8& src)
+		LoadReg8Immediate (Reg8& reg, const uint8_t immediate)
 		:
 			Instruction { Mnemonic::LD },
-			src { src }
+			reg         { reg          },
+			immediate   { immediate    }
 		{
 		}
 	};
 
-	using AnyInstruction = std::variant<Nop, LoadReg8Reg8, LoadMemReg8>;
+	struct LoadMemoryReg8 : Instruction
+	{
+		const Reg8& reg;
+
+		LoadMemoryReg8 (const Reg8& reg)
+		:
+			Instruction { Mnemonic::LD },
+			reg         { reg          }
+		{
+		}
+	};
+
+	using AnyInstruction = std::variant<Nop, LoadReg8Reg8, LoadMemoryReg8>;
 }
 
 #endif

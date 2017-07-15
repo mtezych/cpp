@@ -12,6 +12,9 @@
 // GameBoy Opcode Map:
 //        http://imrannazar.com/Gameboy-Z80-Opcode-Map
 
+// GameBoy Memory Map:
+//        http://gameboy.mongenel.com/dmg/asmmemmap.html
+
 // Writing a Game Boy emulator, Cinoop:
 //        https://cturt.github.io/cinoop.html
 

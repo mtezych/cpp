@@ -225,6 +225,8 @@ namespace gb
 				default :
 				{
 					assert(false);
+
+					return Nop { };
 				}
 			}
 		}
