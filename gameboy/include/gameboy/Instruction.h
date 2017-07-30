@@ -12,6 +12,7 @@ namespace gb
 	{
 		NOP,
 		LD,
+		ADD,
 	};
 
 	struct Instruction
@@ -34,9 +35,9 @@ namespace gb
 	// 0x |  NOP   |
 	//    +--------+
 	//
-	struct Nop : Instruction
+	struct NoOperation : Instruction
 	{
-		Nop ()
+		NoOperation ()
 		:
 			Instruction { Mnemonic::NOP }
 		{
@@ -108,7 +109,34 @@ namespace gb
 		}
 	};
 
-	using AnyInstruction = std::variant<Nop, LoadReg8Reg8, LoadMemoryReg8>;
+	//
+	//        x0        x1        x2        x3        x4        x5              x7
+	//    +---------+---------+---------+---------+---------+---------+     +---------+
+	// 4x | ADD A,B | ADD A,C | ADD A,D | ADD A,E | ADD A,H | ADD A,L |     | ADD A,A |
+	//    +---------+---------+---------+---------+---------+---------+     +---------+
+	//
+	struct AddReg8Reg8 : Instruction
+	{
+		const Reg8& srcReg;
+		const Reg8& dstReg;
+
+		AddReg8Reg8 (const Reg8& srcReg, Reg8& dstReg)
+		:
+			Instruction { Mnemonic::ADD },
+			dstReg      { dstReg        },
+			srcReg      { srcReg        }
+		{
+		}
+	};
+
+	using AnyInstruction = std::variant
+	<
+		NoOperation,
+		LoadReg8Reg8,
+		LoadReg8Immediate,
+		LoadMemoryReg8,
+		AddReg8Reg8
+	>;
 }
 
 #endif

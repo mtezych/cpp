@@ -17,9 +17,9 @@ namespace gb
 			std::visit(execute, instruction);
 		}
 
-		void Execute (Nop& nop)
+		void Execute (NoOperation& noOperation)
 		{
-			static_cast<void>(nop);
+			static_cast<void>(noOperation);
 		}
 
 		void Execute (LoadReg8Reg8& load)
@@ -29,9 +29,14 @@ namespace gb
 
 		void Execute (LoadReg8Immediate& load)
 		{
+			// assert(load.immediate == memory.Read(registers.PC));
 		}
 
 		void Execute (LoadMemoryReg8& load)
+		{
+		}
+
+		void Execute (AddReg8Reg8& add)
 		{
 		}
 	};
