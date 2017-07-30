@@ -129,8 +129,6 @@ namespace gb
 
 		static_assert(std::is_same_v<RegType, Reg8> || std::is_same_v<RegType, Reg16>);
 	};
-	using  Reg8Instruction = RegInstruction<Reg8>;
-	using Reg16Instruction = RegInstruction<Reg16>;
 
 	template <typename RegType>
 	struct RegRegInstruction : Instruction
@@ -151,9 +149,17 @@ namespace gb
 
 		static_assert(std::is_same_v<RegType, Reg8> || std::is_same_v<RegType, Reg16>);
 	};
-	using   Reg8Reg8Instruction = RegRegInstruction<Reg8>;
-	using Reg16Reg16Instruction = RegRegInstruction<Reg16>;
 
+
+	template <typename RegType>
+	struct LoadRegReg : RegRegInstruction<RegType>
+	{
+		LoadRegReg (RegType& dstReg, const RegType& srcReg)
+		:
+			RegRegInstruction<RegType> { Mnemonic::LD, dstReg, srcReg }
+		{
+		}
+	};
 
 	//
 	//        x0       x1       x2       x3       x4       x5             x7
@@ -171,24 +177,17 @@ namespace gb
 	// 7x | LD A,B | LD A,C | LD A,D | LD A,E | LD A,H | LD A,L |     | LD A,A |
 	//    +--------+--------+--------+--------+--------+--------+     +--------+
 	//
-	struct LoadReg8Reg8 : Reg8Reg8Instruction
-	{
-		LoadReg8Reg8 (Reg8& dstReg, const Reg8& srcReg)
-		:
-			Reg8Reg8Instruction { Mnemonic::LD, dstReg, srcReg }
-		{
-		}
-	};
+	using LoadReg8Reg8 = LoadRegReg<Reg8>;
 
 	//
-	//         x6              xE
-	//    +---------+     +---------+
-	// 0x | LD B,d8 |     | LD C,d8 |
-	// 1x | LD D,d8 | ... | LD E,d8 |
-	// 2x | LD H,d8 |     | LD L,d8 |
-	// 3x |         |     | LD A,d8 |
-	//    +---------+     +---------+
+	//         x9
+	//    +----------+
+	// Fx | LD SP,HL |
+	//    +----------+
 	//
+	using LoadReg16Reg16 = LoadRegReg<Reg16>;
+
+
 	template <typename RegType, typename ImmType>
 	struct LoadRegImm : Instruction
 	{
@@ -209,6 +208,16 @@ namespace gb
 			(std::is_same_v<RegType, Reg16> && std::is_same_v<ImmType, Imm16>)
 		);
 	};
+
+	//
+	//         x6              xE
+	//    +---------+     +---------+
+	// 0x | LD B,d8 |     | LD C,d8 |
+	// 1x | LD D,d8 | ... | LD E,d8 |
+	// 2x | LD H,d8 |     | LD L,d8 |
+	// 3x |         |     | LD A,d8 |
+	//    +---------+     +---------+
+	//
 	using LoadReg8Imm8 = LoadRegImm<Reg8, Imm8>;
 
 	//
@@ -221,6 +230,7 @@ namespace gb
 	//    +-----------+
 	//
 	using LoadReg16Imm16 = LoadRegImm<Reg16, Imm16>;
+
 
 	struct LoadMemoryReg8 : Instruction
 	{
@@ -259,11 +269,11 @@ namespace gb
 	// 8x | ADC A,B | ADC A,C | ADC A,D | ADC A,E | ADC A,H | ADC A,L |     | ADC A,A |
 	//    +---------+---------+---------+---------+---------+---------+     +---------+
 	//
-	struct AddWithCarryReg8Reg8 : Reg8Reg8Instruction
+	struct AddWithCarryReg8Reg8 : RegRegInstruction<Reg8>
 	{
 		AddWithCarryReg8Reg8 (Reg8& dstReg, const Reg8& srcReg)
 		:
-			Reg8Reg8Instruction { Mnemonic::ADC, dstReg, srcReg }
+			RegRegInstruction<Reg8> { Mnemonic::ADC, dstReg, srcReg }
 		{
 		}
 	};
@@ -275,11 +285,11 @@ namespace gb
 	// 9x | SUB A,B | SUB A,C | SUB A,D | SUB A,E | SUB A,H | SUB A,L |     | SUB A,A |
 	//    +---------+---------+---------+---------+---------+---------+     +---------+
 	//
-	struct SubtractReg8Reg8 : Reg8Reg8Instruction
+	struct SubtractReg8Reg8 : RegRegInstruction<Reg8>
 	{
 		SubtractReg8Reg8 (Reg8& dstReg, const Reg8& srcReg)
 		:
-			Reg8Reg8Instruction { Mnemonic::SUB, dstReg, srcReg }
+			RegRegInstruction<Reg8> { Mnemonic::SUB, dstReg, srcReg }
 		{
 		}
 	};
@@ -290,11 +300,11 @@ namespace gb
 	// 9x | SBC A,B | SBC A,C | SBC A,D | SBC A,E | SBC A,H | SBC A,L |     | SBC A,A |
 	//    +---------+---------+---------+---------+---------+---------+     +---------+
 	//
-	struct SubtractWithCarryReg8Reg8 : Reg8Reg8Instruction
+	struct SubtractWithCarryReg8Reg8 : RegRegInstruction<Reg8>
 	{
 		SubtractWithCarryReg8Reg8 (Reg8& dstReg, const Reg8& srcReg)
 		:
-			Reg8Reg8Instruction { Mnemonic::SBC, dstReg, srcReg }
+			RegRegInstruction<Reg8> { Mnemonic::SBC, dstReg, srcReg }
 		{
 		}
 	};
@@ -306,11 +316,11 @@ namespace gb
 	// Ax | AND A,B | AND A,C | AND A,D | AND A,E | AND A,H | AND A,L |     | AND A,A |
 	//    +---------+---------+---------+---------+---------+---------+     +---------+
 	//
-	struct AndReg8Reg8 : Reg8Reg8Instruction
+	struct AndReg8Reg8 : RegRegInstruction<Reg8>
 	{
 		AndReg8Reg8 (Reg8& dstReg, const Reg8& srcReg)
 		:
-			Reg8Reg8Instruction { Mnemonic::AND, dstReg, srcReg }
+			RegRegInstruction<Reg8> { Mnemonic::AND, dstReg, srcReg }
 		{
 		}
 	};
@@ -321,11 +331,11 @@ namespace gb
 	// Bx | OR A,B | OR A,C | OR A,D | OR A,E | OR A,H | OR A,L |     | OR A,A |
 	//    +--------+--------+--------+--------+--------+--------+     +--------+
 	//
-	struct OrReg8Reg8 : Reg8Reg8Instruction
+	struct OrReg8Reg8 : RegRegInstruction<Reg8>
 	{
 		OrReg8Reg8 (Reg8& dstReg, const Reg8& srcReg)
 		:
-			Reg8Reg8Instruction { Mnemonic::OR, dstReg, srcReg }
+			RegRegInstruction<Reg8> { Mnemonic::OR, dstReg, srcReg }
 		{
 		}
 	};
@@ -336,11 +346,11 @@ namespace gb
 	// Ax | XOR A,B | XOR A,C | XOR A,D | XOR A,E | XOR A,H | XOR A,L |     | XOR A,A |
 	//    +---------+---------+---------+---------+---------+---------+     +---------+
 	//
-	struct XorReg8Reg8 : Reg8Reg8Instruction
+	struct XorReg8Reg8 : RegRegInstruction<Reg8>
 	{
 		XorReg8Reg8 (Reg8& dstReg, const Reg8& srcReg)
 		:
-			Reg8Reg8Instruction { Mnemonic::XOR, dstReg, srcReg }
+			RegRegInstruction<Reg8> { Mnemonic::XOR, dstReg, srcReg }
 		{
 		}
 	};
@@ -352,11 +362,11 @@ namespace gb
 	// Bx | CP A,B | CP A,C | CP A,D | CP A,E | CP A,H | CP A,L |     | CP A,A |
 	//    +--------+--------+--------+--------+--------+--------+     +--------+
 	//
-	struct CompareReg8Reg8 : Reg8Reg8Instruction
+	struct CompareReg8Reg8 : RegRegInstruction<Reg8>
 	{
 		CompareReg8Reg8 (Reg8& dstReg, const Reg8& srcReg)
 		:
-			Reg8Reg8Instruction { Mnemonic::CP, dstReg, srcReg }
+			RegRegInstruction<Reg8> { Mnemonic::CP, dstReg, srcReg }
 		{
 		}
 	};
@@ -447,6 +457,7 @@ namespace gb
 		EnableInterrupt,
 		DisableInterrupt,
 		LoadReg8Reg8,
+		LoadReg16Reg16,
 		LoadReg8Imm8,
 		LoadReg16Imm16,
 		LoadMemoryReg8,

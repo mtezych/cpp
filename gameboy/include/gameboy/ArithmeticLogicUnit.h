@@ -43,6 +43,11 @@ namespace gb
 			load.dstReg = load.srcReg;
 		}
 
+		void Execute(LoadReg16Reg16& load)
+		{
+			load.dstReg = load.srcReg;
+		}
+
 		void Execute (LoadReg8Imm8& load)
 		{
 			// assert(load.imm == memory.Read8(registers.PC));
