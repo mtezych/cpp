@@ -17,6 +17,24 @@ namespace gb
 	// | Z | N | H | C | 0 | 0 | 0 | 0 |
 	// +---+---+---+---+---+---+---+---+
 	//
+	// X -> Zero Flag
+	//   This bit is set when:
+	//    - the result of a math operation is zero
+	//    - two values match when using the CP instruction
+	//
+	// N -> Subtract Flag
+	//   This bit is set if:
+	//    - subtraction was perfomed in the last math instruction
+	//
+	// H -> Half Carry Flag
+	//   This bit is set if:
+	//    - carry occured from the lower nibble in the last math operation
+	//
+	// C -> Carry Flag
+	//   This bit is set if:
+	//    - carry occurred from the last math operation
+	//    - register A is the smaller value when executing the CP instruction
+	//
 	union Flags
 	{
 		Reg8   : 4;
