@@ -6,8 +6,8 @@
 
 namespace gb
 {
-	using Reg8  = uint8_t;
-	using Reg16 = uint16_t;
+	using Reg8  = uint8_t;  //  8-bit register
+	using Reg16 = uint16_t; // 16-bit register
 
 	//
 	// Flags register

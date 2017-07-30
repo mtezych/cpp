@@ -9,6 +9,10 @@
 
 namespace gb
 {
+	using Imm8  = uint8_t;  //  8-bit immediate
+	using Imm16 = uint16_t; // 16-bit immediate
+
+
 	enum Mnemonic
 	{
 		NOP,
@@ -35,6 +39,78 @@ namespace gb
 
 		~Instruction() = default;
 	};
+
+
+	//
+	//      x0
+	//    +-----+
+	// 0x | NOP |
+	//    +-----+
+	//
+	struct NoOperation : Instruction
+	{
+		NoOperation ()
+		:
+			Instruction { Mnemonic::NOP }
+		{
+		}
+	};
+
+
+	//
+	//       x0
+	//    +------+
+	// 1x | STOP |
+	//    +------+
+	//
+	struct Stop : Instruction
+	{
+		Stop ()
+		:
+			Instruction { Mnemonic::STOP }
+		{
+		}
+	};
+
+	//
+	//       x6
+	//    +------+
+	// 7x | HALT |
+	//    +------+
+	//
+	struct Halt : Instruction
+	{
+		Halt ()
+		:
+			Instruction { Mnemonic::HALT }
+		{
+		}
+	};
+
+
+	//
+	//      x3         xB
+	//    +----+     +----+
+	// Fx | DI | ... | EI |
+	//    +----+     +----+
+	//
+	struct EnableInterrupt : Instruction
+	{
+		EnableInterrupt ()
+		:
+			Instruction { Mnemonic::EI }
+		{
+		}
+	};
+	struct DisableInterrupt : Instruction
+	{
+		DisableInterrupt ()
+		:
+			Instruction { Mnemonic::DI }
+		{
+		}
+	};
+
 
 	template <typename RegType>
 	struct RegInstruction : Instruction
@@ -78,73 +154,6 @@ namespace gb
 	using   Reg8Reg8Instruction = RegRegInstruction<Reg8>;
 	using Reg16Reg16Instruction = RegRegInstruction<Reg16>;
 
-	//
-	//      x0
-	//    +-----+
-	// 0x | NOP |
-	//    +-----+
-	//
-	struct NoOperation : Instruction
-	{
-		NoOperation ()
-		:
-			Instruction { Mnemonic::NOP }
-		{
-		}
-	};
-
-	//
-	//       x0
-	//    +------+
-	// 1x | STOP |
-	//    +------+
-	//
-	struct Stop : Instruction
-	{
-		Stop ()
-		:
-			Instruction { Mnemonic::STOP }
-		{
-		}
-	};
-
-	//
-	//       x6
-	//    +------+
-	// 7x | HALT |
-	//    +------+
-	//
-	struct Halt : Instruction
-	{
-		Halt ()
-		:
-			Instruction { Mnemonic::HALT }
-		{
-		}
-	};
-
-	//
-	//      x3         xB
-	//    +----+     +----+
-	// Fx | DI | ... | EI |
-	//    +----+     +----+
-	//
-	struct EnableInterrupt : Instruction
-	{
-		EnableInterrupt ()
-		:
-			Instruction { Mnemonic::EI }
-		{
-		}
-	};
-	struct DisableInterrupt : Instruction
-	{
-		DisableInterrupt ()
-		:
-			Instruction { Mnemonic::DI }
-		{
-		}
-	};
 
 	//
 	//        x0       x1       x2       x3       x4       x5             x7
@@ -180,19 +189,38 @@ namespace gb
 	// 3x |         |     | LD A,d8 |
 	//    +---------+     +---------+
 	//
-	struct LoadReg8Immediate : Instruction
+	template <typename RegType, typename ImmType>
+	struct LoadRegImm : Instruction
 	{
-		Reg8&         reg;
-		const uint8_t immediate;
+		      RegType& reg;
+		const ImmType  imm;
 
-		LoadReg8Immediate (Reg8& reg, const uint8_t immediate)
+		LoadRegImm (RegType& reg, const ImmType imm)
 		:
 			Instruction { Mnemonic::LD },
 			reg         { reg          },
-			immediate   { immediate    }
+			imm         { imm          }
 		{
 		}
+
+		static_assert
+		(
+			(std::is_same_v<RegType, Reg8 > && std::is_same_v<ImmType, Imm8 >) ||
+			(std::is_same_v<RegType, Reg16> && std::is_same_v<ImmType, Imm16>)
+		);
 	};
+	using LoadReg8Imm8 = LoadRegImm<Reg8, Imm8>;
+
+	//
+	//          x1
+	//    +-----------+
+	// 0x | LD BC,d16 |
+	// 1x | LD DE,d16 |
+	// 2x | LD HL,d16 |
+	// 3x | LD SP,d16 |
+	//    +-----------+
+	//
+	using LoadReg16Imm16 = LoadRegImm<Reg16, Imm16>;
 
 	struct LoadMemoryReg8 : Instruction
 	{
@@ -205,6 +233,7 @@ namespace gb
 		{
 		}
 	};
+
 
 	template <typename RegType>
 	struct AddRegReg : RegRegInstruction<RegType>
@@ -239,6 +268,7 @@ namespace gb
 		}
 	};
 
+
 	//
 	//        x0        x1        x2        x3        x4        x5              x7
 	//    +---------+---------+---------+---------+---------+---------+     +---------+
@@ -268,6 +298,7 @@ namespace gb
 		{
 		}
 	};
+
 
 	//
 	//        x0        x1        x2        x3        x4        x5              x7
@@ -314,6 +345,7 @@ namespace gb
 		}
 	};
 
+
 	//
 	//        x8       x9       xA       xB       xC       xD             xF
 	//    +--------+--------+--------+--------+--------+--------+     +--------+
@@ -329,20 +361,21 @@ namespace gb
 		}
 	};
 
-	template <typename Reg>
-	struct IncrementReg : RegInstruction<Reg>
+
+	template <typename RegType>
+	struct IncrementReg : RegInstruction<RegType>
 	{
-		IncrementReg (Reg& reg)
+		IncrementReg (RegType& reg)
 		:
 			RegInstruction { Mnemonic::INC , reg }
 		{
 		}
 	};
 
-	template <typename Reg>
-	struct DecrementReg : RegInstruction<Reg>
+	template <typename RegType>
+	struct DecrementReg : RegInstruction<RegType>
 	{
-		DecrementReg (Reg& reg)
+		DecrementReg (RegType& reg)
 		:
 			RegInstruction { Mnemonic::DEC , reg }
 		{
@@ -393,6 +426,7 @@ namespace gb
 	//
 	using DecrementReg16 = DecrementReg<Reg16>;
 
+
 	//
 	//          x9
 	//    +-----------+
@@ -404,6 +438,7 @@ namespace gb
 	//
 	using AddReg16Reg16 = AddRegReg<Reg16>;
 
+
 	using AnyInstruction = std::variant
 	<
 		NoOperation,
@@ -412,7 +447,8 @@ namespace gb
 		EnableInterrupt,
 		DisableInterrupt,
 		LoadReg8Reg8,
-		LoadReg8Immediate,
+		LoadReg8Imm8,
+		LoadReg16Imm16,
 		LoadMemoryReg8,
 		AddReg8Reg8,
 		AddWithCarryReg8Reg8,

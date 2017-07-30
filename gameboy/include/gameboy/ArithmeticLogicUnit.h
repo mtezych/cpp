@@ -43,10 +43,16 @@ namespace gb
 			load.dstReg = load.srcReg;
 		}
 
-		void Execute (LoadReg8Immediate& load)
+		void Execute (LoadReg8Imm8& load)
 		{
-			// assert(load.immediate == memory.Read(registers.PC));
-			// load.reg = load.immediate;
+			// assert(load.imm == memory.Read8(registers.PC));
+			// load.reg = load.imm;
+		}
+
+		void Execute (LoadReg16Imm16& load)
+		{
+			// assert(load.imm == memory.Read16(registers.PC));
+			// load.reg = load.imm;
 		}
 
 		void Execute (LoadMemoryReg8& load)
@@ -111,6 +117,11 @@ namespace gb
 		void Execute (DecrementReg16& decrement)
 		{
 			// --decrement.reg;
+		}
+
+		void Execute(AddReg16Reg16& add)
+		{
+			// add.dstReg += add.srcReg;
 		}
 	};
 }

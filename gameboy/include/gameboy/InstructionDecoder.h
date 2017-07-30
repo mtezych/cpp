@@ -74,35 +74,59 @@ namespace gb
 					}
 				}
 
-				// Load Reg8, Immediate
+				// Load Reg8, Imm8
 				{
+					// @todo: The LOAD Reg8, Imm8 instruction is 2-byte wide
+					//        with second byte defining value of the immediate.
 					case 0x06 :
 					{
-						return LoadReg8Immediate { registers.B, 0xff };
+						return LoadReg8Imm8 { registers.B, 0xff };
 					}
 					case 0x0E :
 					{
-						return LoadReg8Immediate { registers.C, 0xff };
+						return LoadReg8Imm8 { registers.C, 0xff };
 					}
 					case 0x16 :
 					{
-						return LoadReg8Immediate { registers.D, 0xff };
+						return LoadReg8Imm8 { registers.D, 0xff };
 					}
 					case 0x1E :
 					{
-						return LoadReg8Immediate { registers.E, 0xff };
+						return LoadReg8Imm8 { registers.E, 0xff };
 					}
 					case 0x26 :
 					{
-						return LoadReg8Immediate { registers.H, 0xff };
+						return LoadReg8Imm8 { registers.H, 0xff };
 					}
 					case 0x2E :
 					{
-						return LoadReg8Immediate { registers.L, 0xff };
+						return LoadReg8Imm8 { registers.L, 0xff };
 					}
 					case 0x3E :
 					{
-						return LoadReg8Immediate { registers.A, 0xff };
+						return LoadReg8Imm8 { registers.A, 0xff };
+					}
+				}
+
+				// Load Reg16, Imm16
+				{
+					// @todo: The LOAD Reg16, Imm16 instruction is 3-byte wide
+					//        with second and third bytes defining value of the immediate.
+					case 0x01 :
+					{
+						return LoadReg16Imm16 { registers.BC, 0xFFFF };
+					}
+					case 0x11 :
+					{
+						return LoadReg16Imm16 { registers.DE, 0xFFFF };
+					}
+					case 0x21 :
+					{
+						return LoadReg16Imm16 { registers.HL, 0xFFFF };
+					}
+					case 0x31 :
+					{
+						return LoadReg16Imm16 { registers.SP, 0xFFFF };
 					}
 				}
 
