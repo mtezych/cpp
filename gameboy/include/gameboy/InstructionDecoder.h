@@ -13,10 +13,10 @@ namespace gb
 		//
 		//     x0 x1 x2 x3 x4 x5 x6 x7 x8 x9 xA xB xC xD xE xF
 		//    +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
-		// 0x |##|  |  |  |##|##|##|  |  |  |  |  |##|##|##|  |
-		// 1x |  |  |  |  |##|##|##|  |  |  |  |  |##|##|##|  |
-		// 2x |  |  |  |  |##|##|##|  |  |  |  |  |##|##|##|  |
-		// 3x |  |  |  |  |  |  |  |  |  |  |  |  |##|##|##|  |
+		// 0x |##|  |  |##|##|##|##|  |  |##|  |##|##|##|##|  |
+		// 1x |  |  |  |##|##|##|##|  |  |##|  |##|##|##|##|  |
+		// 2x |  |  |  |##|##|##|##|  |  |##|  |##|##|##|##|  |
+		// 3x |  |  |  |##|  |  |  |  |  |##|  |##|##|##|##|  |
 		// 4x |##|##|##|##|##|##|  |##|##|##|##|##|##|##|  |##|
 		// 5x |##|##|##|##|##|##|  |##|##|##|##|##|##|##|  |##|
 		// 6x |##|##|##|##|##|##|  |##|##|##|##|##|##|##|  |##|
@@ -598,6 +598,66 @@ namespace gb
 					case 0x3D :
 					{
 						return DecrementReg8 { registers.A };
+					}
+				}
+
+				// Increment Reg16
+				{
+					case 0x03 :
+					{
+						return IncrementReg16 { registers.BC };
+					}
+					case 0x13 :
+					{
+						return IncrementReg16 { registers.DE };
+					}
+					case 0x23 :
+					{
+						return IncrementReg16 { registers.HL };
+					}
+					case 0x33 :
+					{
+						return IncrementReg16 { registers.SP };
+					}
+				}
+
+				// Decrement Reg16
+				{
+					case 0x0B :
+					{
+						return DecrementReg16 { registers.BC };
+					}
+					case 0x1B :
+					{
+						return DecrementReg16 { registers.DE };
+					}
+					case 0x2B :
+					{
+						return DecrementReg16 { registers.HL };
+					}
+					case 0x3B :
+					{
+						return DecrementReg16 { registers.SP };
+					}
+				}
+
+				// Add Reg16, Reg16
+				{
+					case 0x09 :
+					{
+						return AddReg16Reg16 { registers.HL, registers.BC };
+					}
+					case 0x19 :
+					{
+						return AddReg16Reg16 { registers.HL, registers.DE };
+					}
+					case 0x29 :
+					{
+						return AddReg16Reg16 { registers.HL, registers.HL };
+					}
+					case 0x39 :
+					{
+						return AddReg16Reg16 { registers.HL, registers.SP };
 					}
 				}
 

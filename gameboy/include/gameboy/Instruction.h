@@ -4,6 +4,7 @@
 
 #include <gameboy/Registers.h>
 
+#include <type_traits>
 #include <variant>
 
 namespace gb
@@ -33,31 +34,47 @@ namespace gb
 		~Instruction() = default;
 	};
 
-	struct Reg8Instruction : Instruction
+	template <typename RegType>
+	struct RegInstruction : Instruction
 	{
-		Reg8& reg;
+		RegType& reg;
 
-		Reg8Instruction (const Mnemonic mnemonic, Reg8& reg)
+	protected:
+		RegInstruction (const Mnemonic mnemonic, RegType& reg)
 		:
 			Instruction { mnemonic },
 			reg         { reg      }
 		{
 		}
+
+		~RegInstruction() = default;
+
+		static_assert(std::is_same_v<RegType, Reg8> || std::is_same_v<RegType, Reg16>);
 	};
+	using  Reg8Instruction = RegInstruction<Reg8>;
+	using Reg16Instruction = RegInstruction<Reg16>;
 
-	struct Reg8Reg8Instruction : Instruction
+	template <typename RegType>
+	struct RegRegInstruction : Instruction
 	{
-		      Reg8& dstReg;
-		const Reg8& srcReg;
+		      RegType& dstReg;
+		const RegType& srcReg;
 
-		Reg8Reg8Instruction (const Mnemonic mnemonic, Reg8& dstReg, const Reg8& srcReg)
+	protected:
+		RegRegInstruction (const Mnemonic mnemonic, RegType& dstReg, const RegType& srcReg)
 		:
 			Instruction { mnemonic },
 			dstReg      { dstReg   },
 			srcReg      { srcReg   }
 		{
 		}
+
+		~RegRegInstruction() = default;
+
+		static_assert(std::is_same_v<RegType, Reg8> || std::is_same_v<RegType, Reg16>);
 	};
+	using   Reg8Reg8Instruction = RegRegInstruction<Reg8>;
+	using Reg16Reg16Instruction = RegRegInstruction<Reg16>;
 
 	//
 	//        x0
@@ -134,20 +151,23 @@ namespace gb
 		}
 	};
 
+	template <typename RegType>
+	struct AddRegReg : RegRegInstruction
+	{
+		AddRegReg (RegType& dstReg, const RegType& srcReg)
+		:
+			RegRegInstruction { Mnemonic::ADD, dstReg, srcReg }
+		{
+		}
+	};
+
 	//
 	//        x0        x1        x2        x3        x4        x5              x7
 	//    +---------+---------+---------+---------+---------+---------+     +---------+
 	// 8x | ADD A,B | ADD A,C | ADD A,D | ADD A,E | ADD A,H | ADD A,L |     | ADD A,A |
 	//    +---------+---------+---------+---------+---------+---------+     +---------+
 	//
-	struct AddReg8Reg8 : Reg8Reg8Instruction
-	{
-		AddReg8Reg8 (Reg8& dstReg, const Reg8& srcReg)
-		:
-			Reg8Reg8Instruction { Mnemonic::ADD, dstReg, srcReg }
-		{
-		}
-	};
+	using AddReg8Reg8 = AddRegReg<Reg8>;
 
 	//
 	//        x8        x9        xA        xB        xC        xD              xF
@@ -254,6 +274,26 @@ namespace gb
 		}
 	};
 
+	template <typename Reg>
+	struct IncrementReg : RegInstruction<Reg>
+	{
+		IncrementReg (Reg& reg)
+		:
+			RegInstruction { Mnemonic::INC , reg }
+		{
+		}
+	};
+
+	template <typename Reg>
+	struct DecrementReg : RegInstruction<Reg>
+	{
+		DecrementReg (Reg& reg)
+		:
+			RegInstruction { Mnemonic::DEC , reg }
+		{
+		}
+	};
+
 	//
 	//        x4            xC
 	//    +-------+     +-------+
@@ -263,14 +303,7 @@ namespace gb
 	// 3x |       |     | INC A |
 	//    +-------+     +-------+
 	//
-	struct IncrementReg8 : Reg8Instruction
-	{
-		IncrementReg8 (Reg8& reg)
-		:
-			Reg8Instruction { Mnemonic::INC , reg }
-		{
-		}
-	};
+	using IncrementReg8 = IncrementReg<Reg8>;
 
 	//
 	//        x5            xD
@@ -281,14 +314,40 @@ namespace gb
 	// 3x |       |     | DEC A |
 	//    +-------+     +-------+
 	//
-	struct DecrementReg8 : Reg8Instruction
-	{
-		DecrementReg8 (Reg8& reg)
-		:
-			Reg8Instruction { Mnemonic::DEC , reg }
-		{
-		}
-	};
+	using DecrementReg8 = DecrementReg<Reg8>;
+
+	//
+	//        x3
+	//    +--------+
+	// 0x | INC BC |
+	// 1x | INC DE |
+	// 2x | INC HL |
+	// 3x | INC SP |
+	//    +--------+
+	//
+	using IncrementReg16 = IncrementReg<Reg16>;
+
+	//
+	//        xB
+	//    +--------+
+	// 0x | DEC BC |
+	// 1x | DEC DE |
+	// 2x | DEC HL |
+	// 3x | DEC SP |
+	//    +--------+
+	//
+	using DecrementReg16 = DecrementReg<Reg16>;
+
+	//
+	//          x9
+	//    +-----------+
+	// 0x | ADD HL,BC |
+	// 1x | ADD HL,DE |
+	// 2x | ADD HL,HL |
+	// 3x | ADD HL,SP |
+	//    +-----------+
+	//
+	using AddReg16Reg16 = AddRegReg<Reg16>;
 
 	using AnyInstruction = std::variant
 	<
@@ -305,7 +364,10 @@ namespace gb
 		XorReg8Reg8,
 		CompareReg8Reg8,
 		IncrementReg8,
-		DecrementReg8
+		DecrementReg8,
+		IncrementReg16,
+		DecrementReg16,
+		AddReg16Reg16
 	>;
 }
 
