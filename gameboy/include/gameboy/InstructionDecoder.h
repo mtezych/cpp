@@ -13,18 +13,18 @@ namespace gb
 		//
 		//     x0 x1 x2 x3 x4 x5 x6 x7 x8 x9 xA xB xC xD xE xF
 		//    +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
-		// 0x |##|  |  |  |  |  |##|  |  |  |  |  |  |  |##|  |
-		// 1x |  |  |  |  |  |  |##|  |  |  |  |  |  |  |##|  |
-		// 2x |  |  |  |  |  |  |##|  |  |  |  |  |  |  |##|  |
-		// 3x |  |  |  |  |  |  |  |  |  |  |  |  |  |  |##|  |
+		// 0x |##|  |  |  |##|##|##|  |  |  |  |  |##|##|##|  |
+		// 1x |  |  |  |  |##|##|##|  |  |  |  |  |##|##|##|  |
+		// 2x |  |  |  |  |##|##|##|  |  |  |  |  |##|##|##|  |
+		// 3x |  |  |  |  |  |  |  |  |  |  |  |  |##|##|##|  |
 		// 4x |##|##|##|##|##|##|  |##|##|##|##|##|##|##|  |##|
 		// 5x |##|##|##|##|##|##|  |##|##|##|##|##|##|##|  |##|
 		// 6x |##|##|##|##|##|##|  |##|##|##|##|##|##|##|  |##|
 		// 7x |  |  |  |  |  |  |  |  |##|##|##|##|##|##|  |##|
 		// 8x |##|##|##|##|##|##|  |##|##|##|##|##|##|##|  |##|
 		// 9x |##|##|##|##|##|##|  |##|##|##|##|##|##|##|  |##|
-		// Ax |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
-		// Bx |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+		// Ax |##|##|##|##|##|##|  |##|##|##|##|##|##|##|  |##|
+		// Bx |##|##|##|##|##|##|  |##|##|##|##|##|##|##|  |##|
 		// Cx |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
 		// Dx |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
 		// Ex |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
@@ -406,6 +406,198 @@ namespace gb
 					case 0x9F :
 					{
 						return SubtractWithCarryReg8Reg8 { registers.A, registers.A };
+					}
+				}
+
+				// And Reg8, Reg8
+				{
+					case 0xA0 :
+					{
+						return AndReg8Reg8 { registers.A, registers.B };
+					}
+					case 0xA1 :
+					{
+						return AndReg8Reg8 { registers.A, registers.C };
+					}
+					case 0xA2 :
+					{
+						return AndReg8Reg8 { registers.A, registers.D };
+					}
+					case 0xA3 :
+					{
+						return AndReg8Reg8 { registers.A, registers.E };
+					}
+					case 0xA4 :
+					{
+						return AndReg8Reg8 { registers.A, registers.H };
+					}
+					case 0xA5 :
+					{
+						return AndReg8Reg8 { registers.A, registers.L };
+					}
+					case 0xA7 :
+					{
+						return AndReg8Reg8 { registers.A, registers.A };
+					}
+				}
+
+				// Xor Reg8, Reg8
+				{
+					case 0xA8 :
+					{
+						return XorReg8Reg8 { registers.A, registers.B };
+					}
+					case 0xA9 :
+					{
+						return XorReg8Reg8 { registers.A, registers.C };
+					}
+					case 0xAA :
+					{
+						return XorReg8Reg8 { registers.A, registers.D };
+					}
+					case 0xAB :
+					{
+						return XorReg8Reg8 { registers.A, registers.E };
+					}
+					case 0xAC :
+					{
+						return XorReg8Reg8 { registers.A, registers.H };
+					}
+					case 0xAD :
+					{
+						return XorReg8Reg8 { registers.A, registers.L };
+					}
+					case 0xAF :
+					{
+						return XorReg8Reg8 { registers.A, registers.A };
+					}
+				}
+
+				// Or Reg8, Reg8
+				{
+					case 0xB0 :
+					{
+						return OrReg8Reg8 { registers.A, registers.B };
+					}
+					case 0xB1 :
+					{
+						return OrReg8Reg8 { registers.A, registers.C };
+					}
+					case 0xB2 :
+					{
+						return OrReg8Reg8 { registers.A, registers.D };
+					}
+					case 0xB3 :
+					{
+						return OrReg8Reg8 { registers.A, registers.E };
+					}
+					case 0xB4 :
+					{
+						return OrReg8Reg8 { registers.A, registers.H };
+					}
+					case 0xB5 :
+					{
+						return OrReg8Reg8 { registers.A, registers.L };
+					}
+					case 0xB7 :
+					{
+						return OrReg8Reg8 { registers.A, registers.A };
+					}
+				}
+
+				// Compare Reg8, Reg8
+				{
+					case 0xB8 :
+					{
+						return CompareReg8Reg8 { registers.A, registers.B };
+					}
+					case 0xB9 :
+					{
+						return CompareReg8Reg8 { registers.A, registers.C };
+					}
+					case 0xBA :
+					{
+						return CompareReg8Reg8 { registers.A, registers.D };
+					}
+					case 0xBB :
+					{
+						return CompareReg8Reg8 { registers.A, registers.E };
+					}
+					case 0xBC :
+					{
+						return CompareReg8Reg8 { registers.A, registers.H };
+					}
+					case 0xBD :
+					{
+						return CompareReg8Reg8 { registers.A, registers.L };
+					}
+					case 0xBF :
+					{
+						return CompareReg8Reg8 { registers.A, registers.A };
+					}
+				}
+
+				// Increment Reg8
+				{
+					case 0x04 :
+					{
+						return IncrementReg8 { registers.B };
+					}
+					case 0x0C :
+					{
+						return IncrementReg8 { registers.C };
+					}
+					case 0x14 :
+					{
+						return IncrementReg8 { registers.D };
+					}
+					case 0x1C :
+					{
+						return IncrementReg8 { registers.E };
+					}
+					case 0x24 :
+					{
+						return IncrementReg8 { registers.H };
+					}
+					case 0x2C :
+					{
+						return IncrementReg8 { registers.L };
+					}
+					case 0x3C :
+					{
+						return IncrementReg8 { registers.A };
+					}
+				}
+
+				// Decrement Reg8
+				{
+					case 0x05 :
+					{
+						return DecrementReg8 { registers.B };
+					}
+					case 0x0D :
+					{
+						return DecrementReg8 { registers.C };
+					}
+					case 0x15 :
+					{
+						return DecrementReg8 { registers.D };
+					}
+					case 0x1D :
+					{
+						return DecrementReg8 { registers.E };
+					}
+					case 0x25 :
+					{
+						return DecrementReg8 { registers.H };
+					}
+					case 0x2D :
+					{
+						return DecrementReg8 { registers.L };
+					}
+					case 0x3D :
+					{
+						return DecrementReg8 { registers.A };
 					}
 				}
 

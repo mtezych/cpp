@@ -11,9 +11,12 @@ namespace gb
 	enum Mnemonic
 	{
 		NOP,
-		LD,
+		INC, DEC,
+		LD ,
 		ADD, ADC,
 		SUB, SBC,
+		AND, OR, XOR,
+		CP,
 	};
 
 	struct Instruction
@@ -28,6 +31,18 @@ namespace gb
 		}
 
 		~Instruction() = default;
+	};
+
+	struct Reg8Instruction : Instruction
+	{
+		Reg8& reg;
+
+		Reg8Instruction (const Mnemonic mnemonic, Reg8& reg)
+		:
+			Instruction { mnemonic },
+			reg         { reg      }
+		{
+		}
 	};
 
 	struct Reg8Reg8Instruction : Instruction
@@ -179,6 +194,102 @@ namespace gb
 		}
 	};
 
+	//
+	//        x0        x1        x2        x3        x4        x5              x7
+	//    +---------+---------+---------+---------+---------+---------+     +---------+
+	// Ax | AND A,B | AND A,C | AND A,D | AND A,E | AND A,H | AND A,L |     | AND A,A |
+	//    +---------+---------+---------+---------+---------+---------+     +---------+
+	//
+	struct AndReg8Reg8 : Reg8Reg8Instruction
+	{
+		AndReg8Reg8 (Reg8& dstReg, const Reg8& srcReg)
+		:
+			Reg8Reg8Instruction { Mnemonic::AND, dstReg, srcReg }
+		{
+		}
+	};
+
+	//
+	//        x0       x1       x2       x3       x4       x5             x7
+	//    +--------+--------+--------+--------+--------+--------+     +--------+
+	// Bx | OR A,B | OR A,C | OR A,D | OR A,E | OR A,H | OR A,L |     | OR A,A |
+	//    +--------+--------+--------+--------+--------+--------+     +--------+
+	//
+	struct OrReg8Reg8 : Reg8Reg8Instruction
+	{
+		OrReg8Reg8 (Reg8& dstReg, const Reg8& srcReg)
+		:
+			Reg8Reg8Instruction { Mnemonic::OR, dstReg, srcReg }
+		{
+		}
+	};
+
+	//
+	//        x8        x9        xA        xB        xC        xD              xF
+	//    +---------+---------+---------+---------+---------+---------+     +---------+
+	// Ax | XOR A,B | XOR A,C | XOR A,D | XOR A,E | XOR A,H | XOR A,L |     | XOR A,A |
+	//    +---------+---------+---------+---------+---------+---------+     +---------+
+	//
+	struct XorReg8Reg8 : Reg8Reg8Instruction
+	{
+		XorReg8Reg8 (Reg8& dstReg, const Reg8& srcReg)
+		:
+			Reg8Reg8Instruction { Mnemonic::XOR, dstReg, srcReg }
+		{
+		}
+	};
+
+	//
+	//        x8       x9       xA       xB       xC       xD             xF
+	//    +--------+--------+--------+--------+--------+--------+     +--------+
+	// Bx | CP A,B | CP A,C | CP A,D | CP A,E | CP A,H | CP A,L |     | CP A,A |
+	//    +--------+--------+--------+--------+--------+--------+     +--------+
+	//
+	struct CompareReg8Reg8 : Reg8Reg8Instruction
+	{
+		CompareReg8Reg8 (Reg8& dstReg, const Reg8& srcReg)
+		:
+			Reg8Reg8Instruction { Mnemonic::CP, dstReg, srcReg }
+		{
+		}
+	};
+
+	//
+	//        x4            xC
+	//    +-------+     +-------+
+	// 0x | INC B |     | INC C |
+	// 1x | INC D | ... | INC E |
+	// 2x | INC H |     | INC L |
+	// 3x |       |     | INC A |
+	//    +-------+     +-------+
+	//
+	struct IncrementReg8 : Reg8Instruction
+	{
+		IncrementReg8 (Reg8& reg)
+		:
+			Reg8Instruction { Mnemonic::INC , reg }
+		{
+		}
+	};
+
+	//
+	//        x5            xD
+	//    +-------+     +-------+
+	// 0x | DEC B |     | DEC C |
+	// 1x | DEC D | ... | DEC E |
+	// 2x | DEC H |     | DEC L |
+	// 3x |       |     | DEC A |
+	//    +-------+     +-------+
+	//
+	struct DecrementReg8 : Reg8Instruction
+	{
+		DecrementReg8 (Reg8& reg)
+		:
+			Reg8Instruction { Mnemonic::DEC , reg }
+		{
+		}
+	};
+
 	using AnyInstruction = std::variant
 	<
 		NoOperation,
@@ -188,7 +299,13 @@ namespace gb
 		AddReg8Reg8,
 		AddWithCarryReg8Reg8,
 		SubtractReg8Reg8,
-		SubtractWithCarryReg8Reg8
+		SubtractWithCarryReg8Reg8,
+		AndReg8Reg8,
+		OrReg8Reg8,
+		XorReg8Reg8,
+		CompareReg8Reg8,
+		IncrementReg8,
+		DecrementReg8
 	>;
 }
 
