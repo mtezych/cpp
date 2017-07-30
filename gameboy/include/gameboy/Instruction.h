@@ -12,8 +12,10 @@ namespace gb
 	enum Mnemonic
 	{
 		NOP,
+		STOP, HALT,
+		EI, DI,
 		INC, DEC,
-		LD ,
+		LD,
 		ADD, ADC,
 		SUB, SBC,
 		AND, OR, XOR,
@@ -77,16 +79,69 @@ namespace gb
 	using Reg16Reg16Instruction = RegRegInstruction<Reg16>;
 
 	//
-	//        x0
-	//    +--------+
-	// 0x |  NOP   |
-	//    +--------+
+	//      x0
+	//    +-----+
+	// 0x | NOP |
+	//    +-----+
 	//
 	struct NoOperation : Instruction
 	{
 		NoOperation ()
 		:
 			Instruction { Mnemonic::NOP }
+		{
+		}
+	};
+
+	//
+	//       x0
+	//    +------+
+	// 1x | STOP |
+	//    +------+
+	//
+	struct Stop : Instruction
+	{
+		Stop ()
+		:
+			Instruction { Mnemonic::STOP }
+		{
+		}
+	};
+
+	//
+	//       x6
+	//    +------+
+	// 7x | HALT |
+	//    +------+
+	//
+	struct Halt : Instruction
+	{
+		Halt ()
+		:
+			Instruction { Mnemonic::HALT }
+		{
+		}
+	};
+
+	//
+	//      x3         xB
+	//    +----+     +----+
+	// Fx | DI | ... | EI |
+	//    +----+     +----+
+	//
+	struct EnableInterrupt : Instruction
+	{
+		EnableInterrupt ()
+		:
+			Instruction { Mnemonic::EI }
+		{
+		}
+	};
+	struct DisableInterrupt : Instruction
+	{
+		DisableInterrupt ()
+		:
+			Instruction { Mnemonic::DI }
 		{
 		}
 	};
@@ -152,7 +207,7 @@ namespace gb
 	};
 
 	template <typename RegType>
-	struct AddRegReg : RegRegInstruction
+	struct AddRegReg : RegRegInstruction<RegType>
 	{
 		AddRegReg (RegType& dstReg, const RegType& srcReg)
 		:
@@ -352,6 +407,10 @@ namespace gb
 	using AnyInstruction = std::variant
 	<
 		NoOperation,
+		Stop,
+		Halt,
+		EnableInterrupt,
+		DisableInterrupt,
 		LoadReg8Reg8,
 		LoadReg8Immediate,
 		LoadMemoryReg8,

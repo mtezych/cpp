@@ -22,6 +22,22 @@ namespace gb
 			static_cast<void>(noOperation);
 		}
 
+		void Execute (Halt& halt)
+		{
+		}
+
+		void Execute (Stop& stop)
+		{
+		}
+
+		void Execute (EnableInterrupt enableInterrupt)
+		{
+		}
+
+		void Execute (DisableInterrupt disableInterrupt)
+		{
+		}
+
 		void Execute (LoadReg8Reg8& load)
 		{
 			load.dstReg = load.srcReg;
