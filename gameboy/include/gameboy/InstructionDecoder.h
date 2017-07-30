@@ -21,8 +21,8 @@ namespace gb
 		// 5x |##|##|##|##|##|##|  |##|##|##|##|##|##|##|  |##|
 		// 6x |##|##|##|##|##|##|  |##|##|##|##|##|##|##|  |##|
 		// 7x |  |  |  |  |  |  |  |  |##|##|##|##|##|##|  |##|
-		// 8x |##|##|##|##|##|##|  |##|  |  |  |  |  |  |  |  |
-		// 9x |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+		// 8x |##|##|##|##|##|##|  |##|##|##|##|##|##|##|  |##|
+		// 9x |##|##|##|##|##|##|  |##|##|##|##|##|##|##|  |##|
 		// Ax |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
 		// Bx |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
 		// Cx |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
@@ -31,7 +31,7 @@ namespace gb
 		// Fx |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
 		//    +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
 		//
-		AnyInstruction decode(const uint8_t byte, Registers& registers)
+		AnyInstruction decode (const uint8_t byte, Registers& registers)
 		{
 			switch (byte)
 			{
@@ -283,33 +283,129 @@ namespace gb
 
 				// Add Reg8, Reg8
 				{
-					case 0x80:
+					case 0x80 :
 					{
 						return AddReg8Reg8 { registers.A, registers.B };
 					}
-					case 0x81:
+					case 0x81 :
 					{
 						return AddReg8Reg8 { registers.A, registers.C };
 					}
-					case 0x82:
+					case 0x82 :
 					{
 						return AddReg8Reg8 { registers.A, registers.D };
 					}
-					case 0x83:
+					case 0x83 :
 					{
 						return AddReg8Reg8 { registers.A, registers.E };
 					}
-					case 0x84:
+					case 0x84 :
 					{
 						return AddReg8Reg8 { registers.A, registers.H };
 					}
-					case 0x85:
+					case 0x85 :
 					{
 						return AddReg8Reg8 { registers.A, registers.L };
 					}
-					case 0x87:
+					case 0x87 :
 					{
 						return AddReg8Reg8 { registers.A, registers.A };
+					}
+				}
+
+				// AddWithCarry Reg8, Reg8
+				{
+					case 0x88 :
+					{
+						return AddWithCarryReg8Reg8 { registers.A, registers.B };
+					}
+					case 0x89 :
+					{
+						return AddWithCarryReg8Reg8 { registers.A, registers.C };
+					}
+					case 0x8A :
+					{
+						return AddWithCarryReg8Reg8 { registers.A, registers.D };
+					}
+					case 0x8B :
+					{
+						return AddWithCarryReg8Reg8 { registers.A, registers.E };
+					}
+					case 0x8C :
+					{
+						return AddWithCarryReg8Reg8 { registers.A, registers.H };
+					}
+					case 0x8D :
+					{
+						return AddWithCarryReg8Reg8 { registers.A, registers.L };
+					}
+					case 0x8F :
+					{
+						return AddWithCarryReg8Reg8 { registers.A, registers.A };
+					}
+				}
+
+				// Subtract Reg8, Reg8
+				{
+					case 0x90 :
+					{
+						return SubtractReg8Reg8 { registers.A, registers.B };
+					}
+					case 0x91 :
+					{
+						return SubtractReg8Reg8 { registers.A, registers.C };
+					}
+					case 0x92 :
+					{
+						return SubtractReg8Reg8 { registers.A, registers.D };
+					}
+					case 0x93 :
+					{
+						return SubtractReg8Reg8 { registers.A, registers.E };
+					}
+					case 0x94 :
+					{
+						return SubtractReg8Reg8 { registers.A, registers.H };
+					}
+					case 0x95 :
+					{
+						return SubtractReg8Reg8 { registers.A, registers.L };
+					}
+					case 0x97 :
+					{
+						return SubtractReg8Reg8 { registers.A, registers.A };
+					}
+				}
+
+				// SubtractWithCarry Reg8, Reg8
+				{
+					case 0x98 :
+					{
+						return SubtractWithCarryReg8Reg8 { registers.A, registers.B };
+					}
+					case 0x99 :
+					{
+						return SubtractWithCarryReg8Reg8 { registers.A, registers.C };
+					}
+					case 0x9A :
+					{
+						return SubtractWithCarryReg8Reg8 { registers.A, registers.D };
+					}
+					case 0x9B :
+					{
+						return SubtractWithCarryReg8Reg8 { registers.A, registers.E };
+					}
+					case 0x9C :
+					{
+						return SubtractWithCarryReg8Reg8 { registers.A, registers.H };
+					}
+					case 0x9D :
+					{
+						return SubtractWithCarryReg8Reg8 { registers.A, registers.L };
+					}
+					case 0x9F :
+					{
+						return SubtractWithCarryReg8Reg8 { registers.A, registers.A };
 					}
 				}
 

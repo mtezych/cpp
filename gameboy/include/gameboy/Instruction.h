@@ -12,7 +12,8 @@ namespace gb
 	{
 		NOP,
 		LD,
-		ADD,
+		ADD, ADC,
+		SUB, SBC,
 	};
 
 	struct Instruction
@@ -27,6 +28,20 @@ namespace gb
 		}
 
 		~Instruction() = default;
+	};
+
+	struct Reg8Reg8Instruction : Instruction
+	{
+		      Reg8& dstReg;
+		const Reg8& srcReg;
+
+		Reg8Reg8Instruction (const Mnemonic mnemonic, Reg8& dstReg, const Reg8& srcReg)
+		:
+			Instruction { mnemonic },
+			dstReg      { dstReg   },
+			srcReg      { srcReg   }
+		{
+		}
 	};
 
 	//
@@ -60,16 +75,11 @@ namespace gb
 	// 7x | LD A,B | LD A,C | LD A,D | LD A,E | LD A,H | LD A,L |     | LD A,A |
 	//    +--------+--------+--------+--------+--------+--------+     +--------+
 	//
-	struct LoadReg8Reg8 : Instruction
+	struct LoadReg8Reg8 : Reg8Reg8Instruction
 	{
-		Reg8&       dstReg;
-		const Reg8& srcReg;
-
 		LoadReg8Reg8 (Reg8& dstReg, const Reg8& srcReg)
 		:
-			Instruction { Mnemonic::LD },
-			dstReg      { dstReg       },
-			srcReg      { srcReg       }
+			Reg8Reg8Instruction { Mnemonic::LD, dstReg, srcReg }
 		{
 		}
 	};
@@ -112,19 +122,59 @@ namespace gb
 	//
 	//        x0        x1        x2        x3        x4        x5              x7
 	//    +---------+---------+---------+---------+---------+---------+     +---------+
-	// 4x | ADD A,B | ADD A,C | ADD A,D | ADD A,E | ADD A,H | ADD A,L |     | ADD A,A |
+	// 8x | ADD A,B | ADD A,C | ADD A,D | ADD A,E | ADD A,H | ADD A,L |     | ADD A,A |
 	//    +---------+---------+---------+---------+---------+---------+     +---------+
 	//
-	struct AddReg8Reg8 : Instruction
+	struct AddReg8Reg8 : Reg8Reg8Instruction
 	{
-		const Reg8& srcReg;
-		const Reg8& dstReg;
-
-		AddReg8Reg8 (const Reg8& srcReg, Reg8& dstReg)
+		AddReg8Reg8 (Reg8& dstReg, const Reg8& srcReg)
 		:
-			Instruction { Mnemonic::ADD },
-			dstReg      { dstReg        },
-			srcReg      { srcReg        }
+			Reg8Reg8Instruction { Mnemonic::ADD, dstReg, srcReg }
+		{
+		}
+	};
+
+	//
+	//        x8        x9        xA        xB        xC        xD              xF
+	//    +---------+---------+---------+---------+---------+---------+     +---------+
+	// 8x | ADC A,B | ADC A,C | ADC A,D | ADC A,E | ADC A,H | ADC A,L |     | ADC A,A |
+	//    +---------+---------+---------+---------+---------+---------+     +---------+
+	//
+	struct AddWithCarryReg8Reg8 : Reg8Reg8Instruction
+	{
+		AddWithCarryReg8Reg8 (Reg8& dstReg, const Reg8& srcReg)
+		:
+			Reg8Reg8Instruction { Mnemonic::ADC, dstReg, srcReg }
+		{
+		}
+	};
+
+	//
+	//        x0        x1        x2        x3        x4        x5              x7
+	//    +---------+---------+---------+---------+---------+---------+     +---------+
+	// 9x | SUB A,B | SUB A,C | SUB A,D | SUB A,E | SUB A,H | SUB A,L |     | SUB A,A |
+	//    +---------+---------+---------+---------+---------+---------+     +---------+
+	//
+	struct SubtractReg8Reg8 : Reg8Reg8Instruction
+	{
+		SubtractReg8Reg8 (Reg8& dstReg, const Reg8& srcReg)
+		:
+			Reg8Reg8Instruction { Mnemonic::SUB, dstReg, srcReg }
+		{
+		}
+	};
+
+	//
+	//        x8        x9        xA        xB        xC        xD              xF
+	//    +---------+---------+---------+---------+---------+---------+     +---------+
+	// 9x | SBC A,B | SBC A,C | SBC A,D | SBC A,E | SBC A,H | SBC A,L |     | SBC A,A |
+	//    +---------+---------+---------+---------+---------+---------+     +---------+
+	//
+	struct SubtractWithCarryReg8Reg8 : Reg8Reg8Instruction
+	{
+		SubtractWithCarryReg8Reg8 (Reg8& dstReg, const Reg8& srcReg)
+		:
+			Reg8Reg8Instruction { Mnemonic::SBC, dstReg, srcReg }
 		{
 		}
 	};
@@ -135,7 +185,10 @@ namespace gb
 		LoadReg8Reg8,
 		LoadReg8Immediate,
 		LoadMemoryReg8,
-		AddReg8Reg8
+		AddReg8Reg8,
+		AddWithCarryReg8Reg8,
+		SubtractReg8Reg8,
+		SubtractWithCarryReg8Reg8
 	>;
 }
 

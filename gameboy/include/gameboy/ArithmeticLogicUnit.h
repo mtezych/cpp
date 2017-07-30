@@ -30,6 +30,7 @@ namespace gb
 		void Execute (LoadReg8Immediate& load)
 		{
 			// assert(load.immediate == memory.Read(registers.PC));
+			// load.dstReg = load.srcReg;
 		}
 
 		void Execute (LoadMemoryReg8& load)
@@ -38,6 +39,22 @@ namespace gb
 
 		void Execute (AddReg8Reg8& add)
 		{
+			// add.dstReg += add.srcReg;
+		}
+
+		void Execute (SubtractReg8Reg8& subtract)
+		{
+			// subtract.dstReg -= subtract.srcReg;
+		}
+
+		void Execute (AddWithCarryReg8Reg8& addWithCarry)
+		{
+			// addWithCarry.dstReg += (addWithCarry.srcReg + flags.C);
+		}
+
+		void Execute(SubtractWithCarryReg8Reg8& subtractWithCarry)
+		{
+			// subtractWithCarry.dstReg -= (subtractWithCarry.srcReg + flags.C);
 		}
 	};
 }
