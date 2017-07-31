@@ -232,11 +232,44 @@ namespace gb
 	using LoadReg16Imm16 = LoadRegImm<Reg16, Imm16>;
 
 
+	//
+	//         x2
+	//    +-----------+
+	// 0x | LD (BC),A |
+	// 1x | LD (DE),A |
+	//    +-----------+
+	//
+	//         x0          x1          x2          x3          x4          x5                x7
+	//    +-----------+-----------+-----------+-----------+-----------+-----------+     +-----------+
+	// 7x | LD (HL),B | LD (HL),C | LD (HL),D | LD (HL),E | LD (HL),H | LD (HL),L |     | LD (HL),A |
+	//    +-----------+-----------+-----------+-----------+-----------+-----------+     +-----------+
+	//
 	struct LoadMemoryReg8 : Instruction
 	{
 		const Reg8& reg;
 
 		LoadMemoryReg8 (const Reg8& reg)
+		:
+			Instruction { Mnemonic::LD },
+			reg         { reg          }
+		{
+		}
+	};
+
+	//
+	//         x6                xE
+	//    +-----------+     +-----------+
+	// 4x | LD B,(HL) |     | LD C,(HL) |
+	// 5x | LD D,(HL) | ... | LD E,(HL) |
+	// 6x | LD H,(HL) |     | LD L,(HL) |
+	// 7x |           |     | LD A,(HL) |
+	//    +-----------+     +-----------+
+	//
+	struct LoadReg8Memory : Instruction
+	{
+		Reg8& reg;
+
+		LoadReg8Memory (Reg8& reg)
 		:
 			Instruction { Mnemonic::LD },
 			reg         { reg          }
