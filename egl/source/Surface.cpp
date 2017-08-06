@@ -108,7 +108,7 @@ namespace egl
 //			eglCreatePixmapSurface
 //			(
 //				eglDisplay,
-//				config.eglDisplay,
+//				config.eglConfig,
 //				eglNativePixmap,
 //				attribs.data()
 //			);

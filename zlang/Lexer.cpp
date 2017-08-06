@@ -14,7 +14,7 @@ namespace zlang
 {
 	Lexer::Lexer (const std::string& code)
 	:
-		code    { std::move(code)     },
+		code    { code                },
 		codeIt  { this->code.cbegin() }
 	{
 	}

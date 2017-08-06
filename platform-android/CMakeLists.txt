@@ -41,7 +41,9 @@ if(CMAKE_SYSTEM_NAME MATCHES Android)
  if(ANDROID_SOURCE AND ANDROID_SYSROOT)
 
   add_library               (platform-android STATIC include/android/Window.h
-                                                              source/Window.cpp)
+                                                     include/android/Pixmap.h
+                                                              source/Window.cpp
+                                                              source/Pixmap.cpp)
 
   target_include_directories(platform-android PUBLIC include
                                  ${ANDROID_SOURCE}/frameworks/native/include
@@ -49,6 +51,7 @@ if(CMAKE_SYSTEM_NAME MATCHES Android)
                                  ${ANDROID_SOURCE}/hardware/libhardware/include)
 
   target_link_libraries     (platform-android util
+                                 ${ANDROID_SYSROOT}/system/lib/libui.so
                                  ${ANDROID_SYSROOT}/system/lib/libgui.so
                                  ${ANDROID_SYSROOT}/system/lib/libutils.so)
 

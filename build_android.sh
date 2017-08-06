@@ -60,6 +60,7 @@ rm repo
 # Android sysroot
 # https://developer.android.com/studio/command-line/adb.html
 mkdir -p android-sysroot/system/lib
+adb pull /system/lib/libui.so    android-sysroot/system/lib/libui.so
 adb pull /system/lib/libgui.so   android-sysroot/system/lib/libgui.so
 adb pull /system/lib/libutils.so android-sysroot/system/lib/libutils.so
 

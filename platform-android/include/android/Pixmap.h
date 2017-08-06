@@ -32,34 +32,39 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifdef __ANDROID__
+#ifndef PLATFORM_ANDROID_PIXMAP
+#define PLATFORM_ANDROID_PIXMAP
 
-#include <android/Window.h>
-#include <android/Pixmap.h>
+#include <ui/ANativeObjectBase.h>
+#include <ui/PixelFormat.h>
 
-#include <thread>
-#include <chrono>
+#include <util/vec.h>
 
-int main ()
+#include <vector>
+
+// https://android.googlesource.com/platform/frameworks/base/+/master/core/jni/com_google_android_gles_jni_EGLImpl.cpp#267
+
+namespace android
 {
-	auto pixmap = android::Pixmap { util::uvec2 { 256, 256 } };
-	assert(pixmap.NativeHandle() != nullptr);
+	class Pixmap
+	{
+	private:
+		std::vector<uint8_t>      storage;
+		egl_native_pixmap_t androidPixmap;
 
-	auto window = android::Window { util::uvec2 { 512, 512 } };
-	assert(window.NativeHandle() != nullptr);
+	public:
+		Pixmap (const util::uvec2& size);
 
-	window.Clear(util::vec4 { 0.0f, 1.0f, 0.0f, 0.5f });
+		~Pixmap() = default;
 
-	std::this_thread::sleep_for(std::chrono::seconds { 4 });
+		Pixmap (Pixmap&& pixmap) = default;
+		Pixmap (const Pixmap& pixmap) = delete;
 
-	return 0;
-}
+		Pixmap& operator = (Pixmap&& pixmap) = default;
+		Pixmap& operator = (const Pixmap& pixmap) = delete;
 
-#else
-
-int main ()
-{
-	return 0;
+		egl_native_pixmap_t* NativeHandle ();
+	};
 }
 
 #endif

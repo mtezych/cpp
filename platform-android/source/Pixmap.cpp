@@ -32,34 +32,30 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifdef __ANDROID__
-
-#include <android/Window.h>
 #include <android/Pixmap.h>
 
-#include <thread>
-#include <chrono>
-
-int main ()
+namespace android
 {
-	auto pixmap = android::Pixmap { util::uvec2 { 256, 256 } };
-	assert(pixmap.NativeHandle() != nullptr);
+	Pixmap::Pixmap (const util::uvec2& size)
+	:
+		storage
+		(
+			size.height * size.width * android::bytesPerPixel(android::PIXEL_FORMAT_RGBA_8888), 0
+		),
+		androidPixmap
+		{
+			sizeof(egl_native_pixmap_t),                        // version
+			static_cast<int32_t>(size.width),                   // width
+			static_cast<int32_t>(size.height),                  // height
+			static_cast<int32_t>(storage.size() / size.height), // stride
+			storage.data(),                                     // data
+			android::PIXEL_FORMAT_RGBA_8888,                    // format
+		}
+	{
+	}
 
-	auto window = android::Window { util::uvec2 { 512, 512 } };
-	assert(window.NativeHandle() != nullptr);
-
-	window.Clear(util::vec4 { 0.0f, 1.0f, 0.0f, 0.5f });
-
-	std::this_thread::sleep_for(std::chrono::seconds { 4 });
-
-	return 0;
+	egl_native_pixmap_t* Pixmap::NativeHandle ()
+	{
+		return &androidPixmap;
+	}
 }
-
-#else
-
-int main ()
-{
-	return 0;
-}
-
-#endif
