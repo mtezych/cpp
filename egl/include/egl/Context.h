@@ -68,9 +68,9 @@ namespace egl
 		~Context ();
 
 		Context (Context&& context);
-		Context& operator = (Context&& context);
-
 		Context (const Context& context) = delete;
+
+		Context& operator = (Context&& context);
 		Context& operator = (const Context& context) = delete;
 
 		void

@@ -48,12 +48,13 @@ namespace egl
 		EGLDisplay eglDisplay;
 
 		Display (EGLNativeDisplayType eglNativeDisplay = EGL_DEFAULT_DISPLAY);
+
 		~Display ();
 
 		Display (Display&& display);
-		Display& operator = (Display&& display);
-
 		Display (const Display& display) = delete;
+
+		Display& operator = (Display&& display);
 		Display& operator = (const Display& display) = delete;
 
 		std::vector<Config> Configs () const;

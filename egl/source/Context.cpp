@@ -151,7 +151,7 @@ namespace egl
 	}
 
 	void
-	Context::MakeCurrent (const Surface& drawSurface,const Surface& readSurface)
+	Context::MakeCurrent (const Surface& drawSurface, const Surface& readSurface)
 	{
 		assert(eglDisplay == drawSurface.eglDisplay);
 		assert(eglDisplay == readSurface.eglDisplay);

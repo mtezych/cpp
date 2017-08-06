@@ -72,11 +72,9 @@ namespace egl
 		~Surface ();
 
 		Surface (Surface&& surface);
-
-		Surface& operator = (Surface&& surface);
-
 		Surface (const Surface& surface) = delete;
 
+		Surface& operator = (Surface&& surface);
 		Surface& operator = (const Surface& surface) = delete;
 
 		void SwapBuffers ();
