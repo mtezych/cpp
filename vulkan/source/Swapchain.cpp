@@ -38,7 +38,7 @@ namespace vk
 			imageUsage,
 			imageSharingMode,
 			static_cast<uint32_t>(queueFamilyIndices.size()),
-			queueFamilyIndices.data(),
+			(queueFamilyIndices.size() > 0) ? queueFamilyIndices.data() : nullptr,
 			preTransform,
 			compositeAlpha,
 			presentMode,

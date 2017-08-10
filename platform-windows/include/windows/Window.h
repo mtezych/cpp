@@ -11,6 +11,9 @@
 
 namespace windows
 {
+	// NUCLEX GAMES BLOG -> Simple Window Class
+	// http://blog.nuclex-games.com/2012/07/simple-main-window-class
+
 	struct Window
 	{
 		// For Win32 HINSTANCE and HMODULE are both the base address of module.

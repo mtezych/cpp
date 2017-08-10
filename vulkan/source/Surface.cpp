@@ -65,7 +65,7 @@ namespace vk
 	{
 		const auto surfaceCreateInfo = VkXcbSurfaceCreateInfoKHR
 		{
-			VK_STRUCTURE_TYPE_XLIB_SURFACE_CREATE_INFO_KHR,
+			VK_STRUCTURE_TYPE_XCB_SURFACE_CREATE_INFO_KHR,
 			nullptr,
 			0,
 			connection.xcbConnection,
@@ -149,7 +149,7 @@ namespace vk
 	{
 		const auto surfaceCreateInfo = VkWin32SurfaceCreateInfoKHR
 		{
-			VK_STRUCTURE_TYPE_ANDROID_SURFACE_CREATE_INFO_KHR,
+			VK_STRUCTURE_TYPE_WIN32_SURFACE_CREATE_INFO_KHR,
 			nullptr,
 			0,
 			window.moduleHandle,
