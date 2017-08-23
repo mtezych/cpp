@@ -138,13 +138,13 @@ namespace meta
 	 * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 	template <typename T>
-	enable_if_t<std::is_integral<T>::value, char> foo (const T)
+	constexpr enable_if_t<std::is_integral<T>::value, char> foo (const T)
 	{
 		return 'i'; // overload for integral types
 	}
 
 	template <typename T>
-	enable_if_t<std::is_floating_point<T>::value, char> foo (const T)
+	constexpr enable_if_t<std::is_floating_point<T>::value, char> foo (const T)
 	{
 		return 'f'; // overload for floating point types
 	}
@@ -264,8 +264,8 @@ int main()
 	assert::same_types<meta::conditional_t<false, char, long>, long>();
 
 	assert::same_types<meta::enable_if_t<true, char>, char>();
-	assert(meta::foo(5)   == 'i');
-	assert(meta::foo(5.0) == 'f');
+	assert::equal_values<meta::foo(5  ), 'i'>();
+	assert::equal_values<meta::foo(5.0), 'f'>();
 
 	assert::equal_values<meta::is_same_v<char, char>,  true>();
 	assert::equal_values<meta::is_same_v<char, long>, false>();
