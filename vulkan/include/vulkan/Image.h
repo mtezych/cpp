@@ -9,7 +9,7 @@
 namespace vk
 {
 	struct Device;
-	struct DeviceMemory;
+	struct Memory;
 
 	struct Image
 	{
@@ -50,11 +50,7 @@ namespace vk
 		Image& operator = (Image&& image);
 		Image& operator = (const Image& image) = delete;
 
-		void BindDeviceMemory
-		(
-			const DeviceMemory& deviceMemory,
-			const VkDeviceSize  deviceMemoryOffset
-		);
+		void BindMemory (const Memory& memory, const VkDeviceSize offset);
 
 		VkSubresourceLayout
 		GetSubresourceLayout (const VkImageSubresource& subresource) const;

@@ -189,7 +189,7 @@ namespace vk
 		/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 		/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-		 *                                    VkDeviceMemory                                     *
+		 *                                       VkMemory                                        *
 		 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 		vkAllocateMemory             = LoadDeviceProcedure<symbol::vkAllocateMemory            >();
 		vkFreeMemory                 = LoadDeviceProcedure<symbol::vkFreeMemory                >();

@@ -3,7 +3,7 @@
 
 #include <vulkan/Symbols.h>
 #include <vulkan/Device.h>
-#include <vulkan/DeviceMemory.h>
+#include <vulkan/Memory.h>
 
 #include <cassert>
 
@@ -83,18 +83,13 @@ namespace vk
 		return *this;
 	}
 
-	void Buffer::BindDeviceMemory
-	(
-		const DeviceMemory &deviceMemory,
-		const VkDeviceSize deviceMemoryOffset
-	)
+	void Buffer::BindMemory (const Memory& memory, const VkDeviceSize offset)
 	{
 		const auto result = device->vkBindBufferMemory
 		(
 			device->vkDevice,
 			vkBuffer,
-			deviceMemory.vkDeviceMemory,
-			deviceMemoryOffset
+			memory.vkMemory, offset
 		);
 		assert(result == VK_SUCCESS);
 	}

@@ -56,7 +56,7 @@ add_library               (vulkan STATIC include/vulkan/Symbols.h
                                          include/vulkan/Image.h
                                          include/vulkan/ImageView.h
                                          include/vulkan/ShaderModule.h
-                                         include/vulkan/DeviceMemory.h
+                                         include/vulkan/Memory.h
                                          include/vulkan/Buffer.h
                                          include/vulkan/BufferView.h
                                          include/vulkan/Fence.h
@@ -82,7 +82,7 @@ add_library               (vulkan STATIC include/vulkan/Symbols.h
                                                  source/Image.cpp
                                                  source/ImageView.cpp
                                                  source/ShaderModule.cpp
-                                                 source/DeviceMemory.cpp
+                                                 source/Memory.cpp
                                                  source/Buffer.cpp
                                                  source/BufferView.cpp
                                                  source/Fence.cpp
