@@ -12,8 +12,15 @@ namespace xcb
 	{
 		assert(xcbPixmap != XCB_NONE);
 
-		// @todo: Finnish creating XCB Pixmap.
-		// xcb_create_pixmap();
+		xcb_create_pixmap
+		(
+			connection.xcbConnection,
+			connection.xcbScreen->root_depth,
+			xcbPixmap,
+			xcb_drawable_t { connection.xcbScreen->root },
+			static_cast<uint16_t>(size.width),
+			static_cast<uint16_t>(size.height)
+		);
 	}
 
 	Pixmap::~Pixmap ()

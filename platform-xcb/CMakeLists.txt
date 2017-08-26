@@ -39,9 +39,11 @@ project(xcb)
 if(CMAKE_SYSTEM_NAME MATCHES Linux)
 
     add_library               (platform-xcb STATIC include/xcb/Connection.h
+                                                   include/xcb/GraphicsContext.h
                                                    include/xcb/Window.h
                                                    include/xcb/Pixmap.h
                                                         source/Connection.cpp
+                                                        source/GraphicsContext.cpp
                                                         source/Window.cpp
                                                         source/Pixmap.cpp)
 

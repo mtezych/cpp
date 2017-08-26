@@ -2,12 +2,14 @@
 #ifndef PLATFORM_XCB_PIXMAP
 #define PLATFORM_XCB_PIXMAP
 
-#include <xcb/Connection.h>
+#include <xcb/xcb.h>
 
 #include <util/vec.h>
 
 namespace xcb
 {
+	struct Connection;
+
 	struct Pixmap
 	{
 		const Connection* connection;

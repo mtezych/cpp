@@ -36,6 +36,8 @@
 
 #include <xcb/Connection.h>
 #include <xcb/Window.h>
+#include <xcb/Pixmap.h>
+#include <xcb/GraphicsContext.h>
 
 #include <chrono>
 #include <thread>
@@ -45,6 +47,10 @@ int main()
 	const auto connection = xcb::Connection { };
 
 	const auto window = xcb::Window { connection, { 512, 512 } };
+
+	const auto pixmap = xcb::Pixmap { connection, { 128, 128 } };
+
+	const auto gc = xcb::GraphicsContext { connection, window };
 
 	const auto render = []()
 	{

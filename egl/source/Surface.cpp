@@ -85,13 +85,21 @@ namespace egl
 		const auto& eglNativeWindow = EGLNativeWindowType
 		{
 #if   defined(PLATFORM_XLIB)
+
 			window.nativeWindow.xWindow
+
 #elif defined(PLATFORM_XCB)
+
 			window.nativeWindow.xcbWindow
+
 #elif defined(PLATFORM_ANDROID)
+
 			window.nativeWindow.NativeHandle()
+
 #elif defined(PLATFORM_WINDOWS)
+
 			window.nativeWindow.windowHandle
+
 #endif
 		};
 
@@ -124,13 +132,21 @@ namespace egl
 		const auto& eglNativePixmap = EGLNativePixmapType
 		{
 #if   defined(PLATFORM_XLIB)
+
 			pixmap.nativePixmap.xPixmap
+
 #elif defined(PLATFORM_XCB)
+
 			pixmap.nativePixmap.xcbPixmap
+
 #elif defined(PLATFORM_ANDROID)
+
 			pixmap.nativePixmap.NativeHandle()
+
 #elif defined(PLATFORM_WINDOWS)
+
 			pixmap.nativePixmap.bitmapHandle
+
 #endif
 		};
 
