@@ -12,7 +12,7 @@ namespace vk
 		const platform::Display& display,
 		const platform::Window&  window
 	):
-#if defined(PLATFORM_XLIB) || defined(PLATFORM_XCB)
+#if   defined(PLATFORM_XLIB)    || defined(PLATFORM_XCB)
 
 		Surface { instance, display, window.nativeWindow }
 

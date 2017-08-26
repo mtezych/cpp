@@ -40,8 +40,10 @@ project(platform)
 add_library               (platform STATIC include/platform/Library.h
                                            include/platform/Display.h
                                            include/platform/Window.h
+                                           include/platform/Pixmap.h
                                                      source/Library.cpp
-                                                     source/Window.cpp)
+                                                     source/Window.cpp
+                                                     source/Pixmap.cpp)
 
 target_include_directories(platform PUBLIC include)
 

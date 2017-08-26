@@ -109,7 +109,7 @@ namespace vk
 	};
 }
 
-#if defined(PLATFORM_XLIB)
+#if   defined(PLATFORM_XLIB)
 
 #define VK_KHR_PLATFORM_SURFACE_EXTENSION_NAME VK_KHR_XLIB_SURFACE_EXTENSION_NAME
 

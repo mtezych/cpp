@@ -37,6 +37,7 @@
 #include <egl/Display.h>
 
 #include <platform/Window.h>
+#include <platform/Pixmap.h>
 
 #include <cassert>
 
@@ -105,31 +106,44 @@ namespace egl
 		assert(eglGetError() == EGL_SUCCESS);
 	}
 
-//		Surface::Surface
-//		(
-//			const Display& display, const Config& config,
-//			const EGLNativePixmapType eglNativePixmap,
-//			const std::vector<EGLint>& attribs
-//		):
-//			eglSurface { EGL_NO_SURFACE     },
-//			eglDisplay { display.eglDisplay }
-//		{
-//			assert(display.eglDisplay == config.eglDisplay);
-//
-//			assert(attribs.size() > 0);
-//			assert(attribs.back() == EGL_NONE);
-//			assert(attribs.size() % 2);
-//
-//			eglCreatePixmapSurface
-//			(
-//				eglDisplay,
-//				config.eglConfig,
-//				eglNativePixmap,
-//				attribs.data()
-//			);
-//			assert(eglSurface != EGL_NO_SURFACE);
-//			assert(eglGetError() == EGL_SUCCESS);
-//		}
+	Surface::Surface
+	(
+		const Display& display, const Config& config,
+		const platform::Pixmap& pixmap,
+		const std::vector<EGLint>& attribs
+	):
+		eglSurface { EGL_NO_SURFACE     },
+		eglDisplay { display.eglDisplay }
+	{
+		assert(display.eglDisplay == config.eglDisplay);
+
+		assert(attribs.size() > 0);
+		assert(attribs.back() == EGL_NONE);
+		assert(attribs.size() % 2);
+
+		const auto& eglNativePixmap = EGLNativePixmapType
+		{
+#if   defined(PLATFORM_XLIB)
+			pixmap.nativePixmap.xPixmap
+#elif defined(PLATFORM_XCB)
+			pixmap.nativePixmap.xcbPixmap
+#elif defined(PLATFORM_ANDROID)
+			pixmap.nativePixmap.NativeHandle()
+#elif defined(PLATFORM_WINDOWS)
+			pixmap.nativePixmap.bitmapHandle
+#endif
+		};
+
+		eglSurface = eglCreatePixmapSurface
+		(
+			eglDisplay,
+			config.eglConfig,
+			eglNativePixmap,
+			attribs.data()
+		);
+		assert(eglSurface != EGL_NO_SURFACE);
+		assert(eglGetError() == EGL_SUCCESS);
+	}
 
 	Surface::~Surface ()
 	{

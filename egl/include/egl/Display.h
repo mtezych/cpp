@@ -47,6 +47,7 @@ namespace egl
 	{
 		EGLDisplay eglDisplay;
 
+		explicit
 		Display (EGLNativeDisplayType eglNativeDisplay = EGL_DEFAULT_DISPLAY);
 
 		~Display ();

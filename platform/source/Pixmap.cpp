@@ -1,17 +1,17 @@
 
-#include <platform/Window.h>
+#include <platform/Pixmap.h>
 
 namespace platform
 {
-	Window::Window (const Display& display, const util::uvec2& size)
+	Pixmap::Pixmap (const Display& display, const util::uvec2& size)
 	:
 #if   defined(PLATFORM_XLIB)    || defined(PLATFORM_XCB)
 
-		nativeWindow { display, size }
+		nativePixmap { display, size }
 
 #elif defined(PLATFORM_ANDROID) || defined(PLATFORM_WINDOWS)
 
-		nativeWindow { size }
+		nativePixmap { size }
 
 #endif
 	{

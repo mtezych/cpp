@@ -33,7 +33,6 @@
  */
 
 #include <egl/Display.h>
-#include <egl/Config.h>
 #include <egl/Surface.h>
 #include <egl/Context.h>
 

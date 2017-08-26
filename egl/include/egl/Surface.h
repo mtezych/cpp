@@ -42,6 +42,7 @@
 namespace platform
 {
 	struct Window;
+	struct Pixmap;
 }
 
 namespace egl
@@ -67,12 +68,12 @@ namespace egl
 			const std::vector<EGLint>& attribs
 		);
 
-//		Surface
-//		(
-//			const egl::Display& display, const Config& config,
-//			const EGLNativePixmapType eglNativePixmap,
-//			const std::vector<EGLint>& attribs
-//		);
+		Surface
+		(
+			const egl::Display& display, const Config& config,
+			const platform::Pixmap& pixmap,
+			const std::vector<EGLint>& attribs
+		);
 
 		~Surface ();
 

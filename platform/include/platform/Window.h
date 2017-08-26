@@ -4,7 +4,7 @@
 
 #include <platform/Display.h>
 
-#if defined(PLATFORM_XLIB)
+#if   defined(PLATFORM_XLIB)
 
 	#include <xlib/Window.h>
 
@@ -29,7 +29,7 @@ namespace platform
 	struct Window
 	{
 
-#if defined(PLATFORM_XLIB)
+#if   defined(PLATFORM_XLIB)
 
 		xlib::Window    nativeWindow;
 
