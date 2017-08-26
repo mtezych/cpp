@@ -36,6 +36,8 @@
 
 #include <egl/Display.h>
 
+#include <platform/Window.h>
+
 #include <cassert>
 
 namespace egl
@@ -67,7 +69,7 @@ namespace egl
 	Surface::Surface
 	(
 		const Display& display, const Config& config,
-		const EGLNativeWindowType eglNativeWindow,
+		const platform::Window& window,
 		const std::vector<EGLint>& attribs
 	):
 		eglSurface { EGL_NO_SURFACE     },
@@ -78,6 +80,19 @@ namespace egl
 		assert(attribs.size() > 0);
 		assert(attribs.back() == EGL_NONE);
 		assert(attribs.size() % 2);
+
+		const auto& eglNativeWindow = EGLNativeWindowType
+		{
+#if   defined(PLATFORM_XLIB)
+			window.nativeWindow.xWindow
+#elif defined(PLATFORM_XCB)
+			window.nativeWindow.xcbWindow
+#elif defined(PLATFORM_ANDROID)
+			window.nativeWindow.NativeHandle()
+#elif defined(PLATFORM_WINDOWS)
+			window.nativeWindow.windowHandle
+#endif
+		};
 
 		eglSurface = eglCreateWindowSurface
 		(

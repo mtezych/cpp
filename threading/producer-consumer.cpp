@@ -18,7 +18,7 @@ namespace threading
 		{
 		}
 
-		Product(char character)
+		explicit Product(char character)
 		:
 			character { character }
 		{

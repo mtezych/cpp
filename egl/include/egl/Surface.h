@@ -39,6 +39,11 @@
 
 #include <vector>
 
+namespace platform
+{
+	struct Window;
+}
+
 namespace egl
 {
 	struct Display;
@@ -58,7 +63,7 @@ namespace egl
 		Surface
 		(
 			const egl::Display& display, const Config& config,
-			const EGLNativeWindowType eglNativeWindow,
+			const platform::Window& window,
 			const std::vector<EGLint>& attribs
 		);
 

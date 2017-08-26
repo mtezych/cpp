@@ -47,7 +47,7 @@ add_library               (egl STATIC include/egl/Display.h
 
 target_include_directories(egl PUBLIC include)
 
-target_link_libraries     (egl EGL khronos)
+target_link_libraries     (egl EGL khronos platform)
 
 set_target_properties     (egl PROPERTIES CXX_STANDARD          14
                                           CXX_STANDARD_REQUIRED ON)

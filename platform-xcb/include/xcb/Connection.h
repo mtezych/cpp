@@ -18,7 +18,7 @@ namespace xcb
 		xcb_connection_t* xcbConnection;
 		xcb_screen_t*     xcbScreen;
 
-		Connection (const char* name = nullptr);
+		explicit Connection (const char* name = nullptr);
 		~Connection ();
 
 		Connection (Connection&& connection);
