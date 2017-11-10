@@ -38,10 +38,45 @@
 
 namespace egl
 {
-	Display::Display (EGLNativeDisplayType eglNativeDisplay)
+	Display::Display ()
 	:
-		eglDisplay { eglGetDisplay(eglNativeDisplay) }
+		eglDisplay { eglGetDisplay(EGL_DEFAULT_DISPLAY) }
 	{
+		assert(eglDisplay != EGL_NO_DISPLAY);
+		assert(eglGetError() == EGL_SUCCESS);
+
+		auto eglMajorVersion = EGLint { };
+		auto eglMinorVersion = EGLint { };
+		const auto eglResult = EGLBoolean
+		{
+			eglInitialize(eglDisplay, &eglMajorVersion, &eglMinorVersion)
+		};
+		assert(eglResult == EGL_TRUE);
+		assert(eglGetError() == EGL_SUCCESS);
+	}
+
+	Display::Display (const platform::Display& display)
+	:
+		eglDisplay { EGL_NO_DISPLAY }
+	{
+		const auto eglNativeDisplay = EGLNativeDisplayType
+		{
+#if   defined(PLATFORM_XLIB)
+
+			display.xDisplay
+
+#elif defined(PLATFORM_XCB)
+
+			display.xcbConnection
+
+#elif defined(PLATFORM_ANDROID) || defined(PLATFORM_WINDOWS)
+
+			EGL_DEFAULT_DISPLAY
+
+#endif
+		};
+
+		eglDisplay = eglGetDisplay(eglNativeDisplay);
 		assert(eglDisplay != EGL_NO_DISPLAY);
 		assert(eglGetError() == EGL_SUCCESS);
 
@@ -164,7 +199,7 @@ namespace egl
 		return configs;
 	}
 
-	void Display::BindAPI(const EGLenum eglAPI)
+	void Display::BindAPI (const EGLenum eglAPI)
 	{
 		assert(eglAPI == EGL_OPENGL_API || eglAPI == EGL_OPENGL_ES_API);
 

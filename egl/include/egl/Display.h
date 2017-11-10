@@ -39,6 +39,8 @@
 
 #include <egl/Config.h>
 
+#include <platform/Display.h>
+
 #include <vector>
 
 namespace egl
@@ -47,8 +49,10 @@ namespace egl
 	{
 		EGLDisplay eglDisplay;
 
+		Display ();
+
 		explicit
-		Display (EGLNativeDisplayType eglNativeDisplay = EGL_DEFAULT_DISPLAY);
+		Display (const platform::Display& display);
 
 		~Display ();
 
@@ -62,7 +66,7 @@ namespace egl
 		std::vector<Config> Configs (const std::vector<EGLint>& requiredAttribs)
 		const;
 
-		void BindAPI(const EGLenum eglAPI);
+		void BindAPI (const EGLenum eglAPI);
 	};
 }
 
