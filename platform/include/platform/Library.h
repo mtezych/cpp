@@ -42,31 +42,9 @@
 
 	#include <dlfcn.h>
 
-	namespace NativeLibrary
-	{
-		using Handle = void*;
-
-		Handle Init (const std::string& path);
-
-		void Deinit (const Handle& handle);
-
-		constexpr auto LoadSymbol = dlsym;
-	}
-
 #elif defined(_WIN32)
 
 	#include <Windows.h>
-
-	namespace NativeLibrary
-	{
-		using Handle = HMODULE;
-
-		Handle Init (const std::string& path);
-
-		void Deinit (const Handle& handle);
-
-		constexpr auto LoadSymbol = GetProcAddress;
-	}
 
 #else
 
@@ -76,6 +54,28 @@
 
 namespace platform
 {
+	struct NativeLibrary
+	{
+
+#if defined(__unix__)
+
+		using Handle = void*;
+		using Symbol = void*;
+
+#elif defined(_WIN32)
+
+		using Handle = HMODULE;
+		using Symbol = FARPROC;
+
+#endif
+
+		static Handle Init (const std::string& path);
+
+		static void Deinit (const Handle& handle);
+
+		static Symbol LoadSymbol (const Handle& handle, const char* symbolName);
+	};
+
 	class Library
 	{
 	private:

@@ -34,80 +34,83 @@
 
 #include <platform/Library.h>
 
+namespace platform
+{
+
 #if defined(__unix__)
 
-	namespace NativeLibrary
+	NativeLibrary::Handle NativeLibrary::Init (const std::string& path)
 	{
-		Handle Init(const std::string& path)
-		{
-			return dlopen(path.c_str(), RTLD_NOW);
-		}
+		return dlopen(path.c_str(), RTLD_NOW);
+	}
 
-		void Deinit(const Handle& handle)
-		{
-			const auto result = dlclose(handle);
-			assert(result == 0);
-		}
+	void NativeLibrary::Deinit (const Handle& handle)
+	{
+		const auto result = dlclose(handle);
+		assert(result == 0);
+	}
+
+	NativeLibrary::Symbol
+	NativeLibrary::LoadSymbol (const Handle& handle, const char* symbolName)
+	{
+		return dlsym(handle, symbolName);
 	}
 
 #elif defined(_WIN32)
 
-	namespace NativeLibrary
+	namespace
 	{
-		namespace
+		std::wstring convert_UTF8_to_UTF16 (const std::string& stringUTF8)
 		{
-			std::wstring convert_UTF8_to_UTF16(const std::string& stringUTF8)
-			{
-				const auto wideCharactersNeeded = MultiByteToWideChar
-				(
-					CP_UTF8, 0,
-					&stringUTF8[0], static_cast<int>(stringUTF8.length()),
-					nullptr, 0
-				);
-				assert(wideCharactersNeeded > 0);
+			const auto wideCharactersNeeded = MultiByteToWideChar
+			(
+				CP_UTF8, 0,
+				&stringUTF8[0], static_cast<int>(stringUTF8.length()),
+				nullptr, 0
+			);
+			assert(wideCharactersNeeded > 0);
 
-				auto stringUTF16 = std::wstring(wideCharactersNeeded, u'\0');
+			auto stringUTF16 = std::wstring(wideCharactersNeeded, u'\0');
 
-				const auto wideCharactersWritten = MultiByteToWideChar
-				(
-					CP_UTF8, 0,
-					&stringUTF8 [0], static_cast<int>(stringUTF8 .length()),
-					&stringUTF16[0], static_cast<int>(stringUTF16.length())
-				);
-				assert(wideCharactersWritten > 0);
+			const auto wideCharactersWritten = MultiByteToWideChar
+			(
+				CP_UTF8, 0,
+				&stringUTF8 [0], static_cast<int>(stringUTF8 .length()),
+				&stringUTF16[0], static_cast<int>(stringUTF16.length())
+			);
+			assert(wideCharactersWritten > 0);
 
-				return stringUTF16;
-			};
-		}
-
-		Handle Init(const std::string& path)
-		{
-			return LoadLibraryW(convert_UTF8_to_UTF16(path).c_str());
-		}
-
-		void Deinit(const Handle& handle)
-		{
-			const auto result = FreeLibrary(handle);
-			assert(result != 0);
-		}
+			return stringUTF16;
+		};
 	}
 
-#else
+	NativeLibrary::Handle NativeLibrary::Init (const std::string& path)
+	{
+		return LoadLibraryW(convert_UTF8_to_UTF16(path).c_str());
+	}
 
-	#error "Unsupported Platform"
+	void NativeLibrary::Deinit (const Handle& handle)
+	{
+		const auto result = FreeLibrary(handle);
+		assert(result != 0);
+	}
+
+	NativeLibrary::Symbol
+	NativeLibrary::LoadSymbol (const Handle& handle, const char* symbolName)
+	{
+		return GetProcAddress(handle, symbolName);
+	}
 
 #endif
 
-namespace platform
-{
-	Library::Library(const std::string& path)
+	Library::Library (const std::string& path)
 	:
 		handle { NativeLibrary::Init(path) }
 	{
 		assert(handle != nullptr);
 	}
 
-	Library::~Library()
+	Library::~Library ()
 	{
 		if (handle != nullptr)
 		{
@@ -115,14 +118,14 @@ namespace platform
 		}
 	}
 
-	Library::Library(Library&& library)
+	Library::Library (Library&& library)
 	:
 		handle { library.handle }
 	{
 		library.handle = nullptr;
 	}
 
-	Library& Library::operator =(Library&& library)
+	Library& Library::operator = (Library&& library)
 	{
 		if (handle != nullptr)
 		{
