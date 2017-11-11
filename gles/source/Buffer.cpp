@@ -39,6 +39,8 @@
 namespace gles
 {
 	Buffer::Buffer()
+	:
+		glBuffer { 0 }
 	{
 		glGenBuffers(1, &glBuffer);
 		assert(glBuffer != 0);

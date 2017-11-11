@@ -39,7 +39,9 @@ project(platform-windows)
 if(CMAKE_SYSTEM_NAME MATCHES Windows)
 
  add_library               (platform-windows STATIC include/windows/Window.h
-                                                             source/Window.cpp)
+                                                    include/windows/Bitmap.h
+                                                             source/Window.cpp
+                                                             source/Bitmap.cpp)
 
  target_include_directories(platform-windows PUBLIC include)
 
