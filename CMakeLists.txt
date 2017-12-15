@@ -37,6 +37,7 @@ cmake_minimum_required (VERSION 3.1)
 project(cpp)
 
 add_subdirectory(google-test)
+add_subdirectory(google-benchmark)
 add_subdirectory(libsync)
 add_subdirectory(platform-android)
 add_subdirectory(adt)
