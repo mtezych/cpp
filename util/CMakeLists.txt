@@ -36,6 +36,7 @@ cmake_minimum_required (VERSION 3.1)
 
 project(util)
 
+
 add_library               (util STATIC include/util/vec.h
                                              source/vec.cpp)
 
@@ -43,3 +44,11 @@ target_include_directories(util PUBLIC include)
 
 set_target_properties     (util PROPERTIES CXX_STANDARD          14
                                            CXX_STANDARD_REQUIRED ON)
+
+
+add_executable            (util-benchmark benchmark/util-benchmark.cpp)
+
+target_link_libraries     (util-benchmark util benchmark)
+
+set_target_properties     (util-benchmark PROPERTIES CXX_STANDARD          14
+                                                     CXX_STANDARD_REQUIRED ON)

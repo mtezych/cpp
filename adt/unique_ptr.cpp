@@ -154,7 +154,7 @@ namespace adt
 	unique_ptr<value_type> make_unique (args_types&&... args)
 	{
 		return unique_ptr<value_type> { new value_type { std::forward<args_types>(args)... } };
-	};
+	}
 }
 
 #include <cassert>
