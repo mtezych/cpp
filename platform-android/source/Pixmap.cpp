@@ -44,18 +44,25 @@ namespace android
 		),
 		androidPixmap
 		{
-			sizeof(egl_native_pixmap_t),                        // version
-			static_cast<int32_t>(size.width),                   // width
-			static_cast<int32_t>(size.height),                  // height
-			static_cast<int32_t>(storage.size() / size.height), // stride
-			storage.data(),                                     // data
-			android::PIXEL_FORMAT_RGBA_8888,                    // format
+			std::make_unique<egl_native_pixmap_t>
+			(
+				egl_native_pixmap_t
+				{
+					sizeof(egl_native_pixmap_t),                        // version
+					static_cast<int32_t>(size.width),                   // width
+					static_cast<int32_t>(size.height),                  // height
+					static_cast<int32_t>(storage.size() / size.height), // stride
+					storage.data(),                                     // data
+					android::PIXEL_FORMAT_RGBA_8888                     // format
+				}
+			)
 		}
 	{
 	}
 
-	egl_native_pixmap_t* Pixmap::NativeHandle ()
+	egl_native_pixmap_t* Pixmap::NativeHandle () const
 	{
-		return &androidPixmap;
+		// The egl_native_pixmap_t is allocated to preserve const correctness.
+		return androidPixmap.get();
 	}
 }
