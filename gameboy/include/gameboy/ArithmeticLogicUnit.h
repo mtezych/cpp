@@ -84,17 +84,17 @@ namespace gb
 			// subtractWithCarry.dstReg -= (subtractWithCarry.srcReg + flags.C);
 		}
 
-		void Execute (AndReg8Reg8& and)
+		void Execute (AndReg8Reg8& /*and*/)
 		{
 			// and.dstReg &= and.srcReg;
 		}
 
-		void Execute (OrReg8Reg8& or)
+		void Execute (OrReg8Reg8& /*or*/)
 		{
 			// or.dstReg |= or.srcReg;
 		}
 
-		void Execute (XorReg8Reg8& xor)
+		void Execute (XorReg8Reg8& /*xor*/)
 		{
 			// xor.dstReg ^= xor.srcReg;
 		}

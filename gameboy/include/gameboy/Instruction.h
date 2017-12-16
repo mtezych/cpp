@@ -283,7 +283,7 @@ namespace gb
 	{
 		AddRegReg (RegType& dstReg, const RegType& srcReg)
 		:
-			RegRegInstruction { Mnemonic::ADD, dstReg, srcReg }
+			RegRegInstruction<RegType> { Mnemonic::ADD, dstReg, srcReg }
 		{
 		}
 	};
@@ -410,7 +410,7 @@ namespace gb
 	{
 		IncrementReg (RegType& reg)
 		:
-			RegInstruction { Mnemonic::INC , reg }
+			RegInstruction<RegType> { Mnemonic::INC , reg }
 		{
 		}
 	};
@@ -420,7 +420,7 @@ namespace gb
 	{
 		DecrementReg (RegType& reg)
 		:
-			RegInstruction { Mnemonic::DEC , reg }
+			RegInstruction<RegType> { Mnemonic::DEC , reg }
 		{
 		}
 	};
