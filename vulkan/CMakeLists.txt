@@ -64,6 +64,7 @@ add_library               (vulkan STATIC include/vulkan/Symbols.h
                                          include/vulkan/DescriptorSetLayout.h
                                          include/vulkan/Sampler.h
                                          include/vulkan/DescriptorSet.h
+                                         include/vulkan/QueryPool.h
                                                  source/Loader.cpp
                                                  source/Instance.cpp
                                                  source/Surface.cpp
@@ -89,7 +90,8 @@ add_library               (vulkan STATIC include/vulkan/Symbols.h
                                                  source/DescriptorPool.cpp
                                                  source/DescriptorSetLayout.cpp
                                                  source/Sampler.cpp
-                                                 source/DescriptorSet.cpp)
+                                                 source/DescriptorSet.cpp
+                                                 source/QueryPool.cpp)
 
 target_include_directories(vulkan PUBLIC include)
 
