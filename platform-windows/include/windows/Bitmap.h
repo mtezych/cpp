@@ -2,18 +2,16 @@
 #ifndef PLATFORM_WINDOWS_BITMAP
 #define PLATFORM_WINDOWS_BITMAP
 
-#define UNICODE
 #include <Windows.h>
 
 #include <util/vec.h>
-
-#include <cassert>
 
 namespace windows
 {
 	struct Bitmap
 	{
 		HBITMAP bitmapHandle;
+		HDC     deviceContextHandle;
 
 		Bitmap (const util::uvec2& size);
 		~Bitmap ();
@@ -23,6 +21,8 @@ namespace windows
 
 		Bitmap& operator = (Bitmap&& bitmap);
 		Bitmap& operator = (const Bitmap& bitmap) = delete;
+
+		util::uvec2 Size() const;
 	};
 }
 

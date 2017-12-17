@@ -2,12 +2,13 @@
 #ifdef _WIN32
 
 #include <windows/Window.h>
+#include <windows/Bitmap.h>
 
 #include <chrono>
 #include <thread>
 #include <array>
 
-void window_task ()
+void WindowTask ()
 {
 	const auto window = windows::Window { util::uvec2 { 512, 512 } };
 
@@ -18,12 +19,28 @@ void window_task ()
 	window.ReceiveMessages(render);
 }
 
+void BitmapTask ()
+{
+	const auto bitmap = windows::Bitmap { util::uvec2 { 256, 256 } };
+
+	auto window = windows::Window { util::uvec2 { 512, 512 } };
+
+	const auto render = [&]()
+	{
+		window.Draw(bitmap);
+
+		std::this_thread::sleep_for(std::chrono::milliseconds { 16 });
+	};
+	window.ReceiveMessages(render);
+}
+
 int main()
 {
-	auto threads = std::array<std::thread, 2>
+	auto threads = std::array<std::thread, 3>
 	{
-		std::thread { window_task },
-		std::thread { window_task },
+		std::thread { WindowTask },
+		std::thread { WindowTask },
+		std::thread { BitmapTask },
 	};
 
 	for (auto& thread : threads)

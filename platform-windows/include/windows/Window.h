@@ -2,15 +2,14 @@
 #ifndef PLATFORM_WINDOWS_WINDOW
 #define PLATFORM_WINDOWS_WINDOW
 
-#define UNICODE
 #include <Windows.h>
 
 #include <util/vec.h>
 
-#include <cassert>
-
 namespace windows
 {
+	struct Bitmap;
+
 	// NUCLEX GAMES BLOG -> Simple Window Class
 	// http://blog.nuclex-games.com/2012/07/simple-main-window-class
 
@@ -59,6 +58,8 @@ namespace windows
 				}
 			}
 		}
+
+		void Draw (const Bitmap& bitmap);
 	};
 }
 

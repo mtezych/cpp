@@ -1,48 +1,82 @@
 
 #include <windows/Window.h>
 
+#include <windows/Bitmap.h>
+
+#include <cassert>
 #include <string>
-
-namespace
-{
-	HMODULE CurrentModuleHandle()
-	{
-		auto moduleHandle = HMODULE { nullptr };
-
-		const auto addressWithinModule = CurrentModuleHandle;
-
-		const auto result = GetModuleHandleEx
-		(
-			GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS |
-			GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT,
-			reinterpret_cast<LPCTSTR>(addressWithinModule),
-			&moduleHandle
-		);
-		assert(result != 0);
-		assert(moduleHandle != nullptr);
-
-		return moduleHandle;
-	}
-
-	std::wstring GenerateUniqueClassName()
-	{
-		auto guid = GUID { };
-
-		const auto resultHandle = CoCreateGuid(&guid);
-		assert(resultHandle == S_OK);
-
-		auto guidString = std::wstring { L"{XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX}~" };
-
-		const auto charsWritten = StringFromGUID2(guid, &guidString[0], guidString.size());
-		assert(charsWritten == guidString.size());
-
-		return guidString;
-	}
-}
+#include <type_traits>
 
 namespace windows
 {
-	Window::Window(const util::uvec2& size)
+	namespace
+	{
+		HMODULE CurrentModuleHandle ()
+		{
+			auto moduleHandle = HMODULE { nullptr };
+
+			const auto addressWithinModule = CurrentModuleHandle;
+
+			const auto result = GetModuleHandleEx
+			(
+				GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS |
+				GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT,
+				reinterpret_cast<LPCTSTR>(addressWithinModule),
+				&moduleHandle
+			);
+			assert(result != 0);
+			assert(moduleHandle != nullptr);
+
+			return moduleHandle;
+		}
+
+		std::wstring GenerateUniqueClassName ()
+		{
+			auto guid = GUID { };
+
+			const auto resultHandle = CoCreateGuid(&guid);
+			assert(resultHandle == S_OK);
+
+			auto guidString = std::wstring
+			{
+				L"{XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX}~"
+			};
+
+			const auto charsWritten = StringFromGUID2
+			(
+				guid, &guidString[0], guidString.size()
+			);
+			assert(charsWritten == guidString.size());
+
+			return guidString;
+		}
+
+		template <typename ObjectHandleType>
+		ObjectHandleType SelectObjectForDeviceContext
+		(
+			const HDC deviceContextHandle,
+			const ObjectHandleType objectHandle
+		)
+		{
+			static_assert
+			(
+				std::is_same<ObjectHandleType, HBITMAP>::value ||
+				std::is_same<ObjectHandleType, HBRUSH >::value ||
+				std::is_same<ObjectHandleType, HFONT  >::value ||
+				std::is_same<ObjectHandleType, HPEN   >::value,""
+			);
+
+			const auto replacedObjectHandle = SelectObject
+			(
+				deviceContextHandle, objectHandle
+			);
+			assert(replacedObjectHandle != nullptr);
+
+			return static_cast<ObjectHandleType>(replacedObjectHandle);
+		}
+	}
+
+	Window::Window (const util::uvec2& size)
 	:
 		moduleHandle        { nullptr },
 		windowHandle        { nullptr },
@@ -104,7 +138,7 @@ namespace windows
 		const auto result = ShowWindow(windowHandle, SW_SHOW);
 	}
 
-	Window::~Window()
+	Window::~Window ()
 	{
 		const auto previousUserData = SetWindowLongPtr
 		(
@@ -122,7 +156,7 @@ namespace windows
 		assert(result != 0);
 	}
 
-	Window::Window(Window&& window)
+	Window::Window (Window&& window)
 	:
 		moduleHandle        { window.moduleHandle        },
 		windowHandle        { window.windowHandle        },
@@ -160,7 +194,7 @@ namespace windows
 
 		switch (uMsg)
 		{
-			case WM_CREATE:
+			case WM_CREATE :
 			{
 				const auto createStruct = reinterpret_cast<const LPCREATESTRUCT>(lParam);
 				// create parameter send by CreateWindowEx()
@@ -197,5 +231,34 @@ namespace windows
 				return DefWindowProc(hWindow, uMsg, wParam, lParam);
 			}
 		}
+	}
+
+	void Window::Draw (const Bitmap& bitmap)
+	{
+		// Drawing without the WM_PAINT message is OK.
+		// https://msdn.microsoft.com/en-us/library/dd162492(v=vs.85).aspx
+
+		const auto previousBitmapHandle = SelectObjectForDeviceContext
+		(
+			bitmap.deviceContextHandle, bitmap.bitmapHandle
+		);
+		{
+			const auto bitmapSize = bitmap.Size();
+
+			const auto result = BitBlt
+			(
+				deviceContextHandle,
+				0, 0, bitmapSize.width, bitmapSize.height,
+				bitmap.deviceContextHandle,
+				0, 0,
+				SRCCOPY
+			);
+			assert(result != 0);
+		}
+		const auto bitmapHandle = SelectObjectForDeviceContext
+		(
+			bitmap.deviceContextHandle, previousBitmapHandle
+		);
+		assert(bitmapHandle == bitmap.bitmapHandle);
 	}
 }
