@@ -1,6 +1,6 @@
 
-#ifndef VULKAN
-#define VULKAN
+#ifndef VULKAN_LOADER
+#define VULKAN_LOADER
 
 #include <vulkan/vulkan.h>
 

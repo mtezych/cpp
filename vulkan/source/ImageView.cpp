@@ -11,7 +11,7 @@ namespace vk
 {
 	ImageView::CreateInfo::CreateInfo
 	(
-		const VkImageViewType          viewType,
+		const VkImageViewType          type,
 		const VkFormat                 format,
 		const VkComponentMapping       components,
 		const VkImageSubresourceRange& subresourceRange
@@ -22,7 +22,7 @@ namespace vk
 			nullptr,
 			0,
 			VkImage { VK_NULL_HANDLE },
-			viewType,
+			type,
 			format,
 			components,
 			subresourceRange,

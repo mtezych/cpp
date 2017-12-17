@@ -17,7 +17,7 @@ namespace vk
 
 			CreateInfo
 			(
-				const VkImageViewType          viewType,
+				const VkImageViewType          type,
 				const VkFormat                 format,
 				const VkComponentMapping       components,
 				const VkImageSubresourceRange& subresourceRange
