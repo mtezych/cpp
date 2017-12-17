@@ -4,9 +4,6 @@
 
 #include <vulkan/vulkan.h>
 
-#include <vulkan/Symbols.h>
-
-#include <cassert>
 #include <vector>
 
 namespace vk

@@ -3,6 +3,8 @@
 
 #include <vulkan/Device.h>
 
+#include <cassert>
+
 namespace vk
 {
 	RenderPass::RenderPass
