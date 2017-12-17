@@ -8,6 +8,7 @@
 #include <vulkan/Framebuffer.h>
 #include <vulkan/Pipeline.h>
 #include <vulkan/Image.h>
+#include <vulkan/QueryPool.h>
 
 #include <cassert>
 
@@ -193,6 +194,66 @@ namespace vk
 			vkCommandBuffer,
 			vertexCount, instanceCount,
 			firstVertex, firstInstance
+		);
+	}
+
+	void CommandBuffer::RecordCommandResetQueryPool
+	(
+		const QueryPool& queryPool,
+		const uint32_t firstQuery, const uint32_t queryCount
+	)
+	{
+		commandPool->device->vkCmdResetQueryPool
+		(
+			vkCommandBuffer,
+			queryPool.vkQueryPool,
+			firstQuery, queryCount
+		);
+	}
+
+	void CommandBuffer::RecordCommandBeginQuery
+	(
+		const QueryPool& queryPool, const uint32_t queryIndex,
+		const VkQueryControlFlags controlFlags
+	)
+	{
+//		assert
+//		(
+//			(controlFlags == VK_QUERY_CONTROL_PRECISE_BIT) &&
+//			(queryPool.type == VK_QUERY_TYPE_OCCLUSION)
+//		);
+
+		commandPool->device->vkCmdBeginQuery
+		(
+			vkCommandBuffer,
+			queryPool.vkQueryPool, queryIndex,
+			controlFlags
+		);
+	}
+
+	void CommandBuffer::RecordCommandEndQuery
+	(
+		const QueryPool& queryPool, const uint32_t queryIndex
+	)
+	{
+		commandPool->device->vkCmdEndQuery
+		(
+			vkCommandBuffer,
+			queryPool.vkQueryPool, queryIndex
+		);
+	}
+
+	void CommandBuffer::RecordCommandWriteTimestamp
+	(
+		const QueryPool& queryPool, const uint32_t queryIndex,
+		const VkPipelineStageFlagBits pipelineStage
+	)
+	{
+		commandPool->device->vkCmdWriteTimestamp
+		(
+			vkCommandBuffer,
+			pipelineStage,
+			queryPool.vkQueryPool, queryIndex
 		);
 	}
 }

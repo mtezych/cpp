@@ -11,6 +11,7 @@ namespace vk
 	struct Framebuffer;
 	struct Pipeline;
 	struct Image;
+	struct QueryPool;
 
 	struct CommandBuffer
 	{
@@ -64,6 +65,29 @@ namespace vk
 		(
 			uint32_t vertexCount, uint32_t instanceCount,
 			uint32_t firstVertex, uint32_t firstInstance
+		);
+
+		void RecordCommandResetQueryPool
+		(
+			const QueryPool& queryPool,
+			const uint32_t firstQuery, const uint32_t queryCount
+		);
+
+		void RecordCommandBeginQuery
+		(
+			const QueryPool& queryPool, const uint32_t queryIndex,
+			const VkQueryControlFlags controlFlags = 0
+		);
+
+		void RecordCommandEndQuery
+		(
+			const QueryPool& queryPool, const uint32_t queryIndex
+		);
+
+		void RecordCommandWriteTimestamp
+		(
+			const QueryPool& queryPool, const uint32_t queryIndex,
+			const VkPipelineStageFlagBits pipelineStage
 		);
 	};
 }
