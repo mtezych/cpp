@@ -52,6 +52,14 @@ namespace vk
 		│ │*/ PFN_vkResetFences                vkResetFences;                /*│ │
 		│ │*/ PFN_vkWaitForFences              vkWaitForFences;              /*│ │
 		│ └────────────────────────────────────────────────────────────────────┘ │
+		│ ┌────────────────────────────────────────────────────────────────────┐ │
+		│ │                             VkQueryPool                            │ │
+		│ ├────────────────────────────────────────────────────────────────────┤ │
+		│ │*/ PFN_vkCreateQueryPool            vkCreateQueryPool;            /*│ │
+		│ │*/ PFN_vkDestroyQueryPool           vkDestroyQueryPool;           /*│ │
+		│ │                                                                    │ │
+		│ │*/ PFN_vkGetQueryPoolResults        vkGetQueryPoolResults;        /*│ │
+		│ └────────────────────────────────────────────────────────────────────┘ │
 		│                                                                        │
 		│ ┌────────────────────────────────────────────────────────────────────┐ │
 		│ │                             VkRenderPass                           │ │
@@ -210,6 +218,12 @@ namespace vk
 		│*/ PFN_vkCmdDraw                      vkCmdDraw;                      /*│
 		│                                                                        │
 		│*/ PFN_vkCmdClearColorImage           vkCmdClearColorImage;           /*│
+		│                                                                        │
+		│*/ PFN_vkCmdResetQueryPool            vkCmdResetQueryPool;            /*│
+		│*/ PFN_vkCmdBeginQuery                vkCmdBeginQuery;                /*│
+		│*/ PFN_vkCmdEndQuery                  vkCmdEndQuery;                  /*│
+		│*/ PFN_vkCmdWriteTimestamp            vkCmdWriteTimestamp;            /*│
+		│*/ PFN_vkCmdCopyQueryPoolResults      vkCmdCopyQueryPoolResults;      /*│
 		│                                                                        │
 		│*/ PFN_vkCmdPipelineBarrier           vkCmdPipelineBarrier;           /*│
 		│                                                                        │

@@ -611,6 +611,54 @@ namespace symbol
 		using                 type = PFN_vkUpdateDescriptorSets;
 		static constexpr auto name =    "vkUpdateDescriptorSets";
 	};
+
+	struct vkCreateQueryPool
+	{
+		using                 type = PFN_vkCreateQueryPool;
+		static constexpr auto name =    "vkCreateQueryPool";
+	};
+
+	struct vkDestroyQueryPool
+	{
+		using                 type = PFN_vkDestroyQueryPool;
+		static constexpr auto name =    "vkDestroyQueryPool";
+	};
+
+	struct vkCmdResetQueryPool
+	{
+		using                 type = PFN_vkCmdResetQueryPool;
+		static constexpr auto name =    "vkCmdResetQueryPool";
+	};
+
+	struct vkCmdBeginQuery
+	{
+		using                 type = PFN_vkCmdBeginQuery;
+		static constexpr auto name =    "vkCmdBeginQuery";
+	};
+
+	struct vkCmdEndQuery
+	{
+		using                 type = PFN_vkCmdEndQuery;
+		static constexpr auto name =    "vkCmdEndQuery";
+	};
+
+	struct vkCmdWriteTimestamp
+	{
+		using                 type = PFN_vkCmdWriteTimestamp;
+		static constexpr auto name =    "vkCmdWriteTimestamp";
+	};
+
+	struct vkCmdCopyQueryPoolResults
+	{
+		using                 type = PFN_vkCmdCopyQueryPoolResults;
+		static constexpr auto name =    "vkCmdCopyQueryPoolResults";
+	};
+
+	struct vkGetQueryPoolResults
+	{
+		using                 type = PFN_vkGetQueryPoolResults;
+		static constexpr auto name =    "vkGetQueryPoolResults";
+	};
 }
 
 #endif

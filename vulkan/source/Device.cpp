@@ -51,6 +51,9 @@ namespace vk
 		vkGetFenceStatus             { nullptr },
 		vkResetFences                { nullptr },
 		vkWaitForFences              { nullptr },
+		vkCreateQueryPool            { nullptr },
+		vkDestroyQueryPool           { nullptr },
+		vkGetQueryPoolResults        { nullptr },
 		vkCreateRenderPass           { nullptr },
 		vkDestroyRenderPass          { nullptr },
 		vkCreateFramebuffer          { nullptr },
@@ -107,6 +110,11 @@ namespace vk
 		vkCmdBindPipeline            { nullptr },
 		vkCmdDraw                    { nullptr },
 		vkCmdClearColorImage         { nullptr },
+		vkCmdResetQueryPool          { nullptr },
+		vkCmdBeginQuery              { nullptr },
+		vkCmdEndQuery                { nullptr },
+		vkCmdWriteTimestamp          { nullptr },
+		vkCmdCopyQueryPoolResults    { nullptr },
 		vkCmdPipelineBarrier         { nullptr },
 		vkCmdBeginRenderPass         { nullptr },
 		vkCmdEndRenderPass           { nullptr }
@@ -143,6 +151,14 @@ namespace vk
 		vkGetFenceStatus             = LoadDeviceProcedure<symbol::vkGetFenceStatus            >();
 		vkResetFences                = LoadDeviceProcedure<symbol::vkResetFences               >();
 		vkWaitForFences              = LoadDeviceProcedure<symbol::vkWaitForFences             >();
+		/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+		/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+		 *                                      VkQueryPool                                      *
+		 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+		vkCreateQueryPool            = LoadDeviceProcedure<symbol::vkCreateQueryPool           >();
+		vkDestroyQueryPool           = LoadDeviceProcedure<symbol::vkDestroyQueryPool          >();
+		vkGetQueryPoolResults        = LoadDeviceProcedure<symbol::vkGetQueryPoolResults       >();
 		/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 		/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -312,6 +328,12 @@ namespace vk
 
 		vkCmdClearColorImage         = LoadDeviceProcedure<symbol::vkCmdClearColorImage        >();
 
+		vkCmdResetQueryPool          = LoadDeviceProcedure<symbol::vkCmdResetQueryPool         >();
+		vkCmdBeginQuery              = LoadDeviceProcedure<symbol::vkCmdBeginQuery             >();
+		vkCmdEndQuery                = LoadDeviceProcedure<symbol::vkCmdEndQuery               >();
+		vkCmdWriteTimestamp          = LoadDeviceProcedure<symbol::vkCmdWriteTimestamp         >();
+		vkCmdCopyQueryPoolResults    = LoadDeviceProcedure<symbol::vkCmdCopyQueryPoolResults   >();
+
 		vkCmdPipelineBarrier         = LoadDeviceProcedure<symbol::vkCmdPipelineBarrier        >();
 
 		vkCmdBeginRenderPass         = LoadDeviceProcedure<symbol::vkCmdBeginRenderPass        >();
@@ -344,6 +366,9 @@ namespace vk
 		vkGetFenceStatus             { device.vkGetFenceStatus             },
 		vkResetFences                { device.vkResetFences                },
 		vkWaitForFences              { device.vkWaitForFences              },
+		vkCreateQueryPool            { device.vkCreateQueryPool            },
+		vkDestroyQueryPool           { device.vkDestroyQueryPool           },
+		vkGetQueryPoolResults        { device.vkGetQueryPoolResults        },
 		vkCreateRenderPass           { device.vkCreateRenderPass           },
 		vkDestroyRenderPass          { device.vkDestroyRenderPass          },
 		vkCreateFramebuffer          { device.vkCreateFramebuffer          },
@@ -400,6 +425,11 @@ namespace vk
 		vkCmdBindPipeline            { device.vkCmdBindPipeline            },
 		vkCmdDraw                    { device.vkCmdDraw                    },
 		vkCmdClearColorImage         { device.vkCmdClearColorImage         },
+		vkCmdResetQueryPool          { device.vkCmdResetQueryPool          },
+		vkCmdBeginQuery              { device.vkCmdBeginQuery              },
+		vkCmdEndQuery                { device.vkCmdEndQuery                },
+		vkCmdWriteTimestamp          { device.vkCmdWriteTimestamp          },
+		vkCmdCopyQueryPoolResults    { device.vkCmdCopyQueryPoolResults    },
 		vkCmdPipelineBarrier         { device.vkCmdPipelineBarrier         },
 		vkCmdBeginRenderPass         { device.vkCmdBeginRenderPass         },
 		vkCmdEndRenderPass           { device.vkCmdEndRenderPass           }
@@ -416,6 +446,9 @@ namespace vk
 		device.vkGetFenceStatus             = nullptr;
 		device.vkResetFences                = nullptr;
 		device.vkWaitForFences              = nullptr;
+		device.vkCreateQueryPool            = nullptr;
+		device.vkDestroyQueryPool           = nullptr;
+		device.vkGetQueryPoolResults        = nullptr;
 		device.vkCreateRenderPass           = nullptr;
 		device.vkDestroyRenderPass          = nullptr;
 		device.vkCreateFramebuffer          = nullptr;
@@ -472,6 +505,11 @@ namespace vk
 		device.vkCmdBindPipeline            = nullptr;
 		device.vkCmdDraw                    = nullptr;
 		device.vkCmdClearColorImage         = nullptr;
+		device.vkCmdResetQueryPool          = nullptr;
+		device.vkCmdBeginQuery              = nullptr;
+		device.vkCmdEndQuery                = nullptr;
+		device.vkCmdWriteTimestamp          = nullptr;
+		device.vkCmdCopyQueryPoolResults    = nullptr;
 		device.vkCmdPipelineBarrier         = nullptr;
 		device.vkCmdBeginRenderPass         = nullptr;
 		device.vkCmdEndRenderPass           = nullptr;
@@ -499,6 +537,9 @@ namespace vk
 		vkGetFenceStatus             = device.vkGetFenceStatus;
 		vkResetFences                = device.vkResetFences;
 		vkWaitForFences              = device.vkWaitForFences;
+		vkCreateQueryPool            = device.vkCreateQueryPool;
+		vkDestroyQueryPool           = device.vkDestroyQueryPool;
+		vkGetQueryPoolResults        = device.vkGetQueryPoolResults;
 		vkCreateRenderPass           = device.vkCreateRenderPass;
 		vkDestroyRenderPass          = device.vkDestroyRenderPass;
 		vkCreateFramebuffer          = device.vkCreateFramebuffer;
@@ -555,6 +596,11 @@ namespace vk
 		vkCmdBindPipeline            = device.vkCmdBindPipeline;
 		vkCmdDraw                    = device.vkCmdDraw;
 		vkCmdClearColorImage         = device.vkCmdClearColorImage;
+		vkCmdResetQueryPool          = device.vkCmdResetQueryPool;
+		vkCmdBeginQuery              = device.vkCmdBeginQuery;
+		vkCmdEndQuery                = device.vkCmdEndQuery;
+		vkCmdWriteTimestamp          = device.vkCmdWriteTimestamp;
+		vkCmdCopyQueryPoolResults    = device.vkCmdCopyQueryPoolResults;
 		vkCmdPipelineBarrier         = device.vkCmdPipelineBarrier;
 		vkCmdBeginRenderPass         = device.vkCmdBeginRenderPass;
 		vkCmdEndRenderPass           = device.vkCmdEndRenderPass;
@@ -571,6 +617,9 @@ namespace vk
 		device.vkGetFenceStatus             = nullptr;
 		device.vkResetFences                = nullptr;
 		device.vkWaitForFences              = nullptr;
+		device.vkCreateQueryPool            = nullptr;
+		device.vkDestroyQueryPool           = nullptr;
+		device.vkGetQueryPoolResults        = nullptr;
 		device.vkCreateRenderPass           = nullptr;
 		device.vkDestroyRenderPass          = nullptr;
 		device.vkCreateFramebuffer          = nullptr;
@@ -627,6 +676,11 @@ namespace vk
 		device.vkCmdBindPipeline            = nullptr;
 		device.vkCmdDraw                    = nullptr;
 		device.vkCmdClearColorImage         = nullptr;
+		device.vkCmdResetQueryPool          = nullptr;
+		device.vkCmdBeginQuery              = nullptr;
+		device.vkCmdEndQuery                = nullptr;
+		device.vkCmdWriteTimestamp          = nullptr;
+		device.vkCmdCopyQueryPoolResults    = nullptr;
 		device.vkCmdPipelineBarrier         = nullptr;
 		device.vkCmdBeginRenderPass         = nullptr;
 		device.vkCmdEndRenderPass           = nullptr;
