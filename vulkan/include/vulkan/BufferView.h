@@ -26,12 +26,7 @@ namespace vk
 		const Device* device;
 		VkBufferView  vkBufferView;
 
-		BufferView
-		(
-			const Device&     device,
-			const Buffer&     buffer,
-			const CreateInfo& createInfo
-		);
+		BufferView (const Buffer& buffer, const CreateInfo& createInfo);
 
 		~BufferView ();
 

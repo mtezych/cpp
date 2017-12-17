@@ -27,12 +27,7 @@ namespace vk
 		const Device* device;
 		VkImageView   vkImageView;
 
-		ImageView
-		(
-			const Device&     device,
-			const Image&      image,
-			const CreateInfo& createInfo
-		);
+		ImageView (const Image& image, const CreateInfo& createInfo);
 
 		~ImageView ();
 

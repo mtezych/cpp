@@ -20,7 +20,6 @@ namespace vk
 
 		Framebuffer
 		(
-			const Device&                 device,
 			const RenderPass&             renderPass,
 			const std::vector<ImageView>& imageViews,
 			const VkExtent2D&             size,

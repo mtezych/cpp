@@ -30,21 +30,17 @@ namespace vk
 	{
 	}
 
-	ImageView::ImageView
-	(
-		const Device&     device,
-		const Image&      image,
-		const CreateInfo& createInfo
-	):
-		device      { &device        },
+	ImageView::ImageView (const Image& image, const CreateInfo& createInfo)
+	:
+		device      { image.device   },
 		vkImageView { VK_NULL_HANDLE }
 	{
 		auto createInfoCopy = createInfo.createInfo;
 		createInfoCopy.image = image.vkImage;
 
-		const auto result = device.vkCreateImageView
+		const auto result = device->vkCreateImageView
 		(
-			device.vkDevice,
+			device->vkDevice,
 			&createInfoCopy,
 			nullptr,
 			&vkImageView

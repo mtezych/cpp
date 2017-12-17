@@ -28,21 +28,17 @@ namespace vk
 	{
 	}
 
-	BufferView::BufferView
-	(
-		const Device&     device,
-		const Buffer&     buffer,
-		const CreateInfo& createInfo
-	):
-		device       { &device        },
+	BufferView::BufferView (const Buffer& buffer, const CreateInfo& createInfo)
+	:
+		device       { buffer.device  },
 		vkBufferView { VK_NULL_HANDLE }
 	{
 		auto createInfoCopy = createInfo.createInfo;
 		createInfoCopy.buffer = buffer.vkBuffer;
 
-		const auto result = device.vkCreateBufferView
+		const auto result = device->vkCreateBufferView
 		(
-			device.vkDevice,
+			device->vkDevice,
 			&createInfoCopy,
 			nullptr,
 			&vkBufferView

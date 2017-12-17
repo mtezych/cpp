@@ -12,14 +12,13 @@ namespace vk
 {
 	Framebuffer::Framebuffer
 	(
-		const Device&                 device,
 		const RenderPass&             renderPass,
 		const std::vector<ImageView>& imageViews,
 		const VkExtent2D&             size,
 		const uint32_t                layers
 	):
-		device        { &device },
-		vkFramebuffer { VK_NULL_HANDLE }
+		device        { renderPass.device },
+		vkFramebuffer { VK_NULL_HANDLE    }
 	{
 		auto vkImageViews = std::vector<VkImageView>
 		(
@@ -45,9 +44,9 @@ namespace vk
 			size.width, size.height, layers
 		};
 
-		const auto result = device.vkCreateFramebuffer
+		const auto result = device->vkCreateFramebuffer
 		(
-			device.vkDevice,
+			device->vkDevice,
 			&createInfo,
 			nullptr,
 			&vkFramebuffer
