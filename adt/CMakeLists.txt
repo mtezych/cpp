@@ -44,6 +44,6 @@ add_executable       (unique_ptr unique_ptr.cpp)
 set_target_properties(unique_ptr PROPERTIES CXX_STANDARD          14
                                             CXX_STANDARD_REQUIRED ON)
 
-add_executable       (handle handle.cpp)
-set_target_properties(handle PROPERTIES CXX_STANDARD          14
-                                        CXX_STANDARD_REQUIRED ON)
+add_executable       (optional optional.cpp)
+set_target_properties(optional PROPERTIES CXX_STANDARD          14
+                                          CXX_STANDARD_REQUIRED ON)

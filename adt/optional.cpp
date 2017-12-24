@@ -40,157 +40,160 @@
 namespace adt
 {
 	template <typename value_type>
-	class handle
+	class optional
 	{
 	private:
-		bool created;
+		bool empty;
 		std::aligned_storage_t<sizeof(value_type), alignof(value_type)> storage;
 
 	public:
-		handle ()
+		optional ()
 		:
-			created { false }
+			empty { true }
 		{
 		}
 
-		~handle()
+		~optional ()
 		{
-			destroy();
+			reset();
 		}
 
-		handle (const handle& handle)
+		optional (const optional& optional)
 		:
-			created { handle.created }
+			empty { optional.empty }
 		{
-			if (created)
+			if (optional)
 			{
-				new (&storage) value_type (*handle.get());
+				new (&storage) value_type (optional.value());
 			}
 		}
 
-		handle& operator = (const handle& handle)
+		optional& operator = (const optional& optional)
 		{
-			destroy();
+			reset();
 
-			created = handle.created;
+			empty = optional.empty;
 
-			if (created)
+			if (optional)
 			{
-				new (&storage) value_type (*handle.get());
+				new (&storage) value_type (optional.value());
 			}
 
 			return *this;
 		}
 
-		handle (handle&& handle)
+		optional (optional&& optional)
 		:
-			created { handle.created }
+			empty { optional.empty }
 		{
-			if (created)
+			if (optional)
 			{
-				new (&storage) value_type (std::move(*handle.get()));
+				new (&storage) value_type (std::move(optional.value()));
 			}
 
-			handle.destroy();
+			optional.reset();
 		}
 
-		handle& operator = (handle&& handle)
+		optional& operator = (optional&& optional)
 		{
-			destroy();
+			reset();
 
-			created = handle.created;
+			empty = optional.empty;
 
-			if (created)
+			if (optional)
 			{
-				new (&storage) value_type (std::move(*handle.get()));
+				new (&storage) value_type (std::move(optional.value()));
 			}
 
-			handle.destroy();
+			optional.reset();
 
 			return *this;
 		}
 
 		template <typename... Args>
-		void create (Args&&... args)
+		value_type& emplace (Args&&... args)
 		{
-			destroy();
+			reset();
 
 			new (&storage) value_type (std::forward<Args>(args)...);
 
-			created = true;
+			empty = false;
+
+			return value();
 		}
 
-		void destroy ()
+		void reset ()
 		{
-			if (created)
+			if (has_value())
 			{
-				created = false;
+				value().~value_type();
 
-				get()->~value_type();
+				empty = true;
 			}
+		}
+
+		bool has_value() const
+		{
+			return !empty;
 		}
 
 		explicit operator bool() const
 		{
-			return created;
+			return has_value();
 		}
 
-		value_type* get ()
+		value_type& value ()
 		{
-			if (created)
-			{
-				return reinterpret_cast<value_type*>(&storage);
-			}
-			else
-			{
-				return nullptr;
-			}
+			assert(has_value());
+
+			return *reinterpret_cast<value_type*>(&storage);
 		}
 
-		const value_type* get () const
+		const value_type& value () const
 		{
-			if (created)
-			{
-				return reinterpret_cast<const value_type*>(&storage);
-			}
-			else
-			{
-				return nullptr;
-			}
+			assert(has_value());
+
+			return *reinterpret_cast<const value_type*>(&storage);
+		}
+
+		value_type& operator * ()
+		{
+			return value();
+		}
+
+		const value_type& operator * () const
+		{
+			return value();
 		}
 
 		value_type* operator -> ()
 		{
-			assert(created);
-
-			return get();
+			return &value();
 		}
 
 		const value_type* operator -> () const
 		{
-			assert(created);
-
-			return get();
+			return &value();
 		}
 
-		void swap (handle& handle)
+		void swap (optional& optional)
 		{
-			if (created && handle.created)
+			if (has_value() && optional.has_value())
 			{
-				std::swap(*get(), *handle.get());
+				std::swap(value(), optional.value());
 			}
-			else if (handle.created)
+			else if (optional.has_value())
 			{
-				new (&storage) value_type (std::move(*handle.get()));
-				handle.get()->~value_type();
+				new (&storage) value_type (std::move(optional.value()));
+				optional.value().~value_type();
 			}
-			else if (created)
+			else if (has_value())
 			{
-				new (&handle.storage) value_type (std::move(*get()));
-				get()->~value_type();
+				new (&optional.storage) value_type (std::move(value()));
+				value().~value_type();
 			}
 
-			std::swap(created, handle.created);
+			std::swap(empty, optional.empty);
 		}
 	};
 }
@@ -198,19 +201,19 @@ namespace adt
 namespace assert
 {
 	template <typename value_type>
-	void empty (const adt::handle<value_type>& handle)
+	void empty (const adt::optional<value_type>& optional)
 	{
-		assert(handle.get() == nullptr);
-		assert(!handle);
+		assert(!optional.has_value());
+		assert(!optional);
 	}
 
 	template <typename value_type>
-	void owns (const adt::handle<value_type>& handle, const value_type& value)
+	void owns (const adt::optional<value_type>& optional, const value_type& value)
 	{
-		assert(handle.get() != nullptr);
-		assert(handle);
+		assert(optional.has_value());
+		assert(optional);
 
-		assert(*handle.get() == value);
+		assert(optional.value() == value);
 	}
 }
 
@@ -242,10 +245,10 @@ namespace test
 			}
 		};
 
-		adt::handle<Foo> foo;
+		auto foo = adt::optional<Foo> { };
 		assert::empty(foo);
 
-		foo.create(4, '&', 8.0);
+		foo.emplace(4, '&', 8.0);
 		assert::owns(foo, Foo { 4, '&', 8.0 });
 		{
 			if (foo)
@@ -253,7 +256,7 @@ namespace test
 				foo->Bar();
 			}
 		}
-		foo.destroy();
+		foo.reset();
 		assert::empty(foo);
 	}
 }
