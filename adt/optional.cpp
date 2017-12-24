@@ -39,6 +39,12 @@
 
 namespace adt
 {
+	struct nullopt_t
+	{
+	};
+
+	constexpr nullopt_t nullopt { };
+
 	template <typename value_type>
 	class optional
 	{
@@ -48,6 +54,12 @@ namespace adt
 
 	public:
 		optional ()
+		:
+			initialized { false }
+		{
+		}
+
+		optional (const nullopt_t)
 		:
 			initialized { false }
 		{
@@ -106,6 +118,13 @@ namespace adt
 			}
 
 			optional.reset();
+
+			return *this;
+		}
+
+		optional& operator = (const nullopt_t)
+		{
+			reset();
 
 			return *this;
 		}
@@ -196,6 +215,40 @@ namespace adt
 			std::swap(initialized, optional.initialized);
 		}
 	};
+
+	template <typename value_type>
+	bool operator == (const optional<value_type>& optional, const nullopt_t)
+	{
+		return !optional.has_value();
+	}
+
+	template <typename value_type>
+	bool operator != (const optional<value_type>& optional, const nullopt_t)
+	{
+		return optional.has_value();
+	}
+
+	template <typename value_type>
+	bool operator == (const nullopt_t, const optional<value_type>& optional)
+	{
+		return !optional.has_value();
+	}
+
+	template <typename value_type>
+	bool operator != (const std::nullptr_t, const optional<value_type>& optional)
+	{
+		return optional.has_value();
+	}
+
+	template <typename value_type, typename... args_types>
+	optional<value_type> make_optional (args_types&&... args)
+	{
+		auto opt = optional<value_type> { };
+
+		opt.emplace(std::forward<args_types>(args)...);
+
+		return opt;
+	}
 }
 
 namespace assert
@@ -219,32 +272,32 @@ namespace assert
 
 namespace test
 {
+	struct Foo
+	{
+		int    a;
+		char   b;
+		double c;
+
+		Foo (int a, char b, double c)
+		:
+			a { a },
+			b { b },
+			c { c }
+		{
+		}
+
+		bool operator == (const Foo& foo) const
+		{
+			return (a == foo.a) && (b == foo.b) && (c == foo.c);
+		}
+
+		void Bar ()
+		{
+		}
+	};
+
 	void idiomatic_usage ()
 	{
-		struct Foo
-		{
-			int    a;
-			char   b;
-			double c;
-
-			Foo (int a, char b, double c)
-			:
-				a { a },
-				b { b },
-				c { c }
-			{
-			}
-
-			bool operator == (const Foo & foo) const
-			{
-				return (a == foo.a) && (b == foo.b) && (c == foo.c);
-			}
-
-			void Bar()
-			{
-			}
-		};
-
 		auto foo = adt::optional<Foo> { };
 		assert::empty(foo);
 
@@ -259,11 +312,38 @@ namespace test
 		foo.reset();
 		assert::empty(foo);
 	}
+
+	void null_optional_construction ()
+	{
+		const adt::optional<int> optional = adt::nullopt;
+		assert::empty(optional);
+	}
+
+	void null_optional_assignment ()
+	{
+		auto optional = adt::optional<char> { };
+		assert::empty(optional);
+
+		optional.emplace('&');
+		assert::owns(optional, '&');
+
+		optional = adt::nullopt;
+		assert::empty(optional);
+	}
+
+	void make_optional ()
+	{
+		const auto optional = adt::make_optional<Foo>(11, '&', 111.0);
+		assert::owns(optional, Foo { 11, '&', 111.0 });
+	}
 }
 
 int main ()
 {
 	test::idiomatic_usage();
+	test::null_optional_construction();
+	test::null_optional_assignment();
+	test::make_optional();
 
 	return 0;
 }
