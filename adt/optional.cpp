@@ -43,13 +43,13 @@ namespace adt
 	class optional
 	{
 	private:
-		bool empty;
+		bool initialized;
 		std::aligned_storage_t<sizeof(value_type), alignof(value_type)> storage;
 
 	public:
 		optional ()
 		:
-			empty { true }
+			initialized { false }
 		{
 		}
 
@@ -60,7 +60,7 @@ namespace adt
 
 		optional (const optional& optional)
 		:
-			empty { optional.empty }
+			initialized { optional.initialized }
 		{
 			if (optional)
 			{
@@ -72,7 +72,7 @@ namespace adt
 		{
 			reset();
 
-			empty = optional.empty;
+			initialized = optional.initialized;
 
 			if (optional)
 			{
@@ -84,7 +84,7 @@ namespace adt
 
 		optional (optional&& optional)
 		:
-			empty { optional.empty }
+			initialized { optional.initialized }
 		{
 			if (optional)
 			{
@@ -98,7 +98,7 @@ namespace adt
 		{
 			reset();
 
-			empty = optional.empty;
+			initialized = optional.initialized;
 
 			if (optional)
 			{
@@ -117,7 +117,7 @@ namespace adt
 
 			new (&storage) value_type (std::forward<Args>(args)...);
 
-			empty = false;
+			initialized = true;
 
 			return value();
 		}
@@ -128,13 +128,13 @@ namespace adt
 			{
 				value().~value_type();
 
-				empty = true;
+				initialized = false;
 			}
 		}
 
 		bool has_value() const
 		{
-			return !empty;
+			return initialized;
 		}
 
 		explicit operator bool() const
@@ -193,7 +193,7 @@ namespace adt
 				value().~value_type();
 			}
 
-			std::swap(empty, optional.empty);
+			std::swap(initialized, optional.initialized);
 		}
 	};
 }
