@@ -50,8 +50,9 @@ if(CMAKE_SYSTEM_NAME MATCHES Windows)
  set_target_properties     (platform-windows PROPERTIES CXX_STANDARD          14
                                                         CXX_STANDARD_REQUIRED ON)
 
- target_compile_definitions(platform-windows PRIVATE UNICODE
-                                                     NOMINMAX)
+ target_compile_definitions(platform-windows PUBLIC STRICT
+                                                    UNICODE
+                                                    NOMINMAX)
 
 
  add_executable            (windows-demo demo/windows-demo.cpp)
