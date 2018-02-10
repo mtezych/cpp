@@ -182,7 +182,7 @@ namespace assert
 
 	void success()
 	{
-		static_assert(true);
+		assert(true);
 	}
 
 	void fail()
