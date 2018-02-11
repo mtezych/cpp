@@ -47,3 +47,7 @@ set_target_properties(unique_ptr PROPERTIES CXX_STANDARD          14
 add_executable       (optional optional.cpp)
 set_target_properties(optional PROPERTIES CXX_STANDARD          14
                                           CXX_STANDARD_REQUIRED ON)
+
+add_executable       (expected expected.cpp)
+set_target_properties(expected PROPERTIES CXX_STANDARD          14
+                                          CXX_STANDARD_REQUIRED ON)
