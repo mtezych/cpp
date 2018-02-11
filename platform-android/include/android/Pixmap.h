@@ -41,7 +41,6 @@
 #include <util/vec.h>
 
 #include <vector>
-#include <memory>
 
 // http://androidxref.com/7.1.1_r6/xref/frameworks/base/core/jni/com_google_android_gles_jni_EGLImpl.cpp#267
 // https://android.googlesource.com/platform/frameworks/base/+/android-7.1.2_r36/core/jni/com_google_android_gles_jni_EGLImpl.cpp#267
@@ -51,8 +50,12 @@ namespace android
 	class Pixmap
 	{
 	private:
-		std::vector<uint8_t>                 storage;
-		std::unique_ptr<egl_native_pixmap_t> androidPixmap;
+		std::vector<uint8_t>        storage;
+		mutable egl_native_pixmap_t androidPixmap;
+		// @note:
+		// Handles managing Android objects do not propagate const,
+		// because EGL and Vulkan functions creating EGLSurface or VkSurface
+		// are taking non-const pointers to Android objects.
 
 	public:
 		Pixmap (const util::uvec2& size);
