@@ -1,13 +1,13 @@
 
 #include <vulkan/Loader.h>
 #include <vulkan/Instance.h>
-#include <vulkan/Surface.h>
 #include <vulkan/Device.h>
+#include <vulkan/Surface.h>
 #include <vulkan/Swapchain.h>
 
 #include <thread>
 
-int main()
+int main ()
 {
 	const auto loader = vk::Loader { };
 
@@ -17,7 +17,7 @@ int main()
 		{
 			"Vulkan Demo", vk::Version { 1, 0, 0 }, //      app name & version
 			"Demo Engine", vk::Version { 1, 0, 0 }, //   engine name & version
-			vk::Version { 1, 0 , 0 },               // required Vulkan version
+			vk::Version { 1, 0, 0 },                // required Vulkan version
 			{ },                                    // enabled layers
 			{                                       // enabled extensions
 				VK_KHR_SURFACE_EXTENSION_NAME,
@@ -25,13 +25,6 @@ int main()
 			},
 		}
 	};
-
-	const auto display = platform::Display { };
-	const auto window  = platform::Window
-	{
-		display, util::uvec2 { 512, 512 }
-	};
-	const auto surface = vk::Surface { instance, display, window };
 
 	const auto physicalDevices = instance.EnumeratePhysicalDevices();
 	assert(physicalDevices.size() > 0);
@@ -41,19 +34,20 @@ int main()
 	{
 		physicalDevice, vk::Device::CreateInfo
 		{
+			std::vector<vk::Queue::CreateInfo>
 			{
-				vk::Queue::CreateInfo
-				{
-					0 /*family index*/, { 1.0f } /* priorities */
-				}
+				{ 0 /* family index */, { 1.0f } /* priorities */ }
 			},
 			{ },                                 // enabled layers
 			{ VK_KHR_SWAPCHAIN_EXTENSION_NAME }, // enabled extensions
 			VkPhysicalDeviceFeatures { },        // enabled features
 		}
 	};
+	const auto queue = device.GetQueue(0 /* family index */, 0 /* queue index */);
 
-	const auto queue = device.GetQueue(0 /*family index*/, 0 /*queue index*/);
+	const auto display = platform::Display { };
+	const auto window  = platform::Window { display, util::uvec2 { 512, 512 } };
+	const auto surface = vk::Surface { instance, display, window };
 
 	const auto swapchain = vk::Swapchain
 	{
@@ -75,9 +69,9 @@ int main()
 	};
 	const auto swapchainImages = swapchain.GetImages();
 
-	const auto render = []()
+	const auto render = [] ()
 	{
-		std::this_thread::sleep_for(std::chrono::milliseconds { 160 });
+		std::this_thread::sleep_for(std::chrono::milliseconds { 16 });
 	};
 	window.ReceiveMessages(render);
 
