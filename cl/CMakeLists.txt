@@ -34,29 +34,22 @@
 
 cmake_minimum_required (VERSION 3.1)
 
-project(cpp)
+project(cl)
 
-add_subdirectory(google-test)
-add_subdirectory(google-benchmark)
-add_subdirectory(libsync)
-add_subdirectory(platform-android)
-add_subdirectory(adt)
-add_subdirectory(metaprogramming)
-add_subdirectory(allocator)
-add_subdirectory(threading)
-add_subdirectory(libdrm-example)
-add_subdirectory(khronos)
-add_subdirectory(cl)
-add_subdirectory(egl)
-add_subdirectory(gles)
-add_subdirectory(platform-xlib)
-add_subdirectory(platform-xcb)
-add_subdirectory(vulkan)
-add_subdirectory(platform-wayland)
-add_subdirectory(util)
-add_subdirectory(platform)
-add_subdirectory(platform-windows)
-add_subdirectory(ieee754)
-add_subdirectory(concepts-lite)
-add_subdirectory(zlang)
-add_subdirectory(gameboy)
+add_library               (cl STATIC include/cl/Platform.h
+                                         source/Platform.cpp)
+
+target_include_directories(cl PUBLIC include)
+
+target_link_libraries     (cl OpenCL khronos platform)
+
+set_target_properties     (cl PROPERTIES CXX_STANDARD          14
+                                         CXX_STANDARD_REQUIRED ON)
+
+
+add_executable            (cl-demo demo/cl-demo.cpp)
+
+target_link_libraries     (cl-demo cl)
+
+set_target_properties     (cl-demo PROPERTIES CXX_STANDARD          14
+                                              CXX_STANDARD_REQUIRED ON)
