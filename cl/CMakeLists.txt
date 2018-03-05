@@ -43,7 +43,7 @@ target_include_directories(cl PUBLIC include)
 
 target_link_libraries     (cl OpenCL khronos platform)
 
-set_target_properties     (cl PROPERTIES CXX_STANDARD          14
+set_target_properties     (cl PROPERTIES CXX_STANDARD          17
                                          CXX_STANDARD_REQUIRED ON)
 
 
@@ -51,5 +51,5 @@ add_executable            (cl-demo demo/cl-demo.cpp)
 
 target_link_libraries     (cl-demo cl)
 
-set_target_properties     (cl-demo PROPERTIES CXX_STANDARD          14
+set_target_properties     (cl-demo PROPERTIES CXX_STANDARD          17
                                               CXX_STANDARD_REQUIRED ON)

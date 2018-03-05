@@ -35,12 +35,98 @@
 #ifndef CL_PLATFORM
 #define CL_PLATFORM
 
-#include <CL/cl.h>
+#ifdef __APPLE__
+	#include <OpenCL/cl.h>
+#else
+	#include <CL/cl.h>
+#endif
+
+#include <vector>
+#include <string>
+#include <cstdint>
+#include <cassert>
+#include <cstddef>
 
 namespace cl
 {
 	struct Platform
 	{
+		cl_platform_id clPlatformID;
+
+		enum class Profile
+		{
+			Full,
+			Embedded,
+		};
+
+		struct Version
+		{
+			uint32_t    major;
+			uint32_t    minor;
+			std::string info;
+		};
+
+		template <cl_platform_info Info>
+		auto GetInfo () const
+		{
+			auto infoSize = size_t { 0 };
+			auto result = clGetPlatformInfo
+			(
+				clPlatformID, Info, 0, nullptr, &infoSize
+			);
+			assert(result == CL_SUCCESS);
+
+			auto infoBytes = std::vector<std::byte> { infoSize, std::byte { 0x00 } };
+			result = clGetPlatformInfo
+			(
+				clPlatformID, Info, infoBytes.size(), infoBytes.data(), nullptr
+			);
+			assert(result == CL_SUCCESS);
+
+			return InfoResult<Info>::FromBytes(infoBytes);
+		}
+
+	private:
+
+		template <cl_platform_info Info>
+		struct InfoResult;
+	};
+
+	std::vector<Platform> GetPlatforms ();
+
+	template <>
+	struct Platform::InfoResult<CL_PLATFORM_PROFILE>
+	{
+		static Profile
+		FromBytes (const std::vector<std::byte>& infoBytes);
+	};
+
+	template <>
+	struct Platform::InfoResult<CL_PLATFORM_VERSION>
+	{
+		static Version
+		FromBytes (const std::vector<std::byte>& infoBytes);
+	};
+
+	template <>
+	struct Platform::InfoResult<CL_PLATFORM_NAME>
+	{
+		static std::string
+		FromBytes (const std::vector<std::byte>& infoBytes);
+	};
+
+	template <>
+	struct Platform::InfoResult<CL_PLATFORM_VENDOR>
+	{
+		static std::string
+		FromBytes (const std::vector<std::byte>& infoBytes);
+	};
+
+	template <>
+	struct Platform::InfoResult<CL_PLATFORM_EXTENSIONS>
+	{
+		static std::vector<std::string>
+		FromBytes (const std::vector<std::byte>& infoBytes);
 	};
 }
 

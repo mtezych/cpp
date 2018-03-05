@@ -34,9 +34,66 @@
 
 #include <cl/Platform.h>
 
-int main()
+//                                 +------+
+//                                 | Host |
+//                                 +------+
+//                                    |
+//                  +-----------------+-------------------+
+//                  |                                     |
+// +----------------|--------------+     +----------------|--------------+
+// |          OpenCL Device        |     |          OpenCL Device        |
+// |    +------------------------+ |     |    +------------------------+ |
+// |    |      Compute Unit      | |     |    |      Compute Unit      | |
+// | +------------------------+  | |     | +------------------------+  | |
+// | |      Compute Unit      |  | |     | |      Compute Unit      |  | |
+// | | +--------------------+ |  | | ... | | +--------------------+ |  | |
+// | | | Processing Element | |  | |     | | | Processing Element | |  | |
+// | | +--------------------+ |  | |     | | +--------------------+ |  | |
+// | | +--------------------+ |  | |     | | +--------------------+ |  | |
+// | | | Processing Element | |  | |     | | | Processing Element | |  | |
+// | | +--------------------+ |  | |     | | +--------------------+ |  | |
+// | |         ...            |  | |     | |         ...            |  | |
+// | | +--------------------+ |  | |     | | +--------------------+ |  | |
+// | | | Processing Element | |--+ |     | | | Processing Element | |--+ |
+// | | +--------------------+ |    |     | | +--------------------+ |    |
+// | +------------------------+    |     | +------------------------+    |
+// +-------------------------------+     +-------------------------------+
+
+// +---------------+ +---------------+     +---------------+
+// |   Work Group  | |   Work Group  |     |   Work Group  |
+// | +-----------+ | | +-----------+ |     | +-----------+ |
+// | | Work Item | | | | Work Item | |     | | Work Item | |
+// | +-----------+ | | +-----------+ |     | +-----------+ |
+// | +-----------+ | | +-----------+ |     | +-----------+ |
+// | | Work Item | | | | Work Item | | ... | | Work Item | |
+// | +-----------+ | | +-----------+ |     | +-----------+ |
+// |      ...      | |      ...      |     |      ...      |
+// | +-----------+ | | +-----------+ |     | +-----------+ |
+// | | Work Item | | | | Work Item | |     | | Work Item | |
+// | +-----------+ | | +-----------+ |     | +-----------+ |
+// +---------------+ +---------------+     +---------------+
+
+// Dispatch
+// - gl_NumWorkGroups
+// - gl_WorkGroupSize
+// Work Group
+// - gl_WorkGroupID
+// Work Item
+// - gl_LocalInvocationID
+// - gl_GlobalInvocationID = gl_WorkGroupID * gl_WorkGroupSize + gl_LocalInvocationID
+
+int main ()
 {
-	const auto platform = cl::Platform { };
+	const auto platforms = cl::GetPlatforms();
+
+	for (auto& platform : platforms)
+	{
+		const auto profile    = platform.GetInfo<CL_PLATFORM_PROFILE   >();
+		const auto version    = platform.GetInfo<CL_PLATFORM_VERSION   >();
+		const auto name       = platform.GetInfo<CL_PLATFORM_NAME      >();
+		const auto vendor     = platform.GetInfo<CL_PLATFORM_VENDOR    >();
+		const auto extensions = platform.GetInfo<CL_PLATFORM_EXTENSIONS>();
+	}
 
 	return 0;
 }

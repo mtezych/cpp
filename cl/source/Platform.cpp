@@ -34,6 +34,135 @@
 
 #include <cl/Platform.h>
 
+#include <sstream>
+
 namespace cl
 {
+	namespace
+	{
+		std::string
+		StringFromBytes (const std::vector<std::byte>& bytes)
+		{
+			return std::string
+			{
+				static_cast<const char*>(static_cast<const void*>(bytes.data()))
+			};
+		}
+
+		std::vector<std::string>
+		Split (const std::string& string, const char delimiter)
+		{
+			auto tokens = std::vector<std::string> { };
+
+			auto stream = std::stringstream { string };
+			auto token  = std::string { };
+
+			while (std::getline(stream, token, delimiter))
+			{
+				tokens.push_back(token);
+			}
+
+			return tokens;
+		}
+	}
+
+	std::vector<Platform> GetPlatforms ()
+	{
+		auto platformIDsCount = cl_uint { 0 };
+		auto result = clGetPlatformIDs(0, nullptr, &platformIDsCount);
+		assert(result == CL_SUCCESS);
+
+		auto platformIDs = std::vector<cl_platform_id>
+		{
+			platformIDsCount, nullptr
+		};
+		result = clGetPlatformIDs(platformIDsCount, platformIDs.data(), nullptr);
+		assert(result == CL_SUCCESS);
+
+		auto platforms = std::vector<Platform> { };
+
+		for (const auto platformID : platformIDs)
+		{
+			platforms.push_back(Platform { platformID });
+		}
+
+		return platforms;
+	}
+
+	Platform::Profile
+	Platform::InfoResult<CL_PLATFORM_PROFILE>::FromBytes
+	(
+		const std::vector<std::byte>& infoBytes
+	)
+	{
+		const auto profile = StringFromBytes(infoBytes);
+
+		if (profile == "FULL_PROFILE")
+		{
+			return Profile::Full;
+		}
+		else if (profile == "EMBEDDED_PROFILE")
+		{
+			return Profile::Embedded;
+		}
+		else
+		{
+			assert(false);
+		}
+	}
+
+	Platform::Version
+	Platform::InfoResult<CL_PLATFORM_VERSION>::FromBytes
+	(
+		const std::vector<std::byte>& infoBytes
+	)
+	{
+		const auto versionString = StringFromBytes(infoBytes);
+
+		auto version = Platform::Version { };
+
+		auto charsParsedCount = unsigned { 0 };
+		auto  argsParsedCount = std::sscanf
+		(
+			versionString.c_str(), "OpenCL %u.%u %n",
+			&version.major, &version.minor, &charsParsedCount
+		);
+		assert( argsParsedCount == 2);
+		assert(charsParsedCount  > 0);
+
+		version.info = versionString.substr(charsParsedCount);
+
+		return version;
+	}
+
+	std::string
+	Platform::InfoResult<CL_PLATFORM_NAME>::FromBytes
+	(
+		const std::vector<std::byte>& infoBytes
+	)
+	{
+		return StringFromBytes(infoBytes);
+	}
+
+	std::string
+	Platform::InfoResult<CL_PLATFORM_VENDOR>::FromBytes
+	(
+		const std::vector<std::byte>& infoBytes
+	)
+	{
+		return StringFromBytes(infoBytes);
+	}
+
+	std::vector<std::string>
+	Platform::InfoResult<CL_PLATFORM_EXTENSIONS>::FromBytes
+	(
+		const std::vector<std::byte>& infoBytes
+	)
+	{
+		const auto extensionsString = StringFromBytes(infoBytes);
+
+		const auto extensions = Split(extensionsString, ' ');
+
+		return extensions;
+	}
 }
