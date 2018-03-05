@@ -2,7 +2,7 @@
 #
 # BSD 3-Clause License
 #
-# Copyright (c) 2017, mtezych
+# Copyright (c) 2018, mtezych
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -37,7 +37,23 @@ cmake_minimum_required (VERSION 3.1)
 project(cl)
 
 add_library               (cl STATIC include/cl/Platform.h
-                                         source/Platform.cpp)
+                                     include/cl/Device.h
+                                     include/cl/Context.h
+                                     include/cl/CommandQueue.h
+                                     include/cl/Memory.h
+                                     include/cl/Kernel.h
+                                     include/cl/Program.h
+                                     include/cl/Sampler.h
+                                     include/cl/Event.h
+                                         source/Platform.cpp
+                                         source/Device.cpp
+                                         source/Context.cpp
+                                         source/CommandQueue.cpp
+                                         source/Memory.cpp
+                                         source/Kernel.cpp
+                                         source/Program.cpp
+                                         source/Sampler.cpp
+                                         source/Event.cpp)
 
 target_include_directories(cl PUBLIC include)
 
