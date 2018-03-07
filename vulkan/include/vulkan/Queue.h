@@ -47,7 +47,7 @@ namespace vk
 		)
 		const;
 
-		void WaitIdle ();
+		void WaitIdle () const;
 
 		void Present
 		(

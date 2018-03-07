@@ -59,7 +59,7 @@ namespace vk
 		assert(result == VK_SUCCESS);
 	}
 
-	void Queue::WaitIdle ()
+	void Queue::WaitIdle () const
 	{
 		const auto result = device->vkQueueWaitIdle(vkQueue);
 		assert(result == VK_SUCCESS);
