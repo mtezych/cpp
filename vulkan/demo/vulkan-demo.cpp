@@ -21,7 +21,7 @@ int main ()
 			{ },                                    // enabled layers
 			{                                       // enabled extensions
 				VK_KHR_SURFACE_EXTENSION_NAME,
-				VK_KHR_PLATFORM_SURFACE_EXTENSION_NAME
+				VK_KHR_PLATFORM_SURFACE_EXTENSION_NAME,
 			},
 		}
 	};
@@ -74,6 +74,8 @@ int main ()
 		std::this_thread::sleep_for(std::chrono::milliseconds { 16 });
 	};
 	window.ReceiveMessages(render);
+
+	device.WaitIdle();
 
 	return 0;
 }

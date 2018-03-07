@@ -345,9 +345,6 @@ namespace vk
 	{
 		if (vkDevice != VK_NULL_HANDLE)
 		{
-			const auto result = vkDeviceWaitIdle(vkDevice);
-			assert(result == VK_SUCCESS);
-
 			vkDestroyDevice(vkDevice, nullptr);
 		}
 	}
@@ -519,9 +516,6 @@ namespace vk
 	{
 		if (vkDevice != VK_NULL_HANDLE)
 		{
-			const auto result = vkDeviceWaitIdle(vkDevice);
-			assert(result == VK_SUCCESS);
-
 			vkDestroyDevice(vkDevice, nullptr);
 		}
 
