@@ -57,12 +57,9 @@ namespace vk
 
 		std::vector<Image> GetImages() const;
 
-		struct AcquireInfo
-		{
-			uint32_t  imageIndex;
-			Semaphore imageAvailable;
-		};
-		AcquireInfo Acquire() const;
+		// @note: Semaphore will be signalled when
+		//        presentation of swapchain image has been completed.
+		uint32_t Acquire (Semaphore& imageAvailable) const;
 	};
 }
 

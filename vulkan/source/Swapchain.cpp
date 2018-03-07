@@ -6,6 +6,7 @@
 #include <vulkan/Surface.h>
 
 #include <algorithm>
+#include <limits>
 
 namespace vk
 {
@@ -149,13 +150,11 @@ namespace vk
 		return images;
 	}
 
-	Swapchain::AcquireInfo Swapchain::Acquire () const
+	uint32_t Swapchain::Acquire (Semaphore& imageAvailable) const
 	{
-		constexpr auto timeout = uint64_t { 0 };
+		constexpr auto timeout = std::numeric_limits<uint64_t>::max();
 
 		auto imageIndex = uint32_t { 0 };
-
-		auto imageAvailable = Semaphore { *device };
 
 		const auto result = device->vkAcquireNextImageKHR
 		(
@@ -167,6 +166,6 @@ namespace vk
 		);
 		assert(result == VK_SUCCESS);
 
-		return AcquireInfo { imageIndex, std::move(imageAvailable) };
+		return imageIndex;
 	}
 }

@@ -34,22 +34,21 @@ namespace vk
 	{
 	}
 
-	Semaphore Queue::Submit
+	void Queue::Submit
 	(
-		const Semaphore&           imageAvaliable,
+		const CommandBuffer&       commandBuffer,
+		const Semaphore&           waitSemaphore,
 		const VkPipelineStageFlags waitPipelineStage,
-		const CommandBuffer&       commandBuffer
+		      Semaphore&           signalSemaphore
 	) const
 	{
-		auto renderingFinished = Semaphore { *device };
-
 		const auto submitInfo = VkSubmitInfo
 		{
 			VK_STRUCTURE_TYPE_SUBMIT_INFO,
 			nullptr,
-			1, &imageAvaliable.vkSemaphore, &waitPipelineStage,
+			1, &waitSemaphore.vkSemaphore, &waitPipelineStage,
 			1, &commandBuffer.vkCommandBuffer,
-			1, &renderingFinished.vkSemaphore
+			1, &signalSemaphore.vkSemaphore
 		};
 		const auto result = device->vkQueueSubmit
 		(
@@ -58,8 +57,6 @@ namespace vk
 			VkFence { VK_NULL_HANDLE }
 		);
 		assert(result == VK_SUCCESS);
-
-		return renderingFinished;
 	}
 
 	void Queue::WaitIdle ()

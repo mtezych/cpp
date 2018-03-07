@@ -2,7 +2,7 @@
 #ifndef VULKAN_QUEUE
 #define VULKAN_QUEUE
 
-#include <vulkan/Semaphore.h>
+#include <vulkan/vulkan.h>
 
 #include <vector>
 
@@ -11,6 +11,7 @@ namespace vk
 	struct Device;
 	struct CommandBuffer;
 	struct Swapchain;
+	struct Semaphore;
 
 	struct Queue
 	{
@@ -19,7 +20,7 @@ namespace vk
 			VkDeviceQueueCreateInfo createInfo;
 
 			//
-			// @note: Size of priorities is queue count.
+			// @note: Size of priorities is the queue count.
 			//
 			CreateInfo
 			(
@@ -33,11 +34,16 @@ namespace vk
 
 		Queue (const Device& device, const VkQueue queue);
 
-		Semaphore Submit
+		//
+		// @note: Semaphore will be signalled when
+		//        execution of command buffer has been finished.
+		//
+		void Submit
 		(
-			const Semaphore&           imageAvaliable,
+			const CommandBuffer&       commandBuffer,
+			const Semaphore&           waitSemaphore,
 			const VkPipelineStageFlags waitPipelineStage,
-			const CommandBuffer&       commandBuffer
+			      Semaphore&           signalSemaphore
 		)
 		const;
 
