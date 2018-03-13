@@ -40,6 +40,10 @@ add_executable       (list list.cpp)
 set_target_properties(list PROPERTIES CXX_STANDARD          14
                                       CXX_STANDARD_REQUIRED ON)
 
+add_executable       (vector vector.cpp)
+set_target_properties(vector PROPERTIES CXX_STANDARD          14
+                                        CXX_STANDARD_REQUIRED ON)
+
 add_executable       (unique_ptr unique_ptr.cpp)
 set_target_properties(unique_ptr PROPERTIES CXX_STANDARD          14
                                             CXX_STANDARD_REQUIRED ON)
