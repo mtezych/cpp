@@ -41,6 +41,8 @@
 	#include <CL/cl.h>
 #endif
 
+#include <cl/Device.h>
+
 #include <vector>
 #include <string>
 #include <cstdint>
@@ -85,6 +87,9 @@ namespace cl
 
 			return InfoResult<Info>::FromBytes(infoBytes);
 		}
+
+		std::vector<Device>
+		GetDevices(const cl_device_type deviceType = CL_DEVICE_TYPE_ALL) const;
 
 	private:
 

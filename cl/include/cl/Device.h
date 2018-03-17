@@ -35,10 +35,17 @@
 #ifndef CL_DEVICE
 #define CL_DEVICE
 
+#ifdef __APPLE__
+	#include <OpenCL/cl.h>
+#else
+	#include <CL/cl.h>
+#endif
+
 namespace cl
 {
 	struct Device
 	{
+		cl_device_id clDeviceID;
 	};
 }
 

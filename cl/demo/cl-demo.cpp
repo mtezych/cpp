@@ -86,13 +86,19 @@ int main ()
 {
 	const auto platforms = cl::GetPlatforms();
 
-	for (auto& platform : platforms)
+	for (const auto& platform : platforms)
 	{
 		const auto profile    = platform.GetInfo<CL_PLATFORM_PROFILE   >();
 		const auto version    = platform.GetInfo<CL_PLATFORM_VERSION   >();
 		const auto name       = platform.GetInfo<CL_PLATFORM_NAME      >();
 		const auto vendor     = platform.GetInfo<CL_PLATFORM_VENDOR    >();
 		const auto extensions = platform.GetInfo<CL_PLATFORM_EXTENSIONS>();
+
+		const auto devices = platform.GetDevices();
+
+		for (const auto& device : devices)
+		{
+		}
 	}
 
 	return 0;

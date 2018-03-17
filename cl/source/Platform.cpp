@@ -64,6 +64,35 @@ namespace cl
 
 			return tokens;
 		}
+
+		//
+		// IsAnyBitSet(bitMask    : 0b00111010,
+		//             bitPattern : 0b11010100) -> true
+		//
+		// IsAnyBitSet(bitMask    : 0b00111010,
+		//             bitPattern : 0b11000100) -> false
+		//
+		constexpr
+		bool IsAnyBitSet (const uint64_t bitMask, const uint64_t bitPattern)
+		{
+			return (bitMask & bitPattern) != 0;
+		}
+
+		constexpr
+		bool IsValid (const cl_device_type deviceType)
+		{
+			const auto matchesAnyDeviceType = IsAnyBitSet
+			(
+				deviceType,
+				CL_DEVICE_TYPE_DEFAULT     |
+				CL_DEVICE_TYPE_CPU         |
+				CL_DEVICE_TYPE_GPU         |
+				CL_DEVICE_TYPE_ACCELERATOR |
+				CL_DEVICE_TYPE_CUSTOM
+			);
+
+			return matchesAnyDeviceType || (deviceType == CL_DEVICE_TYPE_ALL);
+		}
 	}
 
 	std::vector<Platform> GetPlatforms ()
@@ -164,5 +193,38 @@ namespace cl
 		const auto extensions = Split(extensionsString, ' ');
 
 		return extensions;
+	}
+
+	std::vector<Device>
+	Platform::GetDevices (const cl_device_type deviceType) const
+	{
+		assert(IsValid(deviceType));
+
+		auto deviceIDsCount = cl_uint { 0 };
+		auto result = clGetDeviceIDs
+		(
+			clPlatformID, deviceType,
+			0, nullptr,
+			&deviceIDsCount
+		);
+		assert(result == CL_SUCCESS);
+
+		auto deviceIDs = std::vector<cl_device_id> { deviceIDsCount, nullptr };
+		result = clGetDeviceIDs
+		(
+			clPlatformID, deviceType,
+			deviceIDsCount, deviceIDs.data(),
+			nullptr
+		);
+		assert(result == CL_SUCCESS);
+
+		auto devices = std::vector<Device> { };
+
+		for (const auto deviceID : deviceIDs)
+		{
+			devices.push_back(Device { deviceID });
+		}
+
+		return devices;
 	}
 }
