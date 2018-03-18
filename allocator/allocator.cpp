@@ -24,7 +24,7 @@ private:
 public:
 
 	Allocator();
-	Allocator(const size_t size);
+	explicit Allocator(const size_t size);
 	~Allocator();
 
 	Allocator(const Allocator& allocator) = delete;
