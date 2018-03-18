@@ -78,7 +78,10 @@ namespace cl
 			);
 			assert(result == CL_SUCCESS);
 
-			auto infoBytes = std::vector<std::byte> { infoSize, std::byte { 0x00 } };
+			auto infoBytes = std::vector<std::byte>
+			{
+				infoSize, std::byte { 0x00 }
+			};
 			result = clGetPlatformInfo
 			(
 				clPlatformID, Info, infoBytes.size(), infoBytes.data(), nullptr

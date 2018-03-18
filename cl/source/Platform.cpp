@@ -170,7 +170,9 @@ namespace cl
 		const std::vector<std::byte>& infoBytes
 	)
 	{
-		return StringFromBytes(infoBytes);
+		const auto name = StringFromBytes(infoBytes);
+
+		return name;
 	}
 
 	std::string
@@ -179,7 +181,9 @@ namespace cl
 		const std::vector<std::byte>& infoBytes
 	)
 	{
-		return StringFromBytes(infoBytes);
+		const auto vendorString = StringFromBytes(infoBytes);
+
+		return vendorString;
 	}
 
 	std::vector<std::string>
