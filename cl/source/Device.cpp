@@ -34,6 +34,133 @@
 
 #include <cl/Device.h>
 
+#include <sstream>
+
 namespace cl
 {
+	namespace
+	{
+		std::string
+		StringFromBytes (const std::vector<std::byte>& bytes)
+		{
+			return std::string
+			{
+				static_cast<const char*>(static_cast<const void*>(bytes.data()))
+			};
+		}
+
+		std::vector<std::string>
+		Split (const std::string& string, const char delimiter)
+		{
+			auto tokens = std::vector<std::string> { };
+
+			auto stream = std::stringstream { string };
+			auto token  = std::string { };
+
+			while (std::getline(stream, token, delimiter))
+			{
+				tokens.push_back(token);
+			}
+
+			return tokens;
+		}
+
+		template <typename Type>
+		const Type& ReinterpretBytes (const std::vector<std::byte>& bytes)
+		{
+			return *static_cast<const Type*>(static_cast<const void*>(bytes.data()));
+		}
+	}
+
+	cl_device_type
+	Device::InfoResult<CL_DEVICE_TYPE>::FromBytes
+	(
+		const std::vector<std::byte>& infoBytes
+	)
+	{
+		assert(infoBytes.size() == sizeof(cl_device_type));
+
+		return ReinterpretBytes<cl_device_type>(infoBytes);
+	}
+
+	Device::Profile
+	Device::InfoResult<CL_DEVICE_PROFILE>::FromBytes
+	(
+		const std::vector<std::byte>& infoBytes
+	)
+	{
+		const auto profile = StringFromBytes(infoBytes);
+
+		if (profile == "FULL_PROFILE")
+		{
+			return Profile::Full;
+		}
+		else if (profile == "EMBEDDED_PROFILE")
+		{
+			return Profile::Embedded;
+		}
+		else
+		{
+			assert(false);
+		}
+	}
+
+	Device::Version
+	Device::InfoResult<CL_DEVICE_VERSION>::FromBytes
+	(
+		const std::vector<std::byte>& infoBytes
+	)
+	{
+		const auto versionString = StringFromBytes(infoBytes);
+
+		auto version = Device::Version { };
+
+		auto charsParsedCount = unsigned { 0 };
+		auto  argsParsedCount = std::sscanf
+		(
+			versionString.c_str(), "OpenCL %u.%u %n",
+			&version.major, &version.minor, &charsParsedCount
+		);
+		assert( argsParsedCount == 2);
+		assert(charsParsedCount  > 0);
+
+		version.info = versionString.substr(charsParsedCount);
+
+		return version;
+	}
+
+	std::string
+	Device::InfoResult<CL_DEVICE_VENDOR>::FromBytes
+	(
+		const std::vector<std::byte>& infoBytes
+	)
+	{
+		const auto vendorString = StringFromBytes(infoBytes);
+
+		return vendorString;
+	}
+
+	std::string
+	Device::InfoResult<CL_DEVICE_NAME>::FromBytes
+	(
+		const std::vector<std::byte>& infoBytes
+	)
+	{
+		const auto name = StringFromBytes(infoBytes);
+
+		return name;
+	}
+
+	std::vector<std::string>
+	Device::InfoResult<CL_DEVICE_EXTENSIONS>::FromBytes
+	(
+		const std::vector<std::byte>& infoBytes
+	)
+	{
+		const auto extensionsString = StringFromBytes(infoBytes);
+
+		const auto extensions = Split(extensionsString, ' ');
+
+		return extensions;
+	}
 }

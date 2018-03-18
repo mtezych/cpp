@@ -117,14 +117,14 @@ namespace cl
 	};
 
 	template <>
-	struct Platform::InfoResult<CL_PLATFORM_NAME>
+	struct Platform::InfoResult<CL_PLATFORM_VENDOR>
 	{
 		static std::string
 		FromBytes (const std::vector<std::byte>& infoBytes);
 	};
 
 	template <>
-	struct Platform::InfoResult<CL_PLATFORM_VENDOR>
+	struct Platform::InfoResult<CL_PLATFORM_NAME>
 	{
 		static std::string
 		FromBytes (const std::vector<std::byte>& infoBytes);

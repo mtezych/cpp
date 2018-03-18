@@ -165,17 +165,6 @@ namespace cl
 	}
 
 	std::string
-	Platform::InfoResult<CL_PLATFORM_NAME>::FromBytes
-	(
-		const std::vector<std::byte>& infoBytes
-	)
-	{
-		const auto name = StringFromBytes(infoBytes);
-
-		return name;
-	}
-
-	std::string
 	Platform::InfoResult<CL_PLATFORM_VENDOR>::FromBytes
 	(
 		const std::vector<std::byte>& infoBytes
@@ -184,6 +173,17 @@ namespace cl
 		const auto vendorString = StringFromBytes(infoBytes);
 
 		return vendorString;
+	}
+
+	std::string
+	Platform::InfoResult<CL_PLATFORM_NAME>::FromBytes
+	(
+		const std::vector<std::byte>& infoBytes
+	)
+	{
+		const auto name = StringFromBytes(infoBytes);
+
+		return name;
 	}
 
 	std::vector<std::string>

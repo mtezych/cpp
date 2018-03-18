@@ -88,16 +88,22 @@ int main ()
 
 	for (const auto& platform : platforms)
 	{
-		const auto profile    = platform.GetInfo<CL_PLATFORM_PROFILE   >();
-		const auto version    = platform.GetInfo<CL_PLATFORM_VERSION   >();
-		const auto name       = platform.GetInfo<CL_PLATFORM_NAME      >();
-		const auto vendor     = platform.GetInfo<CL_PLATFORM_VENDOR    >();
-		const auto extensions = platform.GetInfo<CL_PLATFORM_EXTENSIONS>();
+		const auto platformProfile    = platform.GetInfo<CL_PLATFORM_PROFILE   >();
+		const auto platformVersion    = platform.GetInfo<CL_PLATFORM_VERSION   >();
+		const auto platformVendor     = platform.GetInfo<CL_PLATFORM_VENDOR    >();
+		const auto platformName       = platform.GetInfo<CL_PLATFORM_NAME      >();
+		const auto platformExtensions = platform.GetInfo<CL_PLATFORM_EXTENSIONS>();
 
 		const auto devices = platform.GetDevices();
 
 		for (const auto& device : devices)
 		{
+			const auto deviceType       = device.GetInfo<CL_DEVICE_TYPE      >();
+			const auto deviceProfile    = device.GetInfo<CL_DEVICE_PROFILE   >();
+			const auto deviceVersion    = device.GetInfo<CL_DEVICE_VERSION   >();
+			const auto deviceVendor     = device.GetInfo<CL_DEVICE_VENDOR    >();
+			const auto deviceName       = device.GetInfo<CL_DEVICE_NAME      >();
+			const auto deviceExtensions = device.GetInfo<CL_DEVICE_EXTENSIONS>();
 		}
 	}
 

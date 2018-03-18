@@ -41,11 +41,99 @@
 	#include <CL/cl.h>
 #endif
 
+#include <vector>
+#include <string>
+#include <cassert>
+#include <cstddef>
+
 namespace cl
 {
 	struct Device
 	{
 		cl_device_id clDeviceID;
+
+		enum class Profile
+		{
+			Full,
+			Embedded,
+		};
+
+		struct Version
+		{
+			uint32_t    major;
+			uint32_t    minor;
+			std::string info;
+		};
+
+		template <cl_device_info Info>
+		auto GetInfo() const
+		{
+			auto infoSize = size_t { 0 };
+			auto result = clGetDeviceInfo
+			(
+				clDeviceID, Info, 0, nullptr, &infoSize
+			);
+			assert(result == CL_SUCCESS);
+
+			auto infoBytes = std::vector<std::byte>
+			{
+				infoSize, std::byte { 0x00 }
+			};
+			result = clGetDeviceInfo
+			(
+				clDeviceID, Info, infoBytes.size(), infoBytes.data(), nullptr
+			);
+			assert(result == CL_SUCCESS);
+
+			return InfoResult<Info>::FromBytes(infoBytes);
+		}
+
+	private:
+
+		template <cl_device_info Info>
+		struct InfoResult;
+	};
+
+	template <>
+	struct Device::InfoResult<CL_DEVICE_TYPE>
+	{
+		static cl_device_type
+		FromBytes (const std::vector<std::byte>& infoBytes);
+	};
+
+	template <>
+	struct Device::InfoResult<CL_DEVICE_PROFILE>
+	{
+		static Profile
+		FromBytes (const std::vector<std::byte>& infoBytes);
+	};
+
+	template <>
+	struct Device::InfoResult<CL_DEVICE_VERSION>
+	{
+		static Version
+		FromBytes (const std::vector<std::byte>& infoBytes);
+	};
+
+	template <>
+	struct Device::InfoResult<CL_DEVICE_VENDOR>
+	{
+		static std::string
+		FromBytes (const std::vector<std::byte>& infoBytes);
+	};
+
+	template <>
+	struct Device::InfoResult<CL_DEVICE_NAME>
+	{
+		static std::string
+		FromBytes (const std::vector<std::byte>& infoBytes);
+	};
+
+	template <>
+	struct Device::InfoResult<CL_DEVICE_EXTENSIONS>
+	{
+		static std::vector<std::string>
+		FromBytes (const std::vector<std::byte>& infoBytes);
 	};
 }
 
