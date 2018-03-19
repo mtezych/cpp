@@ -163,4 +163,34 @@ namespace cl
 
 		return extensions;
 	}
+
+	cl_uint
+	Device::InfoResult<CL_DEVICE_VENDOR_ID>::FromBytes
+	(
+		const std::vector<std::byte>& infoBytes
+	)
+	{
+		assert(infoBytes.size() == sizeof(cl_uint));
+
+		return ReinterpretBytes<cl_uint>(infoBytes);
+	}
+
+	Device::Version
+	Device::InfoResult<CL_DRIVER_VERSION>::FromBytes
+	(
+		const std::vector<std::byte>& infoBytes
+	)
+	{
+		const auto versionString = StringFromBytes(infoBytes);
+
+		auto version = Device::Version { };
+
+		const auto argsParsedCount = std::sscanf
+		(
+			versionString.c_str(), "%u.%u", &version.major, &version.minor
+		);
+		assert(argsParsedCount == 2);
+
+		return version;
+	}
 }

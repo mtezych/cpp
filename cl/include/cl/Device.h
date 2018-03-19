@@ -135,6 +135,20 @@ namespace cl
 		static std::vector<std::string>
 		FromBytes (const std::vector<std::byte>& infoBytes);
 	};
+
+	template <>
+	struct Device::InfoResult<CL_DEVICE_VENDOR_ID>
+	{
+		static cl_uint
+		FromBytes (const std::vector<std::byte>& infoBytes);
+	};
+
+	template <>
+	struct Device::InfoResult<CL_DRIVER_VERSION>
+	{
+		static Version
+		FromBytes (const std::vector<std::byte>& infoBytes);
+	};
 }
 
 #endif

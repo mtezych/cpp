@@ -104,6 +104,8 @@ int main ()
 			const auto deviceVendor     = device.GetInfo<CL_DEVICE_VENDOR    >();
 			const auto deviceName       = device.GetInfo<CL_DEVICE_NAME      >();
 			const auto deviceExtensions = device.GetInfo<CL_DEVICE_EXTENSIONS>();
+			const auto deviceVendorID   = device.GetInfo<CL_DEVICE_VENDOR_ID >();
+			const auto driverVersion    = device.GetInfo<CL_DRIVER_VERSION   >();
 		}
 	}
 
