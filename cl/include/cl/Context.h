@@ -35,10 +35,94 @@
 #ifndef CL_CONTEXT
 #define CL_CONTEXT
 
+#ifdef __APPLE__
+	#include <OpenCL/cl.h>
+#else
+	#include <CL/cl.h>
+#endif
+
+#include <cl/Platform.h>
+
+#include <vector>
+#include <cstddef>
+
 namespace cl
 {
 	struct Context
 	{
+		cl_context clContext;
+
+		//
+		// @note: The NotifyCallback must be thread-safe.
+		//
+		using NotifyCallback = void (CL_CALLBACK *)
+		(
+			const char* errorInfo,
+			const void* privateInfo, size_t cb,
+			void* userData
+		);
+
+		Context
+		(
+			const Platform&            platform,
+			const std::vector<Device>& devices
+		);
+
+		Context
+		(
+			const Platform&      platform,
+			const cl_device_type deviceType
+		);
+
+		~Context ();
+
+		Context (Context&& context);
+		Context (const Context& context) = delete;
+
+		Context& operator = (Context&& context);
+		Context& operator = (const Context& context) = delete;
+
+		template <cl_context_info Info>
+		auto GetInfo() const
+		{
+			auto infoSize = size_t { 0 };
+			auto result = clGetContextInfo
+			(
+				clContext, Info, 0, nullptr, &infoSize
+			);
+			assert(result == CL_SUCCESS);
+
+			auto infoBytes = std::vector<std::byte>
+			{
+				infoSize, std::byte { 0x00 }
+			};
+			result = clGetContextInfo
+			(
+				clContext, Info, infoBytes.size(), infoBytes.data(), nullptr
+			);
+			assert(result == CL_SUCCESS);
+
+			return InfoResult<Info>::FromBytes(infoBytes);
+		}
+
+	private:
+
+		template <cl_context_info Info>
+		struct InfoResult;
+	};
+
+	template <>
+	struct Context::InfoResult<CL_CONTEXT_NUM_DEVICES>
+	{
+		static cl_uint
+		FromBytes (const std::vector<std::byte>& infoBytes);
+	};
+
+	template <>
+	struct Context::InfoResult<CL_CONTEXT_REFERENCE_COUNT>
+	{
+		static cl_uint
+		FromBytes (const std::vector<std::byte>& infoBytes);
 	};
 }
 

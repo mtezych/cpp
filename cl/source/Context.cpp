@@ -34,6 +34,130 @@
 
 #include <cl/Context.h>
 
+#include <array>
+#include <algorithm>
+
 namespace cl
 {
+	Context::Context
+	(
+		const Platform&            platform,
+		const std::vector<Device>& devices
+	):
+		clContext { nullptr }
+	{
+		const auto properties = std::array<cl_context_properties, 3>
+		{
+			CL_CONTEXT_PLATFORM,
+			reinterpret_cast<cl_context_properties>(platform.clPlatformID),
+			0
+		};
+
+		auto clDevices = std::vector<cl_device_id>
+		{
+			devices.size(), nullptr
+		};
+		std::transform
+		(
+			devices.begin(), devices.end(), clDevices.begin(),
+
+			[](const Device& device) -> cl_device_id
+			{
+				return device.clDeviceID;
+			}
+		);
+
+		auto result = cl_int { CL_INVALID_CONTEXT };
+		clContext = clCreateContext
+		(
+			properties.data(),
+			static_cast<cl_uint>(clDevices.size()), clDevices.data(),
+			nullptr, nullptr,
+			&result
+		);
+		assert(result == CL_SUCCESS);
+	}
+
+	Context::Context
+	(
+		const Platform&      platform,
+		const cl_device_type deviceType
+	):
+		clContext { nullptr }
+	{
+		const auto properties = std::array<cl_context_properties, 3>
+		{
+			CL_CONTEXT_PLATFORM,
+			reinterpret_cast<cl_context_properties>(platform.clPlatformID),
+			0
+		};
+
+		auto result = cl_int { CL_INVALID_CONTEXT };
+		clContext = clCreateContextFromType
+		(
+			properties.data(),
+			deviceType,
+			nullptr, nullptr,
+			&result
+		);
+		assert(result == CL_SUCCESS);
+	}
+
+	Context::~Context ()
+	{
+		if (clContext != nullptr)
+		{
+			clReleaseContext(clContext);
+		}
+	}
+
+	Context::Context (Context&& context)
+	:
+		clContext { context.clContext }
+	{
+		context.clContext = nullptr;
+	}
+
+	Context& Context::operator = (Context&& context)
+	{
+		if (clContext != nullptr)
+		{
+			clReleaseContext(clContext);
+		}
+
+		clContext = context.clContext;
+
+		context.clContext = nullptr;
+
+		return *this;
+	}
+
+	namespace
+	{
+		template <typename Type>
+		const Type& ReinterpretBytes (const std::vector<std::byte>& bytes)
+		{
+			assert(bytes.size() == sizeof(Type));
+
+			return *static_cast<const Type*>(static_cast<const void*>(bytes.data()));
+		}
+	}
+
+	cl_uint
+	Context::InfoResult<CL_CONTEXT_NUM_DEVICES>::FromBytes
+	(
+		const std::vector<std::byte>& infoBytes
+	)
+	{
+		return ReinterpretBytes<cl_uint>(infoBytes);
+	}
+
+	cl_uint
+	Context::InfoResult<CL_CONTEXT_REFERENCE_COUNT>::FromBytes
+	(
+		const std::vector<std::byte>& infoBytes
+	)
+	{
+		return ReinterpretBytes<cl_uint>(infoBytes);
+	}
 }

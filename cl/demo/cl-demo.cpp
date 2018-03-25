@@ -33,6 +33,7 @@
  */
 
 #include <cl/Platform.h>
+#include <cl/Context.h>
 
 //                                 +------+
 //                                 | Host |
@@ -107,6 +108,11 @@ int main ()
 			const auto deviceVendorID   = device.GetInfo<CL_DEVICE_VENDOR_ID >();
 			const auto driverVersion    = device.GetInfo<CL_DRIVER_VERSION   >();
 		}
+
+		const auto context = cl::Context { platform, devices };
+
+		const auto contextNumDevices    = context.GetInfo<CL_CONTEXT_NUM_DEVICES    >();
+		const auto contextRefernceCount = context.GetInfo<CL_CONTEXT_REFERENCE_COUNT>();
 	}
 
 	return 0;

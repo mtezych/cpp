@@ -68,6 +68,8 @@ namespace cl
 		template <typename Type>
 		const Type& ReinterpretBytes (const std::vector<std::byte>& bytes)
 		{
+			assert(bytes.size() == sizeof(Type));
+
 			return *static_cast<const Type*>(static_cast<const void*>(bytes.data()));
 		}
 	}
@@ -78,8 +80,6 @@ namespace cl
 		const std::vector<std::byte>& infoBytes
 	)
 	{
-		assert(infoBytes.size() == sizeof(cl_device_type));
-
 		return ReinterpretBytes<cl_device_type>(infoBytes);
 	}
 
@@ -170,8 +170,6 @@ namespace cl
 		const std::vector<std::byte>& infoBytes
 	)
 	{
-		assert(infoBytes.size() == sizeof(cl_uint));
-
 		return ReinterpretBytes<cl_uint>(infoBytes);
 	}
 
