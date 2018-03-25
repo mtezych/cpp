@@ -35,10 +35,36 @@
 #ifndef CL_COMMAND_QUEUE
 #define CL_COMMAND_QUEUE
 
+#ifdef __APPLE__
+	#include <OpenCL/cl.h>
+#else
+	#include <CL/cl.h>
+#endif
+
+#include <cassert>
+
 namespace cl
 {
+	struct Context;
+	struct Device;
+
 	struct CommandQueue
 	{
+		cl_command_queue clCommandQueue;
+
+		CommandQueue
+		(
+			const Context& context, const Device& device,
+			const cl_command_queue_properties queueProperties = 0
+		);
+
+		~CommandQueue ();
+
+		CommandQueue (CommandQueue&& commandQueue);
+		CommandQueue (const CommandQueue& commandQueue) = delete;
+
+		CommandQueue& operator = (CommandQueue&& commandQueue);
+		CommandQueue& operator = (const CommandQueue& commandQueue) = delete;
 	};
 }
 

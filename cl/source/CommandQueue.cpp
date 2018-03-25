@@ -34,6 +34,85 @@
 
 #include <cl/CommandQueue.h>
 
+#include <cl/Context.h>
+#include <cl/Device.h>
+
 namespace cl
 {
+	namespace
+	{
+		//
+		// IsAnyBitSet(bitMask    : 0b00111010,
+		//             bitPattern : 0b11010100) -> true
+		//
+		// IsAnyBitSet(bitMask    : 0b00111010,
+		//             bitPattern : 0b11000100) -> false
+		//
+		constexpr
+		bool IsAnyBitSet (const uint64_t bitMask, const uint64_t bitPattern)
+		{
+			return (bitMask & bitPattern) != 0;
+		}
+
+		constexpr
+		bool IsValid (const cl_command_queue_properties queueProperties)
+		{
+			const auto matchesAnyQueueProperty = IsAnyBitSet
+			(
+				queueProperties,
+				CL_QUEUE_OUT_OF_ORDER_EXEC_MODE_ENABLE |
+				CL_QUEUE_PROFILING_ENABLE
+			);
+
+			return matchesAnyQueueProperty || (queueProperties == 0);
+		}
+	}
+
+	CommandQueue::CommandQueue
+	(
+		const Context& context, const Device& device,
+		const cl_command_queue_properties queueProperties
+	):
+		clCommandQueue { nullptr }
+	{
+		assert(IsValid(queueProperties));
+
+		auto result = cl_int { CL_INVALID_COMMAND_QUEUE };
+		clCommandQueue = clCreateCommandQueue
+		(
+			context.clContext, device.clDeviceID,
+			queueProperties,
+			&result
+		);
+		assert(result == CL_SUCCESS);
+	}
+
+	CommandQueue::~CommandQueue ()
+	{
+		if (clCommandQueue != nullptr)
+		{
+			clReleaseCommandQueue(clCommandQueue);
+		}
+	}
+
+	CommandQueue::CommandQueue (CommandQueue&& commandQueue)
+	:
+		clCommandQueue { commandQueue.clCommandQueue }
+	{
+		commandQueue.clCommandQueue = nullptr;
+	}
+
+	CommandQueue& CommandQueue::operator = (CommandQueue&& commandQueue)
+	{
+		if (clCommandQueue != nullptr)
+		{
+			clReleaseCommandQueue(clCommandQueue);
+		}
+
+		clCommandQueue = commandQueue.clCommandQueue;
+
+		commandQueue.clCommandQueue = nullptr;
+
+		return *this;
+	}
 }
