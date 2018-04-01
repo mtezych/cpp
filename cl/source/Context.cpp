@@ -137,6 +137,8 @@ namespace cl
 		template <typename Type>
 		const Type& ReinterpretBytes (const std::vector<std::byte>& bytes)
 		{
+			static_assert(std::is_scalar<Type>::value, "Type has to be scalar.");
+
 			assert(bytes.size() == sizeof(Type));
 
 			return *static_cast<const Type*>(static_cast<const void*>(bytes.data()));

@@ -35,10 +35,84 @@
 #ifndef CL_PROGRAM
 #define CL_PROGRAM
 
+#ifdef __APPLE__
+	#include <OpenCL/cl.h>
+#else
+	#include <CL/cl.h>
+#endif
+
+#include <cl/Device.h>
+
+#include <string>
+#include <vector>
+#include <cstddef>
+
 namespace cl
 {
+	struct Context;
+
 	struct Program
 	{
+		cl_program clProgram;
+
+		Program (const Context& context, const std::string& sourceCode);
+
+		~Program ();
+
+		Program (Program&& program);
+		Program (const Program& program) = delete;
+
+		Program& operator = (Program&& program);
+		Program& operator = (const Program& program) = delete;
+
+		void Build ();
+
+		template <cl_program_build_info Info>
+		auto BuildInfo (const Device& device)
+		{
+			auto infoSize = size_t { 0 };
+			auto result = clGetProgramBuildInfo
+			(
+				clProgram, device.clDeviceID,
+				Info,
+				0, nullptr,
+				&infoSize
+			);
+			assert(result == CL_SUCCESS);
+
+			auto infoBytes = std::vector<std::byte>
+			{
+				infoSize, std::byte { 0x00 }
+			};
+			result = clGetProgramBuildInfo
+			(
+				clProgram, device.clDeviceID,
+				Info,
+				infoBytes.size(), infoBytes.data(),
+				nullptr
+			);
+			assert(result == CL_SUCCESS);
+
+			return InfoResult<Info>::FromBytes(infoBytes);
+		}
+
+	private:
+		template <cl_program_build_info Info>
+		struct InfoResult;
+	};
+
+	template <>
+	struct Program::InfoResult<CL_PROGRAM_BUILD_STATUS>
+	{
+		static cl_build_status
+		FromBytes (const std::vector<std::byte>& bytes);
+	};
+
+	template <>
+	struct Program::InfoResult<CL_PROGRAM_BUILD_LOG>
+	{
+		static std::string
+		FromBytes (const std::vector<std::byte> &bytes);
 	};
 }
 

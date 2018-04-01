@@ -35,6 +35,7 @@
 #include <cl/Platform.h>
 #include <cl/Context.h>
 #include <cl/CommandQueue.h>
+#include <cl/Program.h>
 
 //                                 +------+
 //                                 | Host |
@@ -119,6 +120,23 @@ int main ()
 		{
 			const auto commandQueue = cl::CommandQueue { context, device };
 		}
+
+		auto program = cl::Program
+		{
+			context,
+			"__kernel void kernel_main                                            \n"
+			"(                                                                    \n"
+			"    __global const float*  firstInput,                               \n"
+			"    __global const float* secondInput,                               \n"
+			"    __global       float*      output                                \n"
+			")                                                                    \n"
+			"{                                                                    \n"
+			"    int globalID = get_global_id(0);                                 \n"
+			"                                                                     \n"
+			"    output[globalID] = firstInput[globalID] + secondInput[globalID]; \n"
+			"}                                                                    \n"
+		};
+		program.Build();
 	}
 
 	return 0;
