@@ -36,6 +36,7 @@
 #include <cl/Context.h>
 #include <cl/CommandQueue.h>
 #include <cl/Program.h>
+#include <cl/Kernel.h>
 
 //                                 +------+
 //                                 | Host |
@@ -124,7 +125,7 @@ int main ()
 		auto program = cl::Program
 		{
 			context,
-			"__kernel void kernel_main                                            \n"
+			"__kernel void cl_main                                                \n"
 			"(                                                                    \n"
 			"    __global const float*  firstInput,                               \n"
 			"    __global const float* secondInput,                               \n"
@@ -137,6 +138,8 @@ int main ()
 			"}                                                                    \n"
 		};
 		program.Build();
+
+		auto kernel = cl::Kernel { program, "cl_main" };
 	}
 
 	return 0;

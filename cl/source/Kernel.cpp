@@ -34,6 +34,50 @@
 
 #include <cl/Kernel.h>
 
+#include <cl/Program.h>
+
 namespace cl
 {
+	Kernel::Kernel (const Program& program, const std::string& entryPoint)
+	:
+		clKernel { nullptr }
+	{
+		auto result = cl_int { CL_INVALID_KERNEL };
+		clKernel = clCreateKernel
+		(
+			program.clProgram,
+			entryPoint.c_str(),
+			&result
+		);
+		assert(result == CL_SUCCESS);
+	}
+
+	Kernel::~Kernel ()
+	{
+		if (clKernel != nullptr)
+		{
+			clReleaseKernel(clKernel);
+		}
+	}
+
+	Kernel::Kernel (Kernel&& kernel)
+	:
+		clKernel { kernel.clKernel }
+	{
+		kernel.clKernel = nullptr;
+	}
+
+	Kernel& Kernel::operator = (Kernel&& kernel)
+	{
+		if (clKernel != nullptr)
+		{
+			clReleaseKernel(clKernel);
+		}
+
+		clKernel = kernel.clKernel;
+
+		kernel.clKernel = nullptr;
+
+		return *this;
+	}
 }

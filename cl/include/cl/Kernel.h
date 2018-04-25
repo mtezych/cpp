@@ -35,10 +35,31 @@
 #ifndef CL_KERNEL
 #define CL_KERNEL
 
+#ifdef __APPLE__
+	#include <OpenCL/cl.h>
+#else
+	#include <CL/cl.h>
+#endif
+
+#include <string>
+
 namespace cl
 {
+	struct Program;
+
 	struct Kernel
 	{
+		cl_kernel clKernel;
+
+		Kernel (const Program& program, const std::string& entryPoint);
+
+		~Kernel ();
+
+		Kernel (Kernel&& kernel);
+		Kernel (const Kernel& kernel) = delete;
+
+		Kernel& operator = (Kernel&& kernel);
+		Kernel& operator = (const Kernel& kernel) = delete;
 	};
 }
 
