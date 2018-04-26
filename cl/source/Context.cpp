@@ -34,6 +34,11 @@
 
 #include <cl/Context.h>
 
+#include <cl/Platform.h>
+#include <cl/Device.h>
+
+#include <util/util.h>
+
 #include <array>
 #include <algorithm>
 
@@ -132,26 +137,13 @@ namespace cl
 		return *this;
 	}
 
-	namespace
-	{
-		template <typename Type>
-		const Type& ReinterpretBytes (const std::vector<std::byte>& bytes)
-		{
-			static_assert(std::is_scalar<Type>::value, "Type has to be scalar.");
-
-			assert(bytes.size() == sizeof(Type));
-
-			return *static_cast<const Type*>(static_cast<const void*>(bytes.data()));
-		}
-	}
-
 	cl_uint
 	Context::InfoResult<CL_CONTEXT_NUM_DEVICES>::FromBytes
 	(
 		const std::vector<std::byte>& infoBytes
 	)
 	{
-		return ReinterpretBytes<cl_uint>(infoBytes);
+		return util::ReinterpretBytes<cl_uint>(infoBytes);
 	}
 
 	cl_uint
@@ -160,6 +152,6 @@ namespace cl
 		const std::vector<std::byte>& infoBytes
 	)
 	{
-		return ReinterpretBytes<cl_uint>(infoBytes);
+		return util::ReinterpretBytes<cl_uint>(infoBytes);
 	}
 }

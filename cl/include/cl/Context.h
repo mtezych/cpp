@@ -41,13 +41,15 @@
 	#include <CL/cl.h>
 #endif
 
-#include <cl/Platform.h>
+#include <cl/Device.h>
 
 #include <vector>
 #include <cstddef>
 
 namespace cl
 {
+	struct Platform;
+
 	struct Context
 	{
 		cl_context clContext;
@@ -85,7 +87,7 @@ namespace cl
 		template <cl_context_info Info>
 		auto GetInfo() const
 		{
-			auto infoSize = size_t { 0 };
+			auto infoSize = std::size_t { 0 };
 			auto result = clGetContextInfo
 			(
 				clContext, Info, 0, nullptr, &infoSize

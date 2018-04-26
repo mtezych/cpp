@@ -34,54 +34,16 @@
 
 #include <cl/Platform.h>
 
-#include <sstream>
+#include <util/util.h>
 
 namespace cl
 {
 	namespace
 	{
-		std::string
-		StringFromBytes (const std::vector<std::byte>& bytes)
-		{
-			return std::string
-			{
-				static_cast<const char*>(static_cast<const void*>(bytes.data()))
-			};
-		}
-
-		std::vector<std::string>
-		Split (const std::string& string, const char delimiter)
-		{
-			auto tokens = std::vector<std::string> { };
-
-			auto stream = std::stringstream { string };
-			auto token  = std::string { };
-
-			while (std::getline(stream, token, delimiter))
-			{
-				tokens.push_back(token);
-			}
-
-			return tokens;
-		}
-
-		//
-		// IsAnyBitSet(bitMask    : 0b00111010,
-		//             bitPattern : 0b11010100) -> true
-		//
-		// IsAnyBitSet(bitMask    : 0b00111010,
-		//             bitPattern : 0b11000100) -> false
-		//
-		constexpr
-		bool IsAnyBitSet (const uint64_t bitMask, const uint64_t bitPattern)
-		{
-			return (bitMask & bitPattern) != 0;
-		}
-
 		constexpr
 		bool IsValid (const cl_device_type deviceType)
 		{
-			const auto matchesAnyDeviceType = IsAnyBitSet
+			const auto matchesAnyDeviceType = util::IsAnyBitSet
 			(
 				deviceType,
 				CL_DEVICE_TYPE_DEFAULT     |
@@ -124,7 +86,7 @@ namespace cl
 		const std::vector<std::byte>& infoBytes
 	)
 	{
-		const auto profile = StringFromBytes(infoBytes);
+		const auto profile = util::StringFromBytes(infoBytes);
 
 		if (profile == "FULL_PROFILE")
 		{
@@ -146,7 +108,7 @@ namespace cl
 		const std::vector<std::byte>& infoBytes
 	)
 	{
-		const auto versionString = StringFromBytes(infoBytes);
+		const auto versionString = util::StringFromBytes(infoBytes);
 
 		auto version = Platform::Version { };
 
@@ -170,7 +132,7 @@ namespace cl
 		const std::vector<std::byte>& infoBytes
 	)
 	{
-		const auto vendorString = StringFromBytes(infoBytes);
+		const auto vendorString = util::StringFromBytes(infoBytes);
 
 		return vendorString;
 	}
@@ -181,7 +143,7 @@ namespace cl
 		const std::vector<std::byte>& infoBytes
 	)
 	{
-		const auto name = StringFromBytes(infoBytes);
+		const auto name = util::StringFromBytes(infoBytes);
 
 		return name;
 	}
@@ -192,9 +154,9 @@ namespace cl
 		const std::vector<std::byte>& infoBytes
 	)
 	{
-		const auto extensionsString = StringFromBytes(infoBytes);
+		const auto extensionsString = util::StringFromBytes(infoBytes);
 
-		const auto extensions = Split(extensionsString, ' ');
+		const auto extensions = util::Split(extensionsString, ' ');
 
 		return extensions;
 	}

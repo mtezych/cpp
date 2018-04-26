@@ -37,27 +37,16 @@
 #include <cl/Context.h>
 #include <cl/Device.h>
 
+#include <util/util.h>
+
 namespace cl
 {
 	namespace
 	{
-		//
-		// IsAnyBitSet(bitMask    : 0b00111010,
-		//             bitPattern : 0b11010100) -> true
-		//
-		// IsAnyBitSet(bitMask    : 0b00111010,
-		//             bitPattern : 0b11000100) -> false
-		//
-		constexpr
-		bool IsAnyBitSet (const uint64_t bitMask, const uint64_t bitPattern)
-		{
-			return (bitMask & bitPattern) != 0;
-		}
-
 		constexpr
 		bool IsValid (const cl_command_queue_properties queueProperties)
 		{
-			const auto matchesAnyQueueProperty = IsAnyBitSet
+			const auto matchesAnyQueueProperty = util::IsAnyBitSet
 			(
 				queueProperties,
 				CL_QUEUE_OUT_OF_ORDER_EXEC_MODE_ENABLE |

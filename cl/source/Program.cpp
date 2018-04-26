@@ -36,9 +36,10 @@
 
 #include <cl/Context.h>
 
+#include <util/util.h>
+
 #include <cassert>
 #include <cstddef>
-#include <type_traits>
 
 namespace cl
 {
@@ -99,35 +100,13 @@ namespace cl
 		assert(result == CL_SUCCESS);
 	}
 
-	namespace
-	{
-		std::string
-		StringFromBytes (const std::vector<std::byte>& bytes)
-		{
-			return std::string
-			{
-				static_cast<const char*>(static_cast<const void*>(bytes.data()))
-			};
-		}
-
-		template <typename Type>
-		const Type& ReinterpretBytes (const std::vector<std::byte>& bytes)
-		{
-			static_assert(std::is_scalar<Type>::value, "Type has to be scalar.");
-
-			assert(bytes.size() == sizeof(Type));
-
-			return *static_cast<const Type*>(static_cast<const void*>(bytes.data()));
-		}
-	}
-
 	cl_build_status
 	Program::InfoResult<CL_PROGRAM_BUILD_STATUS>::FromBytes
 	(
 		const std::vector<std::byte>& bytes
 	)
 	{
-		return ReinterpretBytes<cl_build_status>(bytes);
+		return util::ReinterpretBytes<cl_build_status>(bytes);
 	}
 
 	std::string
@@ -136,6 +115,6 @@ namespace cl
 		const std::vector<std::byte>& bytes
 	)
 	{
-		return StringFromBytes(bytes);
+		return util::StringFromBytes(bytes);
 	}
 }

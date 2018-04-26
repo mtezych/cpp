@@ -60,15 +60,15 @@ namespace cl
 
 		struct Version
 		{
-			uint32_t    major;
-			uint32_t    minor;
-			std::string info;
+			std::uint32_t major;
+			std::uint32_t minor;
+			std::string   info;
 		};
 
 		template <cl_device_info Info>
 		auto GetInfo() const
 		{
-			auto infoSize = size_t { 0 };
+			auto infoSize = std::size_t { 0 };
 			auto result = clGetDeviceInfo
 			(
 				clDeviceID, Info, 0, nullptr, &infoSize

@@ -70,7 +70,7 @@ namespace cl
 		template <cl_program_build_info Info>
 		auto BuildInfo (const Device& device)
 		{
-			auto infoSize = size_t { 0 };
+			auto infoSize = std::size_t { 0 };
 			auto result = clGetProgramBuildInfo
 			(
 				clProgram, device.clDeviceID,

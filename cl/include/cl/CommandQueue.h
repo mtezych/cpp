@@ -41,8 +41,6 @@
 	#include <CL/cl.h>
 #endif
 
-#include <cassert>
-
 namespace cl
 {
 	struct Context;
