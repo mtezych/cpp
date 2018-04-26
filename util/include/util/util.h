@@ -70,6 +70,17 @@ namespace util
 	{
 		return (bitMask & bitPattern) != 0;
 	}
+
+	template <typename EnumType>
+	constexpr
+	auto enum_cast (const EnumType enumValue)
+	{
+		static_assert(std::is_enum_v<EnumType>, "EnumType has to be enum.");
+
+		using UnderlyingType = std::underlying_type_t<EnumType>;
+
+		return static_cast<UnderlyingType>(enumValue);
+	}
 }
 
 #endif
