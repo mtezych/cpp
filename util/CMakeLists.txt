@@ -38,11 +38,12 @@ project(util)
 
 
 add_library               (util STATIC include/util/vec.h
-                                             source/vec.cpp)
+                                       include/util/util.h
+                                             source/util.cpp)
 
 target_include_directories(util PUBLIC include)
 
-set_target_properties     (util PROPERTIES CXX_STANDARD          14
+set_target_properties     (util PROPERTIES CXX_STANDARD          17
                                            CXX_STANDARD_REQUIRED ON)
 
 
@@ -50,5 +51,5 @@ add_executable            (util-benchmark benchmark/util-benchmark.cpp)
 
 target_link_libraries     (util-benchmark util benchmark)
 
-set_target_properties     (util-benchmark PROPERTIES CXX_STANDARD          14
+set_target_properties     (util-benchmark PROPERTIES CXX_STANDARD          17
                                                      CXX_STANDARD_REQUIRED ON)
