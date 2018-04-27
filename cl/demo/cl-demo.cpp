@@ -37,6 +37,7 @@
 #include <cl/CommandQueue.h>
 #include <cl/Program.h>
 #include <cl/Kernel.h>
+#include <cl/Memory.h>
 
 //                                 +------+
 //                                 | Host |
@@ -140,6 +141,39 @@ int main ()
 		program.Build();
 
 		auto kernel = cl::Kernel { program, "cl_main" };
+
+		const auto firstSrcMemory = cl::Memory
+		{
+			context,
+			cl::Memory::DeviceAccess::ReadOnly,
+			cl::Memory::HostAccess::ReadWrite,
+			cl::Memory::Alloc::Device,
+			std::vector<float>
+			{
+				1.5f, 7.6f, 8.1f, 1.5f, 1.7f, 2.4f, 9.0f, 3.5f,
+			},
+		};
+
+		const auto secondSrcMemory = cl::Memory
+		{
+			context,
+			cl::Memory::DeviceAccess::ReadOnly,
+			cl::Memory::HostAccess::ReadWrite,
+			cl::Memory::Alloc::Device,
+			std::vector<float>
+			{
+				3.6f, 7.0f, 0.8f, 4.3f, 2.7f, 6.5f, 2.8f, 1.4f,
+			},
+		};
+
+		const auto dstMemory = cl::Memory
+		{
+			context,
+			cl::Memory::DeviceAccess::WriteOnly,
+			cl::Memory::HostAccess::ReadWrite,
+			cl::Memory::Alloc::Device,
+			8
+		};
 	}
 
 	return 0;

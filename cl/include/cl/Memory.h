@@ -35,10 +35,126 @@
 #ifndef CL_MEMORY
 #define CL_MEMORY
 
+#include <cl/Context.h>
+
+#include <util/util.h>
+
+#include <vector>
+#include <cassert>
+#include <cstddef>
+
+// OpenCL Basics: Flags for the creating memory objects
+//     https://streamhpc.com/blog/2013-02-03/opencl-basics-flags-for-the-creating-memory-objects
+
 namespace cl
 {
+	constexpr
+	bool IsValid (const cl_mem_flags memoryFlags)
+	{
+		const auto matchesAnyQueueProperty = util::IsAnyBitSet
+		(
+			memoryFlags,
+
+			CL_MEM_READ_ONLY       |
+			CL_MEM_WRITE_ONLY      |
+			CL_MEM_READ_WRITE      |
+
+			CL_MEM_HOST_WRITE_ONLY |
+			CL_MEM_HOST_READ_ONLY  |
+			CL_MEM_HOST_NO_ACCESS  |
+
+			CL_MEM_USE_HOST_PTR    |
+			CL_MEM_ALLOC_HOST_PTR  |
+			CL_MEM_COPY_HOST_PTR
+		);
+
+		return matchesAnyQueueProperty || (memoryFlags == 0);
+	}
+
 	struct Memory
 	{
+		cl_mem clMemory;
+
+		enum class DeviceAccess : cl_mem_flags
+		{
+			ReadWrite = CL_MEM_READ_WRITE,
+			ReadOnly  = CL_MEM_READ_ONLY,
+			WriteOnly = CL_MEM_WRITE_ONLY,
+		};
+
+		enum class HostAccess : cl_mem_flags
+		{
+			ReadWrite = 0,
+			ReadOnly  = CL_MEM_HOST_WRITE_ONLY,
+			WriteOnly = CL_MEM_HOST_READ_ONLY,
+			NoAccess  = CL_MEM_HOST_NO_ACCESS,
+		};
+
+		enum class Alloc : cl_mem_flags
+		{
+			Device = 0,
+			Host   = CL_MEM_ALLOC_HOST_PTR,
+		};
+
+		// @todo: Add support for CL_MEM_USE_HOST_PTR flag.
+
+		Memory
+		(
+			const Context&     context,
+			const DeviceAccess deviceAccess,
+			const HostAccess   hostAccess,
+			const Alloc        alloc,
+			const std::size_t  size
+		);
+
+		template <typename ValueType>
+		Memory
+		(
+			const Context&                context,
+			const DeviceAccess            deviceAccess,
+			const HostAccess              hostAccess,
+			const Alloc                   alloc,
+			const std::vector<ValueType>& buffer
+		):
+			clMemory { nullptr }
+		{
+			const auto flags = cl_mem_flags
+			{
+				util::enum_cast(deviceAccess) |
+				util::enum_cast(  hostAccess) |
+				util::enum_cast(alloc)        |
+				CL_MEM_COPY_HOST_PTR
+			};
+			assert(IsValid(flags));
+
+			// @note: The OpenCL spec guarantees that the host_ptr
+			//        will be used only for reading data,
+			//
+			//        using which memory content of
+			//        OpenCL buffer will be initialized with,
+			//
+			//        when the CL_MEM_COPY_HOST_PTR flag is specified.
+			//
+			const auto host_ptr = const_cast<ValueType*>(buffer.data());
+
+			auto result = cl_int { CL_INVALID_MEM_OBJECT };
+			clMemory = clCreateBuffer
+			(
+				context.clContext,
+				flags,
+				sizeof(ValueType) * buffer.size(), host_ptr,
+				&result
+			);
+			assert(result == CL_SUCCESS);
+		}
+
+		~Memory ();
+
+		Memory (Memory&& memory);
+		Memory (const Memory& memory) = delete;
+
+		Memory& operator = (Memory&& memory);
+		Memory& operator = (const Memory& memory) = delete;
 	};
 }
 
