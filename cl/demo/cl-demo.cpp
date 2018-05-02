@@ -174,6 +174,10 @@ int main ()
 			cl::Memory::Alloc::Device,
 			8
 		};
+
+		kernel.SetArg(0,  firstSrcMemory);
+		kernel.SetArg(1, secondSrcMemory);
+		kernel.SetArg(2,       dstMemory);
 	}
 
 	return 0;

@@ -42,6 +42,7 @@
 #endif
 
 #include <string>
+#include <cassert>
 
 namespace cl
 {
@@ -60,6 +61,16 @@ namespace cl
 
 		Kernel& operator = (Kernel&& kernel);
 		Kernel& operator = (const Kernel& kernel) = delete;
+
+		template <typename ArgType>
+		void SetArg (const cl_uint argIndex, const ArgType& argValue)
+		{
+			auto result = cl_int
+			{
+				clSetKernelArg(clKernel, argIndex, sizeof(ArgType), &argValue)
+			};
+			assert(result == CL_SUCCESS);
+		}
 	};
 }
 
