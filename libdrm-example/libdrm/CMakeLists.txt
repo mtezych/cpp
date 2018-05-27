@@ -60,8 +60,11 @@ add_library               (drm SHARED xf86drm.h
                                       include/drm/qxl_drm.h
                                       include/drm/virtgpu_drm.h)
 
-target_include_directories(drm PUBLIC . include/drm /usr/include/valgrind)
+target_include_directories(drm PUBLIC .
+                                      include/drm)
 
-target_compile_definitions(drm PUBLIC PIC HAVE_CONFIG_H)
+target_compile_definitions(drm PRIVATE HAVE_CONFIG_H)
 
 target_link_libraries     (drm m)
+
+set_target_properties     (drm PROPERTIES POSITION_INDEPENDENT_CODE ON)

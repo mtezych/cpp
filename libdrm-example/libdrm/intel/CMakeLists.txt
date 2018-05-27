@@ -49,9 +49,10 @@ add_library               (drm_intel SHARED intel_aub.h
 
 target_include_directories(drm_intel PUBLIC .
                                             ..
-                                            ../include/drm
-                                            /usr/include/valgrind)
+                                            ../include/drm)
 
-target_compile_definitions(drm_intel PUBLIC PIC HAVE_CONFIG_H)
+target_compile_definitions(drm_intel PRIVATE HAVE_CONFIG_H)
 
 target_link_libraries     (drm_intel drm pciaccess)
+
+set_target_properties     (drm_intel PROPERTIES POSITION_INDEPENDENT_CODE ON)

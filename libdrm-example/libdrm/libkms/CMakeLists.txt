@@ -45,6 +45,8 @@ target_include_directories(kms PUBLIC .
                                       ..
                                       ../include/drm)
 
-target_compile_definitions(kms PUBLIC PIC HAVE_CONFIG_H)
+target_compile_definitions(kms PRIVATE HAVE_CONFIG_H)
 
 target_link_libraries     (kms drm)
+
+set_target_properties     (kms PROPERTIES POSITION_INDEPENDENT_CODE ON)
