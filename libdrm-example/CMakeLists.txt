@@ -34,9 +34,9 @@
 
 cmake_minimum_required(VERSION 3.1)
 
-if(CMAKE_SYSTEM_NAME MATCHES Linux)
-
   project(libdrm-example)
+
+if(CMAKE_SYSTEM_NAME MATCHES Linux)
 
   add_subdirectory(libdrm)
   add_subdirectory(libdrm/libkms)
