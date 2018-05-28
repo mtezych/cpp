@@ -41,6 +41,7 @@ if(CMAKE_SYSTEM_NAME MATCHES Linux)
   add_subdirectory(libdrm)
   add_subdirectory(libdrm/libkms)
   add_subdirectory(libdrm/intel)
+  add_subdirectory(libdrm/amdgpu)
 
 
   add_executable       (libdrm-intel-example libdrm-intel-example.cpp)
@@ -49,5 +50,13 @@ if(CMAKE_SYSTEM_NAME MATCHES Linux)
 
   set_target_properties(libdrm-intel-example PROPERTIES CXX_STANDARD          14
                                                         CXX_STANDARD_REQUIRED ON)
+
+
+  add_executable       (libdrm-amdgpu-example libdrm-amdgpu-example.cpp)
+
+  target_link_libraries(libdrm-amdgpu-example drm kms drm_amdgpu)
+
+  set_target_properties(libdrm-amdgpu-example PROPERTIES CXX_STANDARD          14
+                                                         CXX_STANDARD_REQUIRED ON)
 
 endif()
