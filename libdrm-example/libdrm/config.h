@@ -17,22 +17,34 @@
 #define HAVE_ALLOCA_H 1
 
 /* Have amdgpu support */
-#define HAVE_AMDGPU 0
+/* #undef HAVE_AMDGPU */
 
 /* Have Cairo support */
-#define HAVE_CAIRO 0
+/* #undef HAVE_CAIRO */
 
 /* Define to 1 if you have the `clock_gettime' function. */
 #define HAVE_CLOCK_GETTIME 1
 
+/* Enable CUNIT support */
+/* #undef HAVE_CUNIT */
+
 /* Define to 1 if you have the <dlfcn.h> header file. */
 #define HAVE_DLFCN_H 1
 
+/* Have etnaviv support */
+/* #undef HAVE_ETNAVIV */
+
 /* Have EXYNOS support */
-#define HAVE_EXYNOS 0
+/* #undef HAVE_EXYNOS */
+
+/* Have freedreno support */
+/* #undef HAVE_FREEDRENO */
 
 /* Have freedreno support for KGSL kernel interface */
-#define HAVE_FREEDRENO_KGSL 0
+/* #undef HAVE_FREEDRENO_KGSL */
+
+/* Install test programs */
+/* #undef HAVE_INSTALL_TESTS */
 
 /* Have intel support */
 #define HAVE_INTEL 1
@@ -44,19 +56,22 @@
 #define HAVE_LIBDRM_ATOMIC_PRIMITIVES 1
 
 /* Enable if you have libatomic-ops-dev installed */
-#define HAVE_LIB_ATOMIC_OPS 0
+/* #undef HAVE_LIB_ATOMIC_OPS */
 
 /* Define to 1 if you have the <memory.h> header file. */
 #define HAVE_MEMORY_H 1
 
 /* Have nouveau (nvidia) support */
-#define HAVE_NOUVEAU 0
+/* #undef HAVE_NOUVEAU */
+
+/* Have OMAP support */
+/* #undef HAVE_OMAP */
 
 /* Define to 1 if you have the `open_memstream' function. */
 #define HAVE_OPEN_MEMSTREAM 1
 
 /* Have radeon support */
-#define HAVE_RADEON 0
+/* #undef HAVE_RADEON */
 
 /* Define to 1 if you have the <stdint.h> header file. */
 #define HAVE_STDINT_H 1
@@ -82,20 +97,23 @@
 /* Define to 1 if you have the <sys/types.h> header file. */
 #define HAVE_SYS_TYPES_H 1
 
+/* Have Tegra support */
+/* #undef HAVE_TEGRA */
+
 /* Define to 1 if you have the <unistd.h> header file. */
 #define HAVE_UNISTD_H 1
 
 /* Use valgrind intrinsics to suppress false warnings */
-#define HAVE_VALGRIND 0
+/* #undef HAVE_VALGRIND */
 
 /* Have VC4 support */
-#define HAVE_VC4 0
+/* #undef HAVE_VC4 */
 
 /* Compiler supports __attribute__(("hidden")) */
 #define HAVE_VISIBILITY 1
 
 /* Have vmwgfx kernel headers */
-#define HAVE_VMWGFX 0
+/* #undef HAVE_VMWGFX */
 
 /* Define to the sub-directory where libtool stores uninstalled libraries. */
 #define LT_OBJDIR ".libs/"
@@ -118,7 +136,7 @@
 #define PACKAGE_NAME "libdrm"
 
 /* Define to the full name and version of this package. */
-#define PACKAGE_STRING "libdrm 2.4.91"
+#define PACKAGE_STRING "libdrm 2.4.81"
 
 /* Define to the one symbol short name of this package. */
 #define PACKAGE_TARNAME "libdrm"
@@ -127,7 +145,7 @@
 #define PACKAGE_URL ""
 
 /* Define to the version of this package. */
-#define PACKAGE_VERSION "2.4.91"
+#define PACKAGE_VERSION "2.4.81"
 
 /* If using the C implementation of alloca, define if you know the
    direction of stack growth for your system; otherwise it will be
@@ -166,7 +184,7 @@
 
 
 /* Version number of package */
-#define VERSION "2.4.91"
+#define VERSION "2.4.81"
 
 /* Enable large inode numbers on Mac OS X 10.5.  */
 #ifndef _DARWIN_USE_64_BIT_INODE

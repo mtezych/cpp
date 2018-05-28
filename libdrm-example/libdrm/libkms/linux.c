@@ -110,27 +110,27 @@ linux_from_sysfs(int fd, struct kms_driver **out)
 	if (ret)
 		return ret;
 
-#if HAVE_INTEL
+#ifdef HAVE_INTEL
 	if (!strcmp(name, "intel"))
 		ret = intel_create(fd, out);
 	else
 #endif
-#if HAVE_VMWGFX
+#ifdef HAVE_VMWGFX
 	if (!strcmp(name, "vmwgfx"))
 		ret = vmwgfx_create(fd, out);
 	else
 #endif
-#if HAVE_NOUVEAU
+#ifdef HAVE_NOUVEAU
 	if (!strcmp(name, "nouveau"))
 		ret = nouveau_create(fd, out);
 	else
 #endif
-#if HAVE_RADEON
+#ifdef HAVE_RADEON
 	if (!strcmp(name, "radeon"))
 		ret = radeon_create(fd, out);
 	else
 #endif
-#if HAVE_EXYNOS
+#ifdef HAVE_EXYNOS
 	if (!strcmp(name, "exynos"))
 		ret = exynos_create(fd, out);
 	else

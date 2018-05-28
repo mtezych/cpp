@@ -66,7 +66,7 @@
 #include "i915_drm.h"
 #include "uthash.h"
 
-#if HAVE_VALGRIND
+#ifdef HAVE_VALGRIND
 #include <valgrind.h>
 #include <memcheck.h>
 #define VG(x) x
@@ -1629,7 +1629,7 @@ int
 drm_intel_gem_bo_map_unsynchronized(drm_intel_bo *bo)
 {
 	drm_intel_bufmgr_gem *bufmgr_gem = (drm_intel_bufmgr_gem *) bo->bufmgr;
-#if HAVE_VALGRIND
+#ifdef HAVE_VALGRIND
 	drm_intel_bo_gem *bo_gem = (drm_intel_bo_gem *) bo;
 #endif
 	int ret;
@@ -3662,8 +3662,6 @@ drm_intel_bufmgr_gem_init(int fd, int batch_size)
 		bufmgr_gem->gen = 8;
 	else if (IS_GEN9(bufmgr_gem->pci_device))
 		bufmgr_gem->gen = 9;
-	else if (IS_GEN10(bufmgr_gem->pci_device))
-		bufmgr_gem->gen = 10;
 	else {
 		free(bufmgr_gem);
 		bufmgr_gem = NULL;
