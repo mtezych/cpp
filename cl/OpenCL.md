@@ -44,7 +44,7 @@
 │                                                │
 │ cl Get CommandQueue Info                       │
 │                                                │
-│ cl Flush┐                                      │
+│ cl Flush                                       │
 │ cl Finish                                      │
 │                                                │
 │ cl Enqueue Read  Buffer                        │
