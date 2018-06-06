@@ -45,61 +45,214 @@
 #include <cstring>
 #include <cstdint>
 
-int main()
+namespace amdgpu
 {
-	auto gpuFD = open("/dev/dri/renderD128", O_RDWR); // "/dev/dri/card0"
-	assert(gpuFD > 0);
+	struct Device
 	{
-		auto result = int { -1 };
+		amdgpu_device_handle amdDeviceHandle;
 
 		struct Version
 		{
 			std::uint32_t major;
 			std::uint32_t minor;
 		};
-		auto version = Version { };
 
-		auto amdDeviceHandle = amdgpu_device_handle { };
-
-		result = amdgpu_device_initialize
-		(
-			gpuFD,
-			&version.major, &version.minor,
-			&amdDeviceHandle
-		);
-		assert(result == 0);
+		explicit
+		Device (const int gpuFileDescriptor)
+		:
+			amdDeviceHandle { nullptr }
 		{
-			auto amdContextHandle = amdgpu_context_handle { };
+			auto version = Version { };
 
-			result = amdgpu_cs_ctx_create(amdDeviceHandle, &amdContextHandle);
+			const auto result = amdgpu_device_initialize
+			(
+				gpuFileDescriptor,
+				&version.major, &version.minor, &amdDeviceHandle
+			);
 			assert(result == 0);
+			assert(amdDeviceHandle != nullptr);
+		}
+
+		~Device ()
+		{
+			if (amdDeviceHandle != nullptr)
 			{
-				auto allocRequest = amdgpu_bo_alloc_request
-				{
-					64,                                // alloc_size
-					0,                                 // phys_alignment
-					AMDGPU_GEM_DOMAIN_VRAM,            // preferred_heap
-					AMDGPU_GEM_CREATE_VRAM_CONTIGUOUS, // flags
-				};
-				auto amdBufferObjectHandle = amdgpu_bo_handle { };
-
-				result = amdgpu_bo_alloc
-				(
-					amdDeviceHandle,
-					&allocRequest, &amdBufferObjectHandle
-				);
-				assert(result == 0);
-				{
-
-				}
-				result = amdgpu_bo_free(amdBufferObjectHandle);
+				const auto result = amdgpu_device_deinitialize(amdDeviceHandle);
 				assert(result == 0);
 			}
-			result = amdgpu_cs_ctx_free(amdContextHandle);
+		}
+
+		Device (Device&& device)
+		:
+			amdDeviceHandle { device.amdDeviceHandle }
+		{
+			device.amdDeviceHandle = nullptr;
+		}
+
+		Device (const Device& device) = delete;
+
+		Device& operator = (Device&& device)
+		{
+			if (amdDeviceHandle != nullptr)
+			{
+				const auto result = amdgpu_device_deinitialize(amdDeviceHandle);
+				assert(result == 0);
+			}
+
+			amdDeviceHandle = device.amdDeviceHandle;
+
+			device.amdDeviceHandle = nullptr;
+
+			return *this;
+		}
+
+		Device& operator = (const Device& device) = delete;
+	};
+
+	struct Context
+	{
+		amdgpu_context_handle amdContextHandle;
+
+		explicit
+		Context (const Device& device)
+		:
+			amdContextHandle { nullptr }
+		{
+			const auto result = amdgpu_cs_ctx_create
+			(
+				device.amdDeviceHandle, &amdContextHandle
+			);
+			assert(result == 0);
+			assert(amdContextHandle != nullptr);
+		}
+
+		~Context ()
+		{
+			if (amdContextHandle != nullptr)
+			{
+				const auto result = amdgpu_cs_ctx_free(amdContextHandle);
+				assert(result == 0);
+			}
+		}
+
+		Context (Context&& context)
+		:
+			amdContextHandle { context.amdContextHandle }
+		{
+			context.amdContextHandle = nullptr;
+		}
+
+		Context (const Context& context) = delete;
+
+		Context& operator = (Context&& context)
+		{
+			if (amdContextHandle != nullptr)
+			{
+				const auto result = amdgpu_cs_ctx_free(amdContextHandle);
+				assert(result == 0);
+			}
+
+			amdContextHandle = context.amdContextHandle;
+
+			context.amdContextHandle = nullptr;
+
+			return *this;
+		}
+
+		Context& operator = (const Context& context) = delete;
+	};
+
+	struct BufferObject
+	{
+		amdgpu_bo_handle amdBufferObjectHandle;
+
+		using AllocRequest = amdgpu_bo_alloc_request;
+
+		BufferObject (const Device& device, AllocRequest allocRequest)
+		:
+			amdBufferObjectHandle { nullptr }
+		{
+			const auto result = amdgpu_bo_alloc
+			(
+				device.amdDeviceHandle,
+				&allocRequest, &amdBufferObjectHandle
+			);
+			assert(result == 0);
+			assert(amdBufferObjectHandle != nullptr);
+		}
+
+		~BufferObject ()
+		{
+			if (amdBufferObjectHandle != nullptr)
+			{
+				const auto result = amdgpu_bo_free(amdBufferObjectHandle);
+				assert(result == 0);
+			}
+		}
+
+		BufferObject (BufferObject&& bo)
+		:
+			amdBufferObjectHandle { bo.amdBufferObjectHandle }
+		{
+			bo.amdBufferObjectHandle = nullptr;
+		}
+
+		BufferObject (const BufferObject& bo) = delete;
+
+		BufferObject& operator = (BufferObject&& bo)
+		{
+			if (amdBufferObjectHandle != nullptr)
+			{
+				const auto result = amdgpu_bo_free(amdBufferObjectHandle);
+				assert(result == 0);
+			}
+
+			amdBufferObjectHandle = bo.amdBufferObjectHandle;
+
+			bo.amdBufferObjectHandle = nullptr;
+
+			return *this;
+		}
+
+		BufferObject& operator = (const BufferObject& bo) = delete;
+
+		void* Map ()
+		{
+			void* ptr = nullptr;
+
+			const auto result = amdgpu_bo_cpu_map(amdBufferObjectHandle, &ptr);
+			assert(result == 0);
+
+			return ptr;
+		}
+
+		void Unmap ()
+		{
+			const auto result = amdgpu_bo_cpu_unmap(amdBufferObjectHandle);
 			assert(result == 0);
 		}
-		result = amdgpu_device_deinitialize(amdDeviceHandle);
-		assert(result == 0);
+	};
+}
+
+int main()
+{
+	auto gpuFD = open("/dev/dri/renderD128", O_RDWR); // "/dev/dri/card0"
+	assert(gpuFD > 0);
+	{
+		const auto device = amdgpu::Device { gpuFD };
+
+		const auto context = amdgpu::Context { device };
+
+		const auto bo = amdgpu::BufferObject
+		{
+			device, amdgpu::BufferObject::AllocRequest
+			{
+				64,                     // size
+				0,                      // alignment
+				AMDGPU_GEM_DOMAIN_VRAM, // preferred heap
+				0,                      // flags
+			}
+		};
 	}
 	auto result = close(gpuFD);
 	assert(result == 0);
