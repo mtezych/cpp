@@ -32,33 +32,12 @@
 # EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #
 
-cmake_minimum_required (VERSION 3.1)
+cmake_minimum_required(VERSION 3.8)
 
-project(cpp)
+project(gsl)
 
-add_subdirectory(google-test)
-add_subdirectory(google-benchmark)
-add_subdirectory(gsl)
-add_subdirectory(libsync)
-add_subdirectory(platform-android)
-add_subdirectory(adt)
-add_subdirectory(metaprogramming)
-add_subdirectory(polymorphism)
-add_subdirectory(allocator)
-add_subdirectory(threading)
-add_subdirectory(libdrm-example)
-add_subdirectory(khronos)
-add_subdirectory(cl)
-add_subdirectory(egl)
-add_subdirectory(gles)
-add_subdirectory(platform-xlib)
-add_subdirectory(platform-xcb)
-add_subdirectory(vulkan)
-add_subdirectory(platform-wayland)
-add_subdirectory(util)
-add_subdirectory(platform)
-add_subdirectory(platform-windows)
-add_subdirectory(ieee754)
-add_subdirectory(concepts-lite)
-add_subdirectory(zlang)
-add_subdirectory(gameboy)
+add_library               (gsl INTERFACE)
+
+target_include_directories(gsl INTERFACE include)
+
+target_compile_features   (gsl INTERFACE cxx_std_14)
