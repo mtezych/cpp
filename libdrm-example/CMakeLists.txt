@@ -54,7 +54,7 @@ if(CMAKE_SYSTEM_NAME MATCHES Linux)
 
   add_executable       (libdrm-amdgpu-example libdrm-amdgpu-example.cpp)
 
-  target_link_libraries(libdrm-amdgpu-example drm kms drm_amdgpu)
+  target_link_libraries(libdrm-amdgpu-example drm kms drm_amdgpu gsl)
 
   set_target_properties(libdrm-amdgpu-example PROPERTIES CXX_STANDARD          14
                                                          CXX_STANDARD_REQUIRED ON)

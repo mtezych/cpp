@@ -45,6 +45,9 @@
 #include <cstring>
 #include <cstdint>
 
+// C++ Guideline Support Library
+#include <gsl/span>
+
 namespace amdgpu
 {
 	struct Device
@@ -232,6 +235,91 @@ namespace amdgpu
 			assert(result == 0);
 		}
 	};
+
+	struct BufferObjectList
+	{
+		amdgpu_bo_list_handle amdBufferObjectListHandle;
+
+		BufferObjectList
+		(
+			const Device& device,
+			const gsl::span<BufferObject> bufferObjects,
+			const gsl::span<std::uint8_t> priorities
+		):
+			amdBufferObjectListHandle { nullptr }
+		{
+			assert(bufferObjects.size() == priorities.size());
+
+			static_assert(sizeof(amdgpu_bo_handle) == sizeof(BufferObject), "");
+
+			const auto result = amdgpu_bo_list_create
+			(
+				device.amdDeviceHandle,
+				static_cast<uint32_t>(bufferObjects.size()),
+				reinterpret_cast<amdgpu_bo_handle*>(bufferObjects.data()),
+				priorities.data(),
+				&amdBufferObjectListHandle
+			);
+			assert(result == 0);
+			assert(amdBufferObjectListHandle != nullptr);
+		}
+
+		BufferObjectList
+		(
+			const Device& device,
+			const gsl::span<BufferObject> bufferObjects
+		):
+			amdBufferObjectListHandle { nullptr }
+		{
+			static_assert(sizeof(amdgpu_bo_handle) == sizeof(BufferObject), "");
+
+			const auto result = amdgpu_bo_list_create
+			(
+				device.amdDeviceHandle,
+				static_cast<uint32_t>(bufferObjects.size()),
+				reinterpret_cast<amdgpu_bo_handle*>(bufferObjects.data()),
+				nullptr,
+				&amdBufferObjectListHandle
+			);
+			assert(result == 0);
+			assert(amdBufferObjectListHandle != nullptr);
+		}
+
+		~BufferObjectList ()
+		{
+			if (amdBufferObjectListHandle != nullptr)
+			{
+				const auto result = amdgpu_bo_list_destroy(amdBufferObjectListHandle);
+				assert(result == 0);
+			}
+		}
+
+		BufferObjectList (BufferObjectList&& boList)
+		:
+			amdBufferObjectListHandle { boList.amdBufferObjectListHandle }
+		{
+			boList.amdBufferObjectListHandle = nullptr;
+		}
+
+		BufferObjectList (const BufferObjectList& boList) = delete;
+
+		BufferObjectList& operator = (BufferObjectList&& boList)
+		{
+			if (amdBufferObjectListHandle != nullptr)
+			{
+				const auto result = amdgpu_bo_list_destroy(amdBufferObjectListHandle);
+				assert(result == 0);
+			}
+
+			amdBufferObjectListHandle = boList.amdBufferObjectListHandle;
+
+			boList.amdBufferObjectListHandle = nullptr;
+
+			return *this;
+		}
+
+		BufferObjectList& operator = (const BufferObjectList& boList) = delete;
+	};
 }
 
 int main()
@@ -243,7 +331,7 @@ int main()
 
 		const auto context = amdgpu::Context { device };
 
-		const auto bo = amdgpu::BufferObject
+		auto bo = amdgpu::BufferObject
 		{
 			device, amdgpu::BufferObject::AllocRequest
 			{
@@ -253,6 +341,8 @@ int main()
 				0,                      // flags
 			}
 		};
+
+		const auto boList = amdgpu::BufferObjectList { device, { &bo, 1 } };
 	}
 	auto result = close(gpuFD);
 	assert(result == 0);
