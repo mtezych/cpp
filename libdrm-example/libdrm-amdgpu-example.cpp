@@ -50,61 +50,61 @@
 
 namespace amdgpu
 {
+	struct Version
+	{
+		std::uint32_t major;
+		std::uint32_t minor;
+	};
+
 	struct Device
 	{
-		amdgpu_device_handle amdDeviceHandle;
-
-		struct Version
-		{
-			std::uint32_t major;
-			std::uint32_t minor;
-		};
+		amdgpu_device_handle amdDevice;
 
 		explicit
 		Device (const int gpuFileDescriptor)
 		:
-			amdDeviceHandle { nullptr }
+			amdDevice { nullptr }
 		{
 			auto version = Version { };
 
 			const auto result = amdgpu_device_initialize
 			(
 				gpuFileDescriptor,
-				&version.major, &version.minor, &amdDeviceHandle
+				&version.major, &version.minor, &amdDevice
 			);
 			assert(result == 0);
-			assert(amdDeviceHandle != nullptr);
+			assert(amdDevice != nullptr);
 		}
 
 		~Device ()
 		{
-			if (amdDeviceHandle != nullptr)
+			if (amdDevice != nullptr)
 			{
-				const auto result = amdgpu_device_deinitialize(amdDeviceHandle);
+				const auto result = amdgpu_device_deinitialize(amdDevice);
 				assert(result == 0);
 			}
 		}
 
 		Device (Device&& device)
 		:
-			amdDeviceHandle { device.amdDeviceHandle }
+			amdDevice { device.amdDevice }
 		{
-			device.amdDeviceHandle = nullptr;
+			device.amdDevice = nullptr;
 		}
 
 		Device (const Device& device) = delete;
 
 		Device& operator = (Device&& device)
 		{
-			if (amdDeviceHandle != nullptr)
+			if (amdDevice != nullptr)
 			{
-				const auto result = amdgpu_device_deinitialize(amdDeviceHandle);
+				const auto result = amdgpu_device_deinitialize(amdDevice);
 				assert(result == 0);
 			}
 
-			amdDeviceHandle = device.amdDeviceHandle;
+			amdDevice = device.amdDevice;
 
-			device.amdDeviceHandle = nullptr;
+			device.amdDevice = nullptr;
 
 			return *this;
 		}
@@ -114,50 +114,50 @@ namespace amdgpu
 
 	struct Context
 	{
-		amdgpu_context_handle amdContextHandle;
+		amdgpu_context_handle amdContext;
 
 		explicit
 		Context (const Device& device)
 		:
-			amdContextHandle { nullptr }
+			amdContext { nullptr }
 		{
 			const auto result = amdgpu_cs_ctx_create
 			(
-				device.amdDeviceHandle, &amdContextHandle
+				device.amdDevice, &amdContext
 			);
 			assert(result == 0);
-			assert(amdContextHandle != nullptr);
+			assert(amdContext != nullptr);
 		}
 
 		~Context ()
 		{
-			if (amdContextHandle != nullptr)
+			if (amdContext != nullptr)
 			{
-				const auto result = amdgpu_cs_ctx_free(amdContextHandle);
+				const auto result = amdgpu_cs_ctx_free(amdContext);
 				assert(result == 0);
 			}
 		}
 
 		Context (Context&& context)
 		:
-			amdContextHandle { context.amdContextHandle }
+			amdContext { context.amdContext }
 		{
-			context.amdContextHandle = nullptr;
+			context.amdContext = nullptr;
 		}
 
 		Context (const Context& context) = delete;
 
 		Context& operator = (Context&& context)
 		{
-			if (amdContextHandle != nullptr)
+			if (amdContext != nullptr)
 			{
-				const auto result = amdgpu_cs_ctx_free(amdContextHandle);
+				const auto result = amdgpu_cs_ctx_free(amdContext);
 				assert(result == 0);
 			}
 
-			amdContextHandle = context.amdContextHandle;
+			amdContext = context.amdContext;
 
-			context.amdContextHandle = nullptr;
+			context.amdContext = nullptr;
 
 			return *this;
 		}
@@ -167,52 +167,52 @@ namespace amdgpu
 
 	struct BufferObject
 	{
-		amdgpu_bo_handle amdBufferObjectHandle;
+		amdgpu_bo_handle amdBufferObject;
 
 		using AllocRequest = amdgpu_bo_alloc_request;
 
 		BufferObject (const Device& device, AllocRequest allocRequest)
 		:
-			amdBufferObjectHandle { nullptr }
+			amdBufferObject { nullptr }
 		{
 			const auto result = amdgpu_bo_alloc
 			(
-				device.amdDeviceHandle,
-				&allocRequest, &amdBufferObjectHandle
+				device.amdDevice,
+				&allocRequest, &amdBufferObject
 			);
 			assert(result == 0);
-			assert(amdBufferObjectHandle != nullptr);
+			assert(amdBufferObject != nullptr);
 		}
 
 		~BufferObject ()
 		{
-			if (amdBufferObjectHandle != nullptr)
+			if (amdBufferObject != nullptr)
 			{
-				const auto result = amdgpu_bo_free(amdBufferObjectHandle);
+				const auto result = amdgpu_bo_free(amdBufferObject);
 				assert(result == 0);
 			}
 		}
 
 		BufferObject (BufferObject&& bo)
 		:
-			amdBufferObjectHandle { bo.amdBufferObjectHandle }
+			amdBufferObject { bo.amdBufferObject }
 		{
-			bo.amdBufferObjectHandle = nullptr;
+			bo.amdBufferObject = nullptr;
 		}
 
 		BufferObject (const BufferObject& bo) = delete;
 
 		BufferObject& operator = (BufferObject&& bo)
 		{
-			if (amdBufferObjectHandle != nullptr)
+			if (amdBufferObject != nullptr)
 			{
-				const auto result = amdgpu_bo_free(amdBufferObjectHandle);
+				const auto result = amdgpu_bo_free(amdBufferObject);
 				assert(result == 0);
 			}
 
-			amdBufferObjectHandle = bo.amdBufferObjectHandle;
+			amdBufferObject = bo.amdBufferObject;
 
-			bo.amdBufferObjectHandle = nullptr;
+			bo.amdBufferObject = nullptr;
 
 			return *this;
 		}
@@ -223,7 +223,7 @@ namespace amdgpu
 		{
 			void* ptr = nullptr;
 
-			const auto result = amdgpu_bo_cpu_map(amdBufferObjectHandle, &ptr);
+			const auto result = amdgpu_bo_cpu_map(amdBufferObject, &ptr);
 			assert(result == 0);
 
 			return ptr;
@@ -231,14 +231,14 @@ namespace amdgpu
 
 		void Unmap ()
 		{
-			const auto result = amdgpu_bo_cpu_unmap(amdBufferObjectHandle);
+			const auto result = amdgpu_bo_cpu_unmap(amdBufferObject);
 			assert(result == 0);
 		}
 	};
 
 	struct BufferObjectList
 	{
-		amdgpu_bo_list_handle amdBufferObjectListHandle;
+		amdgpu_bo_list_handle amdBufferObjectList;
 
 		BufferObjectList
 		(
@@ -246,7 +246,7 @@ namespace amdgpu
 			const gsl::span<BufferObject> bufferObjects,
 			const gsl::span<std::uint8_t> priorities
 		):
-			amdBufferObjectListHandle { nullptr }
+			amdBufferObjectList { nullptr }
 		{
 			assert(bufferObjects.size() == priorities.size());
 
@@ -254,14 +254,14 @@ namespace amdgpu
 
 			const auto result = amdgpu_bo_list_create
 			(
-				device.amdDeviceHandle,
+				device.amdDevice,
 				static_cast<uint32_t>(bufferObjects.size()),
 				reinterpret_cast<amdgpu_bo_handle*>(bufferObjects.data()),
 				priorities.data(),
-				&amdBufferObjectListHandle
+				&amdBufferObjectList
 			);
 			assert(result == 0);
-			assert(amdBufferObjectListHandle != nullptr);
+			assert(amdBufferObjectList != nullptr);
 		}
 
 		BufferObjectList
@@ -269,51 +269,51 @@ namespace amdgpu
 			const Device& device,
 			const gsl::span<BufferObject> bufferObjects
 		):
-			amdBufferObjectListHandle { nullptr }
+			amdBufferObjectList { nullptr }
 		{
 			static_assert(sizeof(amdgpu_bo_handle) == sizeof(BufferObject), "");
 
 			const auto result = amdgpu_bo_list_create
 			(
-				device.amdDeviceHandle,
+				device.amdDevice,
 				static_cast<uint32_t>(bufferObjects.size()),
 				reinterpret_cast<amdgpu_bo_handle*>(bufferObjects.data()),
 				nullptr,
-				&amdBufferObjectListHandle
+				&amdBufferObjectList
 			);
 			assert(result == 0);
-			assert(amdBufferObjectListHandle != nullptr);
+			assert(amdBufferObjectList != nullptr);
 		}
 
 		~BufferObjectList ()
 		{
-			if (amdBufferObjectListHandle != nullptr)
+			if (amdBufferObjectList != nullptr)
 			{
-				const auto result = amdgpu_bo_list_destroy(amdBufferObjectListHandle);
+				const auto result = amdgpu_bo_list_destroy(amdBufferObjectList);
 				assert(result == 0);
 			}
 		}
 
 		BufferObjectList (BufferObjectList&& boList)
 		:
-			amdBufferObjectListHandle { boList.amdBufferObjectListHandle }
+			amdBufferObjectList { boList.amdBufferObjectList }
 		{
-			boList.amdBufferObjectListHandle = nullptr;
+			boList.amdBufferObjectList = nullptr;
 		}
 
 		BufferObjectList (const BufferObjectList& boList) = delete;
 
 		BufferObjectList& operator = (BufferObjectList&& boList)
 		{
-			if (amdBufferObjectListHandle != nullptr)
+			if (amdBufferObjectList != nullptr)
 			{
-				const auto result = amdgpu_bo_list_destroy(amdBufferObjectListHandle);
+				const auto result = amdgpu_bo_list_destroy(amdBufferObjectList);
 				assert(result == 0);
 			}
 
-			amdBufferObjectListHandle = boList.amdBufferObjectListHandle;
+			amdBufferObjectList = boList.amdBufferObjectList;
 
-			boList.amdBufferObjectListHandle = nullptr;
+			boList.amdBufferObjectList = nullptr;
 
 			return *this;
 		}
