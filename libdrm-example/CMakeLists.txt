@@ -46,9 +46,9 @@ if(CMAKE_SYSTEM_NAME MATCHES Linux)
 
   add_executable       (libdrm-intel-example libdrm-intel-example.cpp)
 
-  target_link_libraries(libdrm-intel-example drm kms drm_intel)
+  target_link_libraries(libdrm-intel-example drm kms drm_intel util)
 
-  set_target_properties(libdrm-intel-example PROPERTIES CXX_STANDARD          14
+  set_target_properties(libdrm-intel-example PROPERTIES CXX_STANDARD          17
                                                         CXX_STANDARD_REQUIRED ON)
 
 
