@@ -35,10 +35,31 @@
 #ifndef CL_EVENT
 #define CL_EVENT
 
+#ifdef __APPLE__
+	#include <OpenCL/cl.h>
+#else
+	#include <CL/cl.h>
+#endif
+
 namespace cl
 {
+	struct Context;
+
 	struct Event
 	{
+		cl_event clEvent;
+
+		explicit
+		Event (const Context& context);
+
+		~Event ();
+
+		Event (Event&& event);
+		Event (const Event& event) = delete;
+
+		Event& operator = (Event&& event);
+		Event& operator = (const Event& event) = delete;
+
 	};
 }
 

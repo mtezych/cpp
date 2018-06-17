@@ -34,6 +34,47 @@
 
 #include <cl/Event.h>
 
+#include <cl/Context.h>
+
+#include <cassert>
+
 namespace cl
 {
+	Event::Event (const Context& context)
+	:
+		clEvent { nullptr }
+	{
+		auto result = cl_int { CL_INVALID_EVENT };
+		clEvent = clCreateUserEvent(context.clContext, &result);
+		assert(result == CL_SUCCESS);
+	}
+
+	Event::~Event ()
+	{
+		if (clEvent != nullptr)
+		{
+			clReleaseEvent(clEvent);
+		}
+	}
+
+	Event::Event (Event&& event)
+	:
+		clEvent { event.clEvent }
+	{
+		event.clEvent = nullptr;
+	}
+
+	Event& Event::operator = (Event&& event)
+	{
+		if (clEvent != nullptr)
+		{
+			clReleaseEvent(clEvent);
+		}
+
+		clEvent = event.clEvent;
+
+		event.clEvent = nullptr;
+
+		return *this;
+	}
 }
