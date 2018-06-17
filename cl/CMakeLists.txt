@@ -57,7 +57,7 @@ add_library               (cl STATIC include/cl/Platform.h
 
 target_include_directories(cl PUBLIC include)
 
-target_link_libraries     (cl OpenCL khronos platform util)
+target_link_libraries     (cl OpenCL khronos platform gsl util)
 
 set_target_properties     (cl PROPERTIES CXX_STANDARD          17
                                          CXX_STANDARD_REQUIRED ON)
