@@ -43,6 +43,8 @@
 
 #include <cl/Device.h>
 
+#include <util/util.h>
+
 #include <vector>
 #include <string>
 #include <cstdint>
@@ -68,13 +70,23 @@ namespace cl
 			std::string   info;
 		};
 
-		template <cl_platform_info Info>
+		enum class Info : cl_platform_info
+		{
+			Profile    = CL_PLATFORM_PROFILE,
+			Version    = CL_PLATFORM_VERSION,
+			Name       = CL_PLATFORM_NAME,
+			Vendor     = CL_PLATFORM_VENDOR,
+			Extensions = CL_PLATFORM_EXTENSIONS,
+		};
+
+		template <Info info>
 		auto GetInfo () const
 		{
 			auto infoSize = std::size_t { 0 };
 			auto result = clGetPlatformInfo
 			(
-				clPlatformID, Info, 0, nullptr, &infoSize
+				clPlatformID, util::enum_cast(info),
+				0, nullptr, &infoSize
 			);
 			assert(result == CL_SUCCESS);
 
@@ -84,11 +96,12 @@ namespace cl
 			};
 			result = clGetPlatformInfo
 			(
-				clPlatformID, Info, infoBytes.size(), infoBytes.data(), nullptr
+				clPlatformID, util::enum_cast(info),
+				infoBytes.size(), infoBytes.data(), nullptr
 			);
 			assert(result == CL_SUCCESS);
 
-			return InfoResult<Info>::FromBytes(infoBytes);
+			return InfoResult<info>::FromBytes(infoBytes);
 		}
 
 		std::vector<Device>
@@ -96,42 +109,42 @@ namespace cl
 
 	private:
 
-		template <cl_platform_info Info>
+		template <Info info>
 		struct InfoResult;
 	};
 
 	std::vector<Platform> GetPlatforms ();
 
 	template <>
-	struct Platform::InfoResult<CL_PLATFORM_PROFILE>
+	struct Platform::InfoResult<Platform::Info::Profile>
 	{
 		static Profile
 		FromBytes (const std::vector<std::byte>& infoBytes);
 	};
 
 	template <>
-	struct Platform::InfoResult<CL_PLATFORM_VERSION>
+	struct Platform::InfoResult<Platform::Info::Version>
 	{
 		static Version
 		FromBytes (const std::vector<std::byte>& infoBytes);
 	};
 
 	template <>
-	struct Platform::InfoResult<CL_PLATFORM_VENDOR>
+	struct Platform::InfoResult<Platform::Info::Vendor>
 	{
 		static std::string
 		FromBytes (const std::vector<std::byte>& infoBytes);
 	};
 
 	template <>
-	struct Platform::InfoResult<CL_PLATFORM_NAME>
+	struct Platform::InfoResult<Platform::Info::Name>
 	{
 		static std::string
 		FromBytes (const std::vector<std::byte>& infoBytes);
 	};
 
 	template <>
-	struct Platform::InfoResult<CL_PLATFORM_EXTENSIONS>
+	struct Platform::InfoResult<Platform::Info::Extensions>
 	{
 		static std::vector<std::string>
 		FromBytes (const std::vector<std::byte>& infoBytes);

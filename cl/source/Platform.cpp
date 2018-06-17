@@ -81,7 +81,7 @@ namespace cl
 	}
 
 	Platform::Profile
-	Platform::InfoResult<CL_PLATFORM_PROFILE>::FromBytes
+	Platform::InfoResult<Platform::Info::Profile>::FromBytes
 	(
 		const std::vector<std::byte>& infoBytes
 	)
@@ -103,7 +103,7 @@ namespace cl
 	}
 
 	Platform::Version
-	Platform::InfoResult<CL_PLATFORM_VERSION>::FromBytes
+	Platform::InfoResult<Platform::Info::Version>::FromBytes
 	(
 		const std::vector<std::byte>& infoBytes
 	)
@@ -127,7 +127,7 @@ namespace cl
 	}
 
 	std::string
-	Platform::InfoResult<CL_PLATFORM_VENDOR>::FromBytes
+	Platform::InfoResult<Platform::Info::Vendor>::FromBytes
 	(
 		const std::vector<std::byte>& infoBytes
 	)
@@ -138,7 +138,7 @@ namespace cl
 	}
 
 	std::string
-	Platform::InfoResult<CL_PLATFORM_NAME>::FromBytes
+	Platform::InfoResult<Platform::Info::Name>::FromBytes
 	(
 		const std::vector<std::byte>& infoBytes
 	)
@@ -149,7 +149,7 @@ namespace cl
 	}
 
 	std::vector<std::string>
-	Platform::InfoResult<CL_PLATFORM_EXTENSIONS>::FromBytes
+	Platform::InfoResult<Platform::Info::Extensions>::FromBytes
 	(
 		const std::vector<std::byte>& infoBytes
 	)

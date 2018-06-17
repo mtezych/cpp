@@ -118,11 +118,11 @@ int main ()
 
 	for (const auto& platform : platforms)
 	{
-		const auto platformProfile    = platform.GetInfo<CL_PLATFORM_PROFILE   >();
-		const auto platformVersion    = platform.GetInfo<CL_PLATFORM_VERSION   >();
-		const auto platformVendor     = platform.GetInfo<CL_PLATFORM_VENDOR    >();
-		const auto platformName       = platform.GetInfo<CL_PLATFORM_NAME      >();
-		const auto platformExtensions = platform.GetInfo<CL_PLATFORM_EXTENSIONS>();
+		const auto platformProfile    = platform.GetInfo<cl::Platform::Info::Profile   >();
+		const auto platformVersion    = platform.GetInfo<cl::Platform::Info::Version   >();
+		const auto platformVendor     = platform.GetInfo<cl::Platform::Info::Vendor    >();
+		const auto platformName       = platform.GetInfo<cl::Platform::Info::Name      >();
+		const auto platformExtensions = platform.GetInfo<cl::Platform::Info::Extensions>();
 
 		const auto devices = platform.GetDevices();
 
