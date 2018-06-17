@@ -81,6 +81,12 @@ namespace util
 
 		return static_cast<UnderlyingType>(enumValue);
 	}
+
+	template <typename Container>
+	auto data_or_null (Container& container)
+	{
+		return container.empty() ? nullptr : container.data();
+	}
 }
 
 #endif
