@@ -43,6 +43,8 @@
 
 #include <cl/Device.h>
 
+#include <util/util.h>
+
 #include <vector>
 #include <cstddef>
 
@@ -84,13 +86,20 @@ namespace cl
 		Context& operator = (Context&& context);
 		Context& operator = (const Context& context) = delete;
 
-		template <cl_context_info Info>
+		enum class Info : cl_context_info
+		{
+			NumDevices     = CL_CONTEXT_NUM_DEVICES,
+			ReferenceCount = CL_CONTEXT_REFERENCE_COUNT,
+		};
+
+		template <Info info>
 		auto GetInfo() const
 		{
 			auto infoSize = std::size_t { 0 };
 			auto result = clGetContextInfo
 			(
-				clContext, Info, 0, nullptr, &infoSize
+				clContext, util::enum_cast(info),
+				0, nullptr, &infoSize
 			);
 			assert(result == CL_SUCCESS);
 
@@ -100,28 +109,29 @@ namespace cl
 			};
 			result = clGetContextInfo
 			(
-				clContext, Info, infoBytes.size(), infoBytes.data(), nullptr
+				clContext, util::enum_cast(info),
+				infoBytes.size(), infoBytes.data(), nullptr
 			);
 			assert(result == CL_SUCCESS);
 
-			return InfoResult<Info>::FromBytes(infoBytes);
+			return InfoResult<info>::FromBytes(infoBytes);
 		}
 
 	private:
 
-		template <cl_context_info Info>
+		template <Info info>
 		struct InfoResult;
 	};
 
 	template <>
-	struct Context::InfoResult<CL_CONTEXT_NUM_DEVICES>
+	struct Context::InfoResult<Context::Info::NumDevices>
 	{
 		static cl_uint
 		FromBytes (const std::vector<std::byte>& infoBytes);
 	};
 
 	template <>
-	struct Context::InfoResult<CL_CONTEXT_REFERENCE_COUNT>
+	struct Context::InfoResult<Context::Info::ReferenceCount>
 	{
 		static cl_uint
 		FromBytes (const std::vector<std::byte>& infoBytes);

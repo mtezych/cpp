@@ -138,7 +138,7 @@ namespace cl
 	}
 
 	cl_uint
-	Context::InfoResult<CL_CONTEXT_NUM_DEVICES>::FromBytes
+	Context::InfoResult<Context::Info::NumDevices>::FromBytes
 	(
 		const std::vector<std::byte>& infoBytes
 	)
@@ -147,7 +147,7 @@ namespace cl
 	}
 
 	cl_uint
-	Context::InfoResult<CL_CONTEXT_REFERENCE_COUNT>::FromBytes
+	Context::InfoResult<Context::Info::ReferenceCount>::FromBytes
 	(
 		const std::vector<std::byte>& infoBytes
 	)

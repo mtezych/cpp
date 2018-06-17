@@ -140,8 +140,8 @@ int main ()
 
 		const auto context = cl::Context { platform, devices };
 
-		const auto contextNumDevices     = context.GetInfo<CL_CONTEXT_NUM_DEVICES    >();
-		const auto contextReferenceCount = context.GetInfo<CL_CONTEXT_REFERENCE_COUNT>();
+		const auto contextNumDevices     = context.GetInfo<cl::Context::Info::NumDevices    >();
+		const auto contextReferenceCount = context.GetInfo<cl::Context::Info::ReferenceCount>();
 
 		for (const auto& device : devices)
 		{
