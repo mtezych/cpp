@@ -60,10 +60,14 @@ namespace cl
 	CommandQueue::CommandQueue
 	(
 		const Context& context, const Device& device,
-		const cl_command_queue_properties queueProperties
+		const ExecMode execMode, const Profiling profiling
 	):
 		clCommandQueue { nullptr }
 	{
+		const auto queueProperties = cl_command_queue_properties
+		{
+			util::enum_cast(execMode) | util::enum_cast(profiling)
+		};
 		assert(IsValid(queueProperties));
 
 		auto result = cl_int { CL_INVALID_COMMAND_QUEUE };

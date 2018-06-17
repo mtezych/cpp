@@ -50,10 +50,23 @@ namespace cl
 	{
 		cl_command_queue clCommandQueue;
 
+		enum class ExecMode : cl_command_queue_properties
+		{
+			   InOrder = 0,
+			OutOfOrder = CL_QUEUE_OUT_OF_ORDER_EXEC_MODE_ENABLE,
+		};
+
+		enum class Profiling : cl_command_queue_properties
+		{
+			Enable  = CL_QUEUE_PROFILING_ENABLE,
+			Disable = 0,
+		};
+
 		CommandQueue
 		(
 			const Context& context, const Device& device,
-			const cl_command_queue_properties queueProperties = 0
+			ExecMode  execMode  = ExecMode::InOrder,
+			Profiling profiling = Profiling::Disable
 		);
 
 		~CommandQueue ();
