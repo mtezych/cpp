@@ -40,6 +40,12 @@
 
 namespace cl
 {
+	Event::Event (const cl_event event)
+	:
+		clEvent { event }
+	{
+	}
+
 	Event::Event (const Context& context)
 	:
 		clEvent { nullptr }

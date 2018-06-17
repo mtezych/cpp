@@ -50,6 +50,9 @@ namespace cl
 		cl_event clEvent;
 
 		explicit
+		Event (cl_event event);
+
+		explicit
 		Event (const Context& context);
 
 		~Event ();
