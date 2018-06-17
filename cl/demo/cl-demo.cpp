@@ -139,6 +139,65 @@ void GetInfo (const cl::Context& context)
 	const auto refCount   = context.GetInfo<cl::Context::Info::ReferenceCount>();
 }
 
+void Compute (const cl::Context& context)
+{
+	auto program = cl::Program
+	{
+		context,
+		"__kernel void cl_main                                                \n"
+		"(                                                                    \n"
+		"    __global const float*  firstInput,                               \n"
+		"    __global const float* secondInput,                               \n"
+		"    __global       float*      output                                \n"
+		")                                                                    \n"
+		"{                                                                    \n"
+		"    int globalID = get_global_id(0);                                 \n"
+		"                                                                     \n"
+		"    output[globalID] = firstInput[globalID] + secondInput[globalID]; \n"
+		"}                                                                    \n"
+	};
+	program.Build();
+
+	auto kernel = cl::Kernel { program, "cl_main" };
+
+	const auto firstSrcMemory = cl::Memory
+	{
+		context,
+		cl::Memory::DeviceAccess::ReadOnly,
+		cl::Memory::HostAccess::ReadWrite,
+		cl::Memory::Alloc::Device,
+		std::vector<float>
+		{
+			1.5f, 7.6f, 8.1f, 1.5f, 1.7f, 2.4f, 9.0f, 3.5f,
+		},
+	};
+
+	const auto secondSrcMemory = cl::Memory
+	{
+		context,
+		cl::Memory::DeviceAccess::ReadOnly,
+		cl::Memory::HostAccess::ReadWrite,
+		cl::Memory::Alloc::Device,
+		std::vector<float>
+		{
+			3.6f, 7.0f, 0.8f, 4.3f, 2.7f, 6.5f, 2.8f, 1.4f,
+		},
+	};
+
+	const auto dstMemory = cl::Memory
+	{
+		context,
+		cl::Memory::DeviceAccess::WriteOnly,
+		cl::Memory::HostAccess::ReadWrite,
+		cl::Memory::Alloc::Device,
+		8
+	};
+
+	kernel.SetArg(0,  firstSrcMemory);
+	kernel.SetArg(1, secondSrcMemory);
+	kernel.SetArg(2,       dstMemory);
+}
+
 int main ()
 {
 	const auto platforms = cl::GetPlatforms();
@@ -163,61 +222,7 @@ int main ()
 			const auto commandQueue = cl::CommandQueue { context, device };
 		}
 
-		auto program = cl::Program
-		{
-			context,
-			"__kernel void cl_main                                                \n"
-			"(                                                                    \n"
-			"    __global const float*  firstInput,                               \n"
-			"    __global const float* secondInput,                               \n"
-			"    __global       float*      output                                \n"
-			")                                                                    \n"
-			"{                                                                    \n"
-			"    int globalID = get_global_id(0);                                 \n"
-			"                                                                     \n"
-			"    output[globalID] = firstInput[globalID] + secondInput[globalID]; \n"
-			"}                                                                    \n"
-		};
-		program.Build();
-
-		auto kernel = cl::Kernel { program, "cl_main" };
-
-		const auto firstSrcMemory = cl::Memory
-		{
-			context,
-			cl::Memory::DeviceAccess::ReadOnly,
-			cl::Memory::HostAccess::ReadWrite,
-			cl::Memory::Alloc::Device,
-			std::vector<float>
-			{
-				1.5f, 7.6f, 8.1f, 1.5f, 1.7f, 2.4f, 9.0f, 3.5f,
-			},
-		};
-
-		const auto secondSrcMemory = cl::Memory
-		{
-			context,
-			cl::Memory::DeviceAccess::ReadOnly,
-			cl::Memory::HostAccess::ReadWrite,
-			cl::Memory::Alloc::Device,
-			std::vector<float>
-			{
-				3.6f, 7.0f, 0.8f, 4.3f, 2.7f, 6.5f, 2.8f, 1.4f,
-			},
-		};
-
-		const auto dstMemory = cl::Memory
-		{
-			context,
-			cl::Memory::DeviceAccess::WriteOnly,
-			cl::Memory::HostAccess::ReadWrite,
-			cl::Memory::Alloc::Device,
-			8
-		};
-
-		kernel.SetArg(0,  firstSrcMemory);
-		kernel.SetArg(1, secondSrcMemory);
-		kernel.SetArg(2,       dstMemory);
+		Compute(context);
 	}
 
 	return 0;
