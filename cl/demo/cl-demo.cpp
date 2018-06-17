@@ -112,36 +112,51 @@
 // gl_GlobalInvocationID = gl_WorkGroupID * gl_WorkGroupSize + gl_LocalInvocationID
 //
 
+void GetInfo (const cl::Platform& platform)
+{
+	const auto profile    = platform.GetInfo<cl::Platform::Info::Profile   >();
+	const auto version    = platform.GetInfo<cl::Platform::Info::Version   >();
+	const auto vendor     = platform.GetInfo<cl::Platform::Info::Vendor    >();
+	const auto name       = platform.GetInfo<cl::Platform::Info::Name      >();
+	const auto extensions = platform.GetInfo<cl::Platform::Info::Extensions>();
+}
+
+void GetInfo (const cl::Device& device)
+{
+	const auto type          = device.GetInfo<cl::Device::Info::Type         >();
+	const auto profile       = device.GetInfo<cl::Device::Info::Profile      >();
+	const auto version       = device.GetInfo<cl::Device::Info::Version      >();
+	const auto vendor        = device.GetInfo<cl::Device::Info::Vendor       >();
+	const auto name          = device.GetInfo<cl::Device::Info::Name         >();
+	const auto extensions    = device.GetInfo<cl::Device::Info::Extensions   >();
+	const auto vendorID      = device.GetInfo<cl::Device::Info::VendorID     >();
+	const auto driverVersion = device.GetInfo<cl::Device::Info::DriverVersion>();
+}
+
+void GetInfo (const cl::Context& context)
+{
+	const auto numDevices = context.GetInfo<cl::Context::Info::NumDevices    >();
+	const auto refCount   = context.GetInfo<cl::Context::Info::ReferenceCount>();
+}
+
 int main ()
 {
 	const auto platforms = cl::GetPlatforms();
 
 	for (const auto& platform : platforms)
 	{
-		const auto platformProfile    = platform.GetInfo<cl::Platform::Info::Profile   >();
-		const auto platformVersion    = platform.GetInfo<cl::Platform::Info::Version   >();
-		const auto platformVendor     = platform.GetInfo<cl::Platform::Info::Vendor    >();
-		const auto platformName       = platform.GetInfo<cl::Platform::Info::Name      >();
-		const auto platformExtensions = platform.GetInfo<cl::Platform::Info::Extensions>();
+		GetInfo(platform);
 
 		const auto devices = platform.GetDevices();
 
 		for (const auto& device : devices)
 		{
-			const auto deviceType       = device.GetInfo<cl::Device::Info::Type         >();
-			const auto deviceProfile    = device.GetInfo<cl::Device::Info::Profile      >();
-			const auto deviceVersion    = device.GetInfo<cl::Device::Info::Version      >();
-			const auto deviceVendor     = device.GetInfo<cl::Device::Info::Vendor       >();
-			const auto deviceName       = device.GetInfo<cl::Device::Info::Name         >();
-			const auto deviceExtensions = device.GetInfo<cl::Device::Info::Extensions   >();
-			const auto deviceVendorID   = device.GetInfo<cl::Device::Info::VendorID     >();
-			const auto driverVersion    = device.GetInfo<cl::Device::Info::DriverVersion>();
+			GetInfo(device);
 		}
 
 		const auto context = cl::Context { platform, devices };
 
-		const auto contextNumDevices     = context.GetInfo<cl::Context::Info::NumDevices    >();
-		const auto contextReferenceCount = context.GetInfo<cl::Context::Info::ReferenceCount>();
+		GetInfo(context);
 
 		for (const auto& device : devices)
 		{
