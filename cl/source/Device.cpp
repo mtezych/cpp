@@ -39,7 +39,7 @@
 namespace cl
 {
 	cl_device_type
-	Device::InfoResult<CL_DEVICE_TYPE>::FromBytes
+	Device::InfoResult<Device::Info::Type>::FromBytes
 	(
 		const std::vector<std::byte>& infoBytes
 	)
@@ -48,7 +48,7 @@ namespace cl
 	}
 
 	Device::Profile
-	Device::InfoResult<CL_DEVICE_PROFILE>::FromBytes
+	Device::InfoResult<Device::Info::Profile>::FromBytes
 	(
 		const std::vector<std::byte>& infoBytes
 	)
@@ -70,7 +70,7 @@ namespace cl
 	}
 
 	Device::Version
-	Device::InfoResult<CL_DEVICE_VERSION>::FromBytes
+	Device::InfoResult<Device::Info::Version>::FromBytes
 	(
 		const std::vector<std::byte>& infoBytes
 	)
@@ -94,7 +94,7 @@ namespace cl
 	}
 
 	std::string
-	Device::InfoResult<CL_DEVICE_VENDOR>::FromBytes
+	Device::InfoResult<Device::Info::Vendor>::FromBytes
 	(
 		const std::vector<std::byte>& infoBytes
 	)
@@ -105,7 +105,7 @@ namespace cl
 	}
 
 	std::string
-	Device::InfoResult<CL_DEVICE_NAME>::FromBytes
+	Device::InfoResult<Device::Info::Name>::FromBytes
 	(
 		const std::vector<std::byte>& infoBytes
 	)
@@ -116,7 +116,7 @@ namespace cl
 	}
 
 	std::vector<std::string>
-	Device::InfoResult<CL_DEVICE_EXTENSIONS>::FromBytes
+	Device::InfoResult<Device::Info::Extensions>::FromBytes
 	(
 		const std::vector<std::byte>& infoBytes
 	)
@@ -129,7 +129,7 @@ namespace cl
 	}
 
 	cl_uint
-	Device::InfoResult<CL_DEVICE_VENDOR_ID>::FromBytes
+	Device::InfoResult<Device::Info::VendorID>::FromBytes
 	(
 		const std::vector<std::byte>& infoBytes
 	)
@@ -138,7 +138,7 @@ namespace cl
 	}
 
 	Device::Version
-	Device::InfoResult<CL_DRIVER_VERSION>::FromBytes
+	Device::InfoResult<Device::Info::DriverVersion>::FromBytes
 	(
 		const std::vector<std::byte>& infoBytes
 	)

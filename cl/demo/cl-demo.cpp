@@ -128,14 +128,14 @@ int main ()
 
 		for (const auto& device : devices)
 		{
-			const auto deviceType       = device.GetInfo<CL_DEVICE_TYPE      >();
-			const auto deviceProfile    = device.GetInfo<CL_DEVICE_PROFILE   >();
-			const auto deviceVersion    = device.GetInfo<CL_DEVICE_VERSION   >();
-			const auto deviceVendor     = device.GetInfo<CL_DEVICE_VENDOR    >();
-			const auto deviceName       = device.GetInfo<CL_DEVICE_NAME      >();
-			const auto deviceExtensions = device.GetInfo<CL_DEVICE_EXTENSIONS>();
-			const auto deviceVendorID   = device.GetInfo<CL_DEVICE_VENDOR_ID >();
-			const auto driverVersion    = device.GetInfo<CL_DRIVER_VERSION   >();
+			const auto deviceType       = device.GetInfo<cl::Device::Info::Type         >();
+			const auto deviceProfile    = device.GetInfo<cl::Device::Info::Profile      >();
+			const auto deviceVersion    = device.GetInfo<cl::Device::Info::Version      >();
+			const auto deviceVendor     = device.GetInfo<cl::Device::Info::Vendor       >();
+			const auto deviceName       = device.GetInfo<cl::Device::Info::Name         >();
+			const auto deviceExtensions = device.GetInfo<cl::Device::Info::Extensions   >();
+			const auto deviceVendorID   = device.GetInfo<cl::Device::Info::VendorID     >();
+			const auto driverVersion    = device.GetInfo<cl::Device::Info::DriverVersion>();
 		}
 
 		const auto context = cl::Context { platform, devices };

@@ -41,6 +41,8 @@
 	#include <CL/cl.h>
 #endif
 
+#include <util/util.h>
+
 #include <vector>
 #include <string>
 #include <cassert>
@@ -65,13 +67,26 @@ namespace cl
 			std::string   info;
 		};
 
-		template <cl_device_info Info>
+		enum class Info : cl_device_info
+		{
+			Type          = CL_DEVICE_TYPE,
+			Profile       = CL_DEVICE_PROFILE,
+			Version       = CL_DEVICE_VERSION,
+			Vendor        = CL_DEVICE_VENDOR,
+			Name          = CL_DEVICE_NAME,
+			Extensions    = CL_DEVICE_EXTENSIONS,
+			VendorID      = CL_DEVICE_VENDOR_ID,
+			DriverVersion = CL_DRIVER_VERSION,
+		};
+
+		template <Info info>
 		auto GetInfo() const
 		{
 			auto infoSize = std::size_t { 0 };
 			auto result = clGetDeviceInfo
 			(
-				clDeviceID, Info, 0, nullptr, &infoSize
+				clDeviceID, util::enum_cast(info),
+				0, nullptr, &infoSize
 			);
 			assert(result == CL_SUCCESS);
 
@@ -81,70 +96,71 @@ namespace cl
 			};
 			result = clGetDeviceInfo
 			(
-				clDeviceID, Info, infoBytes.size(), infoBytes.data(), nullptr
+				clDeviceID, util::enum_cast(info),
+				infoBytes.size(), infoBytes.data(), nullptr
 			);
 			assert(result == CL_SUCCESS);
 
-			return InfoResult<Info>::FromBytes(infoBytes);
+			return InfoResult<info>::FromBytes(infoBytes);
 		}
 
 	private:
 
-		template <cl_device_info Info>
+		template <Info info>
 		struct InfoResult;
 	};
 
 	template <>
-	struct Device::InfoResult<CL_DEVICE_TYPE>
+	struct Device::InfoResult<Device::Info::Type>
 	{
 		static cl_device_type
 		FromBytes (const std::vector<std::byte>& infoBytes);
 	};
 
 	template <>
-	struct Device::InfoResult<CL_DEVICE_PROFILE>
+	struct Device::InfoResult<Device::Info::Profile>
 	{
 		static Profile
 		FromBytes (const std::vector<std::byte>& infoBytes);
 	};
 
 	template <>
-	struct Device::InfoResult<CL_DEVICE_VERSION>
+	struct Device::InfoResult<Device::Info::Version>
 	{
 		static Version
 		FromBytes (const std::vector<std::byte>& infoBytes);
 	};
 
 	template <>
-	struct Device::InfoResult<CL_DEVICE_VENDOR>
+	struct Device::InfoResult<Device::Info::Vendor>
 	{
 		static std::string
 		FromBytes (const std::vector<std::byte>& infoBytes);
 	};
 
 	template <>
-	struct Device::InfoResult<CL_DEVICE_NAME>
+	struct Device::InfoResult<Device::Info::Name>
 	{
 		static std::string
 		FromBytes (const std::vector<std::byte>& infoBytes);
 	};
 
 	template <>
-	struct Device::InfoResult<CL_DEVICE_EXTENSIONS>
+	struct Device::InfoResult<Device::Info::Extensions>
 	{
 		static std::vector<std::string>
 		FromBytes (const std::vector<std::byte>& infoBytes);
 	};
 
 	template <>
-	struct Device::InfoResult<CL_DEVICE_VENDOR_ID>
+	struct Device::InfoResult<Device::Info::VendorID>
 	{
 		static cl_uint
 		FromBytes (const std::vector<std::byte>& infoBytes);
 	};
 
 	template <>
-	struct Device::InfoResult<CL_DRIVER_VERSION>
+	struct Device::InfoResult<Device::Info::DriverVersion>
 	{
 		static Version
 		FromBytes (const std::vector<std::byte>& infoBytes);
