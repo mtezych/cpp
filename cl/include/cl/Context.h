@@ -45,6 +45,8 @@
 
 #include <util/util.h>
 
+#include <gsl/span>
+
 #include <vector>
 #include <cstddef>
 
@@ -68,14 +70,14 @@ namespace cl
 
 		Context
 		(
-			const Platform&            platform,
-			const std::vector<Device>& devices
+			const Platform&         platform,
+			gsl::span<const Device> devices
 		);
 
 		Context
 		(
-			const Platform&      platform,
-			const cl_device_type deviceType
+			const Platform& platform,
+			cl_device_type  deviceType
 		);
 
 		~Context ();

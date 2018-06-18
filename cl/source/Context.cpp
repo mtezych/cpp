@@ -37,17 +37,14 @@
 #include <cl/Platform.h>
 #include <cl/Device.h>
 
-#include <util/util.h>
-
 #include <array>
-#include <algorithm>
 
 namespace cl
 {
 	Context::Context
 	(
-		const Platform&            platform,
-		const std::vector<Device>& devices
+		const Platform&               platform,
+		const gsl::span<const Device> devices
 	):
 		clContext { nullptr }
 	{
@@ -58,25 +55,14 @@ namespace cl
 			0
 		};
 
-		auto clDevices = std::vector<cl_device_id>
-		{
-			devices.size(), nullptr
-		};
-		std::transform
-		(
-			devices.begin(), devices.end(), clDevices.begin(),
-
-			[](const Device& device) -> cl_device_id
-			{
-				return device.clDeviceID;
-			}
-		);
+		static_assert(sizeof(Device) == sizeof(cl_device_id));
 
 		auto result = cl_int { CL_INVALID_CONTEXT };
 		clContext = clCreateContext
 		(
 			properties.data(),
-			static_cast<cl_uint>(clDevices.size()), clDevices.data(),
+			static_cast<cl_uint>(devices.size()),
+			reinterpret_cast<const cl_device_id*>(util::data_or_null(devices)),
 			nullptr, nullptr,
 			&result
 		);
