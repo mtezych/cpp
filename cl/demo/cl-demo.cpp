@@ -211,18 +211,15 @@ int main ()
 		for (const auto& device : devices)
 		{
 			GetInfo(device);
+
+			const auto context = cl::Context { platform, { &device, 1 } };
+
+			GetInfo(context);
+
+			auto commandQueue = cl::CommandQueue { context, device };
+
+			Compute(context);
 		}
-
-		const auto context = cl::Context { platform, devices };
-
-		GetInfo(context);
-
-		for (const auto& device : devices)
-		{
-			const auto commandQueue = cl::CommandQueue { context, device };
-		}
-
-		Compute(context);
 	}
 
 	return 0;
