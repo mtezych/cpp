@@ -52,7 +52,7 @@ namespace cl
 			util::enum_cast(  hostAccess) |
 			util::enum_cast(alloc)
 		};
-		assert(IsValid(flags));
+		assert(ValidateMemoryFlags(flags));
 
 		auto result = cl_int { CL_INVALID_MEM_OBJECT };
 		clMemory = clCreateBuffer

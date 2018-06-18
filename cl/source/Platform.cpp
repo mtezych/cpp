@@ -41,7 +41,7 @@ namespace cl
 	namespace
 	{
 		constexpr
-		bool IsValid (const cl_device_type deviceType)
+		bool ValidateDeviceType (const cl_device_type deviceType)
 		{
 			const auto matchesAnyDeviceType = util::IsAnyBitSet
 			(
@@ -164,7 +164,7 @@ namespace cl
 	std::vector<Device>
 	Platform::GetDevices (const cl_device_type deviceType) const
 	{
-		assert(IsValid(deviceType));
+		assert(ValidateDeviceType(deviceType));
 
 		auto deviceIDsCount = cl_uint { 0 };
 		auto result = clGetDeviceIDs

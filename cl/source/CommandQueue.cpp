@@ -43,8 +43,8 @@ namespace cl
 {
 	namespace
 	{
-		constexpr
-		bool IsValid (const cl_command_queue_properties queueProperties)
+		constexpr bool
+		ValidateQueueProperties (const cl_command_queue_properties queueProperties)
 		{
 			const auto matchesAnyQueueProperty = util::IsAnyBitSet
 			(
@@ -68,7 +68,7 @@ namespace cl
 		{
 			util::enum_cast(execMode) | util::enum_cast(profiling)
 		};
-		assert(IsValid(queueProperties));
+		assert(ValidateQueueProperties(queueProperties));
 
 		auto result = cl_int { CL_INVALID_COMMAND_QUEUE };
 		clCommandQueue = clCreateCommandQueue

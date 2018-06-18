@@ -49,7 +49,7 @@
 namespace cl
 {
 	constexpr
-	bool IsValid (const cl_mem_flags memoryFlags)
+	bool ValidateMemoryFlags (const cl_mem_flags memoryFlags)
 	{
 		const auto matchesAnyQueueProperty = util::IsAnyBitSet
 		(
@@ -125,7 +125,7 @@ namespace cl
 				util::enum_cast(alloc)        |
 				CL_MEM_COPY_HOST_PTR
 			};
-			assert(IsValid(flags));
+			assert(ValidateMemoryFlags(flags));
 
 			// @note: The OpenCL spec guarantees that the host_ptr
 			//        will be used only for reading data,
