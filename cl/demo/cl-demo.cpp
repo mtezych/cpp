@@ -139,7 +139,7 @@ void GetInfo (const cl::Context& context)
 	const auto refCount   = context.GetInfo<cl::Context::Info::ReferenceCount>();
 }
 
-void Compute (const cl::Context& context)
+void Compute (const cl::Context& context, cl::CommandQueue& commandQueue)
 {
 	auto program = cl::Program
 	{
@@ -196,6 +196,13 @@ void Compute (const cl::Context& context)
 	kernel.SetArg(0,  firstSrcMemory);
 	kernel.SetArg(1, secondSrcMemory);
 	kernel.SetArg(2,       dstMemory);
+
+	const auto signalEvent = commandQueue.EnqueueKernel<cl::Range1D>
+	(
+		kernel,
+		{ 8 }, { 1 },
+		std::vector<cl::Event> { }
+	);
 }
 
 int main ()
@@ -218,7 +225,7 @@ int main ()
 
 			auto commandQueue = cl::CommandQueue { context, device };
 
-			Compute(context);
+			Compute(context, commandQueue);
 		}
 	}
 

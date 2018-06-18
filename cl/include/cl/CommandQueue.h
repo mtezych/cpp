@@ -41,10 +41,25 @@
 	#include <CL/cl.h>
 #endif
 
+#include <cl/Kernel.h>
+#include <cl/Event.h>
+
+#include <util/util.h>
+
+#include <array>
+#include <vector>
+
 namespace cl
 {
 	struct Context;
 	struct Device;
+
+	enum Range : cl_uint
+	{
+		Range1D = 1,
+		Range2D = 2,
+		Range3D = 3,
+	};
 
 	struct CommandQueue
 	{
@@ -76,6 +91,36 @@ namespace cl
 
 		CommandQueue& operator = (CommandQueue&& commandQueue);
 		CommandQueue& operator = (const CommandQueue& commandQueue) = delete;
+
+		template <Range WorkDimension>
+		Event EnqueueKernel
+		(
+			const Kernel& kernel,
+			const std::array<size_t, WorkDimension>& globalWorkSize,
+			const std::array<size_t, WorkDimension>&  localWorkSize,
+			const std::vector<Event>& waitEvents
+		)
+		{
+			static_assert(sizeof(Event) == sizeof(cl_event));
+
+			const auto globalWorkOffset = std::array<size_t, WorkDimension> { };
+
+			auto signalEvent = cl_event { };
+
+			auto result = clEnqueueNDRangeKernel
+			(
+				clCommandQueue, kernel.clKernel,
+				WorkDimension,
+				globalWorkOffset.data(),
+				globalWorkSize.data(), localWorkSize.data(),
+				static_cast<cl_uint>(waitEvents.size()),
+				reinterpret_cast<const cl_event*>(util::data_or_null(waitEvents)),
+				&signalEvent
+			);
+			assert(result == CL_SUCCESS);
+
+			return Event { signalEvent };
+		}
 	};
 }
 
