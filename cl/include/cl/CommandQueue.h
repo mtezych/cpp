@@ -54,28 +54,28 @@ namespace cl
 	struct Context;
 	struct Device;
 
-	enum Range : cl_uint
+	enum NDRange : cl_uint
 	{
 		Range1D = 1,
 		Range2D = 2,
 		Range3D = 3,
 	};
 
+	enum class ExecMode : cl_command_queue_properties
+	{
+		   InOrder = 0,
+		OutOfOrder = CL_QUEUE_OUT_OF_ORDER_EXEC_MODE_ENABLE,
+	};
+
+	enum class Profiling : cl_command_queue_properties
+	{
+		 Enable = CL_QUEUE_PROFILING_ENABLE,
+		Disable = 0,
+	};
+
 	struct CommandQueue
 	{
 		cl_command_queue clCommandQueue;
-
-		enum class ExecMode : cl_command_queue_properties
-		{
-			   InOrder = 0,
-			OutOfOrder = CL_QUEUE_OUT_OF_ORDER_EXEC_MODE_ENABLE,
-		};
-
-		enum class Profiling : cl_command_queue_properties
-		{
-			Enable  = CL_QUEUE_PROFILING_ENABLE,
-			Disable = 0,
-		};
 
 		CommandQueue
 		(
@@ -92,7 +92,7 @@ namespace cl
 		CommandQueue& operator = (CommandQueue&& commandQueue);
 		CommandQueue& operator = (const CommandQueue& commandQueue) = delete;
 
-		template <Range WorkDimension>
+		template <NDRange WorkDimension>
 		Event EnqueueKernel
 		(
 			const Kernel& kernel,
