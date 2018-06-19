@@ -184,9 +184,8 @@ void Compute (const cl::Context& context, cl::CommandQueue& commandQueue)
 		cl::DeviceAccess::ReadOnly,
 		cl::HostAccess::ReadWrite,
 		cl::Alloc::Device,
-		std::vector<float>
 		{
-			1.5f, 7.6f, 8.1f, 1.5f, 1.7f, 2.4f, 9.0f, 3.5f,
+			1.5f, 7.6f, 8.1f, 1.5f, 1.7f, 2.4f, 5.0f, 3.5f,
 		},
 	};
 
@@ -196,9 +195,8 @@ void Compute (const cl::Context& context, cl::CommandQueue& commandQueue)
 		cl::DeviceAccess::ReadOnly,
 		cl::HostAccess::ReadWrite,
 		cl::Alloc::Device,
-		std::vector<float>
 		{
-			3.6f, 7.0f, 0.8f, 4.3f, 2.7f, 6.5f, 2.8f, 1.4f,
+			3.6f, 1.0f, 0.8f, 4.3f, 2.7f, 6.5f, 2.8f, 1.4f,
 		},
 	};
 
@@ -208,7 +206,7 @@ void Compute (const cl::Context& context, cl::CommandQueue& commandQueue)
 		cl::DeviceAccess::WriteOnly,
 		cl::HostAccess::ReadWrite,
 		cl::Alloc::Device,
-		8
+		8,
 	};
 
 	kernel.SetArg(0,  firstSrcMemory);
