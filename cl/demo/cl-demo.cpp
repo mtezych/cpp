@@ -39,6 +39,8 @@
 #include <cl/Kernel.h>
 #include <cl/Memory.h>
 
+#include <iostream>
+
 //
 //                        [ Platform & Memory Models ]
 //
@@ -111,6 +113,22 @@
 //       get_global_id() = get_group_id() * get_local_size() + get_local_id()
 // gl_GlobalInvocationID = gl_WorkGroupID * gl_WorkGroupSize + gl_LocalInvocationID
 //
+
+template <typename value_type, std::size_t size>
+std::ostream&
+operator << (std::ostream& ostream, const std::array<value_type, size>& array)
+{
+	ostream << "[ ";
+
+	for (const auto element : array)
+	{
+		ostream << element << ' ';
+	}
+
+	ostream << ']';
+
+	return ostream;
+}
 
 void GetInfo (const cl::Platform& platform)
 {
@@ -197,12 +215,24 @@ void Compute (const cl::Context& context, cl::CommandQueue& commandQueue)
 	kernel.SetArg(1, secondSrcMemory);
 	kernel.SetArg(2,       dstMemory);
 
-	const auto signalEvent = commandQueue.EnqueueKernel<cl::Range1D>
+	const auto signalKernelEvent = commandQueue.EnqueueKernel<cl::Range1D>
 	(
 		kernel,
 		{ 8 }, { 1 },
 		std::vector<cl::Event> { }
 	);
+
+	auto buffer = std::array<float, 8> { };
+
+	const auto signalReadBufferEvent = commandQueue.EnqueueReadBuffer
+	(
+		dstMemory,
+		gsl::make_span(buffer),
+		cl::Range { 0, 8 },
+		std::vector<cl::Event> { }
+	);
+
+	std::cout << buffer << std::endl;
 }
 
 int main ()

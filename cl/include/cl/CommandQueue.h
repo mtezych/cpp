@@ -43,8 +43,11 @@
 
 #include <cl/Kernel.h>
 #include <cl/Event.h>
+#include <cl/Memory.h>
 
 #include <util/util.h>
+
+#include <gsl/span>
 
 #include <array>
 #include <vector>
@@ -59,6 +62,12 @@ namespace cl
 		Range1D = 1,
 		Range2D = 2,
 		Range3D = 3,
+	};
+
+	struct Range
+	{
+		size_t offset;
+		size_t size;
 	};
 
 	enum class ExecMode : cl_command_queue_properties
@@ -113,6 +122,34 @@ namespace cl
 				WorkDimension,
 				globalWorkOffset.data(),
 				globalWorkSize.data(), localWorkSize.data(),
+				static_cast<cl_uint>(waitEvents.size()),
+				reinterpret_cast<const cl_event*>(util::data_or_null(waitEvents)),
+				&signalEvent
+			);
+			assert(result == CL_SUCCESS);
+
+			return Event { signalEvent };
+		}
+
+		template <typename ValueType>
+		Event EnqueueReadBuffer
+		(
+			const cl::Memory<ValueType>& memory,
+			const gsl::span<ValueType> buffer,
+			const Range& range,
+			const std::vector<Event>& waitEvents
+		)
+		{
+			assert(buffer.size() >= range.size);
+
+			auto signalEvent = cl_event { };
+
+			auto result = clEnqueueReadBuffer
+			(
+				clCommandQueue, memory.clMemory,
+				cl_bool { CL_BLOCKING },
+				range.offset, sizeof(ValueType) * range.size,
+				buffer.data(),
 				static_cast<cl_uint>(waitEvents.size()),
 				reinterpret_cast<const cl_event*>(util::data_or_null(waitEvents)),
 				&signalEvent
