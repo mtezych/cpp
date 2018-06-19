@@ -71,32 +71,33 @@ namespace cl
 		return matchesAnyQueueProperty || (memoryFlags == 0);
 	}
 
+	enum class DeviceAccess : cl_mem_flags
+	{
+		ReadWrite = CL_MEM_READ_WRITE,
+		ReadOnly  = CL_MEM_READ_ONLY,
+		WriteOnly = CL_MEM_WRITE_ONLY,
+	};
+
+	enum class HostAccess : cl_mem_flags
+	{
+		ReadWrite = 0,
+		ReadOnly  = CL_MEM_HOST_WRITE_ONLY,
+		WriteOnly = CL_MEM_HOST_READ_ONLY,
+		NoAccess  = CL_MEM_HOST_NO_ACCESS,
+	};
+
+	enum class Alloc : cl_mem_flags
+	{
+		Device = 0,
+		Host   = CL_MEM_ALLOC_HOST_PTR,
+	};
+
+	// @todo: Add support for CL_MEM_USE_HOST_PTR flag.
+
+	template <typename ValueType>
 	struct Memory
 	{
 		cl_mem clMemory;
-
-		enum class DeviceAccess : cl_mem_flags
-		{
-			ReadWrite = CL_MEM_READ_WRITE,
-			ReadOnly  = CL_MEM_READ_ONLY,
-			WriteOnly = CL_MEM_WRITE_ONLY,
-		};
-
-		enum class HostAccess : cl_mem_flags
-		{
-			ReadWrite = 0,
-			ReadOnly  = CL_MEM_HOST_WRITE_ONLY,
-			WriteOnly = CL_MEM_HOST_READ_ONLY,
-			NoAccess  = CL_MEM_HOST_NO_ACCESS,
-		};
-
-		enum class Alloc : cl_mem_flags
-		{
-			Device = 0,
-			Host   = CL_MEM_ALLOC_HOST_PTR,
-		};
-
-		// @todo: Add support for CL_MEM_USE_HOST_PTR flag.
 
 		Memory
 		(
@@ -105,9 +106,28 @@ namespace cl
 			const HostAccess   hostAccess,
 			const Alloc        alloc,
 			const std::size_t  size
-		);
+		):
+			clMemory { nullptr }
+		{
+			const auto flags = cl_mem_flags
+			{
+				util::enum_cast(deviceAccess) |
+				util::enum_cast(  hostAccess) |
+				util::enum_cast(alloc)
+			};
+			assert(ValidateMemoryFlags(flags));
 
-		template <typename ValueType>
+			auto result = cl_int { CL_INVALID_MEM_OBJECT };
+			clMemory = clCreateBuffer
+			(
+				context.clContext,
+				flags,
+				sizeof(ValueType) * size, nullptr,
+				&result
+			);
+			assert(result == CL_SUCCESS);
+		}
+
 		Memory
 		(
 			const Context&                context,
@@ -148,12 +168,37 @@ namespace cl
 			assert(result == CL_SUCCESS);
 		}
 
-		~Memory ();
+		~Memory ()
+		{
+			if (clMemory != nullptr)
+			{
+				clReleaseMemObject(clMemory);
+			}
+		}
 
-		Memory (Memory&& memory);
+		Memory (Memory&& memory)
+		:
+			clMemory { memory.clMemory }
+		{
+			memory.clMemory = nullptr;
+		}
+
 		Memory (const Memory& memory) = delete;
 
-		Memory& operator = (Memory&& memory);
+		Memory& operator = (Memory&& memory)
+		{
+			if (clMemory != nullptr)
+			{
+				clReleaseMemObject(clMemory);
+			}
+
+			clMemory = memory.clMemory;
+
+			memory.clMemory = nullptr;
+
+			return *this;
+		}
+
 		Memory& operator = (const Memory& memory) = delete;
 	};
 }
