@@ -157,6 +157,11 @@ void GetInfo (const cl::Context& context)
 	const auto refCount   = context.GetInfo<cl::Context::Info::ReferenceCount>();
 }
 
+void GetInfo (const cl::CommandQueue& commandQueue)
+{
+	const auto refCount = commandQueue.GetInfo<cl::CommandQueue::Info::ReferenceCount>();
+}
+
 void Compute (const cl::Context& context, cl::CommandQueue& commandQueue)
 {
 	auto program = cl::Program
@@ -252,6 +257,8 @@ int main ()
 			GetInfo(context);
 
 			auto commandQueue = cl::CommandQueue { context, device };
+
+			GetInfo(commandQueue);
 
 			Compute(context, commandQueue);
 		}

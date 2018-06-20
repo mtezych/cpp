@@ -51,6 +51,7 @@
 
 #include <array>
 #include <vector>
+#include <cstddef>
 
 namespace cl
 {
@@ -66,8 +67,8 @@ namespace cl
 
 	struct Range
 	{
-		size_t offset;
-		size_t size;
+		std::size_t offset;
+		std::size_t size;
 	};
 
 	enum class ExecMode : cl_command_queue_properties
@@ -100,6 +101,36 @@ namespace cl
 
 		CommandQueue& operator = (CommandQueue&& commandQueue);
 		CommandQueue& operator = (const CommandQueue& commandQueue) = delete;
+
+		enum class Info : cl_command_queue_info
+		{
+			ReferenceCount = CL_QUEUE_REFERENCE_COUNT,
+		};
+
+		template <Info info>
+		auto GetInfo() const
+		{
+			auto infoSize = std::size_t { 0 };
+			auto result = clGetCommandQueueInfo
+			(
+				clCommandQueue, util::enum_cast(info),
+				0, nullptr, &infoSize
+			);
+			assert(result == CL_SUCCESS);
+
+			auto infoBytes = std::vector<std::byte>
+			{
+				infoSize, std::byte { 0x00 }
+			};
+			result = clGetCommandQueueInfo
+			(
+				clCommandQueue, util::enum_cast(info),
+				infoBytes.size(), infoBytes.data(), nullptr
+			);
+			assert(result == CL_SUCCESS);
+
+			return InfoResult<info>::FromBytes(infoBytes);
+		}
 
 		template <NDRange WorkDimension>
 		Event EnqueueKernel
@@ -134,13 +165,13 @@ namespace cl
 		template <typename ValueType>
 		Event EnqueueReadBuffer
 		(
-			const cl::Memory<ValueType>& memory,
+			const Memory<ValueType>& memory,
 			const gsl::span<ValueType> buffer,
 			const Range& range,
 			const std::vector<Event>& waitEvents
 		)
 		{
-			assert(buffer.size() >= range.size);
+			assert(buffer.size() >= static_cast<std::ptrdiff_t>(range.size));
 
 			auto signalEvent = cl_event { };
 
@@ -158,6 +189,18 @@ namespace cl
 
 			return Event { signalEvent };
 		}
+
+	private:
+
+		template <Info info>
+		struct InfoResult;
+	};
+
+	template <>
+	struct CommandQueue::InfoResult<CommandQueue::Info::ReferenceCount>
+	{
+		static cl_uint
+		FromBytes (const std::vector<std::byte>& infoBytes);
 	};
 }
 

@@ -108,4 +108,13 @@ namespace cl
 
 		return *this;
 	}
+
+	cl_uint
+	CommandQueue::InfoResult<CommandQueue::Info::ReferenceCount>::FromBytes
+	(
+		const std::vector<std::byte>& infoBytes
+	)
+	{
+		return util::ReinterpretBytes<cl_uint>(infoBytes);
+	}
 }
