@@ -102,9 +102,16 @@ namespace cl
 		CommandQueue& operator = (CommandQueue&& commandQueue);
 		CommandQueue& operator = (const CommandQueue& commandQueue) = delete;
 
+		struct Properties
+		{
+			ExecMode  execMode;
+			Profiling profiling;
+		};
+
 		enum class Info : cl_command_queue_info
 		{
 			ReferenceCount = CL_QUEUE_REFERENCE_COUNT,
+			Properties     = CL_QUEUE_PROPERTIES,
 		};
 
 		template <Info info>
@@ -200,6 +207,13 @@ namespace cl
 	struct CommandQueue::InfoResult<CommandQueue::Info::ReferenceCount>
 	{
 		static cl_uint
+		FromBytes (const std::vector<std::byte>& infoBytes);
+	};
+
+	template <>
+	struct CommandQueue::InfoResult<CommandQueue::Info::Properties>
+	{
+		static CommandQueue::Properties
 		FromBytes (const std::vector<std::byte>& infoBytes);
 	};
 }

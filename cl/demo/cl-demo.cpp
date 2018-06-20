@@ -159,7 +159,8 @@ void GetInfo (const cl::Context& context)
 
 void GetInfo (const cl::CommandQueue& commandQueue)
 {
-	const auto refCount = commandQueue.GetInfo<cl::CommandQueue::Info::ReferenceCount>();
+	const auto properties = commandQueue.GetInfo<cl::CommandQueue::Info::Properties    >();
+	const auto refCount   = commandQueue.GetInfo<cl::CommandQueue::Info::ReferenceCount>();
 }
 
 void Compute (const cl::Context& context, cl::CommandQueue& commandQueue)

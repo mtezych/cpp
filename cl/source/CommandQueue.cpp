@@ -117,4 +117,23 @@ namespace cl
 	{
 		return util::ReinterpretBytes<cl_uint>(infoBytes);
 	}
+
+	CommandQueue::Properties
+	CommandQueue::InfoResult<CommandQueue::Info::Properties>::FromBytes
+	(
+		const std::vector<std::byte>& infoBytes
+	)
+	{
+		const auto properties =
+			util::ReinterpretBytes<cl_command_queue_properties>(infoBytes);
+
+		const auto execMode = (properties & CL_QUEUE_OUT_OF_ORDER_EXEC_MODE_ENABLE)
+			? ExecMode::OutOfOrder : ExecMode::InOrder;
+
+		const auto profiling = (properties & CL_QUEUE_PROFILING_ENABLE)
+			? Profiling::Enable : Profiling::Disable;
+
+		return { execMode, profiling };
+	}
+
 }
