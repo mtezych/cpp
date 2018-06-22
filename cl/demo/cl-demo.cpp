@@ -141,14 +141,15 @@ void GetInfo (const cl::Platform& platform)
 
 void GetInfo (const cl::Device& device)
 {
-	const auto type          = device.GetInfo<cl::Device::Info::Type         >();
-	const auto profile       = device.GetInfo<cl::Device::Info::Profile      >();
-	const auto version       = device.GetInfo<cl::Device::Info::Version      >();
-	const auto vendor        = device.GetInfo<cl::Device::Info::Vendor       >();
-	const auto name          = device.GetInfo<cl::Device::Info::Name         >();
-	const auto extensions    = device.GetInfo<cl::Device::Info::Extensions   >();
-	const auto vendorID      = device.GetInfo<cl::Device::Info::VendorID     >();
-	const auto driverVersion = device.GetInfo<cl::Device::Info::DriverVersion>();
+	const auto type            = device.GetInfo<cl::Device::Info::Type           >();
+	const auto profile         = device.GetInfo<cl::Device::Info::Profile        >();
+	const auto version         = device.GetInfo<cl::Device::Info::Version        >();
+	const auto vendor          = device.GetInfo<cl::Device::Info::Vendor         >();
+	const auto name            = device.GetInfo<cl::Device::Info::Name           >();
+	const auto extensions      = device.GetInfo<cl::Device::Info::Extensions     >();
+	const auto vendorID        = device.GetInfo<cl::Device::Info::VendorID       >();
+	const auto driverVersion   = device.GetInfo<cl::Device::Info::DriverVersion  >();
+	const auto maxComputeUnits = device.GetInfo<cl::Device::Info::MaxComputeUnits>();
 }
 
 void GetInfo (const cl::Context& context)
@@ -168,11 +169,11 @@ void Compute (const cl::Context& context, cl::CommandQueue& commandQueue)
 	auto program = cl::Program
 	{
 		context,
-		"__kernel void cl_main                                                \n"
+		"kernel void cl_main                                                  \n"
 		"(                                                                    \n"
-		"    __global const float*  firstInput,                               \n"
-		"    __global const float* secondInput,                               \n"
-		"    __global       float*      output                                \n"
+		"    global const float* const  firstInput,                           \n"
+		"    global const float* const secondInput,                           \n"
+		"    global       float* const      output                            \n"
 		")                                                                    \n"
 		"{                                                                    \n"
 		"    int globalID = get_global_id(0);                                 \n"

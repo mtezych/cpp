@@ -155,4 +155,13 @@ namespace cl
 
 		return version;
 	}
+
+	cl_uint
+	Device::InfoResult<Device::Info::MaxComputeUnits>::FromBytes
+	(
+		const std::vector<std::byte> &infoBytes
+	)
+	{
+		return util::ReinterpretBytes<cl_uint>(infoBytes);
+	}
 }

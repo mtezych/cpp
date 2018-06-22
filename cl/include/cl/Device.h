@@ -67,16 +67,28 @@ namespace cl
 			std::string   info;
 		};
 
+		enum class Type : cl_device_type
+		{
+			Default     = CL_DEVICE_TYPE_DEFAULT,
+			CPU         = CL_DEVICE_TYPE_CPU,
+			GPU         = CL_DEVICE_TYPE_GPU,
+			Accelerator = CL_DEVICE_TYPE_ACCELERATOR,
+			Custom      = CL_DEVICE_TYPE_CUSTOM,
+			All         = CL_DEVICE_TYPE_ALL,
+		};
+		// @todo: Implement util::bitfield and util::bitmask.
+
 		enum class Info : cl_device_info
 		{
-			Type          = CL_DEVICE_TYPE,
-			Profile       = CL_DEVICE_PROFILE,
-			Version       = CL_DEVICE_VERSION,
-			Vendor        = CL_DEVICE_VENDOR,
-			Name          = CL_DEVICE_NAME,
-			Extensions    = CL_DEVICE_EXTENSIONS,
-			VendorID      = CL_DEVICE_VENDOR_ID,
-			DriverVersion = CL_DRIVER_VERSION,
+			Type            = CL_DEVICE_TYPE,
+			Profile         = CL_DEVICE_PROFILE,
+			Version         = CL_DEVICE_VERSION,
+			Vendor          = CL_DEVICE_VENDOR,
+			Name            = CL_DEVICE_NAME,
+			Extensions      = CL_DEVICE_EXTENSIONS,
+			VendorID        = CL_DEVICE_VENDOR_ID,
+			DriverVersion   = CL_DRIVER_VERSION,
+			MaxComputeUnits = CL_DEVICE_MAX_COMPUTE_UNITS,
 		};
 
 		template <Info info>
@@ -163,6 +175,13 @@ namespace cl
 	struct Device::InfoResult<Device::Info::DriverVersion>
 	{
 		static Version
+		FromBytes (const std::vector<std::byte>& infoBytes);
+	};
+
+	template <>
+	struct Device::InfoResult<Device::Info::MaxComputeUnits>
+	{
+		static cl_uint
 		FromBytes (const std::vector<std::byte>& infoBytes);
 	};
 }

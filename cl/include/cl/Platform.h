@@ -105,7 +105,7 @@ namespace cl
 		}
 
 		std::vector<Device>
-		GetDevices(const cl_device_type deviceType = CL_DEVICE_TYPE_ALL) const;
+		GetDevices(cl_device_type deviceType = CL_DEVICE_TYPE_ALL) const;
 
 	private:
 
