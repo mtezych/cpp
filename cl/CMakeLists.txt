@@ -41,6 +41,8 @@ add_library               (cl STATIC include/cl/Platform.h
                                      include/cl/Context.h
                                      include/cl/CommandQueue.h
                                      include/cl/Memory.h
+                                     include/cl/Buffer.h
+                                     include/cl/Image.h
                                      include/cl/Kernel.h
                                      include/cl/Program.h
                                      include/cl/Sampler.h
@@ -50,6 +52,8 @@ add_library               (cl STATIC include/cl/Platform.h
                                          source/Context.cpp
                                          source/CommandQueue.cpp
                                          source/Memory.cpp
+                                         source/Buffer.cpp
+                                         source/Image.cpp
                                          source/Kernel.cpp
                                          source/Program.cpp
                                          source/Sampler.cpp
