@@ -32,14 +32,14 @@
 # EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #
 
-cmake_minimum_required (VERSION 3.10)
+cmake_minimum_required (VERSION 3.11)
 
 project(coroutines VERSION 0.1.0 LANGUAGES CXX)
 
 
 if((CMAKE_CXX_COMPILER_ID STREQUAL "Clang") AND (CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL "5.0.0"))
 
-    add_executable        (coroutines "")
+    add_executable        (coroutines)
 
     target_sources        (coroutines PRIVATE coroutines.cpp)
 

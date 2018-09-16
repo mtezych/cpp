@@ -59,29 +59,29 @@ namespace coroutines
 			:
 				shared_state { std::make_shared<value_type>() }
 			{
-				std::cout << "[ promise_type ] constructor()" << std::endl;
+				std::cout << "[ promise ] constructor()" << std::endl;
 			}
 			~promise_type ()
 			{
-				std::cout << "[ promise_type ] destructor()" << std::endl;
+				std::cout << "[ promise ] destructor()" << std::endl;
 			}
 
 			promise_type (promise_type&& promise)
 			:
 				shared_state { std::move(promise.shared_state) }
 			{
-				std::cout << "[ promise_type ] move_constructor()" << std::endl;
+				std::cout << "[ promise ] move_constructor()" << std::endl;
 			}
 			promise_type (const promise_type& promise)
 			:
 				shared_state { promise.shared_state }
 			{
-				std::cout << "[ promise_type ] copy_constructor()" << std::endl;
+				std::cout << "[ promise ] copy_constructor()" << std::endl;
 			}
 
 			promise_type& operator = (promise_type&& promise)
 			{
-				std::cout << "[ promise_type ] move_assignment()" << std::endl;
+				std::cout << "[ promise ] move_assignment()" << std::endl;
 
 				shared_state = std::move(promise.shared_state);
 
@@ -89,7 +89,7 @@ namespace coroutines
 			}
 			promise_type& operator = (const promise_type& promise)
 			{
-				std::cout << "[ promise_type ] copy_assignment()" << std::endl;
+				std::cout << "[ promise ] copy_assignment()" << std::endl;
 
 				shared_state = promise.shared_state;
 
@@ -98,21 +98,23 @@ namespace coroutines
 
 			auto get_return_object ()
 			{
-				std::cout << "[ promise_type ] get_return_object() -> sync<value_type> { shared_state }" << std::endl;
+				std::cout << "[ promise ] get_return_object() -> ";
+				std::cout << "sync<value_type> { shared_state }" << std::endl;
 
 				return sync<value_type> { shared_state };
 			}
 
 			auto initial_suspend ()
 			{
-				std::cout << "[ promise_type ] initial_suspend()" << std::endl;
+				std::cout << "[ promise ] initial_suspend()" << std::endl;
 
 				return std::experimental::suspend_never { };
 			}
 
 			auto return_value (value_type&& value)
 			{
-				std::cout << "[ promise_type ] return_value() <- value = " << value << std::endl;
+				std::cout << "[ promise ] return_value() <- ";
+				std::cout << "value = " << value << std::endl;
 
 				*shared_state = std::move(value);
 
@@ -121,7 +123,8 @@ namespace coroutines
 
 			auto return_value (value_type& value)
 			{
-				std::cout << "[ promise_type ] return_value() <- value = " << value << std::endl;
+				std::cout << "[ promise ] return_value() <- ";
+				std::cout << "value = " << value << std::endl;
 
 				*shared_state = value;
 
@@ -130,14 +133,14 @@ namespace coroutines
 
 			auto final_suspend ()
 			{
-				std::cout << "[ promise_type ] final_suspend()" << std::endl;
+				std::cout << "[ promise ] final_suspend()" << std::endl;
 
 				return std::experimental::suspend_never { };
 			}
 
 			void unhandled_exception ()
 			{
-				std::cout << "[ promise_type ] unhandled_exception()" << std::endl;
+				std::cout << "[ promise ] unhandled_exception()" << std::endl;
 
 				std::terminate();
 			}
@@ -150,29 +153,30 @@ namespace coroutines
 		:
 			shared_state { std::move(shared_state) }
 		{
-			std::cout << "[ sync         ] constructor() <- shared_state" << std::endl;
+			std::cout << "[ sync    ] constructor() <- ";
+			std::cout << "shared_state" << std::endl;
 		}
 		~sync ()
 		{
-			std::cout << "[ sync         ] destructor()" << std::endl;
+			std::cout << "[ sync    ] destructor()" << std::endl;
 		}
 
 		sync (sync&& sync)
 		:
 			shared_state { std::move(sync.shared_state) }
 		{
-			std::cout << "[ sync         ] move_constructor()" << std::endl;
+			std::cout << "[ sync    ] move_constructor()" << std::endl;
 		}
 		sync (const sync& sync)
 		:
 			shared_state { sync.shared_state }
 		{
-			std::cout << "[ sync         ] copy_constructor()" << std::endl;
+			std::cout << "[ sync    ] copy_constructor()" << std::endl;
 		}
 
 		sync& operator = (sync&& sync)
 		{
-			std::cout << "[ sync         ] move_assignment()" << std::endl;
+			std::cout << "[ sync    ] move_assignment()" << std::endl;
 
 			shared_state = std::move(sync.shared_state);
 
@@ -180,7 +184,7 @@ namespace coroutines
 		}
 		sync& operator = (const sync& sync)
 		{
-			std::cout << "[ sync         ] copy_assignment()" << std::endl;
+			std::cout << "[ sync    ] copy_assignment()" << std::endl;
 
 			shared_state = sync.shared_state;
 
@@ -191,7 +195,8 @@ namespace coroutines
 		{
 			assert(shared_state != nullptr);
 
-			std::cout << "[ sync         ] get() -> value = " << *shared_state << std::endl;
+			std::cout << "[ sync    ] get() -> ";
+			std::cout << "value = " << *shared_state << std::endl;
 
 			return *shared_state;
 		}
@@ -200,7 +205,8 @@ namespace coroutines
 		{
 			assert(shared_state != nullptr);
 
-			std::cout << "[ sync         ] get() -> value = " << *shared_state << std::endl;
+			std::cout << "[ sync    ] get() -> ";
+			std::cout << "value = " << *shared_state << std::endl;
 
 			return *shared_state;
 		}
@@ -236,7 +242,7 @@ namespace foo
 
 	auto CreateFoo () -> coroutines::sync<Foo>
 	{
-		std::cout << "[ foo          ] CreateFoo () -> sync<Foo>" << std::endl;
+		std::cout << "[ foo     ] CreateFoo () -> sync<Foo>" << std::endl;
 
 		co_return Foo { '#' };
 	}
@@ -245,10 +251,10 @@ namespace foo
 int main ()
 {
 	auto sync = foo::CreateFoo();
-	std::cout << "[ main         ] foo::CreateFoo() -> sync<Foo>" << std::endl;
+	std::cout << "[ main    ] foo::CreateFoo() -> sync<Foo>" << std::endl;
 
 	const auto& value = sync.get();
-	std::cout << "[ main         ] sync.get() -> value = " << value << std::endl;
+	std::cout << "[ main    ] sync.get() -> value = " << value << std::endl;
 
 	return 0;
 }
