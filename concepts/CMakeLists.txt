@@ -2,7 +2,7 @@
 #
 # BSD 3-Clause License
 #
-# Copyright (c) 2017, mtezych
+# Copyright (c) 2018, mtezych
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -32,20 +32,31 @@
 # EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #
 
-cmake_minimum_required (VERSION 3.1)
+cmake_minimum_required (VERSION 3.11)
 
-project(concepts-lite)
+project(concepts VERSION 0.1.0 LANGUAGES CXX)
 
-# http://en.cppreference.com/w/cpp/language/constraints
-if((CMAKE_CXX_COMPILER_ID STREQUAL "GNU") AND (NOT CMAKE_CXX_COMPILER_VERSION VERSION_LESS "6.1"))
+#
+# GCC 6 Release Series
+# ~ https://gcc.gnu.org/gcc-6/changes.html
+#
+# C++ Standards Support in GCC
+# ~ https://gcc.gnu.org/projects/cxx-status.html#cxx17
+#
+if((CMAKE_CXX_COMPILER_ID STREQUAL "GNU") AND (CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL "7.1"))
 
-        add_executable (concepts-lite concepts-lite.cpp)
-  set_target_properties(concepts-lite PROPERTIES CXX_STANDARD          14
-                                                 CXX_STANDARD_REQUIRED ON)
- target_compile_options(concepts-lite PUBLIC -fconcepts)
+    add_executable        (concepts)
+
+    target_sources        (concepts PRIVATE concepts.cpp)
+
+    target_compile_options(concepts PRIVATE -fconcepts)
+
+    set_target_properties (concepts PROPERTIES CXX_STANDARD          17
+                                               CXX_STANDARD_REQUIRED ON
+                                               CXX_EXTENSIONS        OFF)
 
 else()
 
- message("[concepts-lite] GCC 6.1 or later is required.")
+    message("[concepts] GCC 7.1 or later is required.")
 
 endif()

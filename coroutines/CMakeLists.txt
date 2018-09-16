@@ -37,6 +37,13 @@ cmake_minimum_required (VERSION 3.11)
 project(coroutines VERSION 0.1.0 LANGUAGES CXX)
 
 
+#
+# Clang 5.0.0 Release Notes
+# ~ https://releases.llvm.org/5.0.0/tools/clang/docs/ReleaseNotes.html
+#
+# C++ Support in Clang
+# ~ https://clang.llvm.org/cxx_status.html
+#
 if((CMAKE_CXX_COMPILER_ID STREQUAL "Clang") AND (CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL "5.0.0"))
 
     add_executable        (coroutines)
