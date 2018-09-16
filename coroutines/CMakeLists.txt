@@ -2,7 +2,7 @@
 #
 # BSD 3-Clause License
 #
-# Copyright (c) 2017, mtezych
+# Copyright (c) 2018, mtezych
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -32,34 +32,27 @@
 # EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #
 
-cmake_minimum_required (VERSION 3.1)
+cmake_minimum_required (VERSION 3.10)
 
-project(cpp)
+project(coroutines VERSION 0.1.0 LANGUAGES CXX)
 
-add_subdirectory(google-test)
-add_subdirectory(google-benchmark)
-add_subdirectory(gsl)
-add_subdirectory(libsync)
-add_subdirectory(platform-android)
-add_subdirectory(adt)
-add_subdirectory(metaprogramming)
-add_subdirectory(polymorphism)
-add_subdirectory(allocator)
-add_subdirectory(threading)
-add_subdirectory(libdrm-example)
-add_subdirectory(khronos)
-add_subdirectory(cl)
-add_subdirectory(egl)
-add_subdirectory(gles)
-add_subdirectory(platform-xlib)
-add_subdirectory(platform-xcb)
-add_subdirectory(vulkan)
-add_subdirectory(platform-wayland)
-add_subdirectory(util)
-add_subdirectory(platform)
-add_subdirectory(platform-windows)
-add_subdirectory(ieee754)
-add_subdirectory(concepts-lite)
-add_subdirectory(coroutines)
-add_subdirectory(zlang)
-add_subdirectory(gameboy)
+
+if((CMAKE_CXX_COMPILER_ID STREQUAL "Clang") AND (CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL "5.0.0"))
+
+    add_executable        (coroutines "")
+
+    target_sources        (coroutines PRIVATE coroutines.cpp)
+
+    target_compile_options(coroutines PRIVATE -stdlib=libc++ -fcoroutines-ts)
+
+    target_link_libraries (coroutines PRIVATE -stdlib=libc++)
+
+    set_target_properties (coroutines PROPERTIES CXX_STANDARD          17
+                                                 CXX_STANDARD_REQUIRED ON
+                                                 CXX_EXTENSIONS        OFF)
+
+else()
+
+    message("[coroutines] Clang 5.0.0 or later is required.")
+
+endif()
