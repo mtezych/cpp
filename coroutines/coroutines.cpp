@@ -214,6 +214,181 @@ namespace coroutines
 			return coroutine.promise().value;
 		}
 	};
+
+	template <typename value_type>
+	struct lazy
+	{
+		struct promise_type
+		{
+			value_type value;
+
+			promise_type ()
+			:
+				value { }
+			{
+				std::cout << "[ promise ] constructor()" << std::endl;
+			}
+			~promise_type ()
+			{
+				std::cout << "[ promise ] destructor()" << std::endl;
+			}
+
+			promise_type (promise_type&& promise)
+			:
+				value { std::move(promise.value) }
+			{
+				std::cout << "[ promise ] move_constructor()" << std::endl;
+			}
+			promise_type (const promise_type& promise)
+			:
+				value { promise.value }
+			{
+				std::cout << "[ promise ] copy_constructor()" << std::endl;
+			}
+
+			promise_type& operator = (promise_type&& promise)
+			{
+				std::cout << "[ promise ] move_assignment()" << std::endl;
+
+				value = std::move(promise.value);
+
+				return *this;
+			}
+			promise_type& operator = (const promise_type& promise)
+			{
+				std::cout << "[ promise ] copy_assignment()" << std::endl;
+
+				value = promise.value;
+
+				return *this;
+			}
+
+			auto get_return_object ()
+			{
+				std::cout << "[ promise ] get_return_object() -> ";
+				std::cout << "lazy<value_type> { coroutine }" << std::endl;
+
+				return lazy<value_type>
+				{
+					std::experimental::coroutine_handle<promise_type>::from_promise(*this)
+				};
+			}
+
+			auto initial_suspend ()
+			{
+				std::cout << "[ promise ] initial_suspend()" << std::endl;
+
+				return std::experimental::suspend_always { };
+			}
+
+			auto return_value (value_type&& value)
+			{
+				std::cout << "[ promise ] return_value() <- ";
+				std::cout << "value = " << value << std::endl;
+
+				this->value = std::move(value);
+
+				return std::experimental::suspend_never { };
+			}
+
+			auto return_value (value_type& value)
+			{
+				std::cout << "[ promise ] return_value() <- ";
+				std::cout << "value = " << value << std::endl;
+
+				this->value = value;
+
+				return std::experimental::suspend_never { };
+			}
+
+			auto final_suspend ()
+			{
+				std::cout << "[ promise ] final_suspend()" << std::endl;
+
+				return std::experimental::suspend_always { };
+			}
+
+			void unhandled_exception ()
+			{
+				std::cout << "[ promise ] unhandled_exception()" << std::endl;
+
+				std::terminate();
+			}
+		};
+
+		std::experimental::coroutine_handle<promise_type> coroutine;
+
+		explicit
+		lazy (std::experimental::coroutine_handle<promise_type> coroutine)
+		:
+			coroutine { coroutine }
+		{
+			std::cout << "[ lazy    ] constructor() <- coroutine" << std::endl;
+		}
+
+		~lazy ()
+		{
+			std::cout << "[ lazy    ] destructor()" << std::endl;
+
+			if (coroutine)
+			{
+				coroutine.destroy();
+			}
+		}
+
+		lazy (lazy&& lazy)
+		:
+			coroutine { lazy.coroutine }
+		{
+			lazy.coroutine = nullptr;
+
+			std::cout << "[ lazy    ] move_constructor()" << std::endl;
+		}
+
+		lazy (const lazy& lazy) = delete;
+
+		lazy& operator = (lazy&& lazy)
+		{
+			std::cout << "[ lazy    ] move_assignment()" << std::endl;
+
+			if (coroutine)
+			{
+				coroutine.destroy();
+			}
+
+			coroutine = lazy.coroutine;
+
+			lazy.coroutine = nullptr;
+
+			return *this;
+		}
+
+		lazy& operator = (const lazy& lazy) = delete;
+
+		const value_type& get () const
+		{
+			std::cout << "[ lazy    ] get() -> ..." << std::endl;
+
+			coroutine.resume();
+
+			std::cout << "[ lazy    ]          ... -> value = ";
+			std::cout << coroutine.promise().value << std::endl;
+
+			return coroutine.promise().value;
+		}
+
+		value_type& get ()
+		{
+			std::cout << "[ lazy    ] get() -> ..." << std::endl;
+
+			coroutine.resume();
+
+			std::cout << "[ lazy    ]          ... -> value = ";
+			std::cout << coroutine.promise().value << std::endl;
+
+			return coroutine.promise().value;
+		}
+	};
 }
 
 namespace foo
@@ -249,15 +424,34 @@ namespace foo
 
 		co_return Foo { '#' };
 	}
+
+	auto GenerateFoo () -> coroutines::lazy<Foo>
+	{
+		std::cout << "[ foo     ] GenerateFoo () -> lazy<Foo>" << std::endl;
+
+		co_return Foo { '&' };
+	}
 }
 
 int main ()
 {
-	auto sync = foo::CreateFoo();
-	std::cout << "[ main    ] foo::CreateFoo() -> sync<Foo>" << std::endl;
+	{
+		auto sync = foo::CreateFoo();
+		std::cout << "[ main    ] foo::CreateFoo() -> sync<Foo>" << std::endl;
 
-	const auto& value = sync.get();
-	std::cout << "[ main    ] sync.get() -> value = " << value << std::endl;
+		const auto& value = sync.get();
+		std::cout << "[ main    ] sync.get() -> value = " << value << std::endl;
+	}
+
+	std::cout << std::endl;
+
+	{
+		auto lazy = foo::GenerateFoo();
+		std::cout << "[ main    ] foo::GenerateFoo() -> lazy<Foo>" << std::endl;
+
+		const auto& value = lazy.get();
+		std::cout << "[ main    ] lazy.get() -> value = " << value << std::endl;
+	}
 
 	return 0;
 }
