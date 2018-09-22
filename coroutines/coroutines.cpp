@@ -369,7 +369,10 @@ namespace coroutines
 		{
 			std::cout << "[ lazy    ] get() -> ..." << std::endl;
 
-			coroutine.resume();
+			if (!coroutine.done())
+			{
+				coroutine.resume();
+			}
 
 			std::cout << "[ lazy    ]          ... -> value = ";
 			std::cout << coroutine.promise().value << std::endl;
@@ -381,7 +384,10 @@ namespace coroutines
 		{
 			std::cout << "[ lazy    ] get() -> ..." << std::endl;
 
-			coroutine.resume();
+			if (!coroutine.done())
+			{
+				coroutine.resume();
+			}
 
 			std::cout << "[ lazy    ]          ... -> value = ";
 			std::cout << coroutine.promise().value << std::endl;
