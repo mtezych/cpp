@@ -37,6 +37,23 @@ cmake_minimum_required (VERSION 3.11)
 project(coroutines VERSION 0.1.0 LANGUAGES CXX)
 
 
+function(check_compiler LANG COMPILER_ID COMPILER_VERSION RESULT)
+
+    set(${RESULT} FALSE PARENT_SCOPE)
+
+    if(CMAKE_${LANG}_COMPILER_ID STREQUAL COMPILER_ID)
+
+        if(CMAKE_${LANG}_COMPILER_VERSION VERSION_GREATER_EQUAL COMPILER_VERSION)
+
+            set(${RESULT} TRUE PARENT_SCOPE)
+
+        endif()
+
+    endif()
+
+endfunction()
+
+
 #
 # Clang 5.0.0 Release Notes
 # ~ https://releases.llvm.org/5.0.0/tools/clang/docs/ReleaseNotes.html
@@ -44,15 +61,32 @@ project(coroutines VERSION 0.1.0 LANGUAGES CXX)
 # C++ Support in Clang
 # ~ https://clang.llvm.org/cxx_status.html
 #
-if((CMAKE_CXX_COMPILER_ID STREQUAL "Clang") AND (CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL "5.0.0"))
+check_compiler(CXX Clang 5.0.0 CLANG_SUPPORTS_COROUTINES)
+
+#
+# MSVC -> Enable coroutine support
+# ~ https://docs.microsoft.com/en-us/cpp/build/reference/await-enable-coroutine-support
+#
+check_compiler(CXX MSVC 14.0 MSVC_SUPPORTS_COROUTINES)
+
+
+if(CLANG_SUPPORTS_COROUTINES OR MSVC_SUPPORTS_COROUTINES)
 
     add_executable        (coroutines)
-
     target_sources        (coroutines PRIVATE coroutines.cpp)
 
-    target_compile_options(coroutines PRIVATE -stdlib=libc++ -fcoroutines-ts)
+  if(MSVC_SUPPORTS_COROUTINES)
 
+    target_compile_options(coroutines PRIVATE /await)
+
+  endif()
+
+  if(CLANG_SUPPORTS_COROUTINES)
+
+    target_compile_options(coroutines PRIVATE -stdlib=libc++ -fcoroutines-ts)
     target_link_libraries (coroutines PRIVATE -stdlib=libc++)
+
+  endif()
 
     set_target_properties (coroutines PROPERTIES CXX_STANDARD          17
                                                  CXX_STANDARD_REQUIRED ON
@@ -60,6 +94,6 @@ if((CMAKE_CXX_COMPILER_ID STREQUAL "Clang") AND (CMAKE_CXX_COMPILER_VERSION VERS
 
 else()
 
-    message("[coroutines] Clang 5.0.0 or later is required.")
+    message("[coroutines] At least Clang 5.0.0 or MSVC 14.0 is required.")
 
 endif()
