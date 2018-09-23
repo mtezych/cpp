@@ -395,6 +395,131 @@ namespace coroutines
 			return coroutine.promise().value;
 		}
 	};
+
+	struct empty
+	{
+		struct promise_type
+		{
+			promise_type ()
+			{
+				std::cout << "[ promise ] constructor()" << std::endl;
+			}
+			~promise_type ()
+			{
+				std::cout << "[ promise ] destructor()" << std::endl;
+			}
+
+			promise_type (promise_type&&)
+			{
+				std::cout << "[ promise ] move_constructor()" << std::endl;
+			}
+			promise_type (const promise_type&)
+			{
+				std::cout << "[ promise ] copy_constructor()" << std::endl;
+			}
+
+			promise_type& operator = (promise_type&&)
+			{
+				std::cout << "[ promise ] move_assignment()" << std::endl;
+
+				return *this;
+			}
+			promise_type& operator = (const promise_type&)
+			{
+				std::cout << "[ promise ] copy_assignment()" << std::endl;
+
+				return *this;
+			}
+
+			auto get_return_object ()
+			{
+				std::cout << "[ promise ] get_return_object() -> ";
+				std::cout << "empty { coroutine }" << std::endl;
+
+				return empty
+				{
+					std::experimental::coroutine_handle<promise_type>::from_promise(*this)
+				};
+			}
+
+			auto initial_suspend ()
+			{
+				std::cout << "[ promise ] initial_suspend()" << std::endl;
+
+				return std::experimental::suspend_always { };
+			}
+
+			auto return_void ()
+			{
+				std::cout << "[ promise ] return_void()" << std::endl;
+
+				return std::experimental::suspend_never { };
+			}
+
+			auto final_suspend ()
+			{
+				std::cout << "[ promise ] final_suspend()" << std::endl;
+
+				return std::experimental::suspend_always { };
+			}
+
+			void unhandled_exception ()
+			{
+				std::cout << "[ promise ] unhandled_exception()" << std::endl;
+
+				std::terminate();
+			}
+		};
+
+		std::experimental::coroutine_handle<promise_type> coroutine;
+
+		explicit
+		empty (std::experimental::coroutine_handle<promise_type> coroutine)
+		:
+			coroutine { coroutine }
+		{
+			std::cout << "[ empty   ] constructor() <- coroutine" << std::endl;
+		}
+
+		~empty ()
+		{
+			std::cout << "[ empty   ] destructor()" << std::endl;
+
+			if (coroutine)
+			{
+				coroutine.destroy();
+			}
+		}
+
+		empty (empty&& empty)
+		:
+			coroutine { empty.coroutine }
+		{
+			empty.coroutine = nullptr;
+
+			std::cout << "[ empty   ] move_constructor()" << std::endl;
+		}
+
+		empty (const empty& empty) = delete;
+
+		empty& operator = (empty&& empty)
+		{
+			std::cout << "[ empty   ] move_assignment()" << std::endl;
+
+			if (coroutine)
+			{
+				coroutine.destroy();
+			}
+
+			coroutine = empty.coroutine;
+
+			empty.coroutine = nullptr;
+
+			return *this;
+		}
+
+		empty& operator = (const empty& empty) = delete;
+	};
 }
 
 namespace foo
@@ -437,6 +562,11 @@ namespace foo
 
 		co_return Foo { '&' };
 	}
+
+	auto DoNothing () -> coroutines::empty
+	{
+		co_return;
+	}
 }
 
 int main ()
@@ -457,6 +587,13 @@ int main ()
 
 		const auto& value = lazy.get();
 		std::cout << "[ main    ] lazy.get() -> value = " << value << std::endl;
+	}
+
+	std::cout << std::endl;
+
+	{
+		auto empty = foo::DoNothing();
+		std::cout << "[ main    ] foo::DoNothing() -> empty" << std::endl;
 	}
 
 	return 0;
