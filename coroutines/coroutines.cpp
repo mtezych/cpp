@@ -59,29 +59,29 @@ namespace coroutines
 			:
 				value { }
 			{
-				std::cout << "[ promise ] constructor()" << std::endl;
+				std::cout << "[ promise   ] constructor()" << std::endl;
 			}
 			~promise_type ()
 			{
-				std::cout << "[ promise ] destructor()" << std::endl;
+				std::cout << "[ promise   ] destructor()" << std::endl;
 			}
 
 			promise_type (promise_type&& promise)
 			:
 				value { std::move(promise.value) }
 			{
-				std::cout << "[ promise ] move_constructor()" << std::endl;
+				std::cout << "[ promise   ] move_constructor()" << std::endl;
 			}
 			promise_type (const promise_type& promise)
 			:
 				value { promise.value }
 			{
-				std::cout << "[ promise ] copy_constructor()" << std::endl;
+				std::cout << "[ promise   ] copy_constructor()" << std::endl;
 			}
 
 			promise_type& operator = (promise_type&& promise)
 			{
-				std::cout << "[ promise ] move_assignment()" << std::endl;
+				std::cout << "[ promise   ] move_assignment()" << std::endl;
 
 				value = std::move(promise.value);
 
@@ -89,7 +89,7 @@ namespace coroutines
 			}
 			promise_type& operator = (const promise_type& promise)
 			{
-				std::cout << "[ promise ] copy_assignment()" << std::endl;
+				std::cout << "[ promise   ] copy_assignment()" << std::endl;
 
 				value = promise.value;
 
@@ -98,7 +98,7 @@ namespace coroutines
 
 			auto get_return_object ()
 			{
-				std::cout << "[ promise ] get_return_object() -> ";
+				std::cout << "[ promise   ] get_return_object() -> ";
 				std::cout << "sync<value_type> { coroutine }" << std::endl;
 
 				return sync<value_type>
@@ -109,14 +109,14 @@ namespace coroutines
 
 			auto initial_suspend ()
 			{
-				std::cout << "[ promise ] initial_suspend()" << std::endl;
+				std::cout << "[ promise   ] initial_suspend()" << std::endl;
 
 				return std::experimental::suspend_never { };
 			}
 
 			auto return_value (value_type&& value)
 			{
-				std::cout << "[ promise ] return_value() <- ";
+				std::cout << "[ promise   ] return_value() <- ";
 				std::cout << "value = " << value << std::endl;
 
 				this->value = std::move(value);
@@ -126,7 +126,7 @@ namespace coroutines
 
 			auto return_value (value_type& value)
 			{
-				std::cout << "[ promise ] return_value() <- ";
+				std::cout << "[ promise   ] return_value() <- ";
 				std::cout << "value = " << value << std::endl;
 
 				this->value = value;
@@ -136,14 +136,14 @@ namespace coroutines
 
 			auto final_suspend ()
 			{
-				std::cout << "[ promise ] final_suspend()" << std::endl;
+				std::cout << "[ promise   ] final_suspend()" << std::endl;
 
 				return std::experimental::suspend_always { };
 			}
 
 			void unhandled_exception ()
 			{
-				std::cout << "[ promise ] unhandled_exception()" << std::endl;
+				std::cout << "[ promise   ] unhandled_exception()" << std::endl;
 
 				std::terminate();
 			}
@@ -156,12 +156,12 @@ namespace coroutines
 		:
 			coroutine { coroutine }
 		{
-			std::cout << "[ sync    ] constructor() <- coroutine" << std::endl;
+			std::cout << "[ sync      ] constructor() <- coroutine" << std::endl;
 		}
 
 		~sync ()
 		{
-			std::cout << "[ sync    ] destructor()" << std::endl;
+			std::cout << "[ sync      ] destructor()" << std::endl;
 
 			if (coroutine)
 			{
@@ -175,14 +175,14 @@ namespace coroutines
 		{
 			sync.coroutine = nullptr;
 
-			std::cout << "[ sync    ] move_constructor()" << std::endl;
+			std::cout << "[ sync      ] move_constructor()" << std::endl;
 		}
 
 		sync (const sync& sync) = delete;
 
 		sync& operator = (sync&& sync)
 		{
-			std::cout << "[ sync    ] move_assignment()" << std::endl;
+			std::cout << "[ sync      ] move_assignment()" << std::endl;
 
 			if (coroutine)
 			{
@@ -200,7 +200,7 @@ namespace coroutines
 
 		const value_type& get () const
 		{
-			std::cout << "[ sync    ] get() -> ";
+			std::cout << "[ sync      ] get() -> ";
 			std::cout << "value = " << coroutine.promise().value << std::endl;
 
 			return coroutine.promise().value;
@@ -208,7 +208,7 @@ namespace coroutines
 
 		value_type& get ()
 		{
-			std::cout << "[ sync    ] get() -> ";
+			std::cout << "[ sync      ] get() -> ";
 			std::cout << "value = " << coroutine.promise().value << std::endl;
 
 			return coroutine.promise().value;
@@ -226,29 +226,29 @@ namespace coroutines
 			:
 				value { }
 			{
-				std::cout << "[ promise ] constructor()" << std::endl;
+				std::cout << "[ promise   ] constructor()" << std::endl;
 			}
 			~promise_type ()
 			{
-				std::cout << "[ promise ] destructor()" << std::endl;
+				std::cout << "[ promise   ] destructor()" << std::endl;
 			}
 
 			promise_type (promise_type&& promise)
 			:
 				value { std::move(promise.value) }
 			{
-				std::cout << "[ promise ] move_constructor()" << std::endl;
+				std::cout << "[ promise   ] move_constructor()" << std::endl;
 			}
 			promise_type (const promise_type& promise)
 			:
 				value { promise.value }
 			{
-				std::cout << "[ promise ] copy_constructor()" << std::endl;
+				std::cout << "[ promise   ] copy_constructor()" << std::endl;
 			}
 
 			promise_type& operator = (promise_type&& promise)
 			{
-				std::cout << "[ promise ] move_assignment()" << std::endl;
+				std::cout << "[ promise   ] move_assignment()" << std::endl;
 
 				value = std::move(promise.value);
 
@@ -256,7 +256,7 @@ namespace coroutines
 			}
 			promise_type& operator = (const promise_type& promise)
 			{
-				std::cout << "[ promise ] copy_assignment()" << std::endl;
+				std::cout << "[ promise   ] copy_assignment()" << std::endl;
 
 				value = promise.value;
 
@@ -265,7 +265,7 @@ namespace coroutines
 
 			auto get_return_object ()
 			{
-				std::cout << "[ promise ] get_return_object() -> ";
+				std::cout << "[ promise   ] get_return_object() -> ";
 				std::cout << "lazy<value_type> { coroutine }" << std::endl;
 
 				return lazy<value_type>
@@ -276,14 +276,14 @@ namespace coroutines
 
 			auto initial_suspend ()
 			{
-				std::cout << "[ promise ] initial_suspend()" << std::endl;
+				std::cout << "[ promise   ] initial_suspend()" << std::endl;
 
 				return std::experimental::suspend_always { };
 			}
 
 			auto return_value (value_type&& value)
 			{
-				std::cout << "[ promise ] return_value() <- ";
+				std::cout << "[ promise   ] return_value() <- ";
 				std::cout << "value = " << value << std::endl;
 
 				this->value = std::move(value);
@@ -293,7 +293,7 @@ namespace coroutines
 
 			auto return_value (value_type& value)
 			{
-				std::cout << "[ promise ] return_value() <- ";
+				std::cout << "[ promise   ] return_value() <- ";
 				std::cout << "value = " << value << std::endl;
 
 				this->value = value;
@@ -303,14 +303,14 @@ namespace coroutines
 
 			auto final_suspend ()
 			{
-				std::cout << "[ promise ] final_suspend()" << std::endl;
+				std::cout << "[ promise   ] final_suspend()" << std::endl;
 
 				return std::experimental::suspend_always { };
 			}
 
 			void unhandled_exception ()
 			{
-				std::cout << "[ promise ] unhandled_exception()" << std::endl;
+				std::cout << "[ promise   ] unhandled_exception()" << std::endl;
 
 				std::terminate();
 			}
@@ -323,12 +323,12 @@ namespace coroutines
 		:
 			coroutine { coroutine }
 		{
-			std::cout << "[ lazy    ] constructor() <- coroutine" << std::endl;
+			std::cout << "[ lazy      ] constructor() <- coroutine" << std::endl;
 		}
 
 		~lazy ()
 		{
-			std::cout << "[ lazy    ] destructor()" << std::endl;
+			std::cout << "[ lazy      ] destructor()" << std::endl;
 
 			if (coroutine)
 			{
@@ -342,14 +342,14 @@ namespace coroutines
 		{
 			lazy.coroutine = nullptr;
 
-			std::cout << "[ lazy    ] move_constructor()" << std::endl;
+			std::cout << "[ lazy      ] move_constructor()" << std::endl;
 		}
 
 		lazy (const lazy& lazy) = delete;
 
 		lazy& operator = (lazy&& lazy)
 		{
-			std::cout << "[ lazy    ] move_assignment()" << std::endl;
+			std::cout << "[ lazy      ] move_assignment()" << std::endl;
 
 			if (coroutine)
 			{
@@ -367,14 +367,14 @@ namespace coroutines
 
 		const value_type& get () const
 		{
-			std::cout << "[ lazy    ] get() -> ..." << std::endl;
+			std::cout << "[ lazy      ] get() -> ..." << std::endl;
 
 			if (!coroutine.done())
 			{
 				coroutine.resume();
 			}
 
-			std::cout << "[ lazy    ]          ... -> value = ";
+			std::cout << "[ lazy      ]          ... -> value = ";
 			std::cout << coroutine.promise().value << std::endl;
 
 			return coroutine.promise().value;
@@ -382,14 +382,14 @@ namespace coroutines
 
 		value_type& get ()
 		{
-			std::cout << "[ lazy    ] get() -> ..." << std::endl;
+			std::cout << "[ lazy      ] get() -> ..." << std::endl;
 
 			if (!coroutine.done())
 			{
 				coroutine.resume();
 			}
 
-			std::cout << "[ lazy    ]          ... -> value = ";
+			std::cout << "[ lazy      ]          ... -> value = ";
 			std::cout << coroutine.promise().value << std::endl;
 
 			return coroutine.promise().value;
@@ -402,38 +402,38 @@ namespace coroutines
 		{
 			promise_type ()
 			{
-				std::cout << "[ promise ] constructor()" << std::endl;
+				std::cout << "[ promise   ] constructor()" << std::endl;
 			}
 			~promise_type ()
 			{
-				std::cout << "[ promise ] destructor()" << std::endl;
+				std::cout << "[ promise   ] destructor()" << std::endl;
 			}
 
 			promise_type (promise_type&&)
 			{
-				std::cout << "[ promise ] move_constructor()" << std::endl;
+				std::cout << "[ promise   ] move_constructor()" << std::endl;
 			}
 			promise_type (const promise_type&)
 			{
-				std::cout << "[ promise ] copy_constructor()" << std::endl;
+				std::cout << "[ promise   ] copy_constructor()" << std::endl;
 			}
 
 			promise_type& operator = (promise_type&&)
 			{
-				std::cout << "[ promise ] move_assignment()" << std::endl;
+				std::cout << "[ promise   ] move_assignment()" << std::endl;
 
 				return *this;
 			}
 			promise_type& operator = (const promise_type&)
 			{
-				std::cout << "[ promise ] copy_assignment()" << std::endl;
+				std::cout << "[ promise   ] copy_assignment()" << std::endl;
 
 				return *this;
 			}
 
 			auto get_return_object ()
 			{
-				std::cout << "[ promise ] get_return_object() -> ";
+				std::cout << "[ promise   ] get_return_object() -> ";
 				std::cout << "empty { coroutine }" << std::endl;
 
 				return empty
@@ -444,28 +444,28 @@ namespace coroutines
 
 			auto initial_suspend ()
 			{
-				std::cout << "[ promise ] initial_suspend()" << std::endl;
+				std::cout << "[ promise   ] initial_suspend()" << std::endl;
 
-				return std::experimental::suspend_always { };
+				return std::experimental::suspend_never { };
 			}
 
 			auto return_void ()
 			{
-				std::cout << "[ promise ] return_void()" << std::endl;
+				std::cout << "[ promise   ] return_void()" << std::endl;
 
 				return std::experimental::suspend_never { };
 			}
 
 			auto final_suspend ()
 			{
-				std::cout << "[ promise ] final_suspend()" << std::endl;
+				std::cout << "[ promise   ] final_suspend()" << std::endl;
 
 				return std::experimental::suspend_always { };
 			}
 
 			void unhandled_exception ()
 			{
-				std::cout << "[ promise ] unhandled_exception()" << std::endl;
+				std::cout << "[ promise   ] unhandled_exception()" << std::endl;
 
 				std::terminate();
 			}
@@ -478,12 +478,12 @@ namespace coroutines
 		:
 			coroutine { coroutine }
 		{
-			std::cout << "[ empty   ] constructor() <- coroutine" << std::endl;
+			std::cout << "[ empty     ] constructor() <- coroutine" << std::endl;
 		}
 
 		~empty ()
 		{
-			std::cout << "[ empty   ] destructor()" << std::endl;
+			std::cout << "[ empty     ] destructor()" << std::endl;
 
 			if (coroutine)
 			{
@@ -497,14 +497,14 @@ namespace coroutines
 		{
 			empty.coroutine = nullptr;
 
-			std::cout << "[ empty   ] move_constructor()" << std::endl;
+			std::cout << "[ empty     ] move_constructor()" << std::endl;
 		}
 
 		empty (const empty& empty) = delete;
 
 		empty& operator = (empty&& empty)
 		{
-			std::cout << "[ empty   ] move_assignment()" << std::endl;
+			std::cout << "[ empty     ] move_assignment()" << std::endl;
 
 			if (coroutine)
 			{
@@ -549,22 +549,24 @@ namespace foo
 		return os << "Foo { " << foo.value << " }";
 	}
 
-	auto CreateFoo () -> coroutines::sync<Foo>
+	auto MakeFoo () -> coroutines::sync<Foo>
 	{
-		std::cout << "[ foo     ] CreateFoo () -> sync<Foo>" << std::endl;
+		std::cout << "[ foo       ] CreateFoo () -> sync<Foo>" << std::endl;
 
 		co_return Foo { '#' };
 	}
 
-	auto GenerateFoo () -> coroutines::lazy<Foo>
+	auto CreateFoo () -> coroutines::lazy<Foo>
 	{
-		std::cout << "[ foo     ] GenerateFoo () -> lazy<Foo>" << std::endl;
+		std::cout << "[ foo       ] GenerateFoo () -> lazy<Foo>" << std::endl;
 
 		co_return Foo { '&' };
 	}
 
 	auto DoNothing () -> coroutines::empty
 	{
+		std::cout << "[ foo       ] DoNothing () -> empty" << std::endl;
+
 		co_return;
 	}
 }
@@ -572,28 +574,28 @@ namespace foo
 int main ()
 {
 	{
-		auto sync = foo::CreateFoo();
-		std::cout << "[ main    ] foo::CreateFoo() -> sync<Foo>" << std::endl;
+		auto sync = foo::MakeFoo();
+		std::cout << "[ main      ] foo::MakeFoo() -> sync<Foo>" << std::endl;
 
 		const auto& value = sync.get();
-		std::cout << "[ main    ] sync.get() -> value = " << value << std::endl;
+		std::cout << "[ main      ] sync.get() -> value = " << value << std::endl;
 	}
 
 	std::cout << std::endl;
 
 	{
-		auto lazy = foo::GenerateFoo();
-		std::cout << "[ main    ] foo::GenerateFoo() -> lazy<Foo>" << std::endl;
+		auto lazy = foo::CreateFoo();
+		std::cout << "[ main      ] foo::CreateFoo() -> lazy<Foo>" << std::endl;
 
 		const auto& value = lazy.get();
-		std::cout << "[ main    ] lazy.get() -> value = " << value << std::endl;
+		std::cout << "[ main      ] lazy.get() -> value = " << value << std::endl;
 	}
 
 	std::cout << std::endl;
 
 	{
 		auto empty = foo::DoNothing();
-		std::cout << "[ main    ] foo::DoNothing() -> empty" << std::endl;
+		std::cout << "[ main      ] foo::DoNothing() -> empty" << std::endl;
 	}
 
 	return 0;
