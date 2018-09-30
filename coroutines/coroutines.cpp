@@ -124,7 +124,7 @@ namespace coroutines
 				return std::experimental::suspend_never { };
 			}
 
-			auto return_value (value_type& value)
+			auto return_value (const value_type& value)
 			{
 				std::cout << "[ promise   ] return_value() <- ";
 				std::cout << "value = " << value << std::endl;
@@ -291,7 +291,7 @@ namespace coroutines
 				return std::experimental::suspend_never { };
 			}
 
-			auto return_value (value_type& value)
+			auto return_value (const value_type& value)
 			{
 				std::cout << "[ promise   ] return_value() <- ";
 				std::cout << "value = " << value << std::endl;
@@ -597,7 +597,7 @@ namespace coroutines
 				return std::experimental::suspend_always { };
 			}
 
-			auto yield_value (value_type& value)
+			auto yield_value (const value_type& value)
 			{
 				std::cout << "[ promise   ] yield_value() <- ";
 				std::cout << "value = " << value << std::endl;
@@ -818,7 +818,7 @@ int main ()
 		auto generator = foo::GenerateFoo();
 		std::cout << "[ main      ] foo::GenerateFoo() -> generator<Foo>" << std::endl;
 
-		while (const auto value = generator.get())
+		while (const auto* const value = generator.get())
 		{
 			std::cout << "[ main      ] generator.get() -> value = " << *value << std::endl;
 		}
