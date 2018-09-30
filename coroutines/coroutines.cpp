@@ -520,6 +520,212 @@ namespace coroutines
 
 		empty& operator = (const empty& empty) = delete;
 	};
+
+	template <typename value_type>
+	struct generator
+	{
+		struct promise_type
+		{
+			value_type value;
+
+			promise_type ()
+			:
+				value { }
+			{
+				std::cout << "[ promise   ] constructor()" << std::endl;
+			}
+			~promise_type ()
+			{
+				std::cout << "[ promise   ] destructor()" << std::endl;
+			}
+
+			promise_type (promise_type&& promise)
+			:
+				value { std::move(promise.value) }
+			{
+				std::cout << "[ promise   ] move_constructor()" << std::endl;
+			}
+			promise_type (const promise_type& promise)
+			:
+				value { promise.value }
+			{
+				std::cout << "[ promise   ] copy_constructor()" << std::endl;
+			}
+
+			promise_type& operator = (promise_type&& promise)
+			{
+				std::cout << "[ promise   ] move_assignment()" << std::endl;
+
+				value = std::move(promise.value);
+
+				return *this;
+			}
+			promise_type& operator = (const promise_type& promise)
+			{
+				std::cout << "[ promise   ] copy_assignment()" << std::endl;
+
+				value = promise.value;
+
+				return *this;
+			}
+
+			auto get_return_object ()
+			{
+				std::cout << "[ promise   ] get_return_object() -> ";
+				std::cout << "generator<value_type> { coroutine }" << std::endl;
+
+				return generator<value_type>
+				{
+					std::experimental::coroutine_handle<promise_type>::from_promise(*this)
+				};
+			}
+
+			auto initial_suspend ()
+			{
+				std::cout << "[ promise   ] initial_suspend()" << std::endl;
+
+				return std::experimental::suspend_always { };
+			}
+
+			auto yield_value (value_type&& value)
+			{
+				std::cout << "[ promise   ] yield_value() <- ";
+				std::cout << "value = " << value << std::endl;
+
+				this->value = std::move(value);
+
+				return std::experimental::suspend_always { };
+			}
+
+			auto yield_value (value_type& value)
+			{
+				std::cout << "[ promise   ] yield_value() <- ";
+				std::cout << "value = " << value << std::endl;
+
+				this->value = value;
+
+				return std::experimental::suspend_always { };
+			}
+
+			auto return_void ()
+			{
+				std::cout << "[ promise   ] return_void()" << std::endl;
+
+				return std::experimental::suspend_never { };
+			}
+
+			auto final_suspend ()
+			{
+				std::cout << "[ promise   ] final_suspend()" << std::endl;
+
+				return std::experimental::suspend_always { };
+			}
+
+			void unhandled_exception ()
+			{
+				std::cout << "[ promise   ] unhandled_exception()" << std::endl;
+
+				std::terminate();
+			}
+		};
+
+		std::experimental::coroutine_handle<promise_type> coroutine;
+
+		explicit
+		generator (std::experimental::coroutine_handle<promise_type> coroutine)
+		:
+			coroutine { coroutine }
+		{
+			std::cout << "[ generator ] constructor() <- coroutine" << std::endl;
+		}
+
+		~generator ()
+		{
+			std::cout << "[ generator ] destructor()" << std::endl;
+
+			if (coroutine)
+			{
+				coroutine.destroy();
+			}
+		}
+
+		generator (generator&& generator)
+		:
+			coroutine { generator.coroutine }
+		{
+			generator.coroutine = nullptr;
+
+			std::cout << "[ generator ] move_constructor()" << std::endl;
+		}
+
+		generator (const generator& generator) = delete;
+
+		generator& operator = (generator&& generator)
+		{
+			std::cout << "[ generator ] move_assignment()" << std::endl;
+
+			if (coroutine)
+			{
+				coroutine.destroy();
+			}
+
+			coroutine = generator.coroutine;
+
+			generator.coroutine = nullptr;
+
+			return *this;
+		}
+
+		generator& operator = (const generator& generator) = delete;
+
+		const value_type* get () const
+		{
+			std::cout << "[ generator ] get() -> ..." << std::endl;
+
+			if (!coroutine.done())
+			{
+				coroutine.resume();
+			}
+
+			if (coroutine.done())
+			{
+				std::cout << "[ generator ]          ... -> void" << std::endl;
+
+				return nullptr;
+			}
+			else
+			{
+				std::cout << "[ generator ]          ... -> value = ";
+				std::cout << coroutine.promise().value << std::endl;
+
+				return &coroutine.promise().value;
+			}
+		}
+
+		value_type* get ()
+		{
+			std::cout << "[ generator ] get() -> ..." << std::endl;
+
+			if (!coroutine.done())
+			{
+				coroutine.resume();
+			}
+
+			if (coroutine.done())
+			{
+				std::cout << "[ generator ]          ... -> void" << std::endl;
+
+				return nullptr;
+			}
+			else
+			{
+				std::cout << "[ generator ]          ... -> value = ";
+				std::cout << coroutine.promise().value << std::endl;
+
+				return &coroutine.promise().value;
+			}
+		}
+	};
 }
 
 namespace foo
@@ -551,14 +757,14 @@ namespace foo
 
 	auto MakeFoo () -> coroutines::sync<Foo>
 	{
-		std::cout << "[ foo       ] CreateFoo () -> sync<Foo>" << std::endl;
+		std::cout << "[ foo       ] MakeFoo () -> sync<Foo>" << std::endl;
 
 		co_return Foo { '#' };
 	}
 
 	auto CreateFoo () -> coroutines::lazy<Foo>
 	{
-		std::cout << "[ foo       ] GenerateFoo () -> lazy<Foo>" << std::endl;
+		std::cout << "[ foo       ] CreateFoo () -> lazy<Foo>" << std::endl;
 
 		co_return Foo { '&' };
 	}
@@ -568,6 +774,14 @@ namespace foo
 		std::cout << "[ foo       ] DoNothing () -> empty" << std::endl;
 
 		co_return;
+	}
+
+	auto GenerateFoo () -> coroutines::generator<Foo>
+	{
+		std::cout << "[ foo       ] GenerateFoo () -> generator<Foo>" << std::endl;
+
+		co_yield Foo { '$' };
+		co_yield Foo { '%' };
 	}
 }
 
@@ -596,6 +810,18 @@ int main ()
 	{
 		auto empty = foo::DoNothing();
 		std::cout << "[ main      ] foo::DoNothing() -> empty" << std::endl;
+	}
+
+	std::cout << std::endl;
+
+	{
+		auto generator = foo::GenerateFoo();
+		std::cout << "[ main      ] foo::GenerateFoo() -> generator<Foo>" << std::endl;
+
+		while (const auto value = generator.get())
+		{
+			std::cout << "[ main      ] generator.get() -> value = " << *value << std::endl;
+		}
 	}
 
 	return 0;
