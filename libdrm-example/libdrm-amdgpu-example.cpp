@@ -42,7 +42,6 @@
 
 // C++ Standard Library
 #include <cassert>
-#include <cstring>
 #include <cstdint>
 
 // C++ Guideline Support Library
@@ -110,6 +109,35 @@ namespace amdgpu
 		}
 
 		Device& operator = (const Device& device) = delete;
+
+		amdgpu_gpu_info QueryGpuInfo () const
+		{
+			auto gpuInfo = amdgpu_gpu_info { };
+
+			const auto result = amdgpu_query_gpu_info(amdDevice, &gpuInfo);
+			assert(result == 0);
+
+			return gpuInfo;
+		}
+
+		amdgpu_heap_info
+		QueryHeapInfo (const std::uint32_t heap, const std::uint32_t flags) const
+		{
+			assert((heap == AMDGPU_GEM_DOMAIN_VRAM) || (heap == AMDGPU_GEM_DOMAIN_GTT));
+			assert((flags == AMDGPU_GEM_CREATE_CPU_ACCESS_REQUIRED) || (flags == 0));
+
+			auto heapInfo = amdgpu_heap_info { };
+
+			const auto result = amdgpu_query_heap_info
+			(
+				amdDevice,
+				heap, flags,
+				&heapInfo
+			);
+			assert(result == 0);
+
+			return heapInfo;
+		}
 	};
 
 	struct Context
@@ -219,7 +247,7 @@ namespace amdgpu
 
 		BufferObject& operator = (const BufferObject& bo) = delete;
 
-		void* Map ()
+		void* MapCPU ()
 		{
 			void* ptr = nullptr;
 
@@ -229,7 +257,7 @@ namespace amdgpu
 			return ptr;
 		}
 
-		void Unmap ()
+		void UnmapCPU ()
 		{
 			const auto result = amdgpu_bo_cpu_unmap(amdBufferObject);
 			assert(result == 0);
@@ -320,6 +348,82 @@ namespace amdgpu
 
 		BufferObjectList& operator = (const BufferObjectList& boList) = delete;
 	};
+
+	struct VirtualAddressRange
+	{
+		amdgpu_va_handle amdVirtualAddressRange;
+
+		uint64_t baseAddress;
+
+		struct AllocRequest
+		{
+			const uint64_t size;
+			const uint64_t alignment;
+			const uint64_t requiredBaseAddress;
+			const uint64_t flags;
+		};
+
+		VirtualAddressRange (const Device& device, AllocRequest allocRequest)
+		:
+			amdVirtualAddressRange { nullptr },
+			baseAddress { 0 }
+		{
+			assert((allocRequest.flags == AMDGPU_VA_RANGE_32_BIT) || (allocRequest.flags == 0));
+
+			const auto result = amdgpu_va_range_alloc
+			(
+				device.amdDevice,
+				amdgpu_gpu_va_range::amdgpu_gpu_va_range_general,
+				allocRequest.size,
+				allocRequest.alignment,
+				allocRequest.requiredBaseAddress,
+				&baseAddress,
+				&amdVirtualAddressRange,
+				allocRequest.flags
+			);
+			assert(result == 0);
+			assert(amdVirtualAddressRange != nullptr);
+		}
+
+		~VirtualAddressRange ()
+		{
+			if (amdVirtualAddressRange != nullptr)
+			{
+				const auto result = amdgpu_va_range_free(amdVirtualAddressRange);
+				assert(result == 0);
+			}
+		}
+
+		VirtualAddressRange (VirtualAddressRange&& va)
+		:
+			amdVirtualAddressRange { va.amdVirtualAddressRange },
+			baseAddress            { va.baseAddress            }
+		{
+			va.amdVirtualAddressRange = nullptr;
+			va.baseAddress            = 0;
+		}
+
+		VirtualAddressRange (const VirtualAddressRange& va) = delete;
+
+		VirtualAddressRange& operator = (VirtualAddressRange&& va)
+		{
+			if (amdVirtualAddressRange != nullptr)
+			{
+				const auto result = amdgpu_va_range_free(amdVirtualAddressRange);
+				assert(result == 0);
+			}
+
+			amdVirtualAddressRange = va.amdVirtualAddressRange;
+			baseAddress            = va.baseAddress;
+
+			va.amdVirtualAddressRange = nullptr;
+			va.baseAddress            = 0;
+
+			return *this;
+		}
+
+		VirtualAddressRange& operator = (const VirtualAddressRange& va) = delete;
+	};
 }
 
 int main()
@@ -343,6 +447,17 @@ int main()
 		};
 
 		const auto boList = amdgpu::BufferObjectList { device, { &bo, 1 } };
+
+		const auto vaRange = amdgpu::VirtualAddressRange
+		{
+			device, amdgpu::VirtualAddressRange::AllocRequest
+			{
+				64, // size
+				0,  // alignment,
+				0,  // required base address
+				0,  // flags
+			}
+		};
 	}
 	auto result = close(gpuFD);
 	assert(result == 0);
