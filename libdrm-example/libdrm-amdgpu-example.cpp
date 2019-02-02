@@ -70,6 +70,12 @@ namespace amdgpu
 		VCN_ENCODE = AMDGPU_HW_IP_VCN_ENC,
 	};
 
+	struct Range
+	{
+		uint64_t start;
+		uint64_t end;
+	};
+
 	struct Device
 	{
 		amdgpu_device_handle amdDevice;
@@ -183,6 +189,21 @@ namespace amdgpu
 			}
 
 			return hardwareInfo;
+		}
+
+		Range QueryVirtualAddressRange () const
+		{
+			auto range = Range { };
+
+			const auto result = amdgpu_va_range_query
+			(
+				amdDevice,
+				amdgpu_gpu_va_range::amdgpu_gpu_va_range_general,
+				&range.start, &range.end
+			);
+			assert(result == 0);
+
+			return range;
 		}
 	};
 
@@ -482,6 +503,7 @@ int main()
 		const auto  gpuInfo = device.QueryGpuInfo();
 		const auto heapInfo = device.QueryHeapInfo(AMDGPU_GEM_DOMAIN_VRAM, 0);
 		const auto   hwInfo = device.QueryHardwareInfo(amdgpu::Engine::GFX);
+		const auto    range = device.QueryVirtualAddressRange();
 
 		const auto context = amdgpu::Context { device };
 

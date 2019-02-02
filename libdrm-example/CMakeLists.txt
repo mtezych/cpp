@@ -56,7 +56,7 @@ if(CMAKE_SYSTEM_NAME MATCHES Linux)
 
   target_link_libraries(libdrm-amdgpu-example drm kms drm_amdgpu util gsl)
 
-  set_target_properties(libdrm-amdgpu-example PROPERTIES CXX_STANDARD          14
+  set_target_properties(libdrm-amdgpu-example PROPERTIES CXX_STANDARD          17
                                                          CXX_STANDARD_REQUIRED ON)
 
 endif()
