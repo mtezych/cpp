@@ -47,12 +47,27 @@
 // C++ Guideline Support Library
 #include <gsl/span>
 
+// C++ Utility Library
+#include <util/util.h>
+
 namespace amdgpu
 {
 	struct Version
 	{
 		std::uint32_t major;
 		std::uint32_t minor;
+	};
+
+	enum class Engine : unsigned
+	{
+		GFX        = AMDGPU_HW_IP_GFX,
+		COMPUTE    = AMDGPU_HW_IP_COMPUTE,
+		DMA        = AMDGPU_HW_IP_DMA,
+		UVD        = AMDGPU_HW_IP_UVD,
+		VCE        = AMDGPU_HW_IP_VCE,
+		UVD_ENCODE = AMDGPU_HW_IP_UVD_ENC,
+		VCN_DECODE = AMDGPU_HW_IP_VCN_DEC,
+		VCN_ENCODE = AMDGPU_HW_IP_VCN_ENC,
 	};
 
 	struct Device
@@ -137,6 +152,37 @@ namespace amdgpu
 			assert(result == 0);
 
 			return heapInfo;
+		}
+
+		std::vector<drm_amdgpu_info_hw_ip>
+		QueryHardwareInfo (const Engine engine) const
+		{
+			auto instanceCount = uint32_t { };
+
+			auto result = amdgpu_query_hw_ip_count
+			(
+				amdDevice,
+				util::enum_cast(engine), &instanceCount
+			);
+			assert(result == 0);
+
+			auto hardwareInfo = std::vector<drm_amdgpu_info_hw_ip>
+			(
+				instanceCount, drm_amdgpu_info_hw_ip { }
+			);
+
+			for (auto instance = 0u; instance < instanceCount; ++instance)
+			{
+				result = amdgpu_query_hw_ip_info
+				(
+					amdDevice,
+					util::enum_cast(engine), instance,
+					&hardwareInfo[instance]
+				);
+				assert(result == 0);
+			}
+
+			return hardwareInfo;
 		}
 	};
 
@@ -432,6 +478,10 @@ int main()
 	assert(gpuFD > 0);
 	{
 		const auto device = amdgpu::Device { gpuFD };
+
+		const auto  gpuInfo = device.QueryGpuInfo();
+		const auto heapInfo = device.QueryHeapInfo(AMDGPU_GEM_DOMAIN_VRAM, 0);
+		const auto   hwInfo = device.QueryHardwareInfo(amdgpu::Engine::GFX);
 
 		const auto context = amdgpu::Context { device };
 
