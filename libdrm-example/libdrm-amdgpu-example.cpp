@@ -314,6 +314,59 @@ namespace amdgpu
 
 		BufferObject& operator = (const BufferObject& bo) = delete;
 
+		/*
+		 *          GPU Virtual Address Range     Buffer Object
+		 *              +-----------------+    +----------------+
+		 *              |                 |    |                | ^
+		 *              |                 |    |                | | offset
+		 *              |                 |    |                | v
+		 *              |                 |   /|----------------|
+		 *              |                 |  / |                | ^
+		 *              |                 | /  |                | |
+		 *              |                 |/   |                | | size
+		 * address ---> |-----------------|    |                | |
+		 *              |                 |    |                | v
+		 *              |                 |   /|----------------|
+		 *              |                 |  / |                |
+		 *              |                 | /  +----------------+
+		 *              |                 |/
+		 *              |-----------------|
+		 *              |                 |
+		 *              |                 |
+		 *              +-----------------+
+		 */
+		void MapGPU (const uint64_t offset, const uint64_t size, const uint64_t address)
+		{
+			constexpr auto flags = uint64_t { 0 };
+
+			const auto result = amdgpu_bo_va_op
+			(
+				amdBufferObject,
+				offset,
+				size,
+				address,
+				flags,
+				AMDGPU_VA_OP_MAP
+			);
+			assert(result == 0);
+		}
+
+		void UnmapGPU (const uint64_t offset, const uint64_t size, const uint64_t address)
+		{
+			constexpr auto flags = uint64_t { 0 };
+
+			const auto result = amdgpu_bo_va_op
+			(
+				amdBufferObject,
+				offset,
+				size,
+				address,
+				flags,
+				AMDGPU_VA_OP_UNMAP
+			);
+			assert(result == 0);
+		}
+
 		void* MapCPU ()
 		{
 			void* ptr = nullptr;
@@ -502,7 +555,7 @@ int main()
 
 		const auto  gpuInfo = device.QueryGpuInfo();
 		const auto heapInfo = device.QueryHeapInfo(AMDGPU_GEM_DOMAIN_VRAM, 0);
-		const auto   hwInfo = device.QueryHardwareInfo(amdgpu::Engine::GFX);
+		const auto   hwInfo = device.QueryHardwareInfo(amdgpu::Engine::COMPUTE);
 		const auto    range = device.QueryVirtualAddressRange();
 
 		const auto context = amdgpu::Context { device };
@@ -530,6 +583,15 @@ int main()
 				0,  // flags
 			}
 		};
+
+		bo.MapGPU(/* offset */ 0, /* size */ 64, vaRange.baseAddress);
+		{
+			void* ptr = bo.MapCPU();
+			{
+			}
+			bo.UnmapCPU();
+		}
+		bo.UnmapGPU(/* offset */ 0, /* size */ 64, vaRange.baseAddress);
 	}
 	auto result = close(gpuFD);
 	assert(result == 0);
