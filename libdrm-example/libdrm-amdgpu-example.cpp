@@ -173,9 +173,9 @@ namespace amdgpu
 			assert(result == 0);
 
 			auto hardwareInfo = std::vector<drm_amdgpu_info_hw_ip>
-			(
+			{
 				instanceCount, drm_amdgpu_info_hw_ip { }
-			);
+			};
 
 			for (auto instance = 0u; instance < instanceCount; ++instance)
 			{
@@ -545,6 +545,39 @@ namespace amdgpu
 		VirtualAddressRange& operator = (const VirtualAddressRange& va) = delete;
 	};
 }
+
+/*
+ * AMD Developer -> Developer Guides, Manuals & ISA Documents -> Open GPU Documentation
+ *   https://developer.amd.com/resources/developer-guides-manuals
+ *
+ *    - [R500]                        -> 3D Programming Guide
+ *       http://developer.amd.com/wordpress/media/2013/10/R5xx_Acceleration_v1.5.pdf
+ *
+ * ~ TeraScale
+ *
+ *    - [R600][R700]                  -> 3D Programming Guide
+ *       https://developer.amd.com/wordpress/media/2013/10/R6xx_R7xx_3D.pdf
+ *
+ *    - [Evergreen]                   -> 3D Register Reference Guide
+ *       https://developer.amd.com/wordpress/media/2013/10/evergreen_3D_registers_v2.pdf
+ *
+ *    - [Northern Islands]            -> 3D Register Reference Guide
+ *       https://developer.amd.com/wordpress/media/2013/10/cayman_3D_registers_v2.pdf
+ *
+ *    - [Evergreen][Northern Islands] -> 3D Programming Guide
+ *       https://developer.amd.com/wordpress/media/2013/10/evergreen_cayman_programming_guide.pdf
+ *
+ * ~ GCN (Graphics Core Next)
+ *
+ *    - [Southern Islands]            -> 3D/Compute Register Reference Guide
+ *       https://developer.amd.com/wordpress/media/2013/10/SI_3D_registers.pdf
+ *
+ *    - [Sea Islands]                 -> 3D/Compute Register Reference Guide
+ *       https://developer.amd.com/wordpress/media/2013/10/CIK_3D_registers_v2.pdf
+ *
+ *    - [Southern Islands]            -> 3D/Compute Programming Guide
+ *       https://developer.amd.com/wordpress/media/2013/10/si_programming_guide_v2.pdf
+ */
 
 int main()
 {
