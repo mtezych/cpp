@@ -42,6 +42,9 @@
 // Writing a Simple WDF Driver
 // ~ https://docs.microsoft.com/en-us/windows-hardware/drivers/wdf/writing-a-simple-kmdf-driver
 //
+// Write a Very Small KMDF Driver
+// ~ https://docs.microsoft.com/en-us/windows-hardware/drivers/gettingstarted/writing-a-very-small-kmdf--driver
+//
 
 EVT_WDF_DRIVER_UNLOAD EvtDriverUnload;
 
