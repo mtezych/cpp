@@ -66,6 +66,13 @@
 
 namespace cxx
 {
+    template <typename type>
+    struct memory_block
+    {
+        type*          addr;
+        std::ptrdiff_t size;
+    };
+
     //
     // The stack_alloc() function only allocates memory.
     // It does *not* create C++ objects under rules of the C++ abstract machine.
@@ -76,17 +83,18 @@ namespace cxx
     // ~ https://groups.google.com/a/isocpp.org/d/msg/std-discussion/rt2ivJnc4hg/4RKYJeF5CQAJ
     //
     template <typename type>
-    always_inline auto stack_alloc (const std::ptrdiff_t size) noexcept -> type*
+    always_inline
+    auto stack_alloc (const std::ptrdiff_t count = 1) noexcept -> memory_block<type>
     {
-        assert(size > 0);
+        assert(count > 0);
 
     #if defined(__linux__)
 
-        return static_cast<type*>(alloca(sizeof(type) * size));
+        return { static_cast<type*>( alloca(sizeof(type) * count)), count };
 
     #elif defined(_WIN32)
 
-        return static_cast<type*>(_alloca(sizeof(type) * size));
+        return { static_cast<type*>(_alloca(sizeof(type) * count)), count };
 
     #endif
     }
@@ -102,67 +110,78 @@ namespace cxx
     {
     private:
 
-        element*       data_;
-        std::ptrdiff_t size_;
-        std::ptrdiff_t capacity_;
+        memory_block<element> storage;
+        std::ptrdiff_t        length;
 
     public:
 
-        always_inline stack_array (const std::ptrdiff_t capacity)
+        always_inline
+        explicit stack_array (const std::ptrdiff_t capacity)
         :
-            data_     { stack_alloc<element>(capacity) },
-            size_     { 0                              },
-            capacity_ { capacity                       }
+            storage { stack_alloc<element>(capacity) },
+            length  { 0                              }
         {
             assert(capacity > 0);
         }
 
+        ~stack_array () = default;
+
+        stack_array (stack_array&& array)      = delete;
+        stack_array (const stack_array& array) = delete;
+
+        stack_array& operator = (stack_array&& array)      = delete;
+        stack_array& operator = (const stack_array& array) = delete;
+
         auto data () noexcept -> element*
         {
-            return data_;
+            return storage.addr;
         }
 
         auto data () const noexcept -> const element*
         {
-            return data_;
+            return storage.addr;
         }
 
         auto size () const noexcept -> std::ptrdiff_t
         {
-            return size_;
+            return length;
         }
 
         auto capacity () const noexcept -> std::ptrdiff_t
         {
-            return capacity_;
+            return storage.size;
         }
 
         auto push (const element& value) -> void
         {
-            new (data_ + size_) element(value);
+            assert(length < storage.size);
 
-            ++size_;
+            new (storage.addr + length) element(value);
+
+            ++length;
         }
 
         auto push (element&& value) -> void
         {
-            new (data_ + size_) element(std::move(value));
+            assert(length < storage.size);
 
-            ++size_;
+            new (storage.addr + length) element(std::move(value));
+
+            ++length;
         }
 
         auto operator [] (const std::ptrdiff_t index) noexcept -> element&
         {
-            assert((index >= 0) && (index < size_));
+            assert((index >= 0) && (index < length));
 
-            return data_[index];
+            return storage.addr[index];
         }
 
         auto operator [] (const std::ptrdiff_t index) const noexcept -> const element&
         {
-            assert((index >= 0) && (index < size_));
+            assert((index >= 0) && (index < length));
 
-            return data_[index];
+            return storage.addr[index];
         }
     };
 }
@@ -176,22 +195,16 @@ namespace test
 {
     auto stack_alloc () -> bool
     {
-        struct span
-        {
-            int*           data;
-            std::ptrdiff_t size;
-        };
-
-        const auto array = span { cxx::stack_alloc<int>(4096), 4096 };
+        const auto array = cxx::stack_alloc<int>(4096);
 
         for (auto i = 0; i < array.size; ++i)
         {
-            new (array.data + i) int { 1 };
+            new (array.addr + i) int { 1 };
         }
 
         // std::fill(array.data, array.data + array.size, 1);
 
-        auto sum = std::accumulate(array.data, array.data + array.size, 0);
+        auto sum = std::accumulate(array.addr, array.addr + array.size, 0);
 
         return sum == array.size;
     }
