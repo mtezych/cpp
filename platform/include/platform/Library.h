@@ -38,7 +38,7 @@
 #include <string>
 #include <cassert>
 
-#if defined(__unix__)
+#if defined(__unix__) || defined(__APPLE__)
 
 	#include <dlfcn.h>
 
@@ -57,7 +57,7 @@ namespace platform
 	struct NativeLibrary
 	{
 
-#if defined(__unix__)
+#if defined(__unix__) || defined(__APPLE__)
 
 		using Handle = void*;
 		using Symbol = void*;

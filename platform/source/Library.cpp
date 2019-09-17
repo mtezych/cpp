@@ -37,7 +37,7 @@
 namespace platform
 {
 
-#if defined(__unix__)
+#if defined(__unix__) || defined(__APPLE__)
 
 	NativeLibrary::Handle NativeLibrary::Init (const std::string& path)
 	{

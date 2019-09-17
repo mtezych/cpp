@@ -13,6 +13,10 @@ TEST(LibraryTest, libc_sprintf)
 
 	const auto path = "libc.so.6";
 
+#elif defined(__APPLE__)
+
+	const auto path = "libSystem.dylib";
+
 #elif defined(_WIN32) && false
 
 	// https://blogs.msdn.microsoft.com/oldnewthing/20140411-00/?p=1273
