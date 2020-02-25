@@ -43,15 +43,30 @@ Ninja ()
 
 GNU_Make ()
 {
-    mkdir -p $TOOLCHAIN_ROOT/make/bin
-    cd       $TOOLCHAIN_ROOT/make/bin
-    cp       /usr/bin/make make # This needs to be fixed!
+    # Download
+    cd       $TOOLCHAIN_ROOT
+    wget     http://ftp.gnu.org/gnu/make/make-4.3.tar.gz
+    tar -xvf make-4.3.tar.gz
+    rm       make-4.3.tar.gz
+    mv       make-4.3 make-src
+
+    # Build
+    mkdir -p $TOOLCHAIN_ROOT/make-build
+    cd       $TOOLCHAIN_ROOT/make-build
+    $TOOLCHAIN_ROOT/make-src/configure --prefix=$TOOLCHAIN_ROOT/make
+    make
+    make install
+
+    # Clean
+    rm -rf   $TOOLCHAIN_ROOT/make-src
+    rm -rf   $TOOLCHAIN_ROOT/make-build
 }
 
 CMake ()
 {
-    cd   $TOOLCHAIN_ROOT
-    wget https://github.com/Kitware/CMake/releases/download/v3.13.2/cmake-3.13.2-Linux-x86_64.tar.gz
+    # Download
+    cd       $TOOLCHAIN_ROOT
+    wget     https://github.com/Kitware/CMake/releases/download/v3.13.2/cmake-3.13.2-Linux-x86_64.tar.gz
     tar -xvf cmake-3.13.2-Linux-x86_64.tar.gz
     rm       cmake-3.13.2-Linux-x86_64.tar.gz
     mv       cmake-3.13.2-Linux-x86_64 cmake
