@@ -59,25 +59,27 @@ CMake ()
 
 LLVM_Clang ()
 {
-    # LLVM
-    cd  $TOOLCHAIN_ROOT
-    git clone https://github.com/mtezych/llvm.git llvm-source
+    # LLVM   -> https://git.llvm.org/git/llvm.git
+    cd          $TOOLCHAIN_ROOT
+    git clone   https://github.com/mtezych/llvm.git llvm-project
 
-    # Clang
-    cd  $TOOLCHAIN_ROOT/llvm-source/tools
-    git clone https://github.com/mtezych/clang.git
+    # Clang  -> https://git.llvm.org/git/clang.git
+    #           https://git.llvm.org/git/clang-tools-extra.git
+    cd          $TOOLCHAIN_ROOT/llvm-project/tools
+    git clone   https://github.com/mtezych/clang.git
 
-    cd  $TOOLCHAIN_ROOT/llvm-source/tools/clang/tools
-    git clone https://github.com/mtezych/clang-tools-extra.git extra
+    cd          $TOOLCHAIN_ROOT/llvm-project/tools/clang/tools
+    git clone   https://github.com/mtezych/clang-tools-extra.git extra
 
-    # LLD
-    cd  $TOOLCHAIN_ROOT/llvm-source/tools
-    git clone https://github.com/mtezych/lld.git
+    # LLD    -> https://git.llvm.org/git/lld.git
+    cd          $TOOLCHAIN_ROOT/llvm-project/tools
+    git clone   https://github.com/mtezych/lld.git
 
-    # libc++
-    cd  $TOOLCHAIN_ROOT/llvm-source/projects
-    git clone https://github.com/mtezych/libcxx.git
-    git clone https://github.com/mtezych/libcxxabi.git
+    # libc++ -> https://git.llvm.org/git/libcxx.git
+    #           https://git.llvm.org/git/libcxxabi.git
+    cd          $TOOLCHAIN_ROOT/llvm-project/projects
+    git clone   https://github.com/mtezych/libcxx.git
+    git clone   https://github.com/mtezych/libcxxabi.git
 
     # Build
     mkdir -p $TOOLCHAIN_ROOT/llvm-build
@@ -85,7 +87,7 @@ LLVM_Clang ()
     cmake -DCMAKE_BUILD_TYPE=Release                  \
           -DCMAKE_INSTALL_PREFIX=$TOOLCHAIN_ROOT/llvm \
           -DLLVM_ENABLE_ASSERTIONS=OFF                \
-          -G Ninja $TOOLCHAIN_ROOT/llvm-source
+          -G Ninja $TOOLCHAIN_ROOT/llvm-project
     ninja
     ninja install
 }
