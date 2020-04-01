@@ -76,10 +76,13 @@ def native_link (native_executable, object_files) :
 	assert native_executable.suffix == ""
 
 	# GNU linker -> https://linux.die.net/man/1/ld
-	cmd = [ "ld", *object_files, "-o", native_executable ]
+	# Clang      -> https://clang.llvm.org/docs/CommandGuide/clang.html
+	cmd = [ "clang", *object_files, "-o", native_executable ]
 
-	if platform.system() == "Darwin" : # macOS
-		cmd.append("-lSystem")
+	# Let the clang driver invoke the ld linker with appropriate arguments,
+	# which will ensure that the native executable will be able to:
+	#  - define main() function as an entry point
+	#  - call functions from the C standard library
 
 	subprocess.check_call(cmd)
 
