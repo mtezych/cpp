@@ -1,4 +1,18 @@
 
+;
+; 2019 EuroLLVM: Vince Bridgers & Felipe de Azevedo Piovezan
+; LLVM IR Tutorial - Phis, GEPs and other things, oh my!
+;
+;  ~ https://www.youtube.com/watch?v=m8G_S5LwlTo
+;
+
+;
+; LLVM IR Language Reference Manual
+;
+; ~ https://llvm.org/docs/LangRef.html
+;
+
+
 declare i32 @bar ()
 
 
