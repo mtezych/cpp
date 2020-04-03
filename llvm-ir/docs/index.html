@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+
+<html lang=en>
+
+    <head>
+        <meta charset=UTF-8>
+        <title>LLVM IR</title>
+    </head>
+
+    <body>
+        <h1>Compilation Model</h1>
+
+        <p>
+            LLVM IR assembly code can be compiled to native assembly code, <br/>
+            which then can be assembled and linked into a native executable.
+        </p>
+        <object type="image/svg+xml"
+                data="compilation_model_link_objectcode.svg"
+                height="300px">
+        </object>
+
+        <p>
+            Alternatively, LLVM IR assembly code can be assembled into bitcode, <br/>
+            which can be linked together into a portable executable. <br/>
+            Such portable executable can be interpreted or
+            further processed into a native executable.
+        </p>
+        <object type="image/svg+xml"
+                data="compilation_model_link_bitcode.svg"
+                height="300px">
+        </object>
+
+        <p>
+            Note that, linking LLVM IR bitcode files into portable executable, <br/>
+            enables the possibility of performing link-time optimizations.
+        </p>
+
+    </body>
+
+</html>
