@@ -32,15 +32,27 @@
 # EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #
 
-cmake_minimum_required (VERSION 3.1)
+cmake_minimum_required (VERSION 3.15)
 
-project(zlang)
+project(Zlang VERSION 0.1.0 LANGUAGES CXX)
 
-add_executable       (zlang Token.h
-                            Token.cpp
-                            Lexer.h
-                            Lexer.cpp
-                            zlang.cpp)
 
-set_target_properties(zlang PROPERTIES CXX_STANDARD          14
-                                       CXX_STANDARD_REQUIRED ON)
+add_executable            (zlang)
+
+target_compile_features   (zlang PRIVATE cxx_std_17)
+
+target_include_directories(zlang PRIVATE include)
+
+target_sources            (zlang PRIVATE include/zlang/keyword.hxx
+                                         include/zlang/literal.hxx
+                                         include/zlang/operator.hxx
+                                         include/zlang/identifier.hxx
+                                         include/zlang/token.hxx
+                                         include/zlang/lexer.hxx
+                                                source/keyword.cxx
+                                                source/literal.cxx
+                                                source/operator.cxx
+                                                source/identifier.cxx
+                                                source/token.cxx
+                                                source/lexer.cxx
+                                                source/compiler.cxx)
