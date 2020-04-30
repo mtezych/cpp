@@ -34,75 +34,58 @@
 
 Ninja ()
 {
-    mkdir -p $TOOLCHAIN_ROOT/ninja/bin
-    cd       $TOOLCHAIN_ROOT/ninja/bin
-    wget     https://github.com/ninja-build/ninja/releases/download/v1.8.2/ninja-linux.zip
-    unzip    ninja-linux.zip
-    rm       ninja-linux.zip
+    mkdir -p  $TOOLCHAIN_ROOT/ninja/bin
+    cd        $TOOLCHAIN_ROOT/ninja/bin
+    wget      https://github.com/ninja-build/ninja/releases/download/v1.8.2/ninja-linux.zip
+    unzip     ninja-linux.zip
+    rm        ninja-linux.zip
 }
 
 GNU_Make ()
 {
     # Download
-    cd       $TOOLCHAIN_ROOT
-    wget     http://ftp.gnu.org/gnu/make/make-4.3.tar.gz
-    tar -xvf make-4.3.tar.gz
-    rm       make-4.3.tar.gz
-    mv       make-4.3 make-src
+    cd        $TOOLCHAIN_ROOT
+    wget      http://ftp.gnu.org/gnu/make/make-4.3.tar.gz
+    tar -xvf  make-4.3.tar.gz
+    rm        make-4.3.tar.gz
+    mv        make-4.3 make-src
 
     # Build
-    mkdir -p $TOOLCHAIN_ROOT/make-build
-    cd       $TOOLCHAIN_ROOT/make-build
+    mkdir -p  $TOOLCHAIN_ROOT/make-build
+    cd        $TOOLCHAIN_ROOT/make-build
     $TOOLCHAIN_ROOT/make-src/configure --prefix=$TOOLCHAIN_ROOT/make
     make
     make install
 
     # Clean
-    rm -rf   $TOOLCHAIN_ROOT/make-src
-    rm -rf   $TOOLCHAIN_ROOT/make-build
+    rm -rf    $TOOLCHAIN_ROOT/make-src
+    rm -rf    $TOOLCHAIN_ROOT/make-build
 }
 
 CMake ()
 {
     # Download
-    cd       $TOOLCHAIN_ROOT
-    wget     https://github.com/Kitware/CMake/releases/download/v3.13.2/cmake-3.13.2-Linux-x86_64.tar.gz
-    tar -xvf cmake-3.13.2-Linux-x86_64.tar.gz
-    rm       cmake-3.13.2-Linux-x86_64.tar.gz
-    mv       cmake-3.13.2-Linux-x86_64 cmake
+    cd        $TOOLCHAIN_ROOT
+    wget      https://github.com/Kitware/CMake/releases/download/v3.13.2/cmake-3.13.2-Linux-x86_64.tar.gz
+    tar -xvf  cmake-3.13.2-Linux-x86_64.tar.gz
+    rm        cmake-3.13.2-Linux-x86_64.tar.gz
+    mv        cmake-3.13.2-Linux-x86_64 cmake
 }
 
 LLVM_Clang ()
 {
-    # LLVM   -> https://git.llvm.org/git/llvm.git
-    cd          $TOOLCHAIN_ROOT
-    git clone   https://github.com/mtezych/llvm.git llvm-project
+    # LLVM -> https://github.com/llvm/llvm-project.git
+    cd        $TOOLCHAIN_ROOT
+    git clone https://github.com/mtezych/llvm-project.git
 
-    # Clang  -> https://git.llvm.org/git/clang.git
-    #           https://git.llvm.org/git/clang-tools-extra.git
-    cd          $TOOLCHAIN_ROOT/llvm-project/tools
-    git clone   https://github.com/mtezych/clang.git
-
-    cd          $TOOLCHAIN_ROOT/llvm-project/tools/clang/tools
-    git clone   https://github.com/mtezych/clang-tools-extra.git extra
-
-    # LLD    -> https://git.llvm.org/git/lld.git
-    cd          $TOOLCHAIN_ROOT/llvm-project/tools
-    git clone   https://github.com/mtezych/lld.git
-
-    # libc++ -> https://git.llvm.org/git/libcxx.git
-    #           https://git.llvm.org/git/libcxxabi.git
-    cd          $TOOLCHAIN_ROOT/llvm-project/projects
-    git clone   https://github.com/mtezych/libcxx.git
-    git clone   https://github.com/mtezych/libcxxabi.git
-
-    # Build
-    mkdir -p $TOOLCHAIN_ROOT/llvm-build
-    cd       $TOOLCHAIN_ROOT/llvm-build
-    cmake -DCMAKE_BUILD_TYPE=Release                  \
-          -DCMAKE_INSTALL_PREFIX=$TOOLCHAIN_ROOT/llvm \
-          -DLLVM_ENABLE_ASSERTIONS=OFF                \
-          -G Ninja $TOOLCHAIN_ROOT/llvm-project
+    # Build   Clang  LLD  libc++
+    mkdir -p  $TOOLCHAIN_ROOT/llvm-build
+    cd        $TOOLCHAIN_ROOT/llvm-build
+    cmake     -DLLVM_ENABLE_PROJECTS="clang;clang-tools-extra;lld;libcxx;libcxxabi" \
+              -DCMAKE_BUILD_TYPE=Release                                            \
+              -DCMAKE_INSTALL_PREFIX=$TOOLCHAIN_ROOT/llvm                           \
+              -DLLVM_ENABLE_ASSERTIONS=OFF                                          \
+              -G Ninja $TOOLCHAIN_ROOT/llvm-project/llvm
     ninja
     ninja install
 }
