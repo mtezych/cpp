@@ -19,12 +19,21 @@ declare i32 @bar ()
 declare void @foo (i32 %arg)
 
 
+declare i32 @puts (i8* %str)
+
+
+@str = constant [8 x i8] c"LLVM-IR\00"
+
+
 define i32 @main (i32 %argc, i8** %argv)
 {
 	call void @foo(i32 37)
 
 	%1 = call i32 @bar()
 	%2 = add  i32 %1, %argc
+
+	%3 = getelementptr [8 x i8], [8 x i8]* @str, i32 0, i32 0
+	%4 = call i32 @puts(i8* %3)
 
 	ret i32 %2
 }
