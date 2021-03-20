@@ -194,5 +194,5 @@ main ()
     BuildGCC
 }
 
-set -e
+set -xe
 main
