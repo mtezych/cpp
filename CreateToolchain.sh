@@ -55,7 +55,8 @@ PrepareHost ()
                      build-essential \
                      make texinfo    \
                      autoconf        \
-                     bison flex
+                     bison flex      \
+                     gawk
 }
 
 PrepareSources ()
