@@ -32,13 +32,20 @@
 # EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #
 
-cmake_minimum_required (VERSION 3.1)
+cmake_minimum_required (VERSION 3.15)
 
-project(threading)
+project (Concurrency VERSION 1.0.0 LANGUAGES CXX)
 
-find_package(Threads REQUIRED)
 
-add_executable       (producer-consumer producer-consumer.cpp)
-set_target_properties(producer-consumer PROPERTIES CXX_STANDARD          14
-                                                   CXX_STANDARD_REQUIRED ON)
-target_link_libraries(producer-consumer ${CMAKE_THREAD_LIBS_INIT})
+set (THREADS_PREFER_PTHREAD_FLAG ON)
+
+find_package (Threads REQUIRED)
+
+
+add_executable          (producer-consumer)
+
+target_compile_features (producer-consumer PRIVATE cxx_std_17)
+
+target_sources          (producer-consumer PRIVATE source/producer_consumer.cxx)
+
+target_link_libraries   (producer-consumer PRIVATE Threads::Threads)
