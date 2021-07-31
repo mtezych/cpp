@@ -42,6 +42,15 @@ set (THREADS_PREFER_PTHREAD_FLAG ON)
 find_package (Threads REQUIRED)
 
 
+add_executable          (sync-threads)
+
+target_compile_features (sync-threads PRIVATE cxx_std_20)
+
+target_sources          (sync-threads PRIVATE source/sync_threads.cxx)
+
+target_link_libraries   (sync-threads PRIVATE Threads::Threads)
+
+
 add_executable          (producer-consumer)
 
 target_compile_features (producer-consumer PRIVATE cxx_std_17)
