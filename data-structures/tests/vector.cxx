@@ -2,7 +2,7 @@
 /*
  * BSD 3-Clause License
  *
- * Copyright (c) 2017, mtezych
+ * Copyright (c) 2021, Mateusz Zych
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -32,51 +32,15 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <cstddef>
-#include <cassert>
 
-namespace adt
+#include <cxx/vector.hxx>
+
+#include <catch2/catch.hpp>
+
+
+TEST_CASE ("[vector] default constructor")
 {
-	template <typename value_type>
-	class array_view
-	{
-	private:
-		value_type* data;
-		size_t      size;
+    auto vector = cxx::vector<int> { };
 
-	public:
-		array_view ()
-		:
-			data { nullptr },
-			size { 0       }
-		{
-		}
-
-		value_type& operator [] (const int index)
-		{
-			assert(index < size);
-			return data[index];
-		}
-
-		const value_type& operator [] (const int index) const
-		{
-			assert(index < size);
-			return data[index];
-		}
-	};
-}
-
-namespace test
-{
-	void default_constructor ()
-	{
-		const adt::array_view<float> view { };
-	}
-}
-
-int main ()
-{
-	test::default_constructor();
-
-	return 0;
+    REQUIRE(vector.empty());
 }

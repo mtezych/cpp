@@ -2,7 +2,7 @@
 /*
  * BSD 3-Clause License
  *
- * Copyright (c) 2017, mtezych
+ * Copyright (c) 2021, Mateusz Zych
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -32,116 +32,66 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <utility>
-#include <cassert>
 
-namespace adt
+#include <cxx/result.hxx>
+
+#include <catch2/catch.hpp>
+
+
+namespace
 {
-	template <typename value_type, typename error_type>
-	struct expected
-	{
-		bool flag;
-		union
-		{
-			value_type val;
-			error_type err;
-		};
+    namespace test
+    {
+        struct object
+        {
+        private:
+            int value;
 
-		expected (value_type value)
-		:
-			flag { true             },
-			val  { std::move(value) }
-		{
-		}
+            explicit constexpr object (const int value) noexcept
+            :
+                value { value }
+            { }
 
-		expected (error_type error)
-		:
-			flag { false            },
-			err  { std::move(error) }
-		{
-		}
+        public:
+            static auto create (int param) noexcept -> cxx::result<object>
+            {
+                // note: Below check represents detecting an environment state,
+                //       in which satisfying the post-condition is not possible.
+                if (param > 0)
+                {
+                    return cxx::result<object> { object { param } };
+                }
+                else
+                {
+                    return cxx::result<object> { cxx::error {   } };
+                }
+            }
 
-		explicit operator bool() const
-		{
-			return flag;
-		}
-
-		const value_type& value () const
-		{
-			assert(flag);
-			return val;
-		}
-
-		const error_type& error () const
-		{
-			assert(!flag);
-			return err;
-		}
-	};
+            [[nodiscard]]
+            constexpr auto get () const noexcept -> int
+            {
+                return value;
+            }
+        };
+    }
 }
 
-namespace assert
+
+TEST_CASE ("[result] success path")
 {
-	template <typename value_type>
-	void equal(const value_type& left, const value_type& right)
-	{
-		assert(left == right);
-	}
+    const auto result = test::object::create(7);
+
+    if (result) { SUCCEED(); } else { FAIL(); }
+
+    REQUIRE(result.value().get() == 7);
 }
 
-namespace test
+
+TEST_CASE ("[result] error path")
 {
-	void idiomatic_usage (bool flag)
-	{
-		struct Error
-		{
-			int value;
+    const auto result = test::object::create(-1);
 
-			bool operator == (const Error& error) const
-			{
-				return value == error.value;
-			}
-		};
+    if (result) { FAIL(); } else { SUCCEED(); }
 
-		struct Foo
-		{
-			int value;
-
-			static adt::expected<Foo, Error> Create (bool flag, int param)
-			{
-				if (flag)
-				{
-					return Foo { param };
-				}
-				else
-				{
-					return Error { param };
-				}
-			}
-
-			bool operator == (const Foo& foo) const
-			{
-				return value == foo.value;
-			}
-		};
-
-		const auto foo = Foo::Create(flag, 7);
-
-		if (foo)
-		{
-			assert::equal(foo.value(), Foo { 7 });
-		}
-		else
-		{
-			assert::equal(foo.error(), Error { 7 });
-		}
-	}
-}
-
-int main ()
-{
-	test::idiomatic_usage(true);
-	test::idiomatic_usage(false);
-
-	return 0;
+    REQUIRE(result.error() == cxx::error { });
 }

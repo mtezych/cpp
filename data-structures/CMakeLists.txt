@@ -32,30 +32,32 @@
 # EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #
 
-cmake_minimum_required (VERSION 3.1)
+cmake_minimum_required (VERSION 3.15)
 
-project(adt)
+project(data.structures VERSION 1.0.0 LANGUAGES CXX)
 
-add_executable       (list list.cpp)
-set_target_properties(list PROPERTIES CXX_STANDARD          14
-                                      CXX_STANDARD_REQUIRED ON)
 
-add_executable       (vector vector.cpp)
-set_target_properties(vector PROPERTIES CXX_STANDARD          14
-                                        CXX_STANDARD_REQUIRED ON)
+find_package(Catch2 REQUIRED)
 
-add_executable       (unique_ptr unique_ptr.cpp)
-set_target_properties(unique_ptr PROPERTIES CXX_STANDARD          14
-                                            CXX_STANDARD_REQUIRED ON)
 
-add_executable       (optional optional.cpp)
-set_target_properties(optional PROPERTIES CXX_STANDARD          14
-                                          CXX_STANDARD_REQUIRED ON)
+add_executable             (data-structures)
 
-add_executable       (expected expected.cpp)
-set_target_properties(expected PROPERTIES CXX_STANDARD          14
-                                          CXX_STANDARD_REQUIRED ON)
+target_compile_features    (data-structures PRIVATE cxx_std_20)
 
-add_executable       (array_view array_view.cpp)
-set_target_properties(array_view PROPERTIES CXX_STANDARD          14
-                                            CXX_STANDARD_REQUIRED ON)
+target_include_directories (data-structures PRIVATE include)
+
+target_sources             (data-structures PRIVATE       tests/catch2_main.cxx
+                                                    include/cxx/list.hxx
+                                                          tests/list.cxx
+                                                    include/cxx/vector.hxx
+                                                          tests/vector.cxx
+                                                    include/cxx/unique_ptr.hxx
+                                                          tests/unique_ptr.cxx
+                                                    include/cxx/optional.hxx
+                                                          tests/optional.cxx
+                                                    include/cxx/span.hxx
+                                                          tests/span.cxx
+                                                    include/cxx/result.hxx
+                                                          tests/result.cxx)
+
+target_link_libraries      (data-structures PRIVATE Catch2::Catch2)

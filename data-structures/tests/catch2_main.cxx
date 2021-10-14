@@ -2,7 +2,7 @@
 /*
  * BSD 3-Clause License
  *
- * Copyright (c) 2017, mtezych
+ * Copyright (c) 2021, Mateusz Zych
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -32,49 +32,7 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <cassert>
-#include <cstddef>
 
-namespace adt
-{
-	template <typename value_type>
-	class vector
-	{
-		value_type* buffer;
-		size_t      capacity;
-		size_t      size;
+#define CATCH_CONFIG_MAIN
 
-	public:
-
-		bool empty () const
-		{
-			return size == 0;
-		}
-	};
-}
-
-namespace assert
-{
-	template <typename value_type>
-	void empty (const adt::vector<value_type>& vector)
-	{
-		assert(vector.empty());
-	}
-}
-
-namespace test
-{
-	void default_constructor()
-	{
-		auto vector = adt::vector<char> { };
-
-		assert::empty(vector);
-	}
-}
-
-int main ()
-{
-	test::default_constructor();
-
-	return 0;
-}
+#include <catch2/catch.hpp>
