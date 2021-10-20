@@ -244,3 +244,244 @@ TEST_CASE ("[tuple] get element from const rvalue tuple")
     check::tuple_get(std::add_const_t<cxx::tuple<int>> { 7 },
                      std::forward<decltype(answer)>(answer));
 }
+
+
+TEST_CASE ("[tuple] get element from mutable lvalue tuple of mutable lvalue refs")
+{
+    auto element = 7;
+
+    auto tuple = cxx::tuple<int&> { element };
+
+    auto answer = 7;
+
+    check::tuple_get(tuple, answer);
+}
+
+
+TEST_CASE ("[tuple] get element from const lvalue tuple of mutable lvalue refs")
+{
+    // note: C++ does not allow rebinding of references,
+    //       that is references are implicitly "const",
+    //       so applying const type-qualifier on a reference has no effect.
+
+    auto element = 7;
+
+    const auto tuple = cxx::tuple<int&> { element };
+
+    // note: Even though, the cxx::get<index>(tuple) function returns
+    //       a reference to a constant tuple element,
+    //       when the tuple is a constant value,
+    //
+    //       calling the std::get<index>() function,
+    //       with a constant tuple of references to mutable values,
+    //       will return a "const" reference to a mutable value,
+    //
+    //       since C++ references are implicitly "const".
+    //
+    //       const <char&>&  ->  char&
+
+    auto answer = 7;
+
+    check::tuple_get(tuple, answer);
+}
+
+
+TEST_CASE ("[tuple] get element from mutable rvalue tuple of mutable lvalue refs")
+{
+    auto element = 7;
+
+    // note: Even though, the cxx::get<index>(tuple) function yields
+    //       an rvalue reference to a tuple element,
+    //       when the tuple is an rvalue,
+    //
+    //       calling the cxx::get<index>() function,
+    //       with an rvalue tuple of lvalue references,
+    //       will yield an lvalue reference,
+    //
+    //       due to reference collapsing taking place.
+    //
+    //       <char&>&&  ->  char&
+
+    auto answer = 7;
+
+    check::tuple_get(cxx::tuple<int&> { element }, answer);
+}
+
+
+TEST_CASE ("[tuple] get element from const rvalue tuple of mutable lvalue refs")
+{
+    auto element = 7;
+
+    auto answer = 7;
+
+    check::tuple_get(std::add_const_t<cxx::tuple<int&>> { element }, answer);
+}
+
+
+TEST_CASE ("[tuple] get element from mutable lvalue tuple of const lvalue refs")
+{
+    const auto element = 7;
+
+    auto tuple = cxx::tuple<const int&> { element };
+
+    const auto answer = 7;
+
+    check::tuple_get(tuple, answer);
+}
+
+
+TEST_CASE ("[tuple] get element from const lvalue tuple of const lvalue refs")
+{
+    const auto element = 7;
+
+    const auto tuple = cxx::tuple<const int&> { element };
+
+    const auto answer = 7;
+
+    check::tuple_get(tuple, answer);
+}
+
+
+TEST_CASE ("[tuple] get element from mutable rvalue tuple of const lvalue refs")
+{
+    const auto element = 7;
+
+    const auto answer = 7;
+
+    check::tuple_get(cxx::tuple<const int&> { element }, answer);
+}
+
+
+TEST_CASE ("[tuple] get element from const rvalue tuple of const lvalue refs")
+{
+    const auto element = 7;
+
+    const auto answer = 7;
+
+    check::tuple_get(std::add_const_t<cxx::tuple<const int&>> { element },
+                     answer);
+}
+
+
+TEST_CASE ("[tuple] get element from mutable lvalue tuple of mutable rvalue refs")
+{
+    auto tuple = cxx::tuple<int&&> { 7 };
+
+    auto answer = 7;
+
+    check::tuple_get(tuple, answer);
+}
+
+
+TEST_CASE ("[tuple] get element from const lvalue tuple of mutable rvalue refs")
+{
+    const auto tuple = cxx::tuple<int&&> { 7 };
+
+    auto answer = 7;
+
+    check::tuple_get(tuple, answer);
+}
+
+
+TEST_CASE ("[tuple] get element from mutable rvalue tuple of mutable rvalue refs")
+{
+    check::tuple_get(cxx::tuple<int&&> { 7 }, 7);
+}
+
+
+TEST_CASE ("[tuple] get element from const rvalue tuple of mutable rvalue refs")
+{
+    check::tuple_get(std::add_const_t<cxx::tuple<int&&>> { 7 }, 7);
+}
+
+
+TEST_CASE ("[tuple] get element from mutable lvalue tuple of const rvalue refs")
+{
+    const auto&& element = 7;
+
+    auto tuple = cxx::tuple<const int&&>
+                 {
+                     std::forward<decltype(element)>(element)
+                 };
+
+    const auto answer = 7;
+
+    check::tuple_get(tuple, answer);
+}
+
+
+TEST_CASE ("[tuple] get element from const lvalue tuple of const rvalue refs")
+{
+    const auto&& element = 7;
+
+    const auto tuple = cxx::tuple<const int&&>
+                       {
+                           std::forward<decltype(element)>(element)
+                       };
+
+    const auto answer = 7;
+
+    check::tuple_get(tuple, answer);
+}
+
+
+TEST_CASE ("[tuple] get element from mutable rvalue tuple of const rvalue refs")
+{
+    const auto&& element = 7;
+
+    const auto&& answer = 7;
+
+    check::tuple_get(cxx::tuple<const int&&>
+                     {
+                         std::forward<decltype(element)>(element)
+                     },
+                     std::forward<decltype(answer)>(answer));
+}
+
+
+TEST_CASE ("[tuple] get element from const rvalue tuple of const rvalue refs")
+{
+    const auto&& element = 7;
+
+    const auto&& answer = 7;
+
+    check::tuple_get(std::add_const_t<cxx::tuple<const int&&>>
+                     {
+                         std::forward<decltype(element)>(element)
+                     },
+                     std::forward<decltype(answer)>(answer));
+}
+
+
+TEST_CASE ("[tuple] element type")
+{
+    constexpr
+    auto check_element_type = [] <typename type> (std::type_identity<type>)
+    {
+        using element_type = cxx::tuple_element<0, const cxx::tuple<type>>;
+
+        static_assert(std::is_same_v<element_type, type>);
+    };
+
+    enum enumeration { };
+    struct structure { };
+    using function = auto (float, char) noexcept -> int;
+
+    check_element_type(std::type_identity<      int       > { });
+    check_element_type(std::type_identity<const int       > { });
+    check_element_type(std::type_identity<      int&      > { });
+    check_element_type(std::type_identity<const int&      > { });
+    check_element_type(std::type_identity<      int&&     > { });
+    check_element_type(std::type_identity<const int&&     > { });
+    check_element_type(std::type_identity<      int*      > { });
+    check_element_type(std::type_identity<const int*      > { });
+    check_element_type(std::type_identity<      int* const> { });
+    check_element_type(std::type_identity<const int* const> { });
+    check_element_type(std::type_identity<      int[8]    > { });
+    check_element_type(std::type_identity<const int[8]    > { });
+    check_element_type(std::type_identity<     enumeration> { });
+    check_element_type(std::type_identity<       structure> { });
+    check_element_type(std::type_identity< function&      > { });
+    check_element_type(std::type_identity< function*      > { });
+    check_element_type(std::type_identity< function* const> { });
+}

@@ -90,70 +90,51 @@ namespace cxx
     namespace detail
     {
         template <std::size_t index, typename type>
+        auto select (const element<index, type>&) -> std::type_identity<type>;
+    }
+
+    template <std::size_t index, typename tuple> requires std::is_class_v<tuple>
+    using tuple_element =
+          typename decltype(detail::select<index>(std::declval<tuple>()))::type;
+
+
+    namespace detail
+    {
+        template <std::size_t index, typename type>
         constexpr
         decltype(auto) slice_off (      element<index, type>&  element) noexcept
         {
-            return element;
+            return std::forward<      type& >(element.value);
         }
 
         template <std::size_t index, typename type>
         constexpr
         decltype(auto) slice_off (const element<index, type>&  element) noexcept
         {
-            return element;
+            return std::forward<const type& >(element.value);
         }
 
         template <std::size_t index, typename type>
         constexpr
         decltype(auto) slice_off (      element<index, type>&& element) noexcept
         {
-            return std::move(element);
+            return std::forward<      type&&>(element.value);
         }
 
         template <std::size_t index, typename type>
         constexpr
         decltype(auto) slice_off (const element<index, type>&& element) noexcept
         {
-            return std::move(element);
+            return std::forward<const type&&>(element.value);
         }
     }
-
-    // [C++ reference] - decltype specifier
-    //  ~ https://en.cppreference.com/w/cpp/language/decltype
-    //
-    // (1) If the argument is an unparenthesized id-expression or
-    //     an unparenthesized class member access expression,
-    //     then decltype yields the type of the entity
-    //     named by this expression.
-    //
-    // (2) If the argument is any other expression of type T, and
-    //     (a) if the value category of expression is xvalue,
-    //         then decltype yields T&&;
-    //     (b) if the value category of expression is lvalue,
-    //         then decltype yields T&;
-    //     (c) if the value category of expression is prvalue,
-    //         then decltype yields T.
 
     template <std::size_t index, typename tuple>
     constexpr
     decltype(auto) get (tuple&& t) noexcept
     {
-        // note: The expression is parenthesised,
-        //       in order to force decltype(auto) to deduce
-        //       either lvalue or rvalue reference type.
-        //
-        return (detail::slice_off<index>(std::forward<tuple>(t)).value);
+        return detail::slice_off<index>(std::forward<tuple>(t));
     }
-
-    template <std::size_t index, typename tuple>
-    using tuple_element = decltype
-    (
-        // note: The expression is not parenthesised,
-        //       in order to allow decltype(auto) to deduce
-        //       the declared type of the element<>::value data member.
-        //
-        detail::slice_off<index>(std::declval<tuple>()).value
-    );
 }
 
 
