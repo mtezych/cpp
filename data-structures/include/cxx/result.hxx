@@ -114,54 +114,54 @@ namespace cxx
     //
     //        ~ https://doc.rust-lang.org/stable/std/result
     //
-    template <typename value_type>
+    template <typename return_type>
     class result
     {
         static_assert(!
-        std::is_same_v           <std::remove_cvref_t<value_type>, cxx:: error>);
+        std::is_same_v           <std::remove_cvref_t<return_type>, cxx:: error>);
 
         static_assert(!
-        cxx::is_specialization_of<std::remove_cvref_t<value_type>, cxx::result>);
+        cxx::is_specialization_of<std::remove_cvref_t<return_type>, cxx::result>);
 
     private:
         union
         {
-            value_type val;
-            cxx::error err;
+            return_type ret;
+            cxx::error  err;
         };
-        bool flag;
+        bool success;
 
     public:
-        explicit result (std::same_as<value_type> auto&& value)
+        explicit result (std::same_as<return_type> auto&& return_value)
         :
-            flag { true                                 },
-            val  { std::forward<decltype(value)>(value) }
+            ret     { std::forward<decltype(return_value)>(return_value) },
+            success { true                                               }
         {
         }
 
         explicit result (cxx::error error)
         :
-            flag { false },
-            err  { error }
+            err     { error },
+            success { false }
         {
         }
 
         explicit operator bool () const
         {
-            return flag;
+            return success;
         }
 
         [[nodiscard]]
-        auto value () const -> const value_type&
+        auto value () const -> const return_type&
         {
-            assert(flag);
-            return val;
+            assert(success);
+            return ret;
         }
 
         [[nodiscard]]
         auto error () const -> const cxx::error&
         {
-            assert(!flag);
+            assert(!success);
             return err;
         }
     };
