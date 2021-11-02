@@ -53,6 +53,8 @@ target_sources             (data-structures PRIVATE       tests/catch2_main.cxx
                                                           tests/vector.cxx
                                                     include/cxx/unique_ptr.hxx
                                                           tests/unique_ptr.cxx
+                                                    include/cxx/indirect.hxx
+                                                          tests/indirect.cxx
                                                     include/cxx/tuple.hxx
                                                           tests/tuple.cxx
                                                     include/cxx/optional.hxx
