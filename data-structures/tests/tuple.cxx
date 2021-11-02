@@ -50,7 +50,7 @@ TEST_CASE ("[tuple] singleton")
 {
     constexpr auto tuple = cxx::tuple<int> { 7 };
 
-    static_assert(cxx::tuple_size<decltype(tuple)> == 1);
+    static_assert(tuple.size() == 1);
 
     static_assert(std::is_same_v<cxx::tuple_element<0, decltype(tuple)>, int>);
 
@@ -62,7 +62,7 @@ TEST_CASE ("[tuple] pair")
 {
     constexpr auto tuple = cxx::tuple<float, bool> { 0.1f, false };
 
-    static_assert(cxx::tuple_size<decltype(tuple)> == 2);
+    static_assert(tuple.size() == 2);
 
     static_assert(std::is_same_v<cxx::tuple_element<0, decltype(tuple)>, float>);
     static_assert(std::is_same_v<cxx::tuple_element<1, decltype(tuple)>,  bool>);
@@ -113,9 +113,9 @@ TEST_CASE ("[tuple] size")
     {
         constexpr auto size = sizeof...(types);
 
-        static_assert(                  cxx::tuple<types...>::size == size);
-        static_assert(cxx::tuple_size  <cxx::tuple<types...>>      == size);
-        static_assert(std::tuple_size_v<cxx::tuple<types...>>      == size);
+        static_assert(                  cxx::tuple<types...>::size() == size);
+        static_assert(cxx::tuple_size  <cxx::tuple<types...>>        == size);
+        static_assert(std::tuple_size_v<cxx::tuple<types...>>        == size);
     };
 
     check_size(cxx::tuple<                      > { });
@@ -190,7 +190,7 @@ namespace
 {
     namespace check
     {
-        auto tuple_get (auto&& tuple, auto&& answer) noexcept -> void
+        auto tuple_get (auto&& tuple, auto&& answer) -> void
         {
             auto&& result = cxx::get<0>(std::forward<decltype(tuple)>(tuple));
 
@@ -365,7 +365,12 @@ TEST_CASE ("[tuple] get element from const rvalue tuple of const lvalue refs")
 
 TEST_CASE ("[tuple] get element from mutable lvalue tuple of mutable rvalue refs")
 {
-    auto tuple = cxx::tuple<int&&> { 7 };
+    auto&& element = 7;
+
+    auto tuple = cxx::tuple<int&&>
+                 {
+                     std::forward<decltype(element)>(element)
+                 };
 
     auto answer = 7;
 
@@ -375,7 +380,12 @@ TEST_CASE ("[tuple] get element from mutable lvalue tuple of mutable rvalue refs
 
 TEST_CASE ("[tuple] get element from const lvalue tuple of mutable rvalue refs")
 {
-    const auto tuple = cxx::tuple<int&&> { 7 };
+    auto&& element = 7;
+
+    const auto tuple = cxx::tuple<int&&>
+                       {
+                           std::forward<decltype(element)>(element)
+                       };
 
     auto answer = 7;
 
@@ -385,13 +395,23 @@ TEST_CASE ("[tuple] get element from const lvalue tuple of mutable rvalue refs")
 
 TEST_CASE ("[tuple] get element from mutable rvalue tuple of mutable rvalue refs")
 {
-    check::tuple_get(cxx::tuple<int&&> { 7 }, 7);
+    auto&& element = 7;
+
+    check::tuple_get(cxx::tuple<int&&>
+                     {
+                         std::forward<decltype(element)>(element)
+                     }, 7);
 }
 
 
 TEST_CASE ("[tuple] get element from const rvalue tuple of mutable rvalue refs")
 {
-    check::tuple_get(std::add_const_t<cxx::tuple<int&&>> { 7 }, 7);
+    auto&& element = 7;
+
+    check::tuple_get(std::add_const_t<cxx::tuple<int&&>>
+                     {
+                         std::forward<decltype(element)>(element)
+                     }, 7);
 }
 
 

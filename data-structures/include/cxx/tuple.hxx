@@ -73,7 +73,10 @@ namespace cxx
     :
         detail::tuple_base<std::index_sequence_for<types...>, types...>
     {
-        static constexpr auto size = sizeof...(types);
+        static constexpr auto size () noexcept -> std::size_t
+        {
+            return sizeof...(types);
+        }
 
         constexpr
         auto operator == (const tuple&) const noexcept -> bool = default;
@@ -84,7 +87,7 @@ namespace cxx
 
 
     template <typename tuple>
-    inline constexpr auto tuple_size = tuple::size;
+    inline constexpr auto tuple_size = tuple::size();
 
 
     namespace detail
