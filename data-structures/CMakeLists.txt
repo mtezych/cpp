@@ -37,6 +37,10 @@ cmake_minimum_required (VERSION 3.15)
 project(data.structures VERSION 1.0.0 LANGUAGES CXX)
 
 
+set(THREADS_PREFER_PTHREAD_FLAG ON)
+
+find_package(Threads)
+
 find_package(Catch2 REQUIRED)
 
 
@@ -55,6 +59,8 @@ target_sources             (data-structures PRIVATE       tests/catch2_main.cxx
                                                           tests/unique_ptr.cxx
                                                     include/cxx/indirect.hxx
                                                           tests/indirect.cxx
+                                                    include/cxx/shared.hxx
+                                                          tests/shared.cxx
                                                     include/cxx/tuple.hxx
                                                           tests/tuple.cxx
                                                     include/cxx/optional.hxx
@@ -64,4 +70,5 @@ target_sources             (data-structures PRIVATE       tests/catch2_main.cxx
                                                     include/cxx/result.hxx
                                                           tests/result.cxx)
 
-target_link_libraries      (data-structures PRIVATE Catch2::Catch2)
+target_link_libraries      (data-structures PRIVATE Catch2::Catch2
+                                                    Threads::Threads)
