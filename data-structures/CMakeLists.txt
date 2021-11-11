@@ -44,13 +44,18 @@ find_package(Threads)
 find_package(Catch2 REQUIRED)
 
 
-add_executable             (data-structures)
+add_library                (data-structures INTERFACE)
 
-target_compile_features    (data-structures PRIVATE cxx_std_20)
+target_compile_features    (data-structures INTERFACE cxx_std_20)
 
-target_include_directories (data-structures PRIVATE include)
+target_include_directories (data-structures INTERFACE include)
 
-target_sources             (data-structures PRIVATE       tests/catch2_main.cxx
+
+add_executable             (data-structures-tests)
+
+target_compile_features    (data-structures-tests PRIVATE cxx_std_20)
+
+target_sources             (data-structures-tests PRIVATE tests/catch2_main.cxx
                                                     include/cxx/list.hxx
                                                           tests/list.cxx
                                                     include/cxx/vector.hxx
@@ -70,5 +75,6 @@ target_sources             (data-structures PRIVATE       tests/catch2_main.cxx
                                                     include/cxx/result.hxx
                                                           tests/result.cxx)
 
-target_link_libraries      (data-structures PRIVATE Catch2::Catch2
-                                                    Threads::Threads)
+target_link_libraries      (data-structures-tests PRIVATE data-structures
+                                                          Catch2::Catch2
+                                                          Threads::Threads)

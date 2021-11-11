@@ -68,6 +68,11 @@ namespace cxx
         };
     }
 
+    // [LLVM Bugzilla] Bug 52277 - implementing tuple as an aggregate type
+    //                             triggers -Wmissing-braces warning
+    //
+    // ~ https://bugs.llvm.org/show_bug.cgi?id=52277
+
     template <typename ... types>
     struct tuple
     :

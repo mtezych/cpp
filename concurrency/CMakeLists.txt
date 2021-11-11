@@ -42,6 +42,16 @@ set (THREADS_PREFER_PTHREAD_FLAG ON)
 find_package (Threads REQUIRED)
 
 
+add_executable          (async-task)
+
+target_compile_features (async-task PRIVATE cxx_std_23)
+
+target_sources          (async-task PRIVATE source/async_task.cxx)
+
+target_link_libraries   (async-task PRIVATE Threads::Threads
+                                            data-structures)
+
+
 add_executable          (sync-threads)
 
 target_compile_features (sync-threads PRIVATE cxx_std_20)
