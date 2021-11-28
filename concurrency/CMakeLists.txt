@@ -32,7 +32,7 @@
 # EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #
 
-cmake_minimum_required (VERSION 3.15)
+cmake_minimum_required (VERSION 3.20)
 
 project (Concurrency VERSION 1.0.0 LANGUAGES CXX)
 
@@ -42,29 +42,47 @@ set (THREADS_PREFER_PTHREAD_FLAG ON)
 find_package (Threads REQUIRED)
 
 
-add_executable          (async-task)
+add_library                (concurrency INTERFACE)
 
-target_compile_features (async-task PRIVATE cxx_std_23)
+target_compile_features    (concurrency INTERFACE cxx_std_20)
 
-target_sources          (async-task PRIVATE source/async_task.cxx)
-
-target_link_libraries   (async-task PRIVATE Threads::Threads
-                                            data-structures)
+target_include_directories (concurrency INTERFACE include)
 
 
-add_executable          (sync-threads)
+add_executable             (latch-demo)
 
-target_compile_features (sync-threads PRIVATE cxx_std_20)
+target_compile_features    (latch-demo PRIVATE cxx_std_20)
 
-target_sources          (sync-threads PRIVATE source/sync_threads.cxx)
+target_sources             (latch-demo PRIVATE include/cxx/latch.hxx
+                                                    source/latch_demo.cxx)
 
-target_link_libraries   (sync-threads PRIVATE Threads::Threads)
+target_link_libraries      (latch-demo PRIVATE concurrency
+                                               Threads::Threads)
 
 
-add_executable          (producer-consumer)
+add_executable             (async-task)
 
-target_compile_features (producer-consumer PRIVATE cxx_std_17)
+target_compile_features    (async-task PRIVATE cxx_std_23)
 
-target_sources          (producer-consumer PRIVATE source/producer_consumer.cxx)
+target_sources             (async-task PRIVATE source/async_task.cxx)
 
-target_link_libraries   (producer-consumer PRIVATE Threads::Threads)
+target_link_libraries      (async-task PRIVATE Threads::Threads
+                                               data-structures)
+
+
+add_executable             (sync-threads)
+
+target_compile_features    (sync-threads PRIVATE cxx_std_20)
+
+target_sources             (sync-threads PRIVATE source/sync_threads.cxx)
+
+target_link_libraries      (sync-threads PRIVATE Threads::Threads)
+
+
+add_executable             (producer-consumer)
+
+target_compile_features    (producer-consumer PRIVATE cxx_std_17)
+
+target_sources             (producer-consumer PRIVATE source/producer_consumer.cxx)
+
+target_link_libraries      (producer-consumer PRIVATE Threads::Threads)
