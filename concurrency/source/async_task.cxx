@@ -43,7 +43,7 @@
 
 #include <functional>
 
-#include <cxx/shared.hxx>
+#include <cxx/channel.hxx>
 
 #include <deque>
 
@@ -292,9 +292,9 @@ namespace cxx
 
     class exec_token
     {
-        cxx::shared<std::atomic_flag> completion;
+        cxx::channel::receiver completion;
 
-        explicit exec_token (cxx::shared<std::atomic_flag> completion) noexcept
+        explicit exec_token (cxx::channel::receiver completion) noexcept
         :
             completion { std::move(completion) }
         { }
@@ -309,26 +309,26 @@ namespace cxx
     auto async_exec (cxx::executor& executor,
                      std::invocable auto&& task) -> exec_token
     {
-        auto completion_handles = cxx::shared<std::atomic_flag>::bulk_create<2>();
+        auto [receiver, sender_generator] = cxx::channel::create(1);
 
-        auto exec_token = cxx::exec_token { std::move(completion_handles[0]) };
-
-        executor.submit([   completion    = std::move(completion_handles[1]),
-                            task          = std::forward<decltype(task)>(task) ]
+        executor.submit([   task        = std::forward<decltype(task)>(task),
+                            completion  = sender_generator() ] () mutable -> void
                         {
-                            std::invoke(task);
+                            auto signal = cxx::channel::scoped_signal
+                                          {
+                                              std::move(completion)
+                                          };
 
-                            completion->test_and_set();
-                            completion->notify_all();
+                            std::invoke(task);
                         });
 
-        return exec_token;
+        return cxx::exec_token { std::move(receiver) };
     }
 
 
     auto sync_wait (const cxx::exec_token& exec_token) noexcept -> void
     {
-        exec_token.completion->wait(false);
+        cxx::channel::wait(exec_token.completion);
     }
 
 

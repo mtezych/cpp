@@ -32,7 +32,7 @@
 # EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #
 
-cmake_minimum_required (VERSION 3.20)
+cmake_minimum_required (VERSION 3.20.3)
 
 project (Concurrency VERSION 1.0.0 LANGUAGES CXX)
 
@@ -79,8 +79,8 @@ target_compile_features    (async-task PRIVATE cxx_std_23)
 
 target_sources             (async-task PRIVATE source/async_task.cxx)
 
-target_link_libraries      (async-task PRIVATE Threads::Threads
-                                               data-structures)
+target_link_libraries      (async-task PRIVATE concurrency
+                                               Threads::Threads)
 
 
 add_executable             (sync-threads)
