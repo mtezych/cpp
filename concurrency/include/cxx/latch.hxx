@@ -74,6 +74,19 @@ namespace cxx
     //
     // [GitHub] - Olivier Giroux: C++20 synchronization facilities
     // ~ https://github.com/ogiroux/atomic_wait/blob/master/include/latch
+    //
+    // [CppCon] - Hans Boehm: Using weakly ordered C++ atomics correctly
+    // ~ https://www.youtube.com/watch?v=M15UKpNlpeM
+    //
+    // [CppCon] - Fedor Pikus: C++ atomics, from basic to advanced.
+    //                         What do they really do?
+    // ~ https://www.youtube.com/watch?v=ZQFzMfHIxng
+    //
+    // [CppCon] - Bryce Adelstein Lelbach: The C++ Execution Model
+    // ~ https://www.youtube.com/watch?v=FJIn1YhPJJc
+    //
+    // [ModernesCpp] - Rainer Grimm: Acquire-Release Fences
+    // ~ https://www.modernescpp.com/index.php/acquire-release-fences
 
 
     // note: The C++ standard library
@@ -91,7 +104,7 @@ namespace cxx
         //       which might not necessarily be equal to the new_value.
         //
         //       To handle the above case, the loop below will
-        //       load current_value of the atomic in the next iteration
+        //       load current_value of the std::atomic in the next iteration
         //       and wake up only when the current_value equals to the new_value.
         //
         while (true)
@@ -105,7 +118,7 @@ namespace cxx
             else
             {
                 // note: The cxx::atomic_wait() *always* ends on loading
-                //       value of the atomic counter with acquire memory_order,
+                //       value of the std::atomic with acquire memory_order,
                 //       thus waiting with relaxed memory_order is sufficient.
                 //
                 atomic.wait(current_value, std::memory_order::relaxed);
@@ -122,7 +135,7 @@ namespace cxx
     public:
         static constexpr auto max () noexcept -> std::ptrdiff_t
         {
-            return std::numeric_limits<int>::max();
+            return std::numeric_limits<std::ptrdiff_t>::max();
         }
 
         constexpr explicit latch (const std::ptrdiff_t initial_value) noexcept
@@ -130,12 +143,41 @@ namespace cxx
             counter { initial_value }
         { }
 
-        constexpr ~latch() noexcept = default;
+        constexpr ~latch () noexcept = default;
 
         latch (const latch&) = delete;
 
         auto operator = (const latch&) -> latch& = delete;
 
+        // note: The cxx::latch::arrive() member function is identical
+        //       to the std::latch::count_down(), except:
+        //
+        //       - it is named arrive() instead of count_down(),
+        //         to better reflect its usage instead of its implementation
+        //
+        //       - returns state of the latch (open or closed)
+        //         ~ false -> latch is still closed
+        //         ~ true  -> latch has just been opened
+        //
+        //       Only the last invocation of the cxx::latch::arrive()
+        //       can change the state of a cxx::latch from closed to open and
+        //       return true, since it is undefined behaviour
+        //       to call cxx::latch::arrive() on an already opened cxx::latch.
+        //
+        //       This enables a client to perform an action exactly once,
+        //       right after the cxx::latch has been opened,
+        //       in which all prior operations,
+        //       that happened-before any invocation of the cxx::latch::arrive(),
+        //       are guaranteed be visible:
+        //
+        //       // thread A           // thread B
+        //       x = 10;               y = 11;
+        //       if (latch.arrive())   if (latch.arrive())
+        //       {                     {                   //     assignments to
+        //         assert(x == 10);      assert(x == 10);  // <-- both x and y
+        //         assert(y == 11);      assert(y == 11);  //     are guaranteed
+        //       }                     }                   //     to be visible
+        //
         auto arrive (const std::ptrdiff_t update = 1) noexcept -> bool
         {
             const auto old_value = counter.fetch_sub(update,
@@ -143,6 +185,34 @@ namespace cxx
 
             if (old_value == update) // counter reached 0
             {
+                // note: In order to guarantee visibility of all prior operations,
+                //       that happened-before invoking the cxx::latch::arrive(),
+                //       potentially in multiple different C++ threads,
+                //       a memory fence performing an acquire operation is required.
+                //
+                //       Moreover, without that memory fence an action
+                //       performed in response to the opening of the cxx::latch,
+                //       could actually be speculatively executed
+                //       before the cxx::latch has been opened:
+                //       if (latch.arrive()) // branch predictor guesses true
+                //       { action(); }      // action() executes before arrive()
+                //
+                //       Interestingly, the std::latch::count_down()
+                //       does not require an acquire operation, since:
+                //
+                //       - it returns void, which effectively forces a client
+                //         to obtain the state of the std::latch using either
+                //         std::latch::try_wait() or std::latch::wait(),
+                //         which themselves perform an acquire operation
+                //
+                //       - std::atomic::fetch_sub() and std::atomic::notify_all()
+                //         are both atomic operations, which are guaranteed to
+                //         never be reordered within a single thread,
+                //         as long as they operate on the same atomic value,
+                //         even when the relaxed memory ordering is used
+                //
+                std::atomic_thread_fence(std::memory_order::acquire);
+
                 counter.notify_all();
 
                 return true;
@@ -166,9 +236,22 @@ namespace cxx
 
         auto arrive_and_wait (const std::ptrdiff_t update = 1) noexcept -> void
         {
-            arrive(update);
+            const auto
+            current_value = counter.fetch_sub(update,
+                                              std::memory_order::release) - update;
 
-            wait();
+            if (current_value == std::ptrdiff_t { 0 })
+            {
+                std::atomic_thread_fence(std::memory_order::acquire);
+
+                counter.notify_all();
+            }
+            else // waiting is required, since counter have not reached 0 yet
+            {
+                counter.wait(current_value, std::memory_order::relaxed);
+
+                cxx::atomic_wait(counter, std::ptrdiff_t { 0 });
+            }
         }
     };
 }
