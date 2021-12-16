@@ -135,10 +135,32 @@ namespace cxx
         //
         shared () = delete;
 
+        // [CppCon] - Hans Boehm: Using weakly ordered C++ atomics correctly
+        // ~ https://www.youtube.com/watch?v=M15UKpNlpeM
+        //
+        // [C++ and Beyond] - Herb Sutter: atomic<> Weapons
+        // ~ https://herbsutter.com/2013/02/11/atomic-weapons-the-c-memory-model-and-modern-hardware
+        // ~ https://sec.ch9.ms/ch9/0b96/086be40b-912f-4cd7-a038-d09612ee0b96/CB2012SessionHerbSutterAtomicP2_mid.mp4
+        // ~ https://sec.ch9.ms/ch9/aa79/4a4e75bd-46c5-4674-bc6f-34d740f9aa79/CB2012SessionHerbSutterAtomicP1_mid.mp4
+        //
+        // [Boost.Atomic] - Usage examples: Reference counting
+        // ~ https://www.boost.org/doc/libs/1_78_0/doc/html/atomic/usage_examples.html
+        //
         ~shared () noexcept
         {
-            if ((state != nullptr) && (--state->ref_count == 0))
+            if ((state != nullptr) &&
+                (state->ref_count.fetch_sub(1, std::memory_order::release) == 1))
             {
+                // note : The acquire memory fence is required to ensure that
+                //        all operations on the shared value will happen-before
+                //        that shared value will be destroyed.
+                //
+                //        Relying on data-flow / control-flow dependencies
+                //        to establish ordering is not sufficient,
+                //        since CPUs can perform speculative execution.
+                //
+                std::atomic_thread_fence(std::memory_order::acquire);
+
                 delete state;
             }
         }
@@ -168,8 +190,11 @@ namespace cxx
 
         auto operator = (shared&& other) noexcept -> shared&
         {
-            if ((state != nullptr) && (--state->ref_count == 0))
+            if ((state != nullptr) &&
+                (state->ref_count.fetch_sub(1, std::memory_order::release) == 1))
             {
+                std::atomic_thread_fence(std::memory_order::acquire);
+
                 delete state;
             }
 
