@@ -48,6 +48,8 @@ target_compile_features    (concurrency INTERFACE cxx_std_20)
 
 target_include_directories (concurrency INTERFACE include)
 
+target_link_libraries      (concurrency INTERFACE data-structures)
+
 
 add_executable             (latch-demo)
 
@@ -58,6 +60,17 @@ target_sources             (latch-demo PRIVATE include/cxx/latch.hxx
 
 target_link_libraries      (latch-demo PRIVATE concurrency
                                                Threads::Threads)
+
+
+add_executable             (channel-demo)
+
+target_compile_features    (channel-demo PRIVATE cxx_std_20)
+
+target_sources             (channel-demo PRIVATE include/cxx/channel.hxx
+                                                      source/channel_demo.cxx)
+
+target_link_libraries      (channel-demo PRIVATE concurrency
+                                                 Threads::Threads)
 
 
 add_executable             (async-task)
