@@ -53,16 +53,18 @@ target_include_directories (concurrency INTERFACE include)
 target_link_libraries      (concurrency INTERFACE data-structures)
 
 
-add_executable            (concurrency-tests)
+add_executable             (concurrency-tests)
 
-target_compile_features   (concurrency-tests PRIVATE cxx_std_20)
+target_compile_features    (concurrency-tests PRIVATE cxx_std_20)
 
-target_sources            (concurrency-tests PRIVATE tests/catch2_main.cxx
-                                               include/cxx/concurrent_queue.hxx
-                                                     tests/concurrent_queue.cxx)
+target_sources             (concurrency-tests PRIVATE tests/catch2_main.cxx
+                                                include/cxx/event_counter.hxx
+                                                      tests/event_counter.cxx
+                                                include/cxx/concurrent_queue.hxx
+                                                      tests/concurrent_queue.cxx)
 
-target_link_libraries     (concurrency-tests PRIVATE concurrency
-                                                     Catch2::Catch2)
+target_link_libraries      (concurrency-tests PRIVATE concurrency
+                                                      Catch2::Catch2)
 
 
 add_executable             (latch-demo)

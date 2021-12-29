@@ -33,25 +33,57 @@
  */
 
 
-#include <cxx/concurrent_queue.hxx>
+#ifndef CXX_EVENT_COUNTER
+#define CXX_EVENT_COUNTER
 
-#include <catch2/catch.hpp>
+
+#include <cstddef>
+
+#include <atomic>
 
 
-TEST_CASE ("[concurrent_queue] create")
+namespace cxx
 {
-    static_assert(std::is_default_constructible_v<cxx::concurrent_queue<bool>>);
+    class event_counter
+    {
+    private:
 
-    [[maybe_unused]]
-    auto concurrent_queue = cxx::concurrent_queue<bool> { };
+        std::atomic<std::ptrdiff_t> counter;
+
+    public:
+
+        explicit
+        constexpr event_counter (const std::ptrdiff_t initial_value) noexcept
+        :
+            counter { initial_value }
+        { }
+
+        constexpr ~event_counter () noexcept = default;
+
+
+        event_counter (const event_counter&) = delete;
+
+        auto operator = (const event_counter&) -> event_counter& = delete;
+
+
+        auto count_down (const std::ptrdiff_t update = 1) noexcept -> bool
+        {
+            const auto old_value = counter.fetch_sub(update,
+                                                     std::memory_order::release);
+
+            if (old_value == update) // counter reached 0
+            {
+                std::atomic_thread_fence(std::memory_order::acquire);
+
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+    };
 }
 
 
-TEST_CASE ("[concurrent_queue] workflow of push followed by pop")
-{
-    auto concurrent_queue = cxx::concurrent_queue<int> { };
-
-    concurrent_queue.push(7);
-
-    REQUIRE(concurrent_queue.pop() != std::nullopt);
-}
+#endif
