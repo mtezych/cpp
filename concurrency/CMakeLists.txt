@@ -41,6 +41,8 @@ set (THREADS_PREFER_PTHREAD_FLAG ON)
 
 find_package (Threads REQUIRED)
 
+find_package (Catch2  REQUIRED)
+
 
 add_library                (concurrency INTERFACE)
 
@@ -49,6 +51,18 @@ target_compile_features    (concurrency INTERFACE cxx_std_20)
 target_include_directories (concurrency INTERFACE include)
 
 target_link_libraries      (concurrency INTERFACE data-structures)
+
+
+add_executable            (concurrency-tests)
+
+target_compile_features   (concurrency-tests PRIVATE cxx_std_20)
+
+target_sources            (concurrency-tests PRIVATE tests/catch2_main.cxx
+                                               include/cxx/concurrent_queue.hxx
+                                                     tests/concurrent_queue.cxx)
+
+target_link_libraries     (concurrency-tests PRIVATE concurrency
+                                                     Catch2::Catch2)
 
 
 add_executable             (latch-demo)
