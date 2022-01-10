@@ -46,7 +46,7 @@ find_package (Catch2  REQUIRED)
 
 add_library                (concurrency INTERFACE)
 
-target_compile_features    (concurrency INTERFACE cxx_std_20)
+target_compile_features    (concurrency INTERFACE cxx_std_23)
 
 target_include_directories (concurrency INTERFACE include)
 
@@ -62,6 +62,8 @@ target_sources             (concurrency-tests PRIVATE tests/catch2_main.cxx
                                                       tests/executor.cxx
                                                 include/cxx/new_thread.hxx
                                                       tests/new_thread.cxx
+                                                include/cxx/thread_pool.hxx
+                                                      tests/thread_pool.cxx
                                                 include/cxx/event_counter.hxx
                                                       tests/event_counter.cxx
                                                 include/cxx/concurrent_queue.hxx
@@ -95,7 +97,7 @@ target_link_libraries      (channel-demo PRIVATE concurrency
 
 add_executable             (async-task)
 
-target_compile_features    (async-task PRIVATE cxx_std_23)
+target_compile_features    (async-task PRIVATE cxx_std_20)
 
 target_sources             (async-task PRIVATE source/async_task.cxx)
 
