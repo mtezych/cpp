@@ -50,7 +50,65 @@
 
 namespace cxx
 {
-    class executor
+    // [GitHub] - Barry Revzin: Things you can almost, mostly, do with Concepts
+    // ~ https://medium.com/p/6b52ace78630?source=brevzin.github.io
+    //
+    // [Andrzej's C++ blog] - Andrzej Krzemienski: Concept archetypes
+    // ~ https://akrzemi1.wordpress.com/2020/09/02/concept-archetypes
+    //
+    namespace archetype
+    {
+        // note: Support for callable types, invocable with a set of arguments,
+        //       is not implemented, since it's incredibly difficult to define
+        //       an archetype for generic std::invocable<args_types...> concept.
+        //
+        //       [C++ reference] - std::invocable
+        //       ~ https://en.cppreference.com/w/cpp/concepts/invocable
+        //
+        struct invocable
+        {
+            invocable () = delete;
+           ~invocable () = delete;
+
+            invocable (const invocable& ) = delete;
+            invocable (      invocable&&) = delete;
+
+            auto operator = (const invocable& ) -> invocable& = delete;
+            auto operator = (      invocable&&) -> invocable& = delete;
+
+            auto operator & () const -> const invocable* = delete;
+
+            friend auto operator , (const auto&  left,
+                                    const auto& right) -> decltype(right)
+            //
+            requires (std::same_as<decltype( left), const invocable&> ||
+                      std::same_as<decltype(right), const invocable&>) = delete;
+
+            auto operator () () -> void;
+        };
+
+        static_assert(std::invocable<cxx::archetype::invocable>);
+        //
+        // [ISO C++] - P0443R14: A Unified Executors Proposal for C++
+        // ~ http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2020/p0443r14.html
+        //
+        // [GitHub] - Eric Niebler: Partial header <execution> for P0443R12
+        // ~ https://gist.github.com/ericniebler/8cc25656a0a496bd682edc8314d9576b#file-execution-h-L75
+        //
+        // [Boost] - Christopher Kohlhoff: Asio
+        // ~ https://www.boost.org/doc/libs/1_78_0/doc/html/boost_asio/reference/execution__invocable_archetype.html
+        // ~ https://www.boost.org/doc/libs/1_78_0/boost/asio/execution/invocable_archetype.hpp
+    }
+
+
+    template <typename type>
+    concept executor = requires (type executor, cxx::archetype::invocable task)
+                       {
+                           { executor.submit(task) } -> std::same_as<void>;
+                       };
+
+
+    class new_thread
     {
     private:
         using task_type = std::move_only_function<auto () -> void>;
@@ -77,13 +135,13 @@ namespace cxx
         }
 
     public:
-        executor ()
+        new_thread ()
         :
             task_queue    {                                   },
             worker_thread { worker_main, std::ref(task_queue) }
         { }
 
-        ~executor ()
+        ~new_thread ()
         {
             task_queue.interrupt();
 
@@ -96,6 +154,8 @@ namespace cxx
         }
     };
 
+    static_assert(cxx::executor<cxx::new_thread>);
+
 
     class exec_token
     {
@@ -106,14 +166,14 @@ namespace cxx
             completion { std::move(completion) }
         { }
 
-        friend auto async_exec (cxx::executor& executor,
+        friend auto async_exec (cxx::executor  auto&  executor,
                                 std::invocable auto&& task) -> exec_token;
 
         friend auto sync_wait (const cxx::exec_token& exec_token) noexcept -> void;
     };
 
 
-    auto async_exec (cxx::executor& executor,
+    auto async_exec (cxx::executor  auto&  executor,
                      std::invocable auto&& task) -> exec_token
     {
         auto [receiver, sender_generator] = cxx::channel::create(1);
@@ -139,7 +199,7 @@ namespace cxx
     }
 
 
-    auto sync_exec (cxx::executor& executor,
+    auto sync_exec (cxx::executor  auto&  executor,
                     std::invocable auto&& task) -> void
     {
         auto completion = std::atomic_flag { };
@@ -162,7 +222,7 @@ namespace cxx
 
 auto main () -> int
 {
-    auto executor   = cxx::executor { };
+    auto executor   = cxx::new_thread { };
 
     auto task       = [] () -> void
                       {
