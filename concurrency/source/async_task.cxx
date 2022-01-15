@@ -33,130 +33,21 @@
  */
 
 
-#include <utility>
+#include <cxx/executor.hxx>
 
-#include <thread>
+#include <cxx/channel.hxx>
 
 #include <concepts>
+
+#include <utility>
 
 #include <atomic>
 
 #include <functional>
 
-#include <cxx/channel.hxx>
-
-#include <cxx/concurrent_queue.hxx>
-
 
 namespace cxx
 {
-    // [GitHub] - Barry Revzin: Things you can almost, mostly, do with Concepts
-    // ~ https://medium.com/p/6b52ace78630?source=brevzin.github.io
-    //
-    // [Andrzej's C++ blog] - Andrzej Krzemienski: Concept archetypes
-    // ~ https://akrzemi1.wordpress.com/2020/09/02/concept-archetypes
-    //
-    namespace archetype
-    {
-        // note: Support for callable types, invocable with a set of arguments,
-        //       is not implemented, since it's incredibly difficult to define
-        //       an archetype for generic std::invocable<args_types...> concept.
-        //
-        //       [C++ reference] - std::invocable
-        //       ~ https://en.cppreference.com/w/cpp/concepts/invocable
-        //
-        struct invocable
-        {
-            invocable () = delete;
-           ~invocable () = delete;
-
-            invocable (const invocable& ) = delete;
-            invocable (      invocable&&) = delete;
-
-            auto operator = (const invocable& ) -> invocable& = delete;
-            auto operator = (      invocable&&) -> invocable& = delete;
-
-            auto operator & () const -> const invocable* = delete;
-
-            friend auto operator , (const auto&  left,
-                                    const auto& right) -> decltype(right)
-            //
-            requires (std::same_as<decltype( left), const invocable&> ||
-                      std::same_as<decltype(right), const invocable&>) = delete;
-
-            auto operator () () -> void;
-        };
-
-        static_assert(std::invocable<cxx::archetype::invocable>);
-        //
-        // [ISO C++] - P0443R14: A Unified Executors Proposal for C++
-        // ~ http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2020/p0443r14.html
-        //
-        // [GitHub] - Eric Niebler: Partial header <execution> for P0443R12
-        // ~ https://gist.github.com/ericniebler/8cc25656a0a496bd682edc8314d9576b#file-execution-h-L75
-        //
-        // [Boost] - Christopher Kohlhoff: Asio
-        // ~ https://www.boost.org/doc/libs/1_78_0/doc/html/boost_asio/reference/execution__invocable_archetype.html
-        // ~ https://www.boost.org/doc/libs/1_78_0/boost/asio/execution/invocable_archetype.hpp
-    }
-
-
-    template <typename type>
-    concept executor = requires (type executor, cxx::archetype::invocable task)
-                       {
-                           { executor.submit(task) } -> std::same_as<void>;
-                       };
-
-
-    class new_thread
-    {
-    private:
-        using task_type = std::move_only_function<auto () -> void>;
-
-        cxx::concurrent_queue<task_type>     task_queue;
-        std::thread                       worker_thread;
-
-        static
-        auto worker_main (cxx::concurrent_queue<task_type>& task_queue) -> void
-        {
-            while (true)
-            {
-                auto task = task_queue.pop();
-
-                if (task != std::nullopt)
-                {
-                    std::invoke(*task);
-                }
-                else
-                {
-                    return;
-                }
-            }
-        }
-
-    public:
-        new_thread ()
-        :
-            task_queue    {                                   },
-            worker_thread { worker_main, std::ref(task_queue) }
-        { }
-
-        ~new_thread ()
-        {
-            task_queue.interrupt();
-
-            worker_thread.join();
-        }
-
-        auto submit (std::invocable auto&& task) -> void
-        {
-            task_queue.push(task_type { std::forward<decltype(task)>(task) });
-        }
-    };
-
-    static_assert(cxx::executor<cxx::new_thread>);
-
-
     class exec_token
     {
         cxx::channel::receiver completion;
@@ -216,6 +107,8 @@ namespace cxx
     }
 }
 
+
+#include <cxx/new_thread.hxx>
 
 #include <cstdio>
 
