@@ -58,12 +58,10 @@ add_executable             (concurrency-tests)
 target_compile_features    (concurrency-tests PRIVATE cxx_std_20)
 
 target_sources             (concurrency-tests PRIVATE tests/catch2_main.cxx
+                                                include/cxx/new_thread.hxx
+                                                include/cxx/thread_pool.hxx
                                                 include/cxx/executor.hxx
                                                       tests/executor.cxx
-                                                include/cxx/new_thread.hxx
-                                                      tests/new_thread.cxx
-                                                include/cxx/thread_pool.hxx
-                                                      tests/thread_pool.cxx
                                                 include/cxx/event_counter.hxx
                                                       tests/event_counter.cxx
                                                 include/cxx/concurrent_queue.hxx
