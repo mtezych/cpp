@@ -2,7 +2,7 @@
 /*
  * BSD 3-Clause License
  *
- * Copyright (c) 2021, Mateusz Zych
+ * Copyright (c) 2022, Mateusz Zych
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -37,13 +37,13 @@
 #define CXX_LATCH
 
 
-#include <concepts>
-
 #include <cstddef>
 
 #include <atomic>
 
 #include <limits>
+
+#include <cxx/atomic_wait.hxx>
 
 
 namespace cxx
@@ -87,44 +87,6 @@ namespace cxx
     //
     // [ModernesCpp] - Rainer Grimm: Acquire-Release Fences
     // ~ https://www.modernescpp.com/index.php/acquire-release-fences
-
-
-    // note: The C++ standard library
-    //       does *not* provide std::atomic_wait() overload,
-    //       which waits until a predicate is satisfied or
-    //       waits until value of std::atomic changes to the new value.
-    //
-    template <std::integral integral_type>
-    auto atomic_wait (const std::atomic<integral_type>& atomic,
-                                        integral_type new_value) noexcept -> void
-    {
-        // note: Even though std::atomic::wait(old_value) handles spurious wakeups,
-        //       it may still wake up (stop waiting), due to spurious wakeup
-        //       *and* a change from the old_value to some different value,
-        //       which might not necessarily be equal to the new_value.
-        //
-        //       To handle the above case, the loop below will
-        //       load current_value of the std::atomic in the next iteration
-        //       and wake up only when the current_value equals to the new_value.
-        //
-        while (true)
-        {
-            const auto current_value = atomic.load(std::memory_order::acquire);
-
-            if (current_value == new_value)
-            {
-                return;
-            }
-            else
-            {
-                // note: The cxx::atomic_wait() *always* ends on loading
-                //       value of the std::atomic with acquire memory_order,
-                //       thus waiting with relaxed memory_order is sufficient.
-                //
-                atomic.wait(current_value, std::memory_order::relaxed);
-            }
-        }
-    }
 
 
     class latch

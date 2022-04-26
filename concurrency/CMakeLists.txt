@@ -2,7 +2,7 @@
 #
 # BSD 3-Clause License
 #
-# Copyright (c) 2017, mtezych
+# Copyright (c) 2022, Mateusz Zych
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -62,6 +62,8 @@ target_sources             (concurrency-tests PRIVATE tests/catch2_main.cxx
                                                 include/cxx/thread_pool.hxx
                                                 include/cxx/executor.hxx
                                                       tests/executor.cxx
+                                                include/cxx/atomic_wait.hxx
+                                                      tests/atomic_wait.cxx
                                                 include/cxx/event_counter.hxx
                                                       tests/event_counter.cxx
                                                 include/cxx/concurrent_queue.hxx

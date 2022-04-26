@@ -37,7 +37,7 @@
 #define CXX_CHANNEL
 
 
-#include <cxx/latch.hxx>
+#include <cxx/atomic_wait.hxx>
 
 #include <cxx/tuple.hxx>
 
