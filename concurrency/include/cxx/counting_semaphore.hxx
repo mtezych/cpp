@@ -46,8 +46,6 @@
 
 #include <concepts>
 
-#include <cxx/atomic_wait.hxx>
-
 
 namespace cxx
 {
@@ -104,7 +102,9 @@ namespace cxx
 
         auto acquire () noexcept -> void
         {
-            while (true)
+            const auto
+            try_acquire_until_cannot_enter_critical_section = [this] () noexcept
+                                                                        ->  bool
             {
                 auto old_value = counter.load(std::memory_order::acquire);
 
@@ -116,10 +116,15 @@ namespace cxx
                                                       std::memory_order::acquire,
                                                       std::memory_order::relaxed))
                     {
-                        return;
+                        return true;
                     }
                 }
 
+                return false;
+            };
+
+            while (!try_acquire_until_cannot_enter_critical_section())
+            {
                 counter.wait(0, std::memory_order::relaxed);
             }
         }
