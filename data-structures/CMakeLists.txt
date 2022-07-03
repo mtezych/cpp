@@ -32,7 +32,7 @@
 # EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #
 
-cmake_minimum_required (VERSION 3.15)
+cmake_minimum_required (VERSION 3.18)
 
 project(data.structures VERSION 1.0.0 LANGUAGES CXX)
 
@@ -72,6 +72,8 @@ target_sources             (data-structures-tests PRIVATE tests/catch2_main.cxx
                                                           tests/optional.cxx
                                                     include/cxx/span.hxx
                                                           tests/span.cxx
+                                                    include/cxx/iota_view.hxx
+                                                          tests/iota_view.cxx
                                                     include/cxx/result.hxx
                                                           tests/result.cxx)
 
