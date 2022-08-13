@@ -64,6 +64,21 @@ TEST_CASE("cxx::iota_view models a range", "[iota_view]")
 }
 
 
+TEST_CASE("cxx::iota_view models a sized_range", "[iota_view]")
+{
+    auto iota_view = cxx::iota_view { -7, +9 };
+
+    static_assert(std::ranges::sized_range<decltype(iota_view)>);
+
+    REQUIRE(             iota_view.size() == 16);
+
+    REQUIRE(std::         size(iota_view) == 16);
+    REQUIRE(std::ranges:: size(iota_view) == 16);
+    REQUIRE(std::        ssize(iota_view) == 16);
+    REQUIRE(std::ranges::ssize(iota_view) == 16);
+}
+
+
 namespace
 {
     template <std::ranges::input_range input_range>
