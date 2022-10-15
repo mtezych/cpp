@@ -72,8 +72,8 @@ target_sources             (data-structures-tests PRIVATE tests/catch2_main.cxx
                                                           tests/optional.cxx
                                                     include/cxx/span.hxx
                                                           tests/span.cxx
-                                                    include/cxx/iota_view.hxx
-                                                          tests/iota_view.cxx
+                                                    include/cxx/iota.hxx
+                                                          tests/iota.cxx
                                                     include/cxx/result.hxx
                                                           tests/result.cxx)
 

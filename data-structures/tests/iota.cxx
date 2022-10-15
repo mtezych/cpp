@@ -33,7 +33,7 @@
  */
 
 
-#include <cxx/iota_view.hxx>
+#include <cxx/iota.hxx>
 
 #include <catch2/catch.hpp>
 
@@ -50,9 +50,9 @@
 #include <cassert>
 
 
-TEST_CASE("cxx::iota_view models a range", "[iota_view]")
+TEST_CASE("cxx::iota_view models a range", "[iota]")
 {
-    auto iota_view = cxx::iota_view { 0, 10 };
+    auto iota_view = cxx::iota(0, 10);
 
     static_assert(std::ranges::range<decltype(iota_view)>);
 
@@ -64,9 +64,9 @@ TEST_CASE("cxx::iota_view models a range", "[iota_view]")
 }
 
 
-TEST_CASE("cxx::iota_view models a sized_range", "[iota_view]")
+TEST_CASE("cxx::iota_view models a sized_range", "[iota]")
 {
-    auto iota_view = cxx::iota_view { -7, +9 };
+    auto iota_view = cxx::iota(-7, +9);
 
     static_assert(std::ranges::sized_range<decltype(iota_view)>);
 
@@ -81,14 +81,13 @@ TEST_CASE("cxx::iota_view models a sized_range", "[iota_view]")
 
 namespace
 {
-    template <std::ranges::input_range input_range>
     constexpr
-    auto in_range (const                 input_range& range,
-        const std::ranges::range_value_t<input_range> start,
-        const std::ranges::range_value_t<input_range> stop,
-        const std::ranges::range_value_t<input_range> step = 1) noexcept -> bool
+    auto in_range (std::ranges::input_range auto&&             range,
+             const std::ranges::range_value_t<decltype(range)> start,
+             const std::ranges::range_value_t<decltype(range)> stop,
+             const std::ranges::range_value_t<decltype(range)> step = 1) -> bool
     requires
-        std::integral<std::ranges::range_value_t<input_range>>
+    std::integral< std::ranges::range_value_t<decltype(range)> >
     {
         auto value = start;
 
@@ -104,9 +103,9 @@ namespace
 }
 
 
-TEST_CASE("cxx::iota_view models an input_range", "[iota_view]")
+TEST_CASE("cxx::iota_view models an input_range", "[iota]")
 {
-    auto iota_view = cxx::iota_view { -7, +9 };
+    auto iota_view = cxx::iota(-7, +9);
 
     static_assert(std::ranges::input_range<decltype(iota_view)>);
 
@@ -114,9 +113,9 @@ TEST_CASE("cxx::iota_view models an input_range", "[iota_view]")
 }
 
 
-TEST_CASE("cxx::iota_view models a forward_range", "[iota_view]")
+TEST_CASE("cxx::iota_view models a forward_range", "[iota]")
 {
-    auto iota_view = cxx::iota_view { -7, +9 };
+    auto iota_view = cxx::iota(-7, +9);
 
     static_assert(std::ranges::forward_range<decltype(iota_view)>);
 
@@ -132,9 +131,9 @@ TEST_CASE("cxx::iota_view models a forward_range", "[iota_view]")
 }
 
 
-TEST_CASE("cxx::iota_view models a bidirectional_range", "[iota_view]")
+TEST_CASE("cxx::iota_view models a bidirectional_range", "[iota]")
 {
-    auto iota_view = cxx::iota_view { -7, +9 };
+    auto iota_view = cxx::iota(-7, +9);
 
     static_assert(std::ranges::bidirectional_range<decltype(iota_view)>);
 
@@ -173,9 +172,9 @@ namespace
 }
 
 
-TEST_CASE("cxx::iota_view models a random_access_range", "[iota_view]")
+TEST_CASE("cxx::iota_view models a random_access_range", "[iota]")
 {
-    auto iota_view = cxx::iota_view { -7, +9 };
+    auto iota_view = cxx::iota(-7, +9);
 
     static_assert(std::ranges::random_access_range<decltype(iota_view)>);
 
@@ -191,7 +190,7 @@ TEST_CASE("cxx::iota_view models a random_access_range", "[iota_view]")
 }
 
 
-TEST_CASE("cxx::iota_view models a view", "[iota_view]")
+TEST_CASE("cxx::iota_view models a view", "[iota]")
 {
     // [ISO C++] - P2325R3: Views should not be required to be
     //                      default constructible
@@ -201,9 +200,9 @@ TEST_CASE("cxx::iota_view models a view", "[iota_view]")
 }
 
 
-TEST_CASE ("empty range", "[iota_view]")
+TEST_CASE ("empty range", "[iota]")
 {
-    auto iota_view = cxx::iota_view { 0, 0 };
+    auto iota_view = cxx::iota(0, 0);
 
     for ([[maybe_unused]] auto number : iota_view)
     {
@@ -218,9 +217,9 @@ TEST_CASE ("empty range", "[iota_view]")
 }
 
 
-TEST_CASE ("single element range", "[iota_view]")
+TEST_CASE ("single element range", "[iota]")
 {
-    auto iota_view = cxx::iota_view { -7, -6 };
+    auto iota_view = cxx::iota(-7, -6);
 
     REQUIRE(std::        begin(iota_view) != std::        end(iota_view));
     REQUIRE(std::ranges::begin(iota_view) != std::ranges::end(iota_view));
@@ -232,11 +231,11 @@ TEST_CASE ("single element range", "[iota_view]")
 }
 
 
-TEST_CASE ("max size range", "[iota_view]")
+TEST_CASE ("max size range", "[iota]")
 {
     constexpr auto ptrdiff_max = std::numeric_limits<std::ptrdiff_t>::max();
 
-    auto iota_view = cxx::iota_view { std::ptrdiff_t { 0 }, ptrdiff_max };
+    auto iota_view = cxx::iota(std::ptrdiff_t { 0 }, ptrdiff_max);
 
     REQUIRE(iota_view.front() ==                std::ptrdiff_t { 0 } );
     REQUIRE(iota_view. back() == (ptrdiff_max - std::ptrdiff_t { 1 }));
@@ -252,14 +251,14 @@ TEST_CASE ("max size range", "[iota_view]")
 }
 
 
-TEST_CASE ("range of all signed ints, except int_max", "[iota_view]")
+TEST_CASE ("range of all signed ints, except int_max", "[iota]")
 {
     if constexpr (sizeof(std::ptrdiff_t) > sizeof(int))
     {
         constexpr auto int_min = std::numeric_limits<int>::min();
         constexpr auto int_max = std::numeric_limits<int>::max();
 
-        auto iota_view = cxx::iota_view { int_min, int_max };
+        auto iota_view = cxx::iota(int_min, int_max);
 
         REQUIRE(iota_view.front() ==  int_min     );
         REQUIRE(iota_view. back() == (int_max - 1));
@@ -273,7 +272,7 @@ TEST_CASE ("range of all signed ints, except int_max", "[iota_view]")
 }
 
 
-TEST_CASE ("compare value-initialized iterators", "[iota_view]")
+TEST_CASE ("compare value-initialized iterators", "[iota]")
 {
     // [ISO C++] - Working Draft, C++20 Standard
     //

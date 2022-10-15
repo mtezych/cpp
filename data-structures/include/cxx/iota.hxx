@@ -33,8 +33,8 @@
  */
 
 
-#ifndef CXX_IOTA_VIEW
-#define CXX_IOTA_VIEW
+#ifndef CXX_IOTA
+#define CXX_IOTA
 
 
 #include <cxx/detect_overflow.hxx>
@@ -259,7 +259,7 @@ namespace cxx
     //       using the std::ptrdiff_t type, it is almost guaranteed that
     //       hardware can process std::ptrdiff_t values incredibly efficiently.
     //
-    //       In contrast, the std::iota_view defines
+    //       In contrast, the std::ranges::iota_view defines
     //       the difference_type of its iterator, as a signed integral type
     //       or as an implementation-provided, integer-like type, which is often
     //       guaranteed to never overflow, due to sufficiently large width.
@@ -280,15 +280,16 @@ namespace cxx
     //       width is greater than the size of the weakly_incrementable type.
     //
     //
-    // [GCC Git] - (GNU) GCC libstdc++: std::iota_view
+    // [GCC Git] - (GNU) GCC libstdc++: std::ranges::iota_view
     //
     // ~ https://gcc.gnu.org/git/?p=gcc.git;a=blob;f=libstdc%2B%2B-v3/include/std/ranges;hb=refs/heads/trunk#l300
     //
     //
     //       To satisfy the described guarantee, in extreme cases,
     //       such as, when the initial value is a 128-bit integer,
-    //       the iterator of std::iota_view must define the difference_type
-    //       as a class emulating in software 129-bit integer arithmetic.
+    //       the iterator of the std::ranges::iota_view
+    //       must define the difference_type as an integer-like class
+    //       emulating in software 129-bit integer arithmetic.
     //
     //
     // [GCC Git] - (GNU) GCC libstdc++: std::ranges::__detail::__max_diff_type
@@ -991,6 +992,23 @@ template <typename  element_type,
 inline constexpr
 auto std::ranges::enable_borrowed_range<cxx::iota_view<element_type,
                                                       iterdiff_type>> = true;
+
+
+namespace cxx
+{
+    struct iota_func
+    {
+        template <std::integral element_type>
+        [[nodiscard]]
+        constexpr auto operator () (const element_type init,
+                                    const element_type bound) const noexcept
+        {
+            return iota_view { init, bound };
+        }
+    };
+
+    inline constexpr auto iota = iota_func { };
+}
 
 
 #endif
