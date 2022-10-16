@@ -2,7 +2,7 @@
 #
 # BSD 3-Clause License
 #
-# Copyright (c) 2017, mtezych
+# Copyright (c) 2022, Mateusz Zych
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -50,6 +50,8 @@ target_compile_features    (data-structures INTERFACE cxx_std_20)
 
 target_include_directories (data-structures INTERFACE include)
 
+target_link_libraries      (data-structures INTERFACE utilities)
+
 
 add_executable             (data-structures-tests)
 
@@ -74,6 +76,8 @@ target_sources             (data-structures-tests PRIVATE tests/catch2_main.cxx
                                                           tests/span.cxx
                                                     include/cxx/iota.hxx
                                                           tests/iota.cxx
+                                                    include/cxx/chunk_evenly.hxx
+                                                          tests/chunk_evenly.cxx
                                                     include/cxx/result.hxx
                                                           tests/result.cxx)
 
