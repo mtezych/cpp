@@ -50,7 +50,8 @@ target_compile_features    (concurrency INTERFACE cxx_std_23)
 
 target_include_directories (concurrency INTERFACE include)
 
-target_link_libraries      (concurrency INTERFACE data-structures)
+target_link_libraries      (concurrency INTERFACE utilities
+                                                  data-structures)
 
 
 add_executable             (concurrency-tests)

@@ -39,6 +39,8 @@
 
 #include <cxx/atomic_wait.hxx>
 
+#include <cxx/contracts.hxx>
+
 #include <cxx/tuple.hxx>
 
 #include <concepts>
@@ -50,36 +52,6 @@
 #include <atomic>
 
 #include <cassert>
-
-
-#if   defined(_MSC_VER)
-
-    // [MSVC] - __assume
-    // - https://docs.microsoft.com/en-us/cpp/intrinsics/assume
-    #define cxx_assume(condition) __assume(condition)
-
-#elif defined(__clang__)
-
-    // [Clang] - Language Extensions
-    // - https://clang.llvm.org/docs/LanguageExtensions.html#builtin-assume
-    #define cxx_assume(condition) __builtin_assume(condition)
-
-#elif defined(__GNUC__)
-
-    // [GCC] - Other Built-in Functions
-    // - https://gcc.gnu.org/onlinedocs/gcc/Other-Builtins.html
-    #define cxx_assume(condition) ((condition) ? void() : __builtin_unreachable())
-
-#else
-    static_assert(false, "C++ compiler is not supported!");
-#endif
-
-
-#ifdef NDEBUG
-    #define cxx_expects(condition) cxx_assume(condition)
-#else
-    #define cxx_expects(condition)     assert(condition)
-#endif
 
 
 namespace cxx

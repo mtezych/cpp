@@ -2,7 +2,7 @@
 #
 # BSD 3-Clause License
 #
-# Copyright (c) 2017, mtezych
+# Copyright (c) 2022, Mateusz Zych
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -32,36 +32,28 @@
 # EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #
 
-cmake_minimum_required (VERSION 3.1)
+cmake_minimum_required (VERSION 3.20.3)
 
-project(cpp)
+project (Utilities VERSION 1.0.0 LANGUAGES CXX)
 
-add_subdirectory(google-test)
-add_subdirectory(google-benchmark)
-add_subdirectory(gsl)
-add_subdirectory(libsync)
-add_subdirectory(platform-android)
-add_subdirectory(utilities)
-add_subdirectory(data-structures)
-add_subdirectory(metaprogramming)
-add_subdirectory(compile-time)
-add_subdirectory(polymorphism)
-add_subdirectory(allocator)
-add_subdirectory(concurrency)
-add_subdirectory(libdrm-example)
-add_subdirectory(khronos)
-add_subdirectory(cl)
-add_subdirectory(egl)
-add_subdirectory(gles)
-add_subdirectory(platform-xlib)
-add_subdirectory(platform-xcb)
-add_subdirectory(vulkan)
-add_subdirectory(platform-wayland)
-add_subdirectory(util)
-add_subdirectory(platform)
-add_subdirectory(platform-windows)
-add_subdirectory(ieee754)
-add_subdirectory(concepts)
-add_subdirectory(coroutines)
-add_subdirectory(zlang)
-add_subdirectory(gameboy)
+
+find_package (Catch2  REQUIRED)
+
+
+add_library                (utilities INTERFACE)
+
+target_compile_features    (utilities INTERFACE cxx_std_20)
+
+target_include_directories (utilities INTERFACE include)
+
+
+add_executable             (utilities-tests)
+
+target_compile_features    (utilities-tests PRIVATE cxx_std_20)
+
+target_sources             (utilities-tests PRIVATE tests/catch2_main.cxx
+                                              include/cxx/contracts.hxx
+                                                    tests/contracts.cxx)
+
+target_link_libraries      (utilities-tests PRIVATE utilities
+                                                    Catch2::Catch2)
