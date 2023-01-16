@@ -39,7 +39,13 @@
 
 #include <cxx/contracts.hxx>
 
+#include <cxx/integer_like.hxx>
+
+#include <cxx/concepts.hxx>
+
 #include <cxx/ranges.hxx>
+
+#include <cxx/range_adaptor_closure.hxx>
 
 #include <type_traits>
 
@@ -52,7 +58,7 @@
 
 namespace cxx::detail
 {
-    template <typename integer_like>
+    template <cxx::maybe_integer_like integer_like>
     constexpr
     auto decrement_if (integer_like& value,
                        const bool    condition) noexcept -> void
@@ -66,7 +72,7 @@ namespace cxx::detail
     }
 
 
-    template <typename integer_like>
+    template <cxx::maybe_integer_like integer_like>
     constexpr
     auto value_plus_one_or_value (const integer_like value,
                                   const bool         condition)
@@ -387,6 +393,97 @@ auto std::ranges::enable_borrowed_range<cxx::chunk_evenly_view<view>> = bool
 {
      std::ranges::enable_borrowed_range<view>
 };
+
+
+namespace cxx
+{
+    template <cxx::maybe_integer_like integer_like>
+    //
+    class chunk_evenly_closure
+    :
+        public cxx::ranges::range_adaptor_closure_interface<
+                                       chunk_evenly_closure<integer_like>>
+    {
+    private:
+        template <std::ranges::range range>
+        //
+        using range_diff = std::ranges::range_difference_t<range>;
+
+        integer_like chunk_count;
+
+    public:
+        constexpr explicit
+        chunk_evenly_closure (const integer_like chunk_count) noexcept
+        :
+            chunk_count { chunk_count }
+        {
+            cxx_expects(chunk_count > 0);
+        }
+
+        template <std::ranges::viewable_range viewable_range>
+        //
+        requires  cxx::ranges::sized_random_access_range<viewable_range>
+        //
+        [[nodiscard]]
+        constexpr auto operator () (viewable_range&& range) const
+        //
+        noexcept(
+        noexcept(  chunk_evenly_view
+                   {
+                       std::views::all(std::forward<viewable_range>(range)),
+                       static_cast<range_diff<viewable_range>>(chunk_count)
+                   }                                                          ))
+        //
+        ->         chunk_evenly_view<std::views::all_t<viewable_range>>
+        //
+        requires cxx::losslessly_convertible_to<integer_like,
+                                                range_diff<viewable_range>>
+        {
+            return chunk_evenly_view
+                   {
+                       std::views::all(std::forward<viewable_range>(range)),
+                       static_cast<range_diff<viewable_range>>(chunk_count)
+                   };
+        }
+    };
+
+    struct chunk_evenly_func
+    {
+        template <std::ranges::viewable_range viewable_range>
+        //
+        requires  cxx::ranges::sized_random_access_range<viewable_range>
+        //
+        [[nodiscard]]
+        constexpr auto operator ()         (viewable_range&&  range,       const
+            std::ranges::range_difference_t<viewable_range>   chunk_count) const
+        //
+        noexcept(
+        noexcept(  chunk_evenly_view
+                   {
+                       std::views::all(std::forward<viewable_range>(range)),
+                       chunk_count
+                   }                                                          ))
+        //
+        ->         chunk_evenly_view<std::views::all_t<viewable_range>>
+        {
+            return chunk_evenly_view
+                   {
+                       std::views::all(std::forward<viewable_range>(range)),
+                       chunk_count
+                   };
+        }
+
+        [[nodiscard]]
+        constexpr
+        auto operator () (const cxx::maybe_integer_like auto chunk_count) const
+        noexcept
+        {
+            return chunk_evenly_closure { chunk_count };
+        }
+    };
+
+    inline constexpr auto chunk_evenly = chunk_evenly_func { };
+}
 
 
 #endif
