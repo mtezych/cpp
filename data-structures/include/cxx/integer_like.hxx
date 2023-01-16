@@ -50,8 +50,42 @@
 
 namespace cxx
 {
+    // note: A custom type is a user-defined type
+    //       that is not a function, reference, array or pointer type.
+    //
+    //       Keep in mind, that a user-defined type is
+    //       a compound type that is not composed of only fundamental types.
+    //
+    //       In a C++ implementation, conforming to the ISO standard,
+    //       a custom type is simply either an enum, union or class type.
+    //
+    //
+    //       However, in order to allow GCC's and Clang's __int128 type
+    //       to be considered an integer-class type,
+    //
+    //       in a mode when GNU extensions (incompatible with the ISO standard)
+    //       are disabled (e.g. via the '-std=c++20' compiler option),
+    //
+    //       the cxx::is_custom_v meta-function
+    //       defines a custom type as a non-fundamental object type,
+    //       which is not an array nor a pointer type.
+    //
+    //
+    // [GCC] - Extensions to the C Language Family: 128-bit Integers
+    //
+    //  ~ https://gcc.gnu.org/onlinedocs/gcc/_005f_005fint128.html
+    //
+    //
     template <typename type>
-    concept maybe_signed_integer_class = !std::is_arithmetic_v<type>
+    inline constexpr auto is_custom_v  =  std::is_object_v        <type> &&
+                                         !std::is_fundamental_v   <type> &&
+                                         !std::is_array_v         <type> &&
+                                         !std::is_pointer_v       <type> &&
+                                         !std::is_member_pointer_v<type>;
+
+
+    template <typename type>
+    concept maybe_signed_integer_class = cxx::is_custom_v<type>
     //
     //
     // [ISO C++] - Working Draft, C++23 Standard
@@ -77,6 +111,7 @@ namespace cxx
     //        - std::is_integral<>
     //        - std::is_floating_point<>
     //        - std::is_arithmetic<>
+    //        - std::is_fundamental_v<>
     //        - std::is_signed<>
     //        - std::is_unsigned<>
     //
@@ -109,6 +144,12 @@ namespace cxx
     //                  (Composite type categories) : std::is_arithmetic
     //
     //  ~ https://en.cppreference.com/w/cpp/types/is_arithmetic
+    //
+    //
+    // [C++ reference] -  Metaprogramming library
+    //                  (Composite type categories) : std::is_fundamental
+    //
+    //  ~ https://en.cppreference.com/w/cpp/types/is_fundamental
     //
     //
     // [C++ reference] - Metaprogramming library
@@ -288,7 +329,7 @@ namespace cxx
 
 
     template <typename type>
-    concept maybe_unsigned_integer_class = !std::is_arithmetic_v<type>
+    concept maybe_unsigned_integer_class = cxx::is_custom_v<type>
     //
     &&  std::numeric_limits<type>::is_specialized
     //
