@@ -169,7 +169,7 @@ namespace cxx
                                                                 noexcept -> bool
     {
         constexpr
-        auto signed_integral_min = std::numeric_limits<signed_integral>::max();
+        auto signed_integral_min = std::numeric_limits<signed_integral>::min();
 
         return
         (right_value > 0) && (left_value < signed_integral_min + right_value);
