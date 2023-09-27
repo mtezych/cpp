@@ -234,8 +234,8 @@ namespace
 
     constexpr auto tested_executors = std::tuple
                                       {
-                                          spawn_new_thread,
-                                          create_thread_pool,
+                                          &spawn_new_thread,
+                                          &create_thread_pool,
                                       };
 
 

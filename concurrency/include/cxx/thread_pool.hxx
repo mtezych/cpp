@@ -77,7 +77,7 @@ namespace cxx
         auto worker_main (const std::ptrdiff_t         worker_index,
                           const std::span<task_queue>   task_queues) -> void
         {
-            const auto execute_task = [&] () -> bool
+            const auto try_acquire_task = [&]
             {
                 for (auto n = std::size_t { 0 }; n != task_queues.size(); ++n)
                 {
@@ -87,23 +87,26 @@ namespace cxx
 
                     if (task != std::nullopt)
                     {
-                        std::invoke(*task); return true;
+                        return task;
                     }
                 }
 
-                auto task = task_queues[worker_index].pop();
+                return task_queues[worker_index].pop();
+            };
+
+            while (true)
+            {
+                auto task = try_acquire_task();
 
                 if (task != std::nullopt)
                 {
-                    std::invoke(*task); return true;
+                    std::invoke(*task); // execute task
                 }
                 else
                 {
-                    return false; // no more tasks to execute
+                    return; // no more tasks to execute
                 }
-            };
-
-            while (execute_task()) { }
+            }
         }
 
     public:
