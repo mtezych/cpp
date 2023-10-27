@@ -65,6 +65,8 @@ target_sources             (concurrency-tests PRIVATE tests/catch2_main.cxx
                                                       tests/executor.cxx
                                                 include/cxx/atomic_wait.hxx
                                                       tests/atomic_wait.cxx
+                                                include/cxx/spin_mutex.hxx
+                                                      tests/spin_mutex.cxx
                                                 include/cxx/event_counter.hxx
                                                       tests/event_counter.cxx
                                                 include/cxx/counting_semaphore.hxx
