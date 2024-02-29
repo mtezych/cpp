@@ -58,6 +58,8 @@ add_executable             (data-structures-tests)
 target_compile_features    (data-structures-tests PRIVATE cxx_std_20)
 
 target_sources             (data-structures-tests PRIVATE tests/catch2_main.cxx
+                                                    include/cxx/allocator.hxx
+                                                          tests/allocator.cxx
                                                     include/cxx/list.hxx
                                                           tests/list.cxx
                                                     include/cxx/vector.hxx

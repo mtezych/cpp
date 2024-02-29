@@ -227,9 +227,9 @@ namespace
     }
 
 
-    [[nodiscard]] auto   spawn_new_thread () { return cxx:: new_thread { }; }
+    constexpr auto   spawn_new_thread = [] () { return cxx:: new_thread { }; };
 
-    [[nodiscard]] auto create_thread_pool () { return cxx::thread_pool { }; }
+    constexpr auto create_thread_pool = [] () { return cxx::thread_pool { }; };
 
 
     constexpr auto tested_executors = std::tuple
