@@ -33,50 +33,97 @@
  */
 
 
-#include <cxx/concepts.hxx>
+#include <cxx/losslessly_convertible_to.hxx>
 
 #include <catch2/catch.hpp>
 
+#include <array>
+#include <algorithm>
 
-TEST_CASE ("integral types", "[losslessly_convertible_to]")
+
+namespace
 {
-    static_assert( cxx::losslessly_convertible_to<  signed short,   signed  int>);
-    static_assert( cxx::losslessly_convertible_to<unsigned   int, unsigned long>);
-    static_assert(!cxx::losslessly_convertible_to<  signed short, unsigned long>);
-
-    #if defined( INT16_MIN) && defined( INT32_MIN) && defined( INT64_MIN) && \
-        defined( INT16_MAX) && defined( INT32_MAX) && defined( INT64_MAX) && \
-        defined(UINT16_MAX) && defined(UINT32_MAX) && defined(UINT64_MAX)
-    //
-    // note: Fixed width integer types are optional.
-    //
-    static_assert( cxx::losslessly_convertible_to<std:: int32_t, std:: int64_t>);
-    static_assert( cxx::losslessly_convertible_to<std:: int16_t, std:: int16_t>);
-    static_assert(!cxx::losslessly_convertible_to<std:: int32_t, std:: int16_t>);
-
-    static_assert( cxx::losslessly_convertible_to<std::uint16_t, std::uint32_t>);
-    static_assert( cxx::losslessly_convertible_to<std::uint64_t, std::uint64_t>);
-    static_assert(!cxx::losslessly_convertible_to<std::uint32_t, std::uint16_t>);
-
-    static_assert( cxx::losslessly_convertible_to<std::uint32_t, std:: int64_t>);
-    static_assert(!cxx::losslessly_convertible_to<std::uint32_t, std:: int16_t>);
-    static_assert(!cxx::losslessly_convertible_to<std::uint64_t, std:: int64_t>);
-
-    static_assert(!cxx::losslessly_convertible_to<std:: int16_t, std::uint64_t>);
-    static_assert(!cxx::losslessly_convertible_to<std:: int64_t, std::uint16_t>);
-    static_assert(!cxx::losslessly_convertible_to<std:: int32_t, std::uint32_t>);
-    #endif
+    struct bar;
+    struct foo { constexpr explicit(false) foo (bar) noexcept; };
+    struct bar { constexpr explicit(false) bar (foo) noexcept; };
 }
 
 
-TEST_CASE ("non-integral types", "[losslessly_convertible_to]")
+template <>
+inline constexpr auto cxx::enable_losslessly_convertible_to<foo, bar> = true;
+
+
+namespace
+{
+    constexpr auto is_true  = [] (std::same_as<bool> auto bit) noexcept -> bool
+                              {
+                                  return bit;
+                              };
+}
+
+
+TEST_CASE ("built-in integral types", "[losslessly_convertible_to]")
+{
+    constexpr auto results = std::array
+    {
+         cxx::losslessly_convertible_to<  signed short,   signed  int>,
+         cxx::losslessly_convertible_to<unsigned   int, unsigned long>,
+        !cxx::losslessly_convertible_to<  signed short, unsigned long>,
+    };
+
+    static_assert(std::ranges::all_of(results, is_true));
+}
+
+
+//
+// [C++ reference] - Type support: Fixed width integer types
+//
+//  ~ https://en.cppreference.com/w/cpp/types/integer
+//
+#if defined( INT16_MIN) && defined( INT32_MIN) && defined( INT64_MIN) && \
+    defined( INT16_MAX) && defined( INT32_MAX) && defined( INT64_MAX) && \
+    defined(UINT16_MAX) && defined(UINT32_MAX) && defined(UINT64_MAX)
+//
+// note: The fixed-width integer types are optional.
+//
+TEST_CASE ("fixed-width integral types", "[losslessly_convertible_to]")
+{
+    constexpr auto results = std::array
+    {
+         cxx::losslessly_convertible_to<std:: int32_t, std:: int64_t>,
+         cxx::losslessly_convertible_to<std:: int16_t, std:: int16_t>,
+        !cxx::losslessly_convertible_to<std:: int32_t, std:: int16_t>,
+
+         cxx::losslessly_convertible_to<std::uint16_t, std::uint32_t>,
+         cxx::losslessly_convertible_to<std::uint64_t, std::uint64_t>,
+        !cxx::losslessly_convertible_to<std::uint32_t, std::uint16_t>,
+
+         cxx::losslessly_convertible_to<std::uint32_t, std:: int64_t>,
+        !cxx::losslessly_convertible_to<std::uint32_t, std:: int16_t>,
+        !cxx::losslessly_convertible_to<std::uint64_t, std:: int64_t>,
+
+        !cxx::losslessly_convertible_to<std:: int16_t, std::uint64_t>,
+        !cxx::losslessly_convertible_to<std:: int64_t, std::uint16_t>,
+        !cxx::losslessly_convertible_to<std:: int32_t, std::uint32_t>,
+    };
+
+    static_assert(std::ranges::all_of(results, is_true));
+}
+#endif
+
+
+TEST_CASE ("non-convertible types", "[losslessly_convertible_to]")
 {
     // note: The type int is not convertible to void*,
     //       therefore is not losslessly convertible.
     //
     static_assert(!std::           convertible_to<int, void*>);
     static_assert(!cxx::losslessly_convertible_to<int, void*>);
+}
 
+
+TEST_CASE ("non-losslessly-convertible types", "[losslessly_convertible_to]")
+{
     // note: Even though int* is convertible to void*,
     //       it has not been marked as losslessly convertible.
     //
@@ -100,18 +147,11 @@ TEST_CASE ("non-integral types", "[losslessly_convertible_to]")
 }
 
 
-namespace
+TEST_CASE ("losslessly-convertible types", "[losslessly_convertible_to]")
 {
-    struct bar;
-    struct foo { constexpr explicit(false) foo (bar) noexcept; };
-    struct bar { constexpr explicit(false) bar (foo) noexcept; };
-}
+    static_assert( std::           convertible_to<      bar ,       foo >);
+    static_assert( std::           convertible_to<      foo ,       bar >);
 
-template <>
-inline constexpr auto cxx::enable_losslessly_convertible_to<foo, bar> = true;
-
-TEST_CASE ("user-defined types", "[losslessly_convertible_to]")
-{
     static_assert(!cxx::losslessly_convertible_to<      bar ,       foo >);
 
     static_assert( cxx::losslessly_convertible_to<      foo ,       bar >);

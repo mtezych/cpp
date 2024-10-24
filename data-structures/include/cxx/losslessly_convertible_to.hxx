@@ -33,8 +33,8 @@
  */
 
 
-#ifndef CXX_CONCEPTS
-#define CXX_CONCEPTS
+#ifndef CXX_LOSSLESSLY_CONVERTIBLE_TO
+#define CXX_LOSSLESSLY_CONVERTIBLE_TO
 
 
 #include <limits>

@@ -41,7 +41,7 @@
 
 #include <cxx/integer_like.hxx>
 
-#include <cxx/concepts.hxx>
+#include <cxx/losslessly_convertible_to.hxx>
 
 #include <cxx/ranges.hxx>
 

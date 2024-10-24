@@ -80,6 +80,8 @@ target_sources             (data-structures-tests PRIVATE tests/catch2_main.cxx
                                                           tests/iota.cxx
                                                     include/cxx/chunk_evenly.hxx
                                                           tests/chunk_evenly.cxx
+                                                    include/cxx/losslessly_convertible_to.hxx
+                                                          tests/losslessly_convertible_to.cxx
                                                     include/cxx/result.hxx
                                                           tests/result.cxx)
 
